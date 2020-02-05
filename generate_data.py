@@ -26,7 +26,7 @@ def convert_to_arff(df, path):
 	cont = df.to_csv(index=False, header=None)
 	fn.write(cont)
 	fn.close()
-	
+
 # def processTermFeature(param):
 # 	term, feature, labels = param
 # 	feature_df =  pd.read_csv('%s.csv' %feature,index_col=0)

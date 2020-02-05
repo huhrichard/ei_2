@@ -8,7 +8,7 @@
 #BSUB -eo GO2HPO_500_1000.stderr
 #BSUB -R rusage[mem=20480]
 
-conda activate ei
+source activate ei
 module load groovy
 module load selfsched
 mpirun selfsched < EIdata_500_1000_go.jobs
