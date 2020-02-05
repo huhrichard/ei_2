@@ -1,0 +1,14 @@
+#!/bin/bash
+#BSUB -J generate_data_200_500
+#BSUB -P acc_pandeg01a
+#BSUB -q expressalloc
+#BSUB -n 31
+#BSUB -W 1:00
+#BSUB -o GO2HPO.stdout
+#BSUB -eo GO2HPO.stderr
+#BSUB -R rusage[mem=20480]
+
+conda activate ei
+module load groovy
+module load selfsched
+mpirun selfsched < EIdata_200_500_go.jobs

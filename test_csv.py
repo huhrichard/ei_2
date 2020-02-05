@@ -36,6 +36,6 @@ for fn, bool_array in go_by_count_dict.items():
     print(fn, np.sum(bool_array))
     go_by_groups = go_terms[bool_array]
     for go in go_by_groups:
-        f.write('python generate_data.py {}\n'.format(go))
+        f.write('python generate_data.py {} {}/\n'.format(go, fn.split('.')[0]))
 
     f.close()

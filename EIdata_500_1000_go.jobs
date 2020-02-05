@@ -1,189 +1,189 @@
-python generate_data.py GO:0000166
-python generate_data.py GO:0000975
-python generate_data.py GO:0000981
-python generate_data.py GO:0000988
-python generate_data.py GO:0000989
-python generate_data.py GO:0001067
-python generate_data.py GO:0003690
-python generate_data.py GO:0004672
-python generate_data.py GO:0005198
-python generate_data.py GO:0008092
-python generate_data.py GO:0008233
-python generate_data.py GO:0008324
-python generate_data.py GO:0015075
-python generate_data.py GO:0016301
-python generate_data.py GO:0016462
-python generate_data.py GO:0016491
-python generate_data.py GO:0016772
-python generate_data.py GO:0016773
-python generate_data.py GO:0016788
-python generate_data.py GO:0016817
-python generate_data.py GO:0016818
-python generate_data.py GO:0017111
-python generate_data.py GO:0019900
-python generate_data.py GO:0022857
-python generate_data.py GO:0022891
-python generate_data.py GO:0030234
-python generate_data.py GO:0032403
-python generate_data.py GO:0036094
-python generate_data.py GO:0042803
-python generate_data.py GO:0043168
-python generate_data.py GO:0043169
-python generate_data.py GO:0043565
-python generate_data.py GO:0044212
-python generate_data.py GO:0044877
-python generate_data.py GO:0046872
-python generate_data.py GO:0046983
-python generate_data.py GO:0070011
-python generate_data.py GO:0097367
-python generate_data.py GO:1901265
-python generate_data.py GO:1990837
-python generate_data.py GO:0000122
-python generate_data.py GO:0001775
-python generate_data.py GO:0001934
-python generate_data.py GO:0002252
-python generate_data.py GO:0002253
-python generate_data.py GO:0002263
-python generate_data.py GO:0002274
-python generate_data.py GO:0002366
-python generate_data.py GO:0002684
-python generate_data.py GO:0002764
-python generate_data.py GO:0003008
-python generate_data.py GO:0006082
-python generate_data.py GO:0006259
-python generate_data.py GO:0006396
-python generate_data.py GO:0006461
-python generate_data.py GO:0006468
-python generate_data.py GO:0006508
-python generate_data.py GO:0006629
-python generate_data.py GO:0006811
-python generate_data.py GO:0006812
-python generate_data.py GO:0006886
-python generate_data.py GO:0006887
-python generate_data.py GO:0006952
-python generate_data.py GO:0006955
-python generate_data.py GO:0006974
-python generate_data.py GO:0007010
-python generate_data.py GO:0007154
-python generate_data.py GO:0007155
-python generate_data.py GO:0007167
-python generate_data.py GO:0007186
-python generate_data.py GO:0007267
-python generate_data.py GO:0007346
-python generate_data.py GO:0008284
-python generate_data.py GO:0009057
-python generate_data.py GO:0009605
-python generate_data.py GO:0009607
-python generate_data.py GO:0009628
-python generate_data.py GO:0009653
-python generate_data.py GO:0009719
-python generate_data.py GO:0009894
-python generate_data.py GO:0009968
-python generate_data.py GO:0010562
-python generate_data.py GO:0010564
-python generate_data.py GO:0010638
-python generate_data.py GO:0010648
-python generate_data.py GO:0015031
-python generate_data.py GO:0015833
-python generate_data.py GO:0016071
-python generate_data.py GO:0016310
-python generate_data.py GO:0016477
-python generate_data.py GO:0018130
-python generate_data.py GO:0018193
-python generate_data.py GO:0019221
-python generate_data.py GO:0019438
-python generate_data.py GO:0019637
-python generate_data.py GO:0019725
-python generate_data.py GO:0019752
-python generate_data.py GO:0022402
-python generate_data.py GO:0022414
-python generate_data.py GO:0022603
-python generate_data.py GO:0022610
-python generate_data.py GO:0023052
-python generate_data.py GO:0023057
-python generate_data.py GO:0030030
-python generate_data.py GO:0030154
-python generate_data.py GO:0030162
-python generate_data.py GO:0030334
-python generate_data.py GO:0031329
-python generate_data.py GO:0031347
-python generate_data.py GO:0031401
-python generate_data.py GO:0032101
-python generate_data.py GO:0032269
-python generate_data.py GO:0032446
-python generate_data.py GO:0032774
-python generate_data.py GO:0032880
-python generate_data.py GO:0032940
-python generate_data.py GO:0034220
-python generate_data.py GO:0034613
-python generate_data.py GO:0034622
-python generate_data.py GO:0034645
-python generate_data.py GO:0034654
-python generate_data.py GO:0040011
-python generate_data.py GO:0040012
-python generate_data.py GO:0042327
-python generate_data.py GO:0042592
-python generate_data.py GO:0042886
-python generate_data.py GO:0043066
-python generate_data.py GO:0043069
-python generate_data.py GO:0043085
-python generate_data.py GO:0043086
-python generate_data.py GO:0043207
-python generate_data.py GO:0043408
-python generate_data.py GO:0043436
-python generate_data.py GO:0043549
-python generate_data.py GO:0044087
-python generate_data.py GO:0044092
-python generate_data.py GO:0044255
-python generate_data.py GO:0044265
-python generate_data.py GO:0045055
-python generate_data.py GO:0045184
-python generate_data.py GO:0045321
-python generate_data.py GO:0045597
-python generate_data.py GO:0045859
-python generate_data.py GO:0045892
-python generate_data.py GO:0045937
-python generate_data.py GO:0045944
-python generate_data.py GO:0046903
-python generate_data.py GO:0048513
-python generate_data.py GO:0048731
-python generate_data.py GO:0048870
-python generate_data.py GO:0048878
-python generate_data.py GO:0050776
-python generate_data.py GO:0050778
-python generate_data.py GO:0050801
-python generate_data.py GO:0051050
-python generate_data.py GO:0051093
-python generate_data.py GO:0051094
-python generate_data.py GO:0051130
-python generate_data.py GO:0051223
-python generate_data.py GO:0051240
-python generate_data.py GO:0051241
-python generate_data.py GO:0051248
-python generate_data.py GO:0051253
-python generate_data.py GO:0051270
-python generate_data.py GO:0051336
-python generate_data.py GO:0051338
-python generate_data.py GO:0051347
-python generate_data.py GO:0051704
-python generate_data.py GO:0051726
-python generate_data.py GO:0055085
-python generate_data.py GO:0060341
-python generate_data.py GO:0060548
-python generate_data.py GO:0061024
-python generate_data.py GO:0070201
-python generate_data.py GO:0070647
-python generate_data.py GO:0070727
-python generate_data.py GO:0070887
-python generate_data.py GO:0071310
-python generate_data.py GO:0080135
-python generate_data.py GO:0090087
-python generate_data.py GO:1901135
-python generate_data.py GO:1901565
-python generate_data.py GO:1901566
-python generate_data.py GO:1901700
-python generate_data.py GO:1902533
-python generate_data.py GO:1902679
-python generate_data.py GO:1903047
-python generate_data.py GO:1903507
-python generate_data.py GO:2000145
+python generate_data.py GO:0000166 EIdata_500_1000_go/
+python generate_data.py GO:0000975 EIdata_500_1000_go/
+python generate_data.py GO:0000981 EIdata_500_1000_go/
+python generate_data.py GO:0000988 EIdata_500_1000_go/
+python generate_data.py GO:0000989 EIdata_500_1000_go/
+python generate_data.py GO:0001067 EIdata_500_1000_go/
+python generate_data.py GO:0003690 EIdata_500_1000_go/
+python generate_data.py GO:0004672 EIdata_500_1000_go/
+python generate_data.py GO:0005198 EIdata_500_1000_go/
+python generate_data.py GO:0008092 EIdata_500_1000_go/
+python generate_data.py GO:0008233 EIdata_500_1000_go/
+python generate_data.py GO:0008324 EIdata_500_1000_go/
+python generate_data.py GO:0015075 EIdata_500_1000_go/
+python generate_data.py GO:0016301 EIdata_500_1000_go/
+python generate_data.py GO:0016462 EIdata_500_1000_go/
+python generate_data.py GO:0016491 EIdata_500_1000_go/
+python generate_data.py GO:0016772 EIdata_500_1000_go/
+python generate_data.py GO:0016773 EIdata_500_1000_go/
+python generate_data.py GO:0016788 EIdata_500_1000_go/
+python generate_data.py GO:0016817 EIdata_500_1000_go/
+python generate_data.py GO:0016818 EIdata_500_1000_go/
+python generate_data.py GO:0017111 EIdata_500_1000_go/
+python generate_data.py GO:0019900 EIdata_500_1000_go/
+python generate_data.py GO:0022857 EIdata_500_1000_go/
+python generate_data.py GO:0022891 EIdata_500_1000_go/
+python generate_data.py GO:0030234 EIdata_500_1000_go/
+python generate_data.py GO:0032403 EIdata_500_1000_go/
+python generate_data.py GO:0036094 EIdata_500_1000_go/
+python generate_data.py GO:0042803 EIdata_500_1000_go/
+python generate_data.py GO:0043168 EIdata_500_1000_go/
+python generate_data.py GO:0043169 EIdata_500_1000_go/
+python generate_data.py GO:0043565 EIdata_500_1000_go/
+python generate_data.py GO:0044212 EIdata_500_1000_go/
+python generate_data.py GO:0044877 EIdata_500_1000_go/
+python generate_data.py GO:0046872 EIdata_500_1000_go/
+python generate_data.py GO:0046983 EIdata_500_1000_go/
+python generate_data.py GO:0070011 EIdata_500_1000_go/
+python generate_data.py GO:0097367 EIdata_500_1000_go/
+python generate_data.py GO:1901265 EIdata_500_1000_go/
+python generate_data.py GO:1990837 EIdata_500_1000_go/
+python generate_data.py GO:0000122 EIdata_500_1000_go/
+python generate_data.py GO:0001775 EIdata_500_1000_go/
+python generate_data.py GO:0001934 EIdata_500_1000_go/
+python generate_data.py GO:0002252 EIdata_500_1000_go/
+python generate_data.py GO:0002253 EIdata_500_1000_go/
+python generate_data.py GO:0002263 EIdata_500_1000_go/
+python generate_data.py GO:0002274 EIdata_500_1000_go/
+python generate_data.py GO:0002366 EIdata_500_1000_go/
+python generate_data.py GO:0002684 EIdata_500_1000_go/
+python generate_data.py GO:0002764 EIdata_500_1000_go/
+python generate_data.py GO:0003008 EIdata_500_1000_go/
+python generate_data.py GO:0006082 EIdata_500_1000_go/
+python generate_data.py GO:0006259 EIdata_500_1000_go/
+python generate_data.py GO:0006396 EIdata_500_1000_go/
+python generate_data.py GO:0006461 EIdata_500_1000_go/
+python generate_data.py GO:0006468 EIdata_500_1000_go/
+python generate_data.py GO:0006508 EIdata_500_1000_go/
+python generate_data.py GO:0006629 EIdata_500_1000_go/
+python generate_data.py GO:0006811 EIdata_500_1000_go/
+python generate_data.py GO:0006812 EIdata_500_1000_go/
+python generate_data.py GO:0006886 EIdata_500_1000_go/
+python generate_data.py GO:0006887 EIdata_500_1000_go/
+python generate_data.py GO:0006952 EIdata_500_1000_go/
+python generate_data.py GO:0006955 EIdata_500_1000_go/
+python generate_data.py GO:0006974 EIdata_500_1000_go/
+python generate_data.py GO:0007010 EIdata_500_1000_go/
+python generate_data.py GO:0007154 EIdata_500_1000_go/
+python generate_data.py GO:0007155 EIdata_500_1000_go/
+python generate_data.py GO:0007167 EIdata_500_1000_go/
+python generate_data.py GO:0007186 EIdata_500_1000_go/
+python generate_data.py GO:0007267 EIdata_500_1000_go/
+python generate_data.py GO:0007346 EIdata_500_1000_go/
+python generate_data.py GO:0008284 EIdata_500_1000_go/
+python generate_data.py GO:0009057 EIdata_500_1000_go/
+python generate_data.py GO:0009605 EIdata_500_1000_go/
+python generate_data.py GO:0009607 EIdata_500_1000_go/
+python generate_data.py GO:0009628 EIdata_500_1000_go/
+python generate_data.py GO:0009653 EIdata_500_1000_go/
+python generate_data.py GO:0009719 EIdata_500_1000_go/
+python generate_data.py GO:0009894 EIdata_500_1000_go/
+python generate_data.py GO:0009968 EIdata_500_1000_go/
+python generate_data.py GO:0010562 EIdata_500_1000_go/
+python generate_data.py GO:0010564 EIdata_500_1000_go/
+python generate_data.py GO:0010638 EIdata_500_1000_go/
+python generate_data.py GO:0010648 EIdata_500_1000_go/
+python generate_data.py GO:0015031 EIdata_500_1000_go/
+python generate_data.py GO:0015833 EIdata_500_1000_go/
+python generate_data.py GO:0016071 EIdata_500_1000_go/
+python generate_data.py GO:0016310 EIdata_500_1000_go/
+python generate_data.py GO:0016477 EIdata_500_1000_go/
+python generate_data.py GO:0018130 EIdata_500_1000_go/
+python generate_data.py GO:0018193 EIdata_500_1000_go/
+python generate_data.py GO:0019221 EIdata_500_1000_go/
+python generate_data.py GO:0019438 EIdata_500_1000_go/
+python generate_data.py GO:0019637 EIdata_500_1000_go/
+python generate_data.py GO:0019725 EIdata_500_1000_go/
+python generate_data.py GO:0019752 EIdata_500_1000_go/
+python generate_data.py GO:0022402 EIdata_500_1000_go/
+python generate_data.py GO:0022414 EIdata_500_1000_go/
+python generate_data.py GO:0022603 EIdata_500_1000_go/
+python generate_data.py GO:0022610 EIdata_500_1000_go/
+python generate_data.py GO:0023052 EIdata_500_1000_go/
+python generate_data.py GO:0023057 EIdata_500_1000_go/
+python generate_data.py GO:0030030 EIdata_500_1000_go/
+python generate_data.py GO:0030154 EIdata_500_1000_go/
+python generate_data.py GO:0030162 EIdata_500_1000_go/
+python generate_data.py GO:0030334 EIdata_500_1000_go/
+python generate_data.py GO:0031329 EIdata_500_1000_go/
+python generate_data.py GO:0031347 EIdata_500_1000_go/
+python generate_data.py GO:0031401 EIdata_500_1000_go/
+python generate_data.py GO:0032101 EIdata_500_1000_go/
+python generate_data.py GO:0032269 EIdata_500_1000_go/
+python generate_data.py GO:0032446 EIdata_500_1000_go/
+python generate_data.py GO:0032774 EIdata_500_1000_go/
+python generate_data.py GO:0032880 EIdata_500_1000_go/
+python generate_data.py GO:0032940 EIdata_500_1000_go/
+python generate_data.py GO:0034220 EIdata_500_1000_go/
+python generate_data.py GO:0034613 EIdata_500_1000_go/
+python generate_data.py GO:0034622 EIdata_500_1000_go/
+python generate_data.py GO:0034645 EIdata_500_1000_go/
+python generate_data.py GO:0034654 EIdata_500_1000_go/
+python generate_data.py GO:0040011 EIdata_500_1000_go/
+python generate_data.py GO:0040012 EIdata_500_1000_go/
+python generate_data.py GO:0042327 EIdata_500_1000_go/
+python generate_data.py GO:0042592 EIdata_500_1000_go/
+python generate_data.py GO:0042886 EIdata_500_1000_go/
+python generate_data.py GO:0043066 EIdata_500_1000_go/
+python generate_data.py GO:0043069 EIdata_500_1000_go/
+python generate_data.py GO:0043085 EIdata_500_1000_go/
+python generate_data.py GO:0043086 EIdata_500_1000_go/
+python generate_data.py GO:0043207 EIdata_500_1000_go/
+python generate_data.py GO:0043408 EIdata_500_1000_go/
+python generate_data.py GO:0043436 EIdata_500_1000_go/
+python generate_data.py GO:0043549 EIdata_500_1000_go/
+python generate_data.py GO:0044087 EIdata_500_1000_go/
+python generate_data.py GO:0044092 EIdata_500_1000_go/
+python generate_data.py GO:0044255 EIdata_500_1000_go/
+python generate_data.py GO:0044265 EIdata_500_1000_go/
+python generate_data.py GO:0045055 EIdata_500_1000_go/
+python generate_data.py GO:0045184 EIdata_500_1000_go/
+python generate_data.py GO:0045321 EIdata_500_1000_go/
+python generate_data.py GO:0045597 EIdata_500_1000_go/
+python generate_data.py GO:0045859 EIdata_500_1000_go/
+python generate_data.py GO:0045892 EIdata_500_1000_go/
+python generate_data.py GO:0045937 EIdata_500_1000_go/
+python generate_data.py GO:0045944 EIdata_500_1000_go/
+python generate_data.py GO:0046903 EIdata_500_1000_go/
+python generate_data.py GO:0048513 EIdata_500_1000_go/
+python generate_data.py GO:0048731 EIdata_500_1000_go/
+python generate_data.py GO:0048870 EIdata_500_1000_go/
+python generate_data.py GO:0048878 EIdata_500_1000_go/
+python generate_data.py GO:0050776 EIdata_500_1000_go/
+python generate_data.py GO:0050778 EIdata_500_1000_go/
+python generate_data.py GO:0050801 EIdata_500_1000_go/
+python generate_data.py GO:0051050 EIdata_500_1000_go/
+python generate_data.py GO:0051093 EIdata_500_1000_go/
+python generate_data.py GO:0051094 EIdata_500_1000_go/
+python generate_data.py GO:0051130 EIdata_500_1000_go/
+python generate_data.py GO:0051223 EIdata_500_1000_go/
+python generate_data.py GO:0051240 EIdata_500_1000_go/
+python generate_data.py GO:0051241 EIdata_500_1000_go/
+python generate_data.py GO:0051248 EIdata_500_1000_go/
+python generate_data.py GO:0051253 EIdata_500_1000_go/
+python generate_data.py GO:0051270 EIdata_500_1000_go/
+python generate_data.py GO:0051336 EIdata_500_1000_go/
+python generate_data.py GO:0051338 EIdata_500_1000_go/
+python generate_data.py GO:0051347 EIdata_500_1000_go/
+python generate_data.py GO:0051704 EIdata_500_1000_go/
+python generate_data.py GO:0051726 EIdata_500_1000_go/
+python generate_data.py GO:0055085 EIdata_500_1000_go/
+python generate_data.py GO:0060341 EIdata_500_1000_go/
+python generate_data.py GO:0060548 EIdata_500_1000_go/
+python generate_data.py GO:0061024 EIdata_500_1000_go/
+python generate_data.py GO:0070201 EIdata_500_1000_go/
+python generate_data.py GO:0070647 EIdata_500_1000_go/
+python generate_data.py GO:0070727 EIdata_500_1000_go/
+python generate_data.py GO:0070887 EIdata_500_1000_go/
+python generate_data.py GO:0071310 EIdata_500_1000_go/
+python generate_data.py GO:0080135 EIdata_500_1000_go/
+python generate_data.py GO:0090087 EIdata_500_1000_go/
+python generate_data.py GO:1901135 EIdata_500_1000_go/
+python generate_data.py GO:1901565 EIdata_500_1000_go/
+python generate_data.py GO:1901566 EIdata_500_1000_go/
+python generate_data.py GO:1901700 EIdata_500_1000_go/
+python generate_data.py GO:1902533 EIdata_500_1000_go/
+python generate_data.py GO:1902679 EIdata_500_1000_go/
+python generate_data.py GO:1903047 EIdata_500_1000_go/
+python generate_data.py GO:1903507 EIdata_500_1000_go/
+python generate_data.py GO:2000145 EIdata_500_1000_go/

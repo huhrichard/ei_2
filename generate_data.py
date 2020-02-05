@@ -81,7 +81,9 @@ def processTermFeature_2(param):
 
 if __name__== "__main__":
 
-	scratch_data_dir = abspath('/sc/hydra/scratch/liy42/ei_data')
+	scratch_data_dir = abspath('/sc/hydra/scratch/liy42/')
+	group_number_goterm = argv[2]
+	scratch_data_dir = scratch_data_dir + group_number_goterm
 	csv_dir = './not_on_github/csv/'
 	tsv_dir = './not_on_github/tsv/'
 	go_to_hpo_file = 'GO2HPO_binary.tsv'
