@@ -9,22 +9,24 @@ from multiprocessing import Pool
 from itertools import product
 import arff
 
-def convert_to_arff(df,path):
-    fn = open(path, 'w')
-    fn.write('@relation yanchakli\n')
-    for col in df.columns:
-        if col not in ['cls','seqID']:
-            fn.write('@attribute %s numeric\n' %col)
-        elif col == 'cls':
-            fn.write('@attribute cls {pos,neg}\n')
 
-	elif col == 'seqID':
-		fn.write('@attribute seqID string\n')
-    fn.write('@data\n')
-    cont = df.to_csv(index=False,header=None)
-    fn.write(cont)
-    fn.close()
 
+def convert_to_arff(df, path):
+	fn = open(path, 'w')
+	fn.write('@relation yanchakli\n')
+	for col in df.columns:
+		if col not in ['cls', 'seqID']:
+			fn.write('@attribute %s numeric\n' %col)
+		elif col == 'cls':
+			fn.write('@attribute cls {pos,neg}\n')
+		elif col == 'seqID':
+			fn.write('@attribute seqID string\n')
+
+	fn.write('@data\n')
+	cont = df.to_csv(index=False, header=None)
+	fn.write(cont)
+	fn.close()
+	
 # def processTermFeature(param):
 # 	term, feature, labels = param
 # 	feature_df =  pd.read_csv('%s.csv' %feature,index_col=0)
