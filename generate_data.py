@@ -83,7 +83,7 @@ def processTermFeature_2(param):
 
 if __name__== "__main__":
 
-	scratch_data_dir = abspath('/sc/hydra/scratch/liy42/')
+	scratch_data_dir = '/sc/hydra/scratch/liy42/'
 	group_number_goterm = argv[2]
 	scratch_data_dir = scratch_data_dir + group_number_goterm
 	csv_dir = './not_on_github/csv/'
