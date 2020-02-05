@@ -55,7 +55,7 @@ def processTermFeature_2(param):
 	before_shape = feature_df.shape
 	go_hpo = go_hpo[go_hpo != 0]
 	term_inds = go_hpo.index.tolist()
-	sel_inds = [ind for feature_df.index.tolist() if ind in term_inds]
+	sel_inds = [ind for ind in feature_df.index.tolist() if ind in term_inds]
 	feature_df = feature_df.loc[sel_inds,]
 	go_hpo = go_hpo.loc[sel_inds]
 	cols = (feature_df == 0).all(axis=0)
