@@ -10,7 +10,7 @@ from goatools.semantic import get_info_content
 import math
 
 from goatools.base import download_go_basic_obo
-# obo_fname = download_go_basic_obo()
+obo_fname = download_go_basic_obo()
 from goatools.associations import dnld_assc
 
 from goatools.obo_parser import GODag
@@ -123,11 +123,11 @@ for fn, bool_array in go_by_count_dict.items():
 
             print(go, depth_go, tinfo_hsa_go)
             # if depth_go >= 2 and
-            if depth_go >= 2 and tinfo_hsa_go > 5:
+            if depth_go >= 2:
             # if tinfo_hsa_go > 5:
             # if depth_go >= 2:
-            # f.write('python generate_data.py {} {}/\n'.format(go, fn.split('.')[0]))
-                f.write(go+'\n')
+                f.write('python generate_data.py {} {}/\n'.format(go, fn.split('.')[0]))
+                # f.write(go+'\n')
                 go_stats += 1
         except KeyError:
             pass
