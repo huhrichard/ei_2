@@ -8,7 +8,8 @@
 #BSUB -eo GO2HPO_200_500.stderr
 #BSUB -R rusage[mem=20480]
 
-source activate ei
+module purge
+module load python
 module load groovy
 module load selfsched
 mpirun selfsched < EIdata_200_500_go.jobs

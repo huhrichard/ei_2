@@ -93,4 +93,4 @@ else:
 	system('rm %s.jobs' %data_name)
 end = time()
 if not args.hpc:
-	print 'Elapsed time is: %s seconds' %(end - start)
+	print('Elapsed time is: %s seconds' %(end - start))
