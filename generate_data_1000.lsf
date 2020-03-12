@@ -9,6 +9,7 @@
 #BSUB -R rusage[mem=20480]
 
 module purge
+module load java
 module load python
 module load groovy
 module load selfsched

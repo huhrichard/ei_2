@@ -62,7 +62,7 @@ def processTermFeature_2(param):
 	cols  = cols.loc[cols == False].index.tolist()
 	feature_df = feature_df[cols]
 
-	print term, feature, before_shape, feature_df.shape
+	print(term, feature, before_shape, feature_df.shape)
 	labs = []
 	for l in go_hpo:
 		if l == -1:
@@ -70,7 +70,7 @@ def processTermFeature_2(param):
 		elif l == 1:
 			labs.append('pos')
 		else:
-			print 'invalid labels'
+			print('invalid labels')
 			exit(0)
 	feature_df = feature_df.round(3)
 	feature_df['cls'] = labs
@@ -110,8 +110,8 @@ if __name__== "__main__":
 
 
 	params = list(product([term], features, [go_to_hpo_df_with_specific_term], [csv_dir]))
-	print '[STARTED: %s] start multithreads computing to generate feature files for GO term: %s...............................' %(str(datetime.datetime.now()), term)
+	print('[STARTED: %s] start multithreads computing to generate feature files for GO term: %s...............................' %(str(datetime.datetime.now()), term))
 	p = Pool(6)
 	p.map(processTermFeature_2,params)
-	print '[FINISHED: %s] completed the generation of feature files for GO term: %s...........................................' %(str(datetime.datetime.now()), term)
+	print('[FINISHED: %s] completed the generation of feature files for GO term: %s...........................................' %(str(datetime.datetime.now()), term))
 
