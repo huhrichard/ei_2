@@ -3,7 +3,7 @@
 #BSUB -P acc_pandeg01a
 #BSUB -q express
 #BSUB -n 31
-#BSUB -W 1:00
+#BSUB -W 10:00
 #BSUB -o GO2HPO.stdout
 #BSUB -eo GO2HPO.stderr
 #BSUB -R rusage[mem=20480]
