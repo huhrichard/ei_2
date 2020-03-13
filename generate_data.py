@@ -70,7 +70,7 @@ def processTermFeature_2(param):
 		elif l == 1:
 			labs.append('pos')
 		else:
-			print('invalid labels')
+			print('invalid labels', l)
 			exit(0)
 	feature_df = feature_df.round(3)
 	feature_df['cls'] = labs
