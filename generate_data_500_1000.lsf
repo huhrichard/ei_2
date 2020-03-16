@@ -1,7 +1,7 @@
 #!/bin/bash
 #BSUB -J generate_data_500_1000
 #BSUB -P acc_pandeg01a
-#BSUB -q express
+#BSUB -q premium
 #BSUB -n 31
 #BSUB -W 1:00
 #BSUB -o GO2HPO_500_1000.stdout

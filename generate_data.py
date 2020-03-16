@@ -64,7 +64,9 @@ def processTermFeature_2(param):
 
 	print(term, feature, before_shape, feature_df.shape)
 	labs = []
+	print(go_hpo)
 	for l in go_hpo:
+		print(l)
 		if l == -1:
 			labs.append('neg')
 		elif l == 1:
@@ -94,7 +96,7 @@ if __name__== "__main__":
 	features = ['coexpression','cooccurence','database','experimental','fusion','neighborhood']
 	term = argv[1]
 	t = term[:2] + term[3:]
-
+	print(t, group_number_goterm)
 	if not exists(scratch_data_dir + '/' + t):
 		mkdir(scratch_data_dir + '/' + t)
 
