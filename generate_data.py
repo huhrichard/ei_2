@@ -67,9 +67,9 @@ def processTermFeature_2(param):
 	print(go_hpo)
 	for l in go_hpo:
 		print(l)
-		if l == -1:
+		if int(l) == -1:
 			labs.append('neg')
-		elif l == 1:
+		elif int(l) == 1:
 			labs.append('pos')
 		else:
 			print('invalid labels', l)
