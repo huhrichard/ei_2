@@ -65,15 +65,18 @@ def processTermFeature_2(param):
 	print(term, feature, before_shape, feature_df.shape)
 	labs = []
 	print(go_hpo)
+	print(feature_df)
 	for l in go_hpo:
-		print(l)
-		if int(l) == -1:
-			labs.append('neg')
-		elif int(l) == 1:
-			labs.append('pos')
-		else:
+		# print(l)
+		try:
+			int_l = int(l)
+			if int_l == -1:
+				labs.append('neg')
+			elif int_l == 1:
+				labs.append('pos')
+		except:
 			print('invalid labels', l)
-			exit(0)
+				# exit(0)
 	feature_df = feature_df.round(3)
 	feature_df['cls'] = labs
 	del feature_df.index.name
