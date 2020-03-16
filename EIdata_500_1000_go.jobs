@@ -1,4 +1,4 @@
-3python generate_data.py GO:0000166 EIdata_500_1000_go/
+python generate_data.py GO:0000166 EIdata_500_1000_go/
 python generate_data.py GO:0000975 EIdata_500_1000_go/
 python generate_data.py GO:0000981 EIdata_500_1000_go/
 python generate_data.py GO:0001067 EIdata_500_1000_go/
