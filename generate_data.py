@@ -22,8 +22,10 @@ def convert_to_arff(df, path):
             fn.write('@attribute seqID string\n')
 
     fn.write('@data\n')
+    print(path, 'start to write df')
     cont = df.to_csv(index=False, header=None)
     fn.write(cont)
+    print(path, 'finished writing df')
     fn.close()
 
 
@@ -65,6 +67,7 @@ def processTermFeature_3(param):
     merged_df = pd.concat([go_hpo_df, feature_df], axis=1, join='inner')
     merged_df.rename(columns={term: 'cls'})
     del merged_df.index.name
+    print(term, 'merged df')
     p = '%s/%s' % (scratch_data_dir, t)
     if not exists(p):
         mkdir(p)
