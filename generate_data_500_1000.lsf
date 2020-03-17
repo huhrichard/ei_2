@@ -4,8 +4,8 @@
 #BSUB -q premium
 #BSUB -n 31
 #BSUB -W 1:00
-#BSUB -o GO2HPO_500_1000.stdout
-#BSUB -eo GO2HPO_500_1000.stderr
+#BSUB -o GO2HPO_500_1000_%J.stdout
+#BSUB -eo GO2HPO_500_1000_%J.stderr
 #BSUB -R rusage[mem=20480]
 
 module purge
