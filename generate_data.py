@@ -49,29 +49,52 @@ def convert_to_arff(df, path):
 # #	arff.dump(path, feature_df.values, relation='linhuaw', names = feature_df.columns)
 #         convert_to_arff(feature_df,path)
 
-def processTermFeature_2(param):
-    term, feature, go_hpo, csv_file = param
+def processTermFeature_3(param):
+    term, feature, go_hpo_df, csv_file = param
     feature_df = pd.read_csv('{}{}.csv'.format(csv_file, feature), index_col=0)
     before_shape = feature_df.shape
-    go_hpo.fillna(0, inplace=True)
-    print('before', go_hpo.shape)
-    go_hpo = go_hpo[go_hpo != 0]
-    print('after', go_hpo.shape)
-    term_inds = go_hpo.index.tolist()
-    sel_inds = [ind for ind in feature_df.index.tolist() if ind in term_inds]
+    go_hpo_df = go_hpo_df[go_hpo_df != 0]
+    go_hpo_df.replace(-1, 'neg', inplace=True)
+    go_hpo_df.replace(1, 'pos', inplace=True)
+
     feature_df.fillna(0, inplace=True)
-    feature_df = feature_df.loc[sel_inds,]
-    go_hpo = go_hpo.loc[sel_inds]
     cols = (feature_df == 0).all(axis=0)
     cols = cols.loc[cols == False].index.tolist()
     feature_df = feature_df[cols]
+    feature_df = feature_df.round(3)
+    merged_df = pd.concat([go_hpo_df, feature_df], axis=1, join='inner')
+    merged_df.rename(columns={term: 'cls'})
+    del merged_df.index.name
+    p = '%s/%s' % (scratch_data_dir, t)
+    if not exists(p):
+        mkdir(p)
+    path = '%s/%s.arff' % (p, t)
+    convert_to_arff(merged_df, path)
+
+
+def processTermFeature_2(param):
+    term, feature, go_hpo_df, csv_file = param
+    feature_df = pd.read_csv('{}{}.csv'.format(csv_file, feature), index_col=0)
+    before_shape = feature_df.shape
+    go_hpo_df.fillna(0, inplace=True)
+    print('before', go_hpo_df.shape)
+    go_hpo_df = go_hpo_df[go_hpo_df != 0]
+    print('after', go_hpo_df.shape)
+    term_inds = go_hpo_df.index.tolist()
+    sel_inds = [ind for ind in feature_df.index.tolist() if ind in term_inds]
+    feature_df.fillna(0, inplace=True)
+    feature_df = feature_df.loc[sel_inds,]
+    go_hpo_df = go_hpo_df.loc[sel_inds]
+
 
     print(term, feature, before_shape, feature_df.shape)
     labs = []
-    print(go_hpo)
+    print(go_hpo_df)
     # print(feature_df)
+
+
     counter = 0
-    for l in go_hpo:
+    for l in go_hpo_df:
 
         print(counter, l)
         counter += 1
@@ -127,7 +150,7 @@ if __name__ == "__main__":
         '[STARTED: %s] start multithreads computing to generate feature files for GO term: %s...............................' % (
         str(datetime.datetime.now()), term))
     p = Pool(6)
-    p.map(processTermFeature_2, params)
+    p.map(processTermFeature_3, params)
     print(
         '[FINISHED: %s] completed the generation of feature files for GO term: %s...........................................' % (
         str(datetime.datetime.now()), term))
