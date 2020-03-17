@@ -1,6 +1,7 @@
 import pandas as pd
 import datetime
 import numpy as np
+import os
 from os.path import exists, abspath
 from os import mkdir
 from sys import argv
@@ -114,10 +115,10 @@ def processTermFeature_2(param):
     feature_df = feature_df.round(3)
     feature_df['cls'] = labs
     del feature_df.index.name
-    p = '%s/%s' % (scratch_data_dir, t)
+    p = os.path.join(scratch_data_dir, feature)
     if not exists(p):
         mkdir(p)
-    path = '%s/%s.arff' % (p, t)
+    path = os.path.join(p, t+'.arff')
     convert_to_arff(feature_df, path)
 
 
