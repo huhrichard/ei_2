@@ -53,9 +53,11 @@ def processTermFeature_2(param):
     term, feature, go_hpo, csv_file = param
     feature_df = pd.read_csv('{}{}.csv'.format(csv_file, feature), index_col=0)
     before_shape = feature_df.shape
+    go_hpo.fillna(0, inplace=True)
     go_hpo = go_hpo[go_hpo != 0]
     term_inds = go_hpo.index.tolist()
     sel_inds = [ind for ind in feature_df.index.tolist() if ind in term_inds]
+    feature_df.fillna(0, inplace=True)
     feature_df = feature_df.loc[sel_inds,]
     go_hpo = go_hpo.loc[sel_inds]
     cols = (feature_df == 0).all(axis=0)
@@ -65,15 +67,18 @@ def processTermFeature_2(param):
     print(term, feature, before_shape, feature_df.shape)
     labs = []
     print(go_hpo)
-    print(feature_df)
+    # print(feature_df)
     counter = 0
     for l in go_hpo:
+
         print(counter, l)
         counter += 1
+
         if l == -1:
             labs.append('neg')
         elif l == 1:
             labs.append('pos')
+
         else:
             print('invalid labels', l)
             exit(0)
