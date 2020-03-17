@@ -13,4 +13,4 @@ module load java
 module load python
 module load groovy
 module load selfsched
-mpirun selfsched < EIdata_1000_go.jobs
+python call_generate_script.py EIdata_1000_go.jobs
