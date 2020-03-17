@@ -54,7 +54,9 @@ def processTermFeature_2(param):
     feature_df = pd.read_csv('{}{}.csv'.format(csv_file, feature), index_col=0)
     before_shape = feature_df.shape
     go_hpo.fillna(0, inplace=True)
+    print('before', go_hpo.shape)
     go_hpo = go_hpo[go_hpo != 0]
+    print('after', go_hpo.shape)
     term_inds = go_hpo.index.tolist()
     sel_inds = [ind for ind in feature_df.index.tolist() if ind in term_inds]
     feature_df.fillna(0, inplace=True)
