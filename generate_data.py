@@ -2,7 +2,7 @@ import pandas as pd
 import datetime
 import numpy as np
 import os
-from os.path import exists, abspath
+from os.path import exists, abspath, isdir
 from os import mkdir
 from sys import argv
 from glob import glob
@@ -144,12 +144,12 @@ if __name__ == "__main__":
     os.system('cp sample_data/classifiers.txt {}'.format(scratch_data_dir[:-1]))
     os.system('cp sample_data/weka.properties {}'.format(scratch_data_dir[:-1]))
 
-    if not exists(scratch_data_dir):
+    if not isdir(scratch_data_dir):
         mkdir(scratch_data_dir)
 
     for feature in features:
         f_dir = os.path.join(scratch_data_dir, feature+'/')
-        if not exists(f_dir):
+        if not isdir(f_dir):
             mkdir(f_dir)
 
     # deepNF_net = pd.read_csv('/sc/hydra/scratch/liy42/deepNF/%s/%s.arff' %(t,t), header=None,comment='@')
