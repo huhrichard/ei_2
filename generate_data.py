@@ -141,11 +141,13 @@ if __name__ == "__main__":
         mkdir(scratch_data_dir)
 
     scratch_data_dir = os.path.join(scratch_data_dir, t+'/')
-    os.system('cp sample_data/classifiers.txt {}'.format(scratch_data_dir[:-1]))
-    os.system('cp sample_data/weka.properties {}'.format(scratch_data_dir[:-1]))
+
 
     if not isdir(scratch_data_dir):
         mkdir(scratch_data_dir)
+
+    os.system('cp sample_data/classifiers.txt {}'.format(scratch_data_dir[:-1]))
+    os.system('cp sample_data/weka.properties {}'.format(scratch_data_dir[:-1]))
 
     for feature in features:
         f_dir = os.path.join(scratch_data_dir, feature+'/')
