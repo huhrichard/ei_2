@@ -4,7 +4,6 @@
 #BSUB -q premium
 #BSUB -n 31
 #BSUB -W 10:00
-#BSUB -R span[hosts=1]
 #BSUB -o GO2HPO_1000_%J.stdout
 #BSUB -eo GO2HPO_1000_%J.stderr
 #BSUB -R rusage[mem=20480]

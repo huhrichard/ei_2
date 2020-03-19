@@ -143,7 +143,7 @@ if __name__ == "__main__":
     scratch_data_dir = os.path.join(scratch_data_dir, t+'/')
 
 
-    if not isdir(scratch_data_dir):
+    if not exists(scratch_data_dir):
         mkdir(scratch_data_dir)
 
     os.system('cp sample_data/classifiers.txt {}'.format(scratch_data_dir[:-1]))
@@ -151,7 +151,7 @@ if __name__ == "__main__":
 
     for feature in features:
         f_dir = os.path.join(scratch_data_dir, feature+'/')
-        if not isdir(f_dir):
+        if not exists(f_dir):
             mkdir(f_dir)
 
     # deepNF_net = pd.read_csv('/sc/hydra/scratch/liy42/deepNF/%s/%s.arff' %(t,t), header=None,comment='@')

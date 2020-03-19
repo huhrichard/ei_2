@@ -2,9 +2,8 @@
 #BSUB -J generate_data_500_1000
 #BSUB -P acc_pandeg01a
 #BSUB -q premium
-#BSUB -n 31
-#BSUB -W 10:00
-#BSUB -R span[hosts=1]
+#BSUB -n 1
+#BSUB -W 1:00
 #BSUB -o GO2HPO_500_1000_%J.stdout
 #BSUB -eo GO2HPO_500_1000_%J.stderr
 #BSUB -R rusage[mem=20480]
