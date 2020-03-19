@@ -72,7 +72,7 @@ def processTermFeature_3(param):
     p = os.path.join(scratch_data_dir, feature)
     if not exists(p):
         mkdir(p)
-    path = os.path.join(p, t+'.arff')
+    path = os.path.join(p, 'data.arff')
     convert_to_arff(merged_df, path)
 
 
