@@ -1,4 +1,3 @@
-
 '''
 Comine predictions from training base classifiers based on one feature set.
 Author: Linhua (Alex) Wang
@@ -25,17 +24,16 @@ def combine_individual(path):
                 bag_dfs = []
                 for bag in range(bag_count):
                     filename = '%s/validation-%s-%02i-%02i.csv.gz' % (dirname, fold, nested_fold, bag)
-		    try:
-                        df = read_csv(filename, skiprows = 1, index_col = [0, 1], compression = 'gzip',engine='python')
+                    try:
+                        df = read_csv(filename, skiprows=1, index_col=[0, 1], compression='gzip', engine='python')
                         df = df[['prediction']]
-                        df.rename(columns = {'prediction': '%s.%s' % (classifier, bag)}, inplace = True)
+                        df.rename(columns={'prediction': '%s.%s' % (classifier, bag)}, inplace=True)
                         bag_dfs.append(df)
-		    except:
-		        print 'file not existed or crashed %s' %filename
-                nested_fold_dfs.append(concat(bag_dfs, axis = 1))
-            dirname_dfs.append(concat(nested_fold_dfs, axis = 0))
-	concat(dirname_dfs,axis=1).sort_index().to_csv('%s/validation-%s.csv.gz' % (path, fold),compression='gzip')
-
+                    except:
+                        print('file not existed or crashed %s' % filename)
+                nested_fold_dfs.append(concat(bag_dfs, axis=1))
+            dirname_dfs.append(concat(nested_fold_dfs, axis=0))
+        concat(dirname_dfs, axis=1).sort_index().to_csv('%s/validation-%s.csv.gz' % (path, fold), compression='gzip')
 
     for fold in range(fold_count):
         dirname_dfs = []
@@ -45,20 +43,21 @@ def combine_individual(path):
             for bag in range(bag_count):
                 filename = '%s/predictions-%s-%02i.csv.gz' % (dirname, fold, bag)
                 try:
-		    df = read_csv(filename, skiprows = 1, index_col = [0, 1], compression = 'gzip',engine='python')
+                    df = read_csv(filename, skiprows=1, index_col=[0, 1], compression='gzip', engine='python')
                     df = df[['prediction']]
-                    df.rename(columns = {'prediction': '%s.%s' % (classifier, bag)}, inplace = True)
+                    df.rename(columns={'prediction': '%s.%s' % (classifier, bag)}, inplace=True)
                     bag_dfs.append(df)
-	        except:
-		    print 'file not existed or crashed %s' %filename
-            dirname_dfs.append(concat(bag_dfs, axis = 1))
-	concat(dirname_dfs,axis=1).sort_index().to_csv('%s/predictions-%s.csv.gz' % (path, fold),compression='gzip')
+                except:
+                    print('file not existed or crashed %s' % filename)
+            dirname_dfs.append(concat(bag_dfs, axis=1))
+        concat(dirname_dfs, axis=1).sort_index().to_csv('%s/predictions-%s.csv.gz' % (path, fold), compression='gzip')
+
 
 data_folder = abspath(argv[1])
 data_name = data_folder.split('/')[-1]
 fns = listdir(data_folder)
 fns = [fn for fn in fns if fn != 'analysis']
-fns = [data_folder  + '/' + fn for fn in fns]
+fns = [data_folder + '/' + fn for fn in fns]
 feature_folders = [fn for fn in fns if isdir(fn)]
 
 p = load_properties(data_folder)

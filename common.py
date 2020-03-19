@@ -26,7 +26,7 @@ def get_best_performer(df, one_se = False):
 def confusion_matrix_fpr(labels, predictions, false_discovery_rate = 0.1):
     fpr, tpr, thresholds = sklearn.metrics.roc_curve(labels, predictions)
     max_fpr_index = where(fpr >= false_discovery_rate)[0][0]
-    print sklearn.metrics.confusion_matrix(labels, predictions > thresholds[max_fpr_index])
+    print(sklearn.metrics.confusion_matrix(labels, predictions > thresholds[max_fpr_index]))
 
 
 def fmax_score(labels, predictions, beta = 1.0, pos_label = 1):
