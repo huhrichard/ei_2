@@ -164,9 +164,12 @@ if __name__ == "__main__":
     print(
         '[STARTED: %s] start multithreads computing to generate feature files for GO term: %s...............................' % (
         str(datetime.datetime.now()), term))
-    p = Pool(6)
+    for param in params:
+        processTermFeature_3(param)
 
-    p.map(processTermFeature_3, params)
+    # p = Pool(6)
+
+    # p.map(processTermFeature_3, params)
     print(
         '[FINISHED: %s] completed the generation of feature files for GO term: %s...........................................' % (
         str(datetime.datetime.now()), term))

@@ -6,10 +6,11 @@ jobs_list = open(jobs_file, 'r').readlines()
 
 for job in jobs_list:
     term = job.split(' ')[-2]
+    dir = job.split(' ')[-1]
     lsf_fn = 'run_{}_generate.lsf'.format(term)
     fn = open(lsf_fn, 'w')
     fn.write('#!/bin/bash\n')
-    fn.write('#BSUB -J generate_data_200_500_{}\n'.format(term))
+    fn.write('#BSUB -J {}_{}\n'.format(dir, term))
     fn.write('#BSUB -P acc_pandeg01a\n#BSUB -q premium\n#BSUB -n 6\n#BSUB -W 1:00\n')
     fn.write('#BSUB -o GO2HPO_200_500_%J_{}.stdout\n'.format(term))
     fn.write('#BSUB -eo GO2HPO_200_500_%J_{}.stderr\n'.format(term))
