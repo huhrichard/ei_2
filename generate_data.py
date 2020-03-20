@@ -65,7 +65,7 @@ def processTermFeature_3(param):
     cols = cols.loc[cols == False].index.tolist()
     feature_df = feature_df[cols]
     feature_df = feature_df.round(3)
-    merged_df = pd.concat([go_hpo_df, feature_df], axis=1, join='inner')
+    merged_df = pd.concat([feature_df, go_hpo_df], axis=1, join='inner')
     merged_df.rename(columns={term: 'cls'})
     del merged_df.index.name
     print(term, 'merged df')
