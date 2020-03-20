@@ -66,7 +66,7 @@ def processTermFeature_3(param):
     feature_df = feature_df[cols]
     feature_df = feature_df.round(3)
     merged_df = pd.concat([feature_df, go_hpo_df], axis=1, join='inner')
-    merged_df.rename(columns={term: 'cls'})
+    merged_df.rename(columns={term: 'cls'}, inplace=True)
     del merged_df.index.name
     print(term, 'merged df')
     p = os.path.join(scratch_data_dir, feature)
