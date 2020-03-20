@@ -61,6 +61,7 @@ def processTermFeature_3(param):
     term, feature, go_hpo_df, csv_file = param
     feature_df = pd.read_csv('{}{}.csv'.format(csv_file, feature), index_col=0)
     before_shape = feature_df.shape
+    # go_hpo_df.fillna(0, inplace=True)
     go_hpo_df = go_hpo_df[go_hpo_df != 0]
     go_hpo_df.replace(-1, 'neg', inplace=True)
     go_hpo_df.replace(1, 'pos', inplace=True)
@@ -70,11 +71,14 @@ def processTermFeature_3(param):
     cols = cols.loc[cols == False].index.tolist()
     feature_df = feature_df[cols]
     feature_df = feature_df.round(3)
-    merged_df = pd.merge(feature_df, go_hpo_df, how='inner')
-    # merged_df = pd.concat([feature_df, go_hpo_df], axis=1, join='inner')
+    # merged_df = pd.merge(feature_df, go_hpo_df, how='inner')
+    merged_df = pd.concat([feature_df, go_hpo_df], axis=1, join='inner')
     merged_df.rename(columns={term: 'cls'}, inplace=True)
     merged_df['seqID'] = merged_df.index
-    print(merged_df.shape)
+    print('before', merged_df.shape)
+    merged_df.dropna(inplace=True)
+
+    print('after', merged_df.shape)
     del merged_df.index.name
     # print(term, 'merged df')
     p = os.path.join(scratch_data_dir, feature)
