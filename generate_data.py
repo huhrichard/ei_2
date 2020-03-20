@@ -14,13 +14,18 @@ import arff
 def convert_to_arff(df, path):
     fn = open(path, 'w')
     fn.write('@relation yanchakli\n')
+    col_counter = 0
     for col in df.columns:
         if col not in ['cls', 'seqID']:
             fn.write('@attribute %s numeric\n' % col)
+            col_counter += 1
         elif col == 'cls':
             fn.write('@attribute cls {pos,neg}\n')
+            col_counter += 1
         elif col == 'seqID':
             fn.write('@attribute seqID string\n')
+            col_counter += 1
+    print('col counter:', col_counter)
 
     fn.write('@data\n')
     print(path, 'start to write df')
@@ -68,8 +73,9 @@ def processTermFeature_3(param):
     merged_df = pd.concat([feature_df, go_hpo_df], axis=1, join='inner')
     merged_df.rename(columns={term: 'cls'}, inplace=True)
     merged_df['seqID'] = merged_df.index
+    print(merged_df.shape)
     del merged_df.index.name
-    print(term, 'merged df')
+    # print(term, 'merged df')
     p = os.path.join(scratch_data_dir, feature)
     if not exists(p):
         mkdir(p)
