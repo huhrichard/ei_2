@@ -77,7 +77,6 @@ def processTermFeature_3(param):
     merged_df['seqID'] = merged_df.index
     print('before', merged_df.shape)
     merged_df.dropna(inplace=True)
-
     print('after', merged_df.shape)
     del merged_df.index.name
     # print(term, 'merged df')
