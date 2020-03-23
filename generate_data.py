@@ -9,7 +9,8 @@ from glob import glob
 from multiprocessing import Pool
 from itertools import product
 import arff
-from fancyimpute import SoftImpute
+from soft_impute import SoftImpute
+
 
 
 def convert_to_arff(df, path):
@@ -68,9 +69,13 @@ def processTermFeature_3(param, impute):
     go_hpo_df.replace(1, 'pos', inplace=True)
 
     if impute:
+        # from fancyimpute import SoftImpute
         imp = SoftImpute()
+
         f = feature_df.values
-        imputed_f = imp.fit_transform(f)
+        imp.fit(f)
+        imputed_f = imp.predict(f)
+        # imputed_f = imp.transform(f)
         feature_df[:] = imputed_f
     else:
         feature_df.fillna(0, inplace=True)
