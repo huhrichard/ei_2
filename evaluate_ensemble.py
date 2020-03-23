@@ -39,7 +39,7 @@ if __name__ == "__main__":
 
     # Load all performance csv
     performance_file_list = find('performance.csv', sys.argv[-1])
-    dir = sys.argv[-1].split('/')[-1]
+    dir = sys.argv[-1].split('/')[-2]
     performance_df_list = []
     for performance_file in performance_file_list:
         df = pd.read_csv(performance_file)
