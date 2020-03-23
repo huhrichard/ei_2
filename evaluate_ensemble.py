@@ -38,7 +38,10 @@ def add_colon(str):
 if __name__ == "__main__":
 
     # Load all performance csv
-    title_name = "#annotated proteins: {}".format(sys.argv[-2])
+    group = sys.argv[-2]
+    if '-' not in group:
+        group = '>' + group
+    title_name = "#annotated proteins: {}".format(group)
     performance_file_list = find('performance.csv', sys.argv[-1])
     dir = sys.argv[-1].split('/')[-2]
     performance_df_list = []
