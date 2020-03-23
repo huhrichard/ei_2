@@ -38,6 +38,7 @@ def add_colon(str):
 if __name__ == "__main__":
 
     # Load all performance csv
+    title_name = "#annotated proteins: {}".format(sys.argv[-2])
     performance_file_list = find('performance.csv', sys.argv[-1])
     dir = sys.argv[-1].split('/')[-2]
     performance_df_list = []
@@ -76,6 +77,7 @@ if __name__ == "__main__":
     ax1.set_xticklabels(go_depth)
     ax1.set_xlabel('Depth in GO hierarchy')
     ax1.set_ylabel(r'$\Delta F_{max} $')
+    ax1.set_title(title_name)
     fig1.savefig('{}_delta_fmax.png'.format(dir), bbox_inches="tight")
 
     fig2 = plt.figure()
@@ -84,6 +86,7 @@ if __name__ == "__main__":
     ax2.set_xticklabels(go_depth)
     ax2.set_xlabel('Depth in GO hierarchy')
     ax2.set_ylabel(r'$ F_{max}$ of LR.Stacking')
+    ax2.set_title(title_name)
     fig2.savefig('{}_fmax_lrs.png'.format(dir), bbox_inches="tight")
 
 
