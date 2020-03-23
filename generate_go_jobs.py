@@ -33,9 +33,9 @@ go_pos_count = sum(pos_entry)
 # plt.hist(go_pos_count, bins=100)
 # plt.show()
 
-go_by_count_dict = {'EIdata_500_1000_go.jobs':np.logical_and((go_pos_count>500), (go_pos_count<=1000)),
-                    'EIdata_1000_go.jobs': go_pos_count > 1000,
-                    'EIdata_200_500_go.jobs': np.logical_and((go_pos_count>200), (go_pos_count<500))}
+go_by_count_dict = {'EIdata_500_1000_go_softImpute.jobs':np.logical_and((go_pos_count>500), (go_pos_count<=1000)),
+                    'EIdata_1000_go_softImpute.jobs': go_pos_count > 1000,
+                    'EIdata_200_500_go_softImpute.jobs': np.logical_and((go_pos_count>200), (go_pos_count<500))}
 
 
 # print(pos_count)

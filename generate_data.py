@@ -9,6 +9,7 @@ from glob import glob
 from multiprocessing import Pool
 from itertools import product
 import arff
+from fancyimpute import SoftImpute
 
 
 def convert_to_arff(df, path):
@@ -57,7 +58,7 @@ def convert_to_arff(df, path):
 # #	arff.dump(path, feature_df.values, relation='linhuaw', names = feature_df.columns)
 #         convert_to_arff(feature_df,path)
 
-def processTermFeature_3(param):
+def processTermFeature_3(param, impute):
     term, feature, go_hpo_df, csv_file = param
     feature_df = pd.read_csv('{}{}.csv'.format(csv_file, feature), index_col=0)
     before_shape = feature_df.shape
@@ -66,7 +67,13 @@ def processTermFeature_3(param):
     go_hpo_df.replace(-1, 'neg', inplace=True)
     go_hpo_df.replace(1, 'pos', inplace=True)
 
-    feature_df.fillna(0, inplace=True)
+    if impute:
+        imp = SoftImpute()
+        f = feature_df.values
+        imputed_f = imp.fit_transform(f)
+        feature_df[:] = imputed_f
+    else:
+        feature_df.fillna(0, inplace=True)
     cols = (feature_df == 0).all(axis=0)
     cols = cols.loc[cols == False].index.tolist()
     feature_df = feature_df[cols]
@@ -138,6 +145,10 @@ if __name__ == "__main__":
 
     scratch_data_dir = '/sc/hydra/scratch/liy42/'
     group_number_goterm = argv[2]
+    if 'Impute' in group_number_goterm:
+        impute_graph = True
+    else:
+        impute_graph = False
 
     csv_dir = './not_on_github/csv/'
     tsv_dir = './not_on_github/tsv/'
@@ -176,7 +187,7 @@ if __name__ == "__main__":
         '[STARTED: %s] start multithreads computing to generate feature files for GO term: %s...............................' % (
         str(datetime.datetime.now()), term))
     for param in params:
-        processTermFeature_3(param)
+        processTermFeature_3(param, impute=impute_graph)
 
     # p = Pool(6)
 
