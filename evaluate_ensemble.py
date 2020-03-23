@@ -50,37 +50,38 @@ if __name__ == "__main__":
     performance_df['data_name'] = performance_df['data_name'].apply(add_colon)
     go_terms_set = set(list(performance_df['data_name']))
     gosubdag = GoSubDag(go_terms_set, godag)
-    performance_df['go_level'] = 0
+    performance_df['go_depth'] = 0
     for go_term in go_terms_set:
         try:
-            depth = gosubdag.go2obj[go_term].level
+            depth = gosubdag.go2obj[go_term].depth
+            # depth = gosubdag.go2obj[go_term].level
         except:
             depth = 0
-        performance_df.loc[performance_df['data_name']==go_term, 'go_level'] = depth
+        performance_df.loc[performance_df['data_name']==go_term, 'go_depth'] = depth
 
     best_base_df = extract_df_by_method(performance_df, method='best base')
-    lrs_df = extract_df_by_method(performance_df, method='LR.S', drop_columns=['method', 'go_level'])
+    lrs_df = extract_df_by_method(performance_df, method='LR.S', drop_columns=['method', 'go_depth'])
 
     delta_fmax_df = pd.merge(best_base_df, lrs_df, on='data_name', how='inner')
     delta_fmax_df['delta_fmax_LR.S'] = delta_fmax_df['fmax_LR.S']-delta_fmax_df['fmax_best base']
 
 
-    go_level = sorted(set(delta_fmax_df['go_level']))
-    delta_fmax_by_level = [delta_fmax_df.loc[delta_fmax_df['go_level']==l, 'delta_fmax_LR.S'] for l in go_level]
-    fmax_lrs_by_level = [delta_fmax_df.loc[delta_fmax_df['go_level']==l, 'fmax_LR.S'] for l in go_level]
+    go_depth = sorted(set(delta_fmax_df['go_depth']))
+    delta_fmax_by_level = [delta_fmax_df.loc[delta_fmax_df['go_depth']==l, 'delta_fmax_LR.S'] for l in go_depth]
+    fmax_lrs_by_level = [delta_fmax_df.loc[delta_fmax_df['go_depth']==l, 'fmax_LR.S'] for l in go_depth]
     fig1 = plt.figure()
     ax1 = fig1.add_subplot(111)
     bp1 = ax1.boxplot(delta_fmax_by_level)
-    ax1.set_xticklabels(go_level)
-    ax1.set_xlabel('Level in GO hierarchy')
+    ax1.set_xticklabels(go_depth)
+    ax1.set_xlabel('Depth in GO hierarchy')
     ax1.set_ylabel(r'$\Delta F_{max} $')
     fig1.savefig('delta_fmax.png', bbox_inches="tight")
 
     fig2 = plt.figure()
     ax2 = fig2.add_subplot(111)
     bp2 = ax2.boxplot(fmax_lrs_by_level)
-    ax2.set_xticklabels(go_level)
-    ax2.set_xlabel('Level in GO hierarchy')
+    ax2.set_xticklabels(go_depth)
+    ax2.set_xlabel('Depth in GO hierarchy')
     ax2.set_ylabel(r'$ F_{max}$ of LR.Stacking')
     fig2.savefig('fmax_lrs.png', bbox_inches="tight")
 
