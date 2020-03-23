@@ -39,6 +39,7 @@ if __name__ == "__main__":
 
     # Load all performance csv
     performance_file_list = find('performance.csv', sys.argv[-1])
+    dir = sys.argv[-1].split('/')[-1]
     performance_df_list = []
     for performance_file in performance_file_list:
         df = pd.read_csv(performance_file)
@@ -75,7 +76,7 @@ if __name__ == "__main__":
     ax1.set_xticklabels(go_depth)
     ax1.set_xlabel('Depth in GO hierarchy')
     ax1.set_ylabel(r'$\Delta F_{max} $')
-    fig1.savefig('delta_fmax.png', bbox_inches="tight")
+    fig1.savefig('{}_delta_fmax.png'.format(dir), bbox_inches="tight")
 
     fig2 = plt.figure()
     ax2 = fig2.add_subplot(111)
@@ -83,7 +84,7 @@ if __name__ == "__main__":
     ax2.set_xticklabels(go_depth)
     ax2.set_xlabel('Depth in GO hierarchy')
     ax2.set_ylabel(r'$ F_{max}$ of LR.Stacking')
-    fig2.savefig('fmax_lrs.png', bbox_inches="tight")
+    fig2.savefig('{}_fmax_lrs.png'.format(dir), bbox_inches="tight")
 
 
     print(delta_fmax_df)
