@@ -159,7 +159,9 @@ if __name__ == "__main__":
     tsv_dir = './not_on_github/tsv/'
     go_to_hpo_file = 'GO2HPO_binary.tsv'
 
-    features = ['coexpression', 'cooccurence', 'database', 'experimental', 'fusion', 'neighborhood']
+    # features = ['coexpression', 'cooccurence', 'database', 'experimental', 'fusion', 'neighborhood']
+    # features = ['deepNF']
+    features = [argv[3]]
     term = argv[1]
     t = term[:2] + term[3:]
     scratch_data_dir = scratch_data_dir + group_number_goterm

@@ -33,9 +33,11 @@ go_pos_count = sum(pos_entry)
 # plt.hist(go_pos_count, bins=100)
 # plt.show()
 
-go_by_count_dict = {'EIdata_500_1000_go_softImpute.jobs':np.logical_and((go_pos_count>500), (go_pos_count<=1000)),
-                    'EIdata_1000_go_softImpute.jobs': go_pos_count > 1000,
-                    'EIdata_200_500_go_softImpute.jobs': np.logical_and((go_pos_count>200), (go_pos_count<500))}
+suffix = '_experimental'
+
+go_by_count_dict = {'EIdata_500_1000_go{}.jobs'.format(suffix):np.logical_and((go_pos_count>500), (go_pos_count<=1000)),
+                    'EIdata_1000_go{}.jobs'.format(suffix): go_pos_count > 1000,
+                    'EIdata_200_500_go{}.jobs'.format(suffix): np.logical_and((go_pos_count>200), (go_pos_count<500))}
 
 
 # print(pos_count)
@@ -126,7 +128,7 @@ for fn, bool_array in go_by_count_dict.items():
             if depth_go >= 2:
             # if tinfo_hsa_go > 5:
             # if depth_go >= 2:
-                f.write('python generate_data.py {} {}/\n'.format(go, fn.split('.')[0]))
+                f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], suffix[1:]))
                 # f.write(go+'\n')
                 go_stats += 1
         except KeyError:
