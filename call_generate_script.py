@@ -5,8 +5,8 @@ jobs_file = sys.argv[-1]
 jobs_list = open(jobs_file, 'r').readlines()
 
 for job in jobs_list:
-    term = job.split(' ')[-2]
-    dir = job.split(' ')[-1][:-1]
+    term = job.split(' ')[1]
+    dir = job.split(' ')[2][:-1]
     lsf_fn = 'run_{}_generate.lsf'.format(term)
     fn = open(lsf_fn, 'w')
     fn.write('#!/bin/bash\n')
