@@ -1,5 +1,5 @@
 #!/bin/bash
-#BSUB -J generate_data_200_500
+#BSUB -J train_all_base
 #BSUB -P acc_pandeg01a
 #BSUB -q express
 #BSUB -n 1
