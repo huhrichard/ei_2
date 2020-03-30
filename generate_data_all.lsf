@@ -1,0 +1,46 @@
+#!/bin/bash
+#BSUB -J generate_data_200_500
+#BSUB -P acc_pandeg01a
+#BSUB -q premium
+#BSUB -n 1
+#BSUB -W 10:00
+#BSUB -o GO2HPO_200_500_%J.stdout
+#BSUB -eo GO2HPO_200_500_%J.stderr
+#BSUB -R rusage[mem=20480]
+
+module purge
+module load java
+module load python
+module load groovy
+module load selfsched
+python call_generate_script.py EIdata_200_500_go_coexpression.jobs
+python call_generate_script.py EIdata_500_1000_go_coexpression.jobs
+python call_generate_script.py EIdata_1000_go_coexpression.jobs
+
+python call_generate_script.py EIdata_200_500_go_cooccurence.jobs
+python call_generate_script.py EIdata_500_1000_go_cooccurence.jobs
+python call_generate_script.py EIdata_1000_go_cooccurence.jobs
+
+python call_generate_script.py EIdata_200_500_go_database.jobs
+python call_generate_script.py EIdata_500_1000_go_database.jobs
+python call_generate_script.py EIdata_1000_go_database.jobs
+
+python call_generate_script.py EIdata_200_500_go_deepNF.jobs
+python call_generate_script.py EIdata_500_1000_go_deepNF.jobs
+python call_generate_script.py EIdata_1000_go_deepNF.jobs
+
+python call_generate_script.py EIdata_200_500_go_experimental.jobs
+python call_generate_script.py EIdata_500_1000_go_experimental.jobs
+python call_generate_script.py EIdata_1000_go_experimental.jobs
+
+python call_generate_script.py EIdata_200_500_go_fusion.jobs
+python call_generate_script.py EIdata_500_1000_go_fusion.jobs
+python call_generate_script.py EIdata_1000_go_fusion.jobs
+
+python call_generate_script.py EIdata_200_500_go_mashup.jobs
+python call_generate_script.py EIdata_500_1000_go_mashup.jobs
+python call_generate_script.py EIdata_1000_go_mashup.jobs
+
+python call_generate_script.py EIdata_200_500_go_neighborhood.jobs
+python call_generate_script.py EIdata_500_1000_go_neighborhood.jobs
+python call_generate_script.py EIdata_1000_go_neighborhood.jobs
