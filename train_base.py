@@ -62,7 +62,8 @@ assert len(feature_folders) > 0
 ### write the individual tasks
 classpath = args.classpath
 all_parameters = list(product(feature_folders, classifiers,fold_values,bag_values))
-job_file = open('%s.jobs' %data_name,'w')
+jobs_fn = "temp_{}_{}.jobs".format(data_source_dir, data_name)
+job_file = open(jobs_fn,'w')
 for parameters in all_parameters:
 	project_path, classifier, fold, bag = parameters
 	job_file.write('groovy -cp %s %s/base_model.groovy %s %s %s %s %s\n' % (classpath, working_dir,data_path, project_path, fold, bag,classifier))
@@ -81,9 +82,9 @@ if args.hpc:
 	# fn.write('conda activate ei')
 	fn.write('module load java\nmodule load python\nmodule load groovy\nmodule load selfsched\nmodule load weka\n')
 	fn.write('export _JAVA_OPTIONS="-XX:ParallelGCThreads=10"\nexport JAVA_OPTS="-Xmx15g"\nexport CLASSPATH=%s\n' %(args.classpath))
-	jobs_fn = "temp_{}_{}.jobs".format(data_source_dir, data_name)
+
 	fn.write('mpirun selfsched < {}\n'.format(jobs_fn))
-	fn.write('rm {}.jobs\n'.format(jobs_fn))
+	fn.write('rm {}\n'.format(jobs_fn))
 	fn.write('python combine_individual_feature_preds.py %s\npython combine_feature_predicts.py %s %s\n' %(data_path,data_path,args.fold))
 	fn.close()
 	system('bsub < %s' %lsf_fn)
