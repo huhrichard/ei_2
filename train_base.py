@@ -37,6 +37,7 @@ args = parser.parse_args()
 start = time()
 ### get the data path
 data_path = abspath(args.path)
+data_source_dir = data_path.split('/')[-2]
 data_name = data_path.split('/')[-1]
 working_dir = dirname(abspath(argv[0]))
 
@@ -80,8 +81,9 @@ if args.hpc:
 	# fn.write('conda activate ei')
 	fn.write('module load java\nmodule load python\nmodule load groovy\nmodule load selfsched\nmodule load weka\n')
 	fn.write('export _JAVA_OPTIONS="-XX:ParallelGCThreads=10"\nexport JAVA_OPTS="-Xmx15g"\nexport CLASSPATH=%s\n' %(args.classpath))
-	fn.write('mpirun selfsched < %s.jobs\n' %data_name)
-	fn.write('rm %s.jobs\n' %data_name)
+	jobs_fn = "temp_{}_{}.jobs".format(data_source_dir, data_name)
+	fn.write('mpirun selfsched < {}\n'.format(jobs_fn))
+	fn.write('rm {}.jobs\n'.format(jobs_fn))
 	fn.write('python combine_individual_feature_preds.py %s\npython combine_feature_predicts.py %s %s\n' %(data_path,data_path,args.fold))
 	fn.close()
 	system('bsub < %s' %lsf_fn)

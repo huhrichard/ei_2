@@ -105,7 +105,7 @@ go_ids_selected = set(go_terms_from_tsv)
 IC_list = []
 
 for fn, bool_array in go_by_count_dict.items():
-
+    fn = './jobs/'+fn
     f = open(fn, 'w')
     go_stats = 0
     plt.figure()
