@@ -4,8 +4,8 @@
 #BSUB -q express
 #BSUB -n 1
 #BSUB -W 10:00
-#BSUB -o GO2HPO_200_500_%J.stdout
-#BSUB -eo GO2HPO_200_500_%J.stderr
+#BSUB -o train_all_base.stdout
+#BSUB -eo train_all_base.stderr
 #BSUB -R rusage[mem=10000]
 
 module purge
