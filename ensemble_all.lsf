@@ -1,0 +1,16 @@
+#!/bin/bash
+#BSUB -J train_all_base
+#BSUB -P acc_pandeg01a
+#BSUB -q express
+#BSUB -n 1
+#BSUB -W 10:00
+#BSUB -o GO2HPO_200_500_%J.stdout
+#BSUB -eo GO2HPO_200_500_%J.stderr
+#BSUB -R rusage[mem=10000]
+
+module purge
+module load java
+module load python
+module load groovy
+module load selfsched
+python run_all_different_data_ensemble.py
