@@ -5,7 +5,7 @@
 #BSUB -n 1
 #BSUB -W 10:00
 #BSUB -o ensemble_all.stdout
-#BSUB -eo ensemnle_all.stderr
+#BSUB -eo ensemble_all.stderr
 #BSUB -R rusage[mem=10000]
 
 module purge
