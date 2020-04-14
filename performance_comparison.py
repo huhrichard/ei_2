@@ -57,7 +57,7 @@ if __name__ == "__main__":
                    'neighborhood': 'Neighborhood'}
 
     godag = get_godag("go-basic.obo")
-    performance_df_dict = dict()
+    # performance_df_dict = dict()
     # fmax_df = pd.DataFrame()
     fmax_list = []
     mean_fmax_list = []
@@ -88,12 +88,14 @@ if __name__ == "__main__":
             except:
                 depth = 0
             performance_df.loc[performance_df['data_name']==go_term, 'go_depth'] = depth
+        lrs_df = extract_df_by_method(performance_df, method='LR.S', drop_columns=['method', 'go_depth'])
 
-        performance_df['delta_fmax_LR.S'] = performance_df['fmax_LR.S'] - performance_df['fmax_best base']
+        # performance_df['delta_fmax_LR.S'] = performance_df['fmax_LR.S'] - performance_df['fmax_best base']
         # best_base_df = extract_df_by_method(performance_df, method='best base')
-        performance_df_dict[val] = performance_df
-        fmax_list.append(performance_df['fmax_LR.S'].values)
-        mean_fmax_list.append(np.mean(performance_df['fmax_LR.S'].values))
+        # performance_df_dict[val] = performance_df
+        print(val, lrs_df.shape)
+        fmax_list.append(lrs_df['fmax_LR.S'].values)
+        mean_fmax_list.append(np.mean(lrs_df['fmax_LR.S'].values))
         data_list.append(val)
 
     fig1 = plt.figure()
