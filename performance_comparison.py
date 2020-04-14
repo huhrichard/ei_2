@@ -76,7 +76,7 @@ if __name__ == "__main__":
             performance_df_list.append(df)
 
         performance_df = pd.concat(performance_df_list)
-
+        print(performance_df.columns)
         performance_df['data_name'] = performance_df['data_name'].apply(add_colon)
         go_terms_set = set(list(performance_df['data_name']))
         gosubdag = GoSubDag(go_terms_set, godag)
