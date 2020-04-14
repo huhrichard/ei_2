@@ -110,7 +110,7 @@ if __name__ == "__main__":
     ax1.set_title(title_name)
     for tick in ax1.get_xticklabels():
         tick.set_rotation(45)
-    fig1.savefig('f_max_comparison_{}.png'.format(sys.argv[-2]))
+    fig1.savefig('f_max_comparison_{}.png'.format(sys.argv[-2]), bbox_inches="tight")
 
     # for key, df in performance_df_dict.items():
 
