@@ -55,6 +55,7 @@ if __name__ == "__main__":
                    'mashup': 'Mashup',
                    'fusion': 'Fusion',
                    'neighborhood': 'Neighborhood'}
+    cp = sns.color_palette(len(dict_suffix))
 
     godag = get_godag("go-basic.obo")
     # performance_df_dict = dict()
@@ -103,16 +104,18 @@ if __name__ == "__main__":
 
     sorted_fmax_list = [f for m, f in sorted(zip(mean_fmax_list, fmax_list), reverse=True)]
     sorted_dataname_list = [f for m, f in sorted(zip(mean_fmax_list, data_list), reverse=True)]
+    sorted_cp = [f for m, f in sorted(zip(mean_fmax_list, cp), reverse=True)]
+
     print(sorted_dataname_list)
     lrs_df_cat = pd.concat(lrs_df_list)
     fig1 = plt.figure()
     ax1 = fig1.add_subplot(111)
-    ax1 = sns.boxplot(ax=ax1, x='fmax_LR.S', y='input', data=lrs_df_cat, palette="Set3", order=sorted_dataname_list)
+    ax1 = sns.boxplot(ax=ax1, y='fmax_LR.S', x='input', data=lrs_df_cat, palette=cp, order=sorted_dataname_list)
     fig1.savefig('f_max_comparison_{}.png'.format(sys.argv[-2]), bbox_inches="tight")
 
     fig2 = plt.figure()
     ax2 = fig2.add_subplot(111)
-    ax2 = sns.boxplot(ax=ax2, x='fmax_LR.S', y='go_depth', data=lrs_df_cat,
+    ax2 = sns.boxplot(ax=ax2, y='fmax_LR.S', x='go_depth', data=lrs_df_cat, palette=cp,
                       hue='input', hue_order=sorted_dataname_list,
                       order=sorted(set(lrs_df_cat['go_depth'].values)))
     fig2.savefig('f_max_by_depth_{}.png'.format(sys.argv[-2]), bbox_inches="tight")
