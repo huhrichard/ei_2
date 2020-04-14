@@ -55,7 +55,7 @@ if __name__ == "__main__":
                    'mashup': 'Mashup',
                    'fusion': 'Fusion',
                    'neighborhood': 'Neighborhood'}
-    cp = sns.color_palette(len(dict_suffix))
+    cp = sns.color_palette(n_colors=len(dict_suffix))
 
     godag = get_godag("go-basic.obo")
     # performance_df_dict = dict()
