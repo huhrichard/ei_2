@@ -62,6 +62,7 @@ if __name__ == "__main__":
     fmax_list = []
     mean_fmax_list = []
     data_list = []
+    lrs_df_list = []
     for key, val in dict_suffix.items():
         if len(key) > 0:
             go_dir = sys.argv[-1] + '_' + key
@@ -88,7 +89,8 @@ if __name__ == "__main__":
             except:
                 depth = 0
             performance_df.loc[performance_df['data_name']==go_term, 'go_depth'] = depth
-        lrs_df = extract_df_by_method(performance_df, method='LR.S', drop_columns=['method', 'go_depth'])
+        lrs_df = extract_df_by_method(performance_df, method='LR.S', drop_columns=['method'])
+        lrs_df['input'] = val
 
         # performance_df['delta_fmax_LR.S'] = performance_df['fmax_LR.S'] - performance_df['fmax_best base']
         # best_base_df = extract_df_by_method(performance_df, method='best base')
@@ -97,20 +99,35 @@ if __name__ == "__main__":
         fmax_list.append(lrs_df['fmax_LR.S'].values)
         mean_fmax_list.append(np.mean(lrs_df['fmax_LR.S'].values))
         data_list.append(val)
+        lrs_df_list.append(lrs_df)
 
-    fig1 = plt.figure()
-    ax1 = fig1.add_subplot(111)
     sorted_fmax_list = [f for m, f in sorted(zip(mean_fmax_list, fmax_list), reverse=True)]
     sorted_dataname_list = [f for m, f in sorted(zip(mean_fmax_list, data_list), reverse=True)]
     print(sorted_dataname_list)
-
-    ax1.boxplot(sorted_fmax_list)
-    ax1.set_ylabel(r'$F_{max}$')
-    ax1.set_xticklabels(sorted_dataname_list)
-    ax1.set_title(title_name)
-    for tick in ax1.get_xticklabels():
-        tick.set_rotation(45)
+    lrs_df_cat = pd.concat(lrs_df_list)
+    fig1 = plt.figure()
+    ax1 = fig1.add_subplot(111)
+    ax1 = sns.boxplot(ax=ax1, x='fmax_LR.S', y='input', data=lrs_df_cat, palette="Set3", order=sorted_dataname_list)
     fig1.savefig('f_max_comparison_{}.png'.format(sys.argv[-2]), bbox_inches="tight")
+
+    fig2 = plt.figure()
+    ax2 = fig2.add_subplot(111)
+    ax2 = sns.boxplot(ax=ax2, x='fmax_LR.S', y='go_depth', data=lrs_df_cat,
+                      hue='input', hue_order=sorted_dataname_list,
+                      order=sorted(set(lrs_df_cat['go_depth'].values)))
+    fig2.savefig('f_max_by_depth_{}.png'.format(sys.argv[-2]), bbox_inches="tight")
+
+
+
+    #
+    # ax1.boxplot(sorted_fmax_list)
+    # ax1.set_ylabel(r'$F_{max}$')
+    # ax1.set_xticklabels(sorted_dataname_list)
+    # ax1.set_title(title_name)
+    # for tick in ax1.get_xticklabels():
+    #     tick.set_rotation(45)
+    #     tick.set_horizontalalignment("right")
+
 
     # for key, df in performance_df_dict.items():
 
