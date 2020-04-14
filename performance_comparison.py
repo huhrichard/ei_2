@@ -100,12 +100,12 @@ if __name__ == "__main__":
 
     fig1 = plt.figure()
     ax1 = fig1.add_subplot(111)
-    sorted_fmax_list = [f for m, f in sorted(zip(mean_fmax_list, fmax_list))]
-    sorted_dataname_list = [f for m, f in sorted(zip(mean_fmax_list, data_list))]
+    sorted_fmax_list = [f for m, f in sorted(zip(mean_fmax_list, fmax_list), reverse=True)]
+    sorted_dataname_list = [f for m, f in sorted(zip(mean_fmax_list, data_list), reverse=True)]
 
     ax1.boxplot(sorted_fmax_list)
     ax1.set_ylabel(r'$F_{max}$')
-    ax1.set_xticks(sorted_dataname_list)
+    # ax1.set_xticks(sorted_dataname_list)
     ax1.set_title(title_name)
     fig1.savefig('f_max_comparison.png')
 
