@@ -105,7 +105,7 @@ if __name__ == "__main__":
 
     ax1.boxplot(sorted_fmax_list)
     ax1.set_ylabel(r'$F_{max}$')
-    ax1.set_xticks(sorted_fmax_list)
+    ax1.set_xticks(sorted_dataname_list)
     ax1.set_title(title_name)
     fig1.savefig('f_max_comparison.png')
 
