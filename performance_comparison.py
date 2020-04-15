@@ -45,14 +45,15 @@ if __name__ == "__main__":
     title_name = "#annotated proteins: {}".format(group)
     file_prefix = sys.argv[-1]
     dict_suffix = {'': 'EI',
+                   'deepNF': 'DeepNF',
+                   'mashup': 'Mashup',
                    'coexpression': 'Coexpression',
                    'cooccurence': 'Coocuurence',
                    # 'database': 'Database',
                    'database': 'Curated database',
-                   'deepNF': 'DeepNF',
+
                    # 'experimental': 'Experimental',
                    'experimental': 'PPI',
-                   'mashup': 'Mashup',
                    'fusion': 'Fusion',
                    'neighborhood': 'Neighborhood'}
     cp = sns.color_palette(n_colors=len(dict_suffix))
