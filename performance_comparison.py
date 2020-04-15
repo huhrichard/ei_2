@@ -8,7 +8,6 @@ from goatools.semantic import get_info_content
 from goatools.gosubdag.gosubdag import GoSubDag
 from goatools.anno.factory import get_objanno
 from goatools.semantic import TermCounts
-from goatools.semantic import get_info_content
 
 from goatools.base import download_go_basic_obo
 import seaborn as sns
@@ -59,6 +58,8 @@ if __name__ == "__main__":
     cp = sns.color_palette(n_colors=len(dict_suffix))
 
     godag = get_godag("go-basic.obo")
+    objanno = get_objanno('goa_human.gpad', 'gpad', godag=godag)
+    termcounts = TermCounts(godag, objanno.get_id2gos_nss())
     # performance_df_dict = dict()
     # fmax_df = pd.DataFrame()
     fmax_list = []
@@ -84,14 +85,19 @@ if __name__ == "__main__":
         go_terms_set = set(list(performance_df['data_name']))
         gosubdag = GoSubDag(go_terms_set, godag)
         performance_df['go_depth'] = 0
+        performance_df['go_ic'] = 0
         for go_term in go_terms_set:
             try:
                 depth = gosubdag.go2obj[go_term].depth
+                ic = get_info_content(go_term, termcounts)
                 # depth = gosubdag.go2obj[go_term].level
             except:
                 depth = 0
+                ic = 0
             performance_df.loc[performance_df['data_name']==go_term, 'go_depth'] = depth
+            performance_df.loc[performance_df['data_name']==go_term, 'go_ic'] = ic
         lrs_df = extract_df_by_method(performance_df, method='LR.S', drop_columns=['method'])
+
         lrs_df['input'] = val
 
         # performance_df['delta_fmax_LR.S'] = performance_df['fmax_LR.S'] - performance_df['fmax_best base']
@@ -117,23 +123,50 @@ if __name__ == "__main__":
         tick.set_rotation(45)
         tick.set_horizontalalignment("right")
     ax1.set_ylabel(r'$F_{max}$')
+    ax1.set_xlabel('')
     fig1.savefig('f_max_go_comparison_{}.png'.format(sys.argv[-2]), bbox_inches="tight")
 
-    fig2_plot_only = ['EI', 'DeepNF', 'Mashup']
-    idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
-    cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
+    fig2_plot_only = ['Mashup', 'DeepNF', 'EI']
+    # idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
+    # cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
     fig2 = plt.figure()
     ax2 = fig2.add_subplot(111)
     ax2 = sns.boxplot(ax=ax2, y='fmax_LR.S', x='go_depth',
                       data=lrs_df_cat[lrs_df_cat['input'].isin(fig2_plot_only)],
-                      palette=cp_plot_only,
+                      # palette=c,
                       hue='input', hue_order=fig2_plot_only,
                       order=sorted(set(lrs_df_cat['go_depth'].values)))
     ax2.get_legend().remove()
-    ax2.get_legend()
+    ax2.legend()
+    ax2.set_ylabel(r'$F_{max}$')
+    ax2.set_xlabel('Depth in GO Hierarchy')
     fig2.savefig('f_max_go_by_depth_{}.png'.format(sys.argv[-2]), bbox_inches="tight")
 
+    # fig2_plot_only = ['Mashup', 'DeepNF', 'EI']
+    # idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
+    # cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
 
+    ic_of_terms = lrs_df_cat['go_ic'].values
+    _, bin_edges = np.histogram(ic_of_terms, bins=5)
+    ic_group_list = []
+    lrs_df_cat['ic_group'] = 'temp'
+    for idx, edge in enumerate(bin_edges[:-1]):
+        next_edge = bin_edges[(idx+1)]
+        group_name = '{:.2f}-{:.2f}'.format(edge, next_edge)
+        lrs_df_cat.loc[(lrs_df_cat['go_ic'] <= next_edge and lrs_df_cat['go_ic'] >= edge), 'ic_group'] = group_name
+        ic_group_list.append(group_name)
+    fig3 = plt.figure()
+    ax3 = fig3.add_subplot(111)
+    ax3 = sns.boxplot(ax=ax3, y='fmax_LR.S', x='ic_group',
+                      data=lrs_df_cat[lrs_df_cat['input'].isin(fig2_plot_only)],
+                      # palette=c,
+                      hue='input', hue_order=fig2_plot_only,
+                      order=ic_group_list)
+    ax3.get_legend().remove()
+    ax3.legend()
+    ax3.set_ylabel(r'$F_{max}$')
+    ax3.set_xlabel('Depth in GO Hierarchy')
+    fig3.savefig('f_max_go_by_ic_{}.png'.format(sys.argv[-2]), bbox_inches="tight")
 
     #
     # ax1.boxplot(sorted_fmax_list)
