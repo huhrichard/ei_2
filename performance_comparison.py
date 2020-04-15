@@ -153,7 +153,7 @@ if __name__ == "__main__":
     for idx, edge in enumerate(bin_edges[:-1]):
         next_edge = bin_edges[(idx+1)]
         group_name = '{:.2f}-{:.2f}'.format(edge, next_edge)
-        lrs_df_cat.loc[(lrs_df_cat['go_ic'] <= next_edge & lrs_df_cat['go_ic'] >= edge), 'ic_group'] = group_name
+        lrs_df_cat.loc[(lrs_df_cat['go_ic'] <= next_edge) & (lrs_df_cat['go_ic'] >= edge), 'ic_group'] = group_name
         ic_group_list.append(group_name)
     fig3 = plt.figure()
     ax3 = fig3.add_subplot(111)
