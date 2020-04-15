@@ -129,6 +129,8 @@ if __name__ == "__main__":
                       palette=cp_plot_only,
                       hue='input', hue_order=fig2_plot_only,
                       order=sorted(set(lrs_df_cat['go_depth'].values)))
+    ax2.get_legend().remove()
+    ax2.get_legend()
     fig2.savefig('f_max_by_depth_{}.png'.format(sys.argv[-2]), bbox_inches="tight")
 
 

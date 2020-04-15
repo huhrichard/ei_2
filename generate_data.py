@@ -150,6 +150,7 @@ if __name__ == "__main__":
 
     scratch_data_dir = '/sc/hydra/scratch/liy42/'
     group_number_goterm = argv[2]
+
     if 'Impute' in group_number_goterm:
         impute_graph = True
     else:
@@ -159,10 +160,12 @@ if __name__ == "__main__":
     tsv_dir = './not_on_github/tsv/'
     # go_to_hpo_file = 'GO2HPO_binary.tsv'
     go_to_hpo_file = 'pos-neg-O-10.tsv'
-
-    features = ['coexpression', 'cooccurence', 'database', 'experimental', 'fusion', 'neighborhood']
+    if len(argv) == 3:
+        features = [argv[3]]
+    else:
+        features = ['coexpression', 'cooccurence', 'database', 'experimental', 'fusion', 'neighborhood']
     # features = ['deepNF']
-    # features = [argv[3]]
+
     term = argv[1]
 
     t = term.split(':')[0] + term.split(':')[1]
