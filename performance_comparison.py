@@ -147,7 +147,8 @@ if __name__ == "__main__":
     # cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
 
     ic_of_terms = lrs_df_cat['go_ic'].values
-    _, bin_edges = np.histogram(ic_of_terms, bins=5)
+    # _, bin_edges = np.histogram(ic_of_terms, bins=5)
+    bin_edges = np.percentile(ic_of_terms, np.linspace(0, 100, 6))
     ic_group_list = []
     lrs_df_cat['ic_group'] = 'temp'
     for idx, edge in enumerate(bin_edges[:-1]):
