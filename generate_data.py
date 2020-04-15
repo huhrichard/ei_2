@@ -160,7 +160,8 @@ if __name__ == "__main__":
     tsv_dir = './not_on_github/tsv/'
     go_to_hpo_file = 'GO2HPO_binary.tsv'
     # go_to_hpo_file = 'pos-neg-O-10.tsv'
-    if len(argv) == 3:
+    print(len(argv))
+    if len(argv) == 4:
         features = [argv[3]]
     else:
         features = ['coexpression', 'cooccurence', 'database', 'experimental', 'fusion', 'neighborhood']
