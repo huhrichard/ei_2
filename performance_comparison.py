@@ -110,13 +110,23 @@ if __name__ == "__main__":
     lrs_df_cat = pd.concat(lrs_df_list)
     fig1 = plt.figure()
     ax1 = fig1.add_subplot(111)
-    ax1 = sns.boxplot(ax=ax1, y='fmax_LR.S', x='input', data=lrs_df_cat, palette=cp, order=sorted_dataname_list)
+    ax1 = sns.boxplot(ax=ax1, y='fmax_LR.S', x='input',
+                      data=lrs_df_cat, palette=sorted_cp, order=sorted_dataname_list)
+    for tick in ax1.get_xticklabels():
+        tick.set_rotation(45)
+        tick.set_horizontalalignment("right")
+    ax1.set_ylabel(r'$F_{max}$')
     fig1.savefig('f_max_comparison_{}.png'.format(sys.argv[-2]), bbox_inches="tight")
 
+    fig2_plot_only = ['EI', 'DeepNF', 'Mashup']
+    idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
+    cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
     fig2 = plt.figure()
     ax2 = fig2.add_subplot(111)
-    ax2 = sns.boxplot(ax=ax2, y='fmax_LR.S', x='go_depth', data=lrs_df_cat, palette=cp,
-                      hue='input', hue_order=sorted_dataname_list,
+    ax2 = sns.boxplot(ax=ax2, y='fmax_LR.S', x='go_depth',
+                      data=lrs_df_cat[lrs_df_cat['input'].isin(fig2_plot_only)],
+                      palette=cp_plot_only,
+                      hue='input', hue_order=fig2_plot_only,
                       order=sorted(set(lrs_df_cat['go_depth'].values)))
     fig2.savefig('f_max_by_depth_{}.png'.format(sys.argv[-2]), bbox_inches="tight")
 
@@ -124,12 +134,9 @@ if __name__ == "__main__":
 
     #
     # ax1.boxplot(sorted_fmax_list)
-    # ax1.set_ylabel(r'$F_{max}$')
-    # ax1.set_xticklabels(sorted_dataname_list)
+
+
     # ax1.set_title(title_name)
-    # for tick in ax1.get_xticklabels():
-    #     tick.set_rotation(45)
-    #     tick.set_horizontalalignment("right")
 
 
     # for key, df in performance_df_dict.items():
