@@ -137,7 +137,7 @@ if __name__ == "__main__":
                       hue='input', hue_order=fig2_plot_only,
                       order=sorted(set(lrs_df_cat['go_depth'].values)))
     ax2.get_legend().remove()
-    ax2.legend()
+    ax2.legend(loc='upper right')
     ax2.set_ylabel(r'$F_{max}$')
     ax2.set_xlabel('Depth in GO Hierarchy')
     fig2.savefig('f_max_go_by_depth_{}.png'.format(sys.argv[-2]), bbox_inches="tight")
@@ -164,9 +164,9 @@ if __name__ == "__main__":
                       hue='input', hue_order=fig2_plot_only,
                       order=ic_group_list)
     ax3.get_legend().remove()
-    ax3.legend()
+    ax3.legend(loc='upper right')
     ax3.set_ylabel(r'$F_{max}$')
-    ax3.set_xlabel('Depth in GO Hierarchy')
+    ax3.set_xlabel('Information Content')
     fig3.savefig('f_max_go_by_ic_{}.png'.format(sys.argv[-2]), bbox_inches="tight")
 
     #
