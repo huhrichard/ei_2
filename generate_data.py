@@ -192,7 +192,9 @@ if __name__ == "__main__":
     # seqs = deepNF_net.iloc[:,-1].tolist()
     # labels = deepNF_net.iloc[:,-2].tolist()
     go_to_hpo_df = pd.read_csv(tsv_dir + go_to_hpo_file, sep='\t', index_col=0)
+    print(term)
     go_to_hpo_df_with_specific_term = go_to_hpo_df[[term]]
+
 
     params = list(product([term], features, [go_to_hpo_df_with_specific_term], [csv_dir]))
     print(
