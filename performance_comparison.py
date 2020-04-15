@@ -58,7 +58,7 @@ if __name__ == "__main__":
     cp = sns.color_palette(n_colors=len(dict_suffix))
 
     godag = get_godag("go-basic.obo")
-    objanno = get_objanno('goa_human.gpad', 'gpad', godag=godag)
+    objanno = get_objanno('goa_human.gaf', 'gaf', godag=godag)
     termcounts = TermCounts(godag, objanno.get_id2gos_nss())
     # performance_df_dict = dict()
     # fmax_df = pd.DataFrame()
