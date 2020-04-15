@@ -117,7 +117,7 @@ if __name__ == "__main__":
         tick.set_rotation(45)
         tick.set_horizontalalignment("right")
     ax1.set_ylabel(r'$F_{max}$')
-    fig1.savefig('f_max_comparison_{}.png'.format(sys.argv[-2]), bbox_inches="tight")
+    fig1.savefig('f_max_go_comparison_{}.png'.format(sys.argv[-2]), bbox_inches="tight")
 
     fig2_plot_only = ['EI', 'DeepNF', 'Mashup']
     idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
@@ -131,7 +131,7 @@ if __name__ == "__main__":
                       order=sorted(set(lrs_df_cat['go_depth'].values)))
     ax2.get_legend().remove()
     ax2.get_legend()
-    fig2.savefig('f_max_by_depth_{}.png'.format(sys.argv[-2]), bbox_inches="tight")
+    fig2.savefig('f_max_go_by_depth_{}.png'.format(sys.argv[-2]), bbox_inches="tight")
 
 
 
