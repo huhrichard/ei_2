@@ -10,8 +10,8 @@ def find_dir(pattern, path):
     for dir in dirs:
         # print(dir)
         if fnmatch.fnmatch(dir, pattern):
-            # result_dir = abspath(os.path.join(path, dir))
-            result_dir = dir
+            result_dir = os.path.join(path, dir)
+            # result_dir = dir
             print(result_dir)
             result.append(result_dir)
 
