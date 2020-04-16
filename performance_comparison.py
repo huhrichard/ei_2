@@ -116,6 +116,10 @@ if __name__ == "__main__":
     sorted_dataname_list = [f for m, f in sorted(zip(mean_fmax_list, data_list), reverse=True)]
     sorted_cp = [f for m, f in sorted(zip(mean_fmax_list, cp), reverse=True)]
 
+    img_str = 'hpo'
+    if is_go:
+        img_str = 'go'
+
     print(sorted_dataname_list)
     lrs_df_cat = pd.concat(lrs_df_list)
     fig1 = plt.figure()
@@ -128,7 +132,7 @@ if __name__ == "__main__":
     ax1.set_ylabel(r'$F_{max}$')
     ax1.set_xlabel(title_name)
     ax1.set_title('# of annotation')
-    fig1.savefig('f_max_go_comparison_{}.png'.format(sys.argv[-2]), bbox_inches="tight")
+    fig1.savefig('f_max_{}_comparison_{}.png'.format(img_str, sys.argv[-2]), bbox_inches="tight")
 
     if is_go:
         fig2_plot_only = ['Mashup', 'DeepNF', 'EI']
@@ -146,7 +150,7 @@ if __name__ == "__main__":
         ax2.set_ylabel(r'$F_{max}$')
         ax2.set_xlabel('Depth in GO Hierarchy')
         ax2.set_title(title_name)
-        fig2.savefig('f_max_go_by_depth_{}.png'.format(sys.argv[-2]), bbox_inches="tight")
+        fig2.savefig('f_max_{}_by_depth_{}.png'.format(img_str, sys.argv[-2]), bbox_inches="tight")
 
         # fig2_plot_only = ['Mashup', 'DeepNF', 'EI']
         # idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
@@ -174,7 +178,7 @@ if __name__ == "__main__":
         ax3.set_ylabel(r'$F_{max}$')
         ax3.set_xlabel('Information Content')
         ax3.set_title(title_name)
-        fig3.savefig('f_max_go_by_ic_{}.png'.format(sys.argv[-2]), bbox_inches="tight")
+        fig3.savefig('f_max_{}_by_ic_{}.png'.format(img_str, sys.argv[-2]), bbox_inches="tight")
 
     #
     # ax1.boxplot(sorted_fmax_list)
