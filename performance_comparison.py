@@ -37,7 +37,7 @@ def best_stacking_score(df, stacking_suffix='.S'):
     # return_df = pd.DataFrame([])
     col_wo_method = df.columns.values.tolist().remove('method')
 
-    pivoted_df = df.pivot_table('method', col_wo_method, 'fmax_stacking')
+    pivoted_df = df.pivot_table('fmax', col_wo_method, 'method')
     pivoted_df = pivoted_df.reindex(col_wo_method+df['method'].unique())
     print(pivoted_df.columns)
     print(pivoted_df)
