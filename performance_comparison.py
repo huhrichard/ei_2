@@ -40,9 +40,9 @@ def best_stacking_score(df, stacking_suffix='.S'):
             stacking_cols.append(col)
 
     # df['best_stacking_fmax'] = 0
-    df.['best_stacking_fmax'] = (df[stacking_cols]).max(axis=1).values
+    df['best_stacking_fmax'] = (df[stacking_cols]).max(axis=1).values
     # df.loc['best_stacking_method'] = ''
-    df.['best_stacking_method'] = (df[stacking_cols]).idxmax(axis=1).values
+    df['best_stacking_method'] = (df[stacking_cols]).idxmax(axis=1).values
     return df
 
 def add_colon(str):
