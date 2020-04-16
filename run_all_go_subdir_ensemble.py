@@ -43,7 +43,7 @@ def find_dir(pattern, path):
 
 if __name__ == "__main__":
     # file_list = find_dir('GO*',sys.argv[-1])
-    dir_list = find_dir('GO*', args.path)
+    dir_list = find_dir('HP*', args.path)
     for go_dir in dir_list:
         data = go_dir.split('/')[-1]
         print('submitting EI ensemble job to hpc...')
