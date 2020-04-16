@@ -61,7 +61,7 @@ for suffix, val in dict_suffix.items():
         jobs_fn = './jobs/'+fn
         f = open(jobs_fn, 'w')
         go_stats = 0
-        plt.figure()
+        # plt.figure()
         go_by_groups = go_terms_from_tsv[bool_array]
         for go in go_by_groups:
 
