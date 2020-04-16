@@ -33,18 +33,26 @@ def extract_df_by_method(df, method='', drop_columns=['method']):
     return return_df
 
 def best_stacking_score(df, stacking_suffix='.S'):
-    cols = df.columns.values
+
+    # return_df = pd.DataFrame([])
+    col_wo_method = df.columns.remove('method').values
+
+    pivoted_df = df.pivot_table('method', col_wo_method, 'fmax_stacking')
+    pivoted_df = pivoted_df.reindex(col_wo_method+df['method'].unique())
+    print(pivoted_df.columns)
+    print(pivoted_df)
+    cols = pivoted_df.columns.values
     stacking_cols = []
     for col in cols:
         if stacking_suffix in col:
             stacking_cols.append(col)
 
-    # df['best_stacking_fmax'] = 0
-    df['best_stacking_fmax'] = (df[stacking_cols]).max(axis=1).values
-    # df.loc['best_stacking_method'] = ''
-    print(df[stacking_cols])
-    df['best_stacking_method'] = (df[stacking_cols]).idxmax(axis=1).values
-    return df
+    # pivoted_df['best_stacking_fmax'] = 0
+    pivoted_df['best_stacking_fmax'] = (pivoted_df[stacking_cols]).max(axis=1).values
+    # pivoted_df.loc['best_stacking_method'] = ''
+    print(pivoted_df[stacking_cols])
+    pivoted_df['best_stacking_method'] = (pivoted_df[stacking_cols]).idxmax(axis=1).values
+    return pivoted_df
 
 def add_colon(str):
     return str[:2]+':'+str[2:]
