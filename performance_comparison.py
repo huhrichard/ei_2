@@ -39,9 +39,9 @@ def best_stacking_score(df, stacking_suffix='.S'):
         if stacking_suffix in col:
             stacking_cols.append(col)
 
-    # df['best_stacking_fmax'] = 0
+    df['best_stacking_fmax'] = 0
     df.loc['best_stacking_fmax'] = (df[stacking_cols]).max(axis=1).values
-    # df.loc['best_stacking_method'] =
+    df.loc['best_stacking_method'] = ''
     df.loc['best_stacking_method'] = (df[stacking_cols]).idxmax(axis=1).values
     return df
 
