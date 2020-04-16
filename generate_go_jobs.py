@@ -8,6 +8,7 @@ from goatools.anno.factory import get_objanno
 from goatools.semantic import TermCounts
 from goatools.semantic import get_info_content
 import math
+import sys
 
 from goatools.base import download_go_basic_obo
 obo_fname = download_go_basic_obo()
@@ -17,9 +18,16 @@ from goatools.obo_parser import GODag
 
 # godag = GODag('go-basic_2018.obo')
 godag = get_godag('go-basic.obo')
+ontology = sys.argv[-1]
+if ontology == 'go':
+    is_go = True
+else:
+    is_go = False
 
-# path = './not_on_github/tsv/'+'GO2HPO_binary.tsv'
-path = './not_on_github/tsv/'+'pos-neg-O-10.tsv'
+if is_go:
+    path = './not_on_github/tsv/'+'GO2HPO_binary.tsv'
+else:
+    path = './not_on_github/tsv/'+'pos-neg-O-10.tsv'
 # path = 'GO_annotations_Sept2017_EI_experiments.tsv'
 df = pd.read_csv(path, sep='\t',index_col=0)
 number_protein = df.shape[0]
@@ -50,10 +58,12 @@ dict_suffix = {'': 'EI',
                'neighborhood': 'Neighborhood'}
 for suffix, val in dict_suffix.items():
     if suffix != '':
-        suffix = '_' + suffix
-    go_by_count_dict = {'EIdata_500_1000_hpo{}.jobs'.format(suffix):np.logical_and((go_pos_count>500), (go_pos_count<=1000)),
-                        'EIdata_1000_hpo{}.jobs'.format(suffix): go_pos_count > 1000,
-                        'EIdata_200_500_hpo{}.jobs'.format(suffix): np.logical_and((go_pos_count>200), (go_pos_count<500))}
+        suffix = ontology + '_' + suffix
+    else:
+        suffix = ontology
+    go_by_count_dict = {'EIdata_500_1000_{}.jobs'.format(suffix):np.logical_and((go_pos_count>500), (go_pos_count<=1000)),
+                        'EIdata_1000_{}.jobs'.format(suffix): go_pos_count > 1000,
+                        'EIdata_200_500_{}.jobs'.format(suffix): np.logical_and((go_pos_count>200), (go_pos_count<500))}
 
     IC_list = []
 
@@ -64,26 +74,20 @@ for suffix, val in dict_suffix.items():
         # plt.figure()
         go_by_groups = go_terms_from_tsv[bool_array]
         for go in go_by_groups:
-
             try:
-
-                # depth_go = godag[go].depth
-                # tinfo_hsa_go = get_info_content(go, term_count)
-                # IC_list.append(tinfo_hsa_go)
-
-
-
-                # print(go, depth_go, tinfo_hsa_go)
-                # if depth_go >= 2 and
-                # if depth_go >= 2:
-                # if tinfo_hsa_go > 5:
-                # if depth_go >= 2:
-                if suffix != '':
-                    f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], suffix[1:]))
+                if is_go:
+                    depth_go = godag[go].depth
+                    if depth_go >= 2:
+                        if suffix != '':
+                            f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], suffix[1:]))
+                        else:
+                            f.write('python generate_data.py {} {}/ \n'.format(go, fn.split('.')[0]))
                 else:
-                    f.write('python generate_data.py {} {}/ \n'.format(go, fn.split('.')[0]))
-                    # f.write(go+'\n')
-                    # go_stats += 1
+                    if suffix != '':
+                        f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], suffix[1:]))
+                    else:
+                        f.write('python generate_data.py {} {}/ \n'.format(go, fn.split('.')[0]))
+
             except KeyError:
                 pass
 
