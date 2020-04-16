@@ -130,8 +130,8 @@ if __name__ == "__main__":
         tick.set_rotation(45)
         tick.set_horizontalalignment("right")
     ax1.set_ylabel(r'$F_{max}$')
-    ax1.set_xlabel(title_name)
-    ax1.set_title('# of annotation')
+    ax1.set_xlabel('')
+    ax1.set_title(title_name)
     fig1.savefig('f_max_{}_comparison_{}.png'.format(img_str, sys.argv[-2]), bbox_inches="tight")
 
     if is_go:
