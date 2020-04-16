@@ -35,7 +35,8 @@ def extract_df_by_method(df, method='', drop_columns=['method']):
 def best_stacking_score(df, stacking_suffix='.S'):
 
     # return_df = pd.DataFrame([])
-    col_wo_method = df.columns.values.tolist().remove('method')
+    col_wo_method = df.columns.values.tolist()\
+    col_wo_method.remove('method')
 
     pivoted_df = df.pivot_table('fmax', col_wo_method, 'method')
     pivoted_df = pivoted_df.reindex(col_wo_method+df['method'].unique())
