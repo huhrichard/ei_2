@@ -32,6 +32,19 @@ def extract_df_by_method(df, method='', drop_columns=['method']):
     return_df.drop(drop_columns, axis=1, inplace=True)
     return return_df
 
+def best_stacking_score(df, stacking_suffix='.S'):
+    cols = df.columns.values
+    stacking_cols = []
+    for col in cols:
+        if stacking_suffix in col:
+            stacking_cols.append(col)
+
+    # df['best_stacking_fmax'] = 0
+    df.loc['best_stacking_fmax'] = (df[stacking_cols]).max(axis=1)
+    # df.loc['best_stacking_method'] =
+    df.loc['best_stacking_method'] = (df[stacking_cols]).idxmax(axis=1)
+    return df
+
 def add_colon(str):
     return str[:2]+':'+str[2:]
 
@@ -65,7 +78,7 @@ if __name__ == "__main__":
     fmax_list = []
     mean_fmax_list = []
     data_list = []
-    lrs_df_list = []
+    stacking_df_list = []
     is_go = False
     for key, val in dict_suffix.items():
         if len(key) > 0:
@@ -99,18 +112,19 @@ if __name__ == "__main__":
                     ic = 0
                 performance_df.loc[performance_df['data_name']==go_term, 'go_depth'] = depth
                 performance_df.loc[performance_df['data_name']==go_term, 'go_ic'] = ic
-        lrs_df = extract_df_by_method(performance_df, method='LR.S', drop_columns=['method'])
+        # stacking_df = extract_df_by_method(performance_df, method='LR.S', drop_columns=['method'])
+        stacking_df = best_stacking_score(performance_df)
 
-        lrs_df['input'] = val
+        stacking_df['input'] = val
 
         # performance_df['delta_fmax_LR.S'] = performance_df['fmax_LR.S'] - performance_df['fmax_best base']
         # best_base_df = extract_df_by_method(performance_df, method='best base')
         # performance_df_dict[val] = performance_df
-        print(val, lrs_df.shape)
-        fmax_list.append(lrs_df['fmax_LR.S'].values)
-        mean_fmax_list.append(np.mean(lrs_df['fmax_LR.S'].values))
+        print(val, stacking_df.shape)
+        fmax_list.append(stacking_df['best_stacking_fmax'].values)
+        mean_fmax_list.append(np.mean(stacking_df['best_stacking_fmax'].values))
         data_list.append(val)
-        lrs_df_list.append(lrs_df)
+        stacking_df_list.append(stacking_df)
 
     sorted_fmax_list = [f for m, f in sorted(zip(mean_fmax_list, fmax_list), reverse=True)]
     sorted_dataname_list = [f for m, f in sorted(zip(mean_fmax_list, data_list), reverse=True)]
@@ -119,17 +133,17 @@ if __name__ == "__main__":
     img_str = 'hpo'
     if is_go:
         img_str = 'go'
-
+    ylabel = r'$F_{max}$ of best stacking'
     print(sorted_dataname_list)
-    lrs_df_cat = pd.concat(lrs_df_list)
+    stacking_df_cat = pd.concat(stacking_df_list)
     fig1 = plt.figure()
     ax1 = fig1.add_subplot(111)
-    ax1 = sns.boxplot(ax=ax1, y='fmax_LR.S', x='input',
-                      data=lrs_df_cat, palette=sorted_cp, order=sorted_dataname_list)
+    ax1 = sns.boxplot(ax=ax1, y='best_stacking_fmax', x='input',
+                      data=stacking_df_cat, palette=sorted_cp, order=sorted_dataname_list)
     for tick in ax1.get_xticklabels():
         tick.set_rotation(45)
         tick.set_horizontalalignment("right")
-    ax1.set_ylabel(r'$F_{max}$')
+    ax1.set_ylabel(ylabel)
     ax1.set_xlabel('')
     ax1.set_title(title_name)
     fig1.savefig('f_max_{}_comparison_{}.png'.format(img_str, sys.argv[-2]), bbox_inches="tight")
@@ -140,14 +154,14 @@ if __name__ == "__main__":
         # cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
         fig2 = plt.figure()
         ax2 = fig2.add_subplot(111)
-        ax2 = sns.boxplot(ax=ax2, y='fmax_LR.S', x='go_depth',
-                          data=lrs_df_cat[lrs_df_cat['input'].isin(fig2_plot_only)],
+        ax2 = sns.boxplot(ax=ax2, y='best_stacking_fmax', x='go_depth',
+                          data=stacking_df_cat[stacking_df_cat['input'].isin(fig2_plot_only)],
                           # palette=c,
                           hue='input', hue_order=fig2_plot_only,
-                          order=sorted(set(lrs_df_cat['go_depth'].values)))
+                          order=sorted(set(stacking_df_cat['go_depth'].values)))
         ax2.get_legend().remove()
         ax2.legend(loc='upper right')
-        ax2.set_ylabel(r'$F_{max}$')
+        ax2.set_ylabel(ylabel)
         ax2.set_xlabel('Depth in GO Hierarchy')
         ax2.set_title(title_name)
         fig2.savefig('f_max_{}_by_depth_{}.png'.format(img_str, sys.argv[-2]), bbox_inches="tight")
@@ -156,26 +170,26 @@ if __name__ == "__main__":
         # idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
         # cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
 
-        ic_of_terms = lrs_df_cat['go_ic'].values
+        ic_of_terms = stacking_df_cat['go_ic'].values
         # _, bin_edges = np.histogram(ic_of_terms, bins=5)
         bin_edges = np.percentile(ic_of_terms, np.linspace(0, 100, 6))
         ic_group_list = []
-        lrs_df_cat['ic_group'] = 'temp'
+        stacking_df_cat['ic_group'] = 'temp'
         for idx, edge in enumerate(bin_edges[:-1]):
             next_edge = bin_edges[(idx+1)]
             group_name = '{:.2f}-{:.2f}'.format(edge, next_edge)
-            lrs_df_cat.loc[(lrs_df_cat['go_ic'] <= next_edge) & (lrs_df_cat['go_ic'] >= edge), 'ic_group'] = group_name
+            stacking_df_cat.loc[(stacking_df_cat['go_ic'] <= next_edge) & (stacking_df_cat['go_ic'] >= edge), 'ic_group'] = group_name
             ic_group_list.append(group_name)
         fig3 = plt.figure()
         ax3 = fig3.add_subplot(111)
-        ax3 = sns.boxplot(ax=ax3, y='fmax_LR.S', x='ic_group',
-                          data=lrs_df_cat[lrs_df_cat['input'].isin(fig2_plot_only)],
+        ax3 = sns.boxplot(ax=ax3, y='best_stacking_fmax', x='ic_group',
+                          data=stacking_df_cat[stacking_df_cat['input'].isin(fig2_plot_only)],
                           # palette=c,
                           hue='input', hue_order=fig2_plot_only,
                           order=ic_group_list)
         ax3.get_legend().remove()
         ax3.legend(loc='upper right')
-        ax3.set_ylabel(r'$F_{max}$')
+        ax3.set_ylabel(ylabel)
         ax3.set_xlabel('Information Content')
         ax3.set_title(title_name)
         fig3.savefig('f_max_{}_by_ic_{}.png'.format(img_str, sys.argv[-2]), bbox_inches="tight")
