@@ -25,6 +25,6 @@ if __name__ == "__main__":
     for go_dir in dir_list:
 
         # python_cmd = 'python train_base.py --path {}'.format(go_dir)
-        python_cmd = 'python call_generate_script {}'.format(go_dir)
+        python_cmd = 'python call_generate_script.py {}'.format(go_dir)
         print(python_cmd)
         system(python_cmd)
