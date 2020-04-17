@@ -23,9 +23,13 @@ if __name__ == "__main__":
     dir_list = find_dir('EIdata*_{}*.jobs'.format(ontology), './jobs/')
     scratch_path = '/sc/hydra/scratch/liy42/'
     # dir_list = find_dir('GO0071704', sys.argv[-1])
+    if ontology == 'go':
+        prefix = 'GO'
+    else:
+        prefix = 'HP'
     for go_dir in dir_list:
 
         # python_cmd = 'python train_base.py --path {}'.format(go_dir)
-        python_cmd = 'python run_all_go_subdir_train_base.py {}'.format(scratch_path+go_dir.split('.')[0])
+        python_cmd = 'python run_all_go_subdir_train_base.py {} {}'.format(prefix, scratch_path+go_dir.split('.')[0])
         print(python_cmd)
         system(python_cmd)

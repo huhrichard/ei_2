@@ -19,7 +19,8 @@ def find_dir(pattern, path):
     return result
 
 if __name__ == "__main__":
-    dir_list = find_dir('HP*', sys.argv[-1])
+
+    dir_list = find_dir('{}*'.format(sys.argv[-2]), sys.argv[-1])
     # dir_list = find_dir('GO0071704', sys.argv[-1])
     for go_dir in dir_list:
         python_cmd = 'python train_base.py --path {}'.format(go_dir)
