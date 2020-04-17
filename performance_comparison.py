@@ -109,6 +109,7 @@ if __name__ == "__main__":
         # print(performance_df.columns)
         performance_df['data_name'] = performance_df['data_name'].apply(add_colon)
         go_terms_set = set(list(performance_df['data_name']))
+        print(performance_df['data_name'][0])
         if 'GO' in performance_df['data_name'][0]:
             is_go = True
             gosubdag = GoSubDag(go_terms_set, godag)
