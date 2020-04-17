@@ -150,6 +150,7 @@ if __name__ == "__main__":
     ylabel = r'$F_{max}$ of best stacking'
     print(sorted_dataname_list)
     stacking_df_cat = pd.concat(stacking_df_list)
+    print(stacking_df_cat, stacking_df_cat.columns)
     fig1 = plt.figure()
     ax1 = fig1.add_subplot(111)
     ax1 = sns.boxplot(ax=ax1, y='best_stacking_fmax', x='input',
