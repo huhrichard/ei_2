@@ -52,7 +52,7 @@ if __name__ == "__main__":
         script.write(
             '#!/bin/bash\n#BSUB -P acc_pandeg01a\n#BSUB -q %s\n#BSUB -J %s\n#BSUB -W %s\n#BSUB -R rusage[mem=%s]\n#BSUB -n %s\n#BSUB -sp 100\n' % (
             args.queue, data, args.time, args.memory, args.node))
-        script.write('#BSUB -o %s.%%J.stdout\n#BSUB -eo %s.%%J.stderr\n#BSUB -L /bin/bash\n' % (data, data))
+        script.write('#BSUB -o %s.stdout\n#BSUB -eo %s.stderr\n#BSUB -L /bin/bash\n' % (data, data))
         script.write('module purge')
         # script.write('conda activate largegopred')
         script.write(
