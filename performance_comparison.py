@@ -154,7 +154,7 @@ if __name__ == "__main__":
     img_str = 'hpo'
     if is_go:
         img_str = 'go'
-    ylabel = r'$F_{max}$ of best stacking'
+    ylabel = r'$F_{max}$'
     print(sorted_dataname_list)
     stacking_df_cat = pd.concat(stacking_df_list)
     print(stacking_df_cat, stacking_df_cat.columns)
