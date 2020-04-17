@@ -58,12 +58,12 @@ dict_suffix = {'': 'EI',
                'neighborhood': 'Neighborhood'}
 for suffix, val in dict_suffix.items():
     if suffix != '':
-        suffix = ontology + '_' + suffix
+        ontology_suffix = ontology + '_' + suffix
     else:
-        suffix = ontology
-    go_by_count_dict = {'EIdata_500_1000_{}.jobs'.format(suffix):np.logical_and((go_pos_count>500), (go_pos_count<=1000)),
-                        'EIdata_1000_{}.jobs'.format(suffix): go_pos_count > 1000,
-                        'EIdata_200_500_{}.jobs'.format(suffix): np.logical_and((go_pos_count>200), (go_pos_count<500))}
+        ontology_suffix = ontology
+    go_by_count_dict = {'EIdata_500_1000_{}.jobs'.format(ontology_suffix):np.logical_and((go_pos_count>500), (go_pos_count<=1000)),
+                        'EIdata_1000_{}.jobs'.format(ontology_suffix): go_pos_count > 1000,
+                        'EIdata_200_500_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>200), (go_pos_count<500))}
 
     IC_list = []
 

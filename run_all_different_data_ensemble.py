@@ -19,7 +19,8 @@ def find_dir(pattern, path):
 
 
 if __name__ == "__main__":
-    dir_list = find_dir('EIdata*_go*.jobs', './jobs/')
+    ontology = sys.argv[-1]
+    dir_list = find_dir('EIdata_*{}_*.jobs'.format(ontology), './jobs/')
     scratch_path = '/sc/hydra/scratch/liy42/'
     # dir_list = find_dir('GO0071704', sys.argv[-1])
     for go_dir in dir_list:

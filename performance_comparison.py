@@ -134,7 +134,7 @@ if __name__ == "__main__":
         # performance_df_dict[val] = performance_df
         print(val, stacking_df.shape)
         fmax_list.append(stacking_df['best_stacking_fmax'].values)
-        mean_fmax_list.append(np.mean(stacking_df['best_stacking_fmax'].values))
+        mean_fmax_list.append(np.median(stacking_df['best_stacking_fmax'].values))
         data_list.append(val)
         stacking_df_list.append(stacking_df)
 
