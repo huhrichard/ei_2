@@ -1,0 +1,16 @@
+#!/bin/bash
+#BSUB -J ensemble_all
+#BSUB -P acc_pandeg01a
+#BSUB -q express
+#BSUB -n 1
+#BSUB -W 10:00
+#BSUB -o ensemble_all.stdout
+#BSUB -eo ensemble_all.stderr
+#BSUB -R rusage[mem=10000]
+
+module purge
+module load java
+module load python
+module load groovy
+module load selfsched
+python run_all_different_data_ensemble.py hpo
