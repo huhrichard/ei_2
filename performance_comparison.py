@@ -132,7 +132,7 @@ if __name__ == "__main__":
                 performance_df.loc[performance_df['data_name']==go_term, 'go_depth'] = depth
                 performance_df.loc[performance_df['data_name']==go_term, 'go_ic'] = ic
         # stacking_df = extract_df_by_method(performance_df, method='LR.S', drop_columns=['method'])
-        stacking_df = best_ensemble_score(performance_df)
+        stacking_df = best_ensemble_score(performance_df, input=key)
 
         stacking_df['input'] = val
 
