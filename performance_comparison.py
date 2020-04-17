@@ -32,7 +32,7 @@ def extract_df_by_method(df, method='', drop_columns=['method']):
     return_df.drop(drop_columns, axis=1, inplace=True)
     return return_df
 
-def best_ensemble_score(df, input, stacking_suffix='.S'):
+def best_ensemble_score(df, input, ensemble_suffix='.S'):
     list_best_base = ['deepNF', 'mashup']
     # return_df = pd.DataFrame([])
     col_wo_method = df.columns.values.tolist()
@@ -48,7 +48,7 @@ def best_ensemble_score(df, input, stacking_suffix='.S'):
     # cols = pivoted_df.columns.values
     # ensemble_cols = []
     # for col in cols:
-    #     if stacking_suffix in col:
+    #     if ensemble_suffix in col:
     #         ensemble_cols.append(col)
     ensemble_cols = df['method'].unique().tolist()
     ensemble_cols.remove('best base')
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     fmax_list = []
     median_fmax_list = []
     data_list = []
-    stacking_df_list = []
+    ensemble_df_list = []
     is_go = False
     for key, val in dict_suffix.items():
         if len(key) > 0:
@@ -131,19 +131,19 @@ if __name__ == "__main__":
                     ic = 0
                 performance_df.loc[performance_df['data_name']==go_term, 'go_depth'] = depth
                 performance_df.loc[performance_df['data_name']==go_term, 'go_ic'] = ic
-        # stacking_df = extract_df_by_method(performance_df, method='LR.S', drop_columns=['method'])
-        stacking_df = best_ensemble_score(performance_df, input=key)
+        # ensemble_df = extract_df_by_method(performance_df, method='LR.S', drop_columns=['method'])
+        ensemble_df = best_ensemble_score(performance_df, input=key)
 
-        stacking_df['input'] = val
+        ensemble_df['input'] = val
 
         # performance_df['delta_fmax_LR.S'] = performance_df['fmax_LR.S'] - performance_df['fmax_best base']
         # best_base_df = extract_df_by_method(performance_df, method='best base')
         # performance_df_dict[val] = performance_df
-        print(val, stacking_df.shape)
-        fmax_list.append(stacking_df['best_fmax'].values)
-        median_fmax_list.append(np.median(stacking_df['best_fmax'].values))
+        print(val, ensemble_df.shape)
+        fmax_list.append(ensemble_df['best_fmax'].values)
+        median_fmax_list.append(np.median(ensemble_df['best_fmax'].values))
         data_list.append(val)
-        stacking_df_list.append(stacking_df)
+        ensemble_df_list.append(ensemble_df)
 
     print(median_fmax_list)
     print(len(fmax_list), len(median_fmax_list))
@@ -156,12 +156,20 @@ if __name__ == "__main__":
         img_str = 'go'
     ylabel = r'$F_{max}$'
     print(sorted_dataname_list)
-    stacking_df_cat = pd.concat(stacking_df_list)
-    print(stacking_df_cat, stacking_df_cat.columns)
+
+
+    ensemble_df_cat = pd.concat(ensemble_df_list)
+
+    # make input for cd plot
+    cd_input = ensemble_df_cat[['data_name','best_fmax','input']]
+
+    cd_input_df = cd_input.pivot_table('best_fmax', ['data_name'],'input')
+    print(cd_input_df)
+    # print(ensemble_df_cat, ensemble_df_cat.columns)
     fig1 = plt.figure()
     ax1 = fig1.add_subplot(111)
     ax1 = sns.boxplot(ax=ax1, y='best_fmax', x='input',
-                      data=stacking_df_cat, palette=sorted_cp, order=sorted_dataname_list)
+                      data=ensemble_df_cat, palette=sorted_cp, order=sorted_dataname_list)
     for tick in ax1.get_xticklabels():
         tick.set_rotation(45)
         tick.set_horizontalalignment("right")
@@ -177,10 +185,10 @@ if __name__ == "__main__":
         fig2 = plt.figure()
         ax2 = fig2.add_subplot(111)
         ax2 = sns.boxplot(ax=ax2, y='best_fmax', x='go_depth',
-                          data=stacking_df_cat[stacking_df_cat['input'].isin(fig2_plot_only)],
+                          data=ensemble_df_cat[ensemble_df_cat['input'].isin(fig2_plot_only)],
                           # palette=c,
                           hue='input', hue_order=fig2_plot_only,
-                          order=sorted(set(stacking_df_cat['go_depth'].values)))
+                          order=sorted(set(ensemble_df_cat['go_depth'].values)))
         ax2.get_legend().remove()
         ax2.legend(loc='upper right')
         ax2.set_ylabel(ylabel)
@@ -192,20 +200,20 @@ if __name__ == "__main__":
         # idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
         # cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
 
-        ic_of_terms = stacking_df_cat['go_ic'].values
+        ic_of_terms = ensemble_df_cat['go_ic'].values
         # _, bin_edges = np.histogram(ic_of_terms, bins=5)
         bin_edges = np.percentile(ic_of_terms, np.linspace(0, 100, 6))
         ic_group_list = []
-        stacking_df_cat['ic_group'] = 'temp'
+        ensemble_df_cat['ic_group'] = 'temp'
         for idx, edge in enumerate(bin_edges[:-1]):
             next_edge = bin_edges[(idx+1)]
             group_name = '{:.2f}-{:.2f}'.format(edge, next_edge)
-            stacking_df_cat.loc[(stacking_df_cat['go_ic'] <= next_edge) & (stacking_df_cat['go_ic'] >= edge), 'ic_group'] = group_name
+            ensemble_df_cat.loc[(ensemble_df_cat['go_ic'] <= next_edge) & (ensemble_df_cat['go_ic'] >= edge), 'ic_group'] = group_name
             ic_group_list.append(group_name)
         fig3 = plt.figure()
         ax3 = fig3.add_subplot(111)
         ax3 = sns.boxplot(ax=ax3, y='best_fmax', x='ic_group',
-                          data=stacking_df_cat[stacking_df_cat['input'].isin(fig2_plot_only)],
+                          data=ensemble_df_cat[ensemble_df_cat['input'].isin(fig2_plot_only)],
                           # palette=c,
                           hue='input', hue_order=fig2_plot_only,
                           order=ic_group_list)
