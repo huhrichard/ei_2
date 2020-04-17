@@ -32,8 +32,8 @@ def extract_df_by_method(df, method='', drop_columns=['method']):
     return_df.drop(drop_columns, axis=1, inplace=True)
     return return_df
 
-def best_stacking_score(df, stacking_suffix='.S'):
-
+def best_ensemble_score(df, input, stacking_suffix='.S'):
+    list_best_base = ['deepNF', 'mashup']
     # return_df = pd.DataFrame([])
     col_wo_method = df.columns.values.tolist()
     col_wo_method.remove('method')
@@ -45,17 +45,21 @@ def best_stacking_score(df, stacking_suffix='.S'):
     # pivoted_df = pivoted_df.reindex(['data_name']+df['method'].unique())
     # print(pivoted_df.columns)
     # print(pivoted_df)
-    cols = pivoted_df.columns.values
-    stacking_cols = []
-    for col in cols:
-        if stacking_suffix in col:
-            stacking_cols.append(col)
+    # cols = pivoted_df.columns.values
+    # ensemble_cols = []
+    # for col in cols:
+    #     if stacking_suffix in col:
+    #         ensemble_cols.append(col)
+    ensemble_cols = df['method'].unique()
 
-    # pivoted_df['best_stacking_fmax'] = 0
-    pivoted_df['best_stacking_fmax'] = (pivoted_df[stacking_cols]).max(axis=1).values
-    # pivoted_df.loc['best_stacking_method'] = ''
-    # print(pivoted_df[stacking_cols])
-    pivoted_df['best_stacking_method'] = (pivoted_df[stacking_cols]).idxmax(axis=1).values
+    # pivoted_df['best_fmax'] = 0
+    if input in list_best_base:
+        pivoted_df['best_fmax'] = pivoted_df['best base'].values
+    else:
+        pivoted_df['best_fmax'] = (pivoted_df[ensemble_cols]).max(axis=1).values
+    # pivoted_df.loc['best_ensemble_method'] = ''
+    # print(pivoted_df[ensemble_cols])
+    pivoted_df['best_ensemble_method'] = (pivoted_df[ensemble_cols]).idxmax(axis=1).values
     return pivoted_df.reset_index()
 
 def add_colon(str):
@@ -89,7 +93,7 @@ if __name__ == "__main__":
     # performance_df_dict = dict()
     # fmax_df = pd.DataFrame()
     fmax_list = []
-    mean_fmax_list = []
+    median_fmax_list = []
     data_list = []
     stacking_df_list = []
     is_go = False
@@ -127,7 +131,7 @@ if __name__ == "__main__":
                 performance_df.loc[performance_df['data_name']==go_term, 'go_depth'] = depth
                 performance_df.loc[performance_df['data_name']==go_term, 'go_ic'] = ic
         # stacking_df = extract_df_by_method(performance_df, method='LR.S', drop_columns=['method'])
-        stacking_df = best_stacking_score(performance_df)
+        stacking_df = best_ensemble_score(performance_df)
 
         stacking_df['input'] = val
 
@@ -135,14 +139,14 @@ if __name__ == "__main__":
         # best_base_df = extract_df_by_method(performance_df, method='best base')
         # performance_df_dict[val] = performance_df
         print(val, stacking_df.shape)
-        fmax_list.append(stacking_df['best_stacking_fmax'].values)
-        mean_fmax_list.append(np.median(stacking_df['best_stacking_fmax'].values))
+        fmax_list.append(stacking_df['best_fmax'].values)
+        median_fmax_list.append(np.median(stacking_df['best_fmax'].values))
         data_list.append(val)
         stacking_df_list.append(stacking_df)
 
-    sorted_fmax_list = [f for m, f in sorted(zip(mean_fmax_list, fmax_list), reverse=True)]
-    sorted_dataname_list = [f for m, f in sorted(zip(mean_fmax_list, data_list), reverse=True)]
-    sorted_cp = [f for m, f in sorted(zip(mean_fmax_list, cp), reverse=True)]
+    sorted_fmax_list = [f for m, f in sorted(zip(median_fmax_list, fmax_list), reverse=True)]
+    sorted_dataname_list = [f for m, f in sorted(zip(median_fmax_list, data_list), reverse=True)]
+    sorted_cp = [f for m, f in sorted(zip(median_fmax_list, cp), reverse=True)]
 
     img_str = 'hpo'
     if is_go:
@@ -153,7 +157,7 @@ if __name__ == "__main__":
     print(stacking_df_cat, stacking_df_cat.columns)
     fig1 = plt.figure()
     ax1 = fig1.add_subplot(111)
-    ax1 = sns.boxplot(ax=ax1, y='best_stacking_fmax', x='input',
+    ax1 = sns.boxplot(ax=ax1, y='best_fmax', x='input',
                       data=stacking_df_cat, palette=sorted_cp, order=sorted_dataname_list)
     for tick in ax1.get_xticklabels():
         tick.set_rotation(45)
@@ -169,7 +173,7 @@ if __name__ == "__main__":
         # cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
         fig2 = plt.figure()
         ax2 = fig2.add_subplot(111)
-        ax2 = sns.boxplot(ax=ax2, y='best_stacking_fmax', x='go_depth',
+        ax2 = sns.boxplot(ax=ax2, y='best_fmax', x='go_depth',
                           data=stacking_df_cat[stacking_df_cat['input'].isin(fig2_plot_only)],
                           # palette=c,
                           hue='input', hue_order=fig2_plot_only,
@@ -197,7 +201,7 @@ if __name__ == "__main__":
             ic_group_list.append(group_name)
         fig3 = plt.figure()
         ax3 = fig3.add_subplot(111)
-        ax3 = sns.boxplot(ax=ax3, y='best_stacking_fmax', x='ic_group',
+        ax3 = sns.boxplot(ax=ax3, y='best_fmax', x='ic_group',
                           data=stacking_df_cat[stacking_df_cat['input'].isin(fig2_plot_only)],
                           # palette=c,
                           hue='input', hue_order=fig2_plot_only,
