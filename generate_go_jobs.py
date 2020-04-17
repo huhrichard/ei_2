@@ -79,12 +79,12 @@ for suffix, val in dict_suffix.items():
                     depth_go = godag[go].depth
                     if depth_go >= 2:
                         if suffix != '':
-                            f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], suffix[1:]))
+                            f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], suffix))
                         else:
                             f.write('python generate_data.py {} {}/ \n'.format(go, fn.split('.')[0]))
                 else:
                     if suffix != '':
-                        f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], suffix[1:]))
+                        f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], suffix))
                     else:
                         f.write('python generate_data.py {} {}/ \n'.format(go, fn.split('.')[0]))
 

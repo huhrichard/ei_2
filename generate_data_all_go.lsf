@@ -1,5 +1,5 @@
 #!/bin/bash
-#BSUB -J generate_data_200_500
+#BSUB -J generate_data_go
 #BSUB -P acc_pandeg01a
 #BSUB -q premium
 #BSUB -n 1

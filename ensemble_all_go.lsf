@@ -13,4 +13,4 @@ module load java
 module load python
 module load groovy
 module load selfsched
-python run_all_different_data_ensemble.py
+python run_all_different_data_ensemble.py go
