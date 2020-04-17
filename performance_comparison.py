@@ -166,7 +166,7 @@ if __name__ == "__main__":
 
     cd_input_df = cd_input.pivot_table('best_fmax', ['data_name'],'input').reset_index()
     cd_input_df.set_index('data_name', inplace=True)
-    cd_csv_fn = 'cd_input_{}.csv'.format(sys.argv[-2])
+    cd_csv_fn = 'cd_input_{}_{}.csv'.format(img_str, sys.argv[-2])
     cd_input_df.to_csv(cd_csv_fn, index_label=False)
     cmd = "R CMD BATCH --no-save --no-restore '--args cd_fn=\"{}\"' R/plotCDdiagram.R".format(cd_csv_fn)
     os.system(cmd)
