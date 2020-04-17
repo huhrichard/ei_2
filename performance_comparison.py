@@ -145,6 +145,7 @@ if __name__ == "__main__":
         data_list.append(val)
         stacking_df_list.append(stacking_df)
 
+    print(median_fmax_list)
     sorted_fmax_list = [f for m, f in sorted(zip(median_fmax_list, fmax_list), reverse=True)]
     sorted_dataname_list = [f for m, f in sorted(zip(median_fmax_list, data_list), reverse=True)]
     sorted_cp = [f for m, f in sorted(zip(median_fmax_list, cp), reverse=True)]
