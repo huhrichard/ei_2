@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib
+import Orange
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
@@ -167,6 +168,10 @@ if __name__ == "__main__":
     cd_input_df.set_index('data_name', inplace=True)
     cd_input_df.to_csv('cd_input_{}.csv'.format(sys.argv[-2]))
     print(cd_input_df)
+    average_rank_df = cd_input_df.rank(axis=1)
+    print(average_rank_df)
+    # for row in cd_input_df.index:
+    #     average_rank_df.loc[row] = df.loc[row].rank
     # print(ensemble_df_cat, ensemble_df_cat.columns)
     fig1 = plt.figure()
     ax1 = fig1.add_subplot(111)
