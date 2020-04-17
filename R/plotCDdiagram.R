@@ -16,6 +16,7 @@ if(length(args)==0){
 
 cd_input <- read.csv(file = cd_fn)
 
-png(file=gsub("csv", "png", cd_fn))
+# png(file=gsub("csv", "png", cd_fn))
+ggsave(gsub("csv", "png", cd_fn))
 plotCD(cd_input, alpha=0.05, cex=1.25)
 dev.off()
