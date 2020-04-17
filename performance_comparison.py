@@ -56,7 +56,7 @@ def best_stacking_score(df, stacking_suffix='.S'):
     # pivoted_df.loc['best_stacking_method'] = ''
     # print(pivoted_df[stacking_cols])
     pivoted_df['best_stacking_method'] = (pivoted_df[stacking_cols]).idxmax(axis=1).values
-    return pivoted_df.reset_index(inplace=True)
+    return pivoted_df.to_frame(index=False)
 
 def add_colon(str):
     return str[:2]+':'+str[2:]
