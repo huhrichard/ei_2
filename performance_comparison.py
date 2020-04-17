@@ -139,7 +139,7 @@ if __name__ == "__main__":
         # performance_df['delta_fmax_LR.S'] = performance_df['fmax_LR.S'] - performance_df['fmax_best base']
         # best_base_df = extract_df_by_method(performance_df, method='best base')
         # performance_df_dict[val] = performance_df
-        print(val, stacking_df.)
+        print(val, stacking_df.shape)
         fmax_list.append(stacking_df['best_fmax'].values)
         median_fmax_list.append(np.median(stacking_df['best_fmax'].values))
         data_list.append(val)
