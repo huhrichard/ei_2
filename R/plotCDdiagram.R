@@ -18,6 +18,6 @@ cd_input <- read.csv(file = cd_fn)
 
 # png(file=gsub("csv", "png", cd_fn))
 
-plotCD(cd_input, alpha=0.05, cex=1.25)
-ggsave(gsub("csv", "png", cd_fn))
+cdplot = plotCD(cd_input, alpha=0.05, cex=1.25)
+ggsave(filename=gsub("csv", "png", cd_fn), plot=cdplot)
 # dev.off()
