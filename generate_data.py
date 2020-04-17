@@ -158,8 +158,10 @@ if __name__ == "__main__":
 
     csv_dir = './not_on_github/csv/'
     tsv_dir = './not_on_github/tsv/'
-    # go_to_hpo_file = 'GO2HPO_binary.tsv'
-    go_to_hpo_file = 'pos-neg-O-10.tsv'
+    if 'go' in argv[2]:
+        go_to_hpo_file = 'GO2HPO_binary.tsv'
+    else:
+        go_to_hpo_file = 'pos-neg-O-10.tsv'
     print(len(argv))
     if len(argv) == 4:
         features = [argv[3]]
