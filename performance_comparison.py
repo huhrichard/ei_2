@@ -166,10 +166,14 @@ if __name__ == "__main__":
 
     cd_input_df = cd_input.pivot_table('best_fmax', ['data_name'],'input').reset_index()
     cd_input_df.set_index('data_name', inplace=True)
-    cd_input_df.to_csv('cd_input_{}.csv'.format(sys.argv[-2]))
-    print(cd_input_df)
-    average_rank_df = cd_input_df.rank(axis=1)
-    print(average_rank_df)
+    cd_csv_fn = 'cd_input_{}.csv'.format(sys.argv[-2])
+    cd_input_df.to_csv(cd_csv_fn, index_label=False)
+    cmd = "R CMD BATCH --no-save --no-restore '--args {}' R/plotCDdiagram.R".format(cd_csv_fn)
+    os.system(cmd)
+
+    # print(cd_input_df)
+    # average_rank_df = cd_input_df.rank(axis=1)
+    # print(average_rank_df)
     # for row in cd_input_df.index:
     #     average_rank_df.loc[row] = df.loc[row].rank
     # print(ensemble_df_cat, ensemble_df_cat.columns)
