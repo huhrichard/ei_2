@@ -164,7 +164,8 @@ if __name__ == "__main__":
     cd_input = ensemble_df_cat[['data_name','best_fmax','input']]
 
     cd_input_df = cd_input.pivot_table('best_fmax', ['data_name'],'input').reset_index()
-    cd_input_df.to_csv('cd_input_{}.csv'.format(group))
+    cd_input_df.set_index('data_name', inplace=True)
+    cd_input_df.to_csv('cd_input_{}.csv'.format(sys.argv[-2]))
     print(cd_input_df)
     # print(ensemble_df_cat, ensemble_df_cat.columns)
     fig1 = plt.figure()
