@@ -20,7 +20,7 @@ def find_dir(pattern, path):
 
 if __name__ == "__main__":
     ontology = sys.argv[-1]
-    dir_list = find_dir('EIdata_*{}_*.jobs'.format(ontology), './jobs/')
+    dir_list = find_dir('EIdata_*{}.jobs'.format(ontology), './jobs/')
     scratch_path = '/sc/hydra/scratch/liy42/'
     if ontology == 'go':
         prefix = 'GO'
