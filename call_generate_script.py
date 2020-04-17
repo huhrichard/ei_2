@@ -7,7 +7,7 @@ jobs_list = open(jobs_file, 'r').readlines()
 for job in jobs_list:
     term = job.split(' ')[2]
     data_dir = job.split(' ')[3][:-1]
-    lsf_fn = 'run_{}_{}_generate.lsf'.format(data_dir, term)
+    lsf_fn = 'run_{}_{}_generate.lsf'.format(data_dir, term.split(':')[1])
     fn = open(lsf_fn, 'w')
     fn.write('#!/bin/bash\n')
     fn.write('#BSUB -J {}_{}\n'.format(data_dir, term))
