@@ -1,8 +1,8 @@
 #!/bin/bash
 #BSUB -J train_all_base
 #BSUB -P acc_pandeg01a
-#BSUB -q express
-#BSUB -n 1
+#BSUB -q premium
+#BSUB -n 4
 #BSUB -W 10:00
 #BSUB -o train_all_base.stdout
 #BSUB -eo train_all_base.stderr

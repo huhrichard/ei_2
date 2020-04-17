@@ -1,8 +1,8 @@
 #!/bin/bash
 #BSUB -J ensemble_all
 #BSUB -P acc_pandeg01a
-#BSUB -q express
-#BSUB -n 1
+#BSUB -q premium
+#BSUB -n 4
 #BSUB -W 10:00
 #BSUB -o ensemble_all.stdout
 #BSUB -eo ensemble_all.stderr
