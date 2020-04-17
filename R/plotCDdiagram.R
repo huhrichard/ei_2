@@ -18,9 +18,9 @@ cd_input <- read.csv(file = cd_fn)
 
 png(file=gsub("csv", "png", cd_fn), width=900, bg="white")
 par(mar=c(1,5,1,5))
-cdplot <- plotCD(cd_input, alpha=0.05, cex=1)  +
+cdplot <- plotCD(cd_input, alpha=0.05, cex=0.9)  +
   geom_point() +
-  coord_fixed(ratio = 1) +
+  coord_fixed(ratio = 0.5) +
     coord_flip(clip = "off")
 # ggsave(filename=gsub("csv", "png", cd_fn), plot=cdplot)
 dev.off()
