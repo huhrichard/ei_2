@@ -51,7 +51,7 @@ def best_ensemble_score(df, input, stacking_suffix='.S'):
     #     if stacking_suffix in col:
     #         ensemble_cols.append(col)
     ensemble_cols = df['method'].unique().tolist()
-    ensemble_cols.remove('best_base')
+    ensemble_cols.remove('best base')
 
     # pivoted_df['best_fmax'] = 0
     if input in list_best_base:
