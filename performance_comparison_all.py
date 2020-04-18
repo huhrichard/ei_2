@@ -2,7 +2,7 @@
 import os
 from os import system
 
-dir_prefix = '/sc/hydra/scratch/liy42//sc/hydra/scratch/liy42/EIdata_'
+dir_prefix = '/sc/hydra/scratch/liy42/EIdata_'
 dict_to_compare = {
                     '1000': '1000_',
                     '500-1000': '500_1000_',
