@@ -15,4 +15,6 @@ system('module load R')
 
 for o in list_ontology:
     for key, val in dict_to_compare.items():
-        system(python_cmd.format(key, val+o))
+        cmd = python_cmd.format(key, val+o)
+        print(cmd)
+        system(cmd)
