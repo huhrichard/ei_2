@@ -13,4 +13,5 @@ module load java
 module load python
 module load groovy
 module load selfsched
+module load R
 python performance_comparison_all.py
