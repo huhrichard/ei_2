@@ -18,6 +18,9 @@ from os.path import abspath
 
 import os, fnmatch
 import sys
+from os import system
+
+system('module load R')
 
 def find(pattern, path):
     result = []
