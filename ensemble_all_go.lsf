@@ -6,7 +6,7 @@
 #BSUB -W 10:00
 #BSUB -o ensemble_all.stdout
 #BSUB -eo ensemble_all.stderr
-#BSUB -R rusage[mem=10000]
+#BSUB -R rusage[mem=20000]
 
 module purge
 module load java
