@@ -188,7 +188,7 @@ def main(path, fold_count=5, agg=1):
     dfs.append(pd.DataFrame(data=[[dn, bestbase, 'best base']], columns=cols, index=[0]))
     # Get Stacking Fmax scores
     stackers = [RandomForestClassifier(n_estimators=200, max_depth=2, bootstrap=False, random_state=0),
-                SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
+                SVC(C=1.0, cache_size=2000, class_weight=None, coef0=0.0,
                     decision_function_shape='ovr', degree=3, gamma='auto', kernel='linear', probability=True,
                     max_iter=-1, random_state=None, shrinking=True,
                     tol=0.001, verbose=False), GaussianNB(), LogisticRegression(), AdaBoostClassifier(),
