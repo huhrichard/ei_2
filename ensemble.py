@@ -190,7 +190,7 @@ def main(path, fold_count=5, agg=1):
     stackers = [RandomForestClassifier(n_estimators=200, max_depth=2, bootstrap=False, random_state=0),
                 SVC(C=1.0, cache_size=10000, class_weight=None, coef0=0.0,
                     decision_function_shape='ovr', degree=3, gamma='auto', kernel='linear', probability=True,
-                    max_iter=-1, random_state=None, shrinking=True,
+                    max_iter=1e8, random_state=None, shrinking=True,
                     tol=0.001, verbose=False), GaussianNB(), LogisticRegression(), AdaBoostClassifier(),
                 DecisionTreeClassifier(), GradientBoostingClassifier(loss='deviance'), KNeighborsClassifier()]
     stacker_names = ["RF.S", "SVM.S", "NB.S", "LR.S", "AB.S", "DT.S", "LB.S", "KNN.S"]
