@@ -30,6 +30,7 @@ else:
     path = './not_on_github/tsv/'+'pos-neg-O-10.tsv'
 # path = 'GO_annotations_Sept2017_EI_experiments.tsv'
 df = pd.read_csv(path, sep='\t',index_col=0)
+print(df.shape)
 number_protein = df.shape[0]
 # print(df.shape)
 # print(df.df.column
@@ -45,17 +46,19 @@ go_pos_count = sum(pos_entry)
 # suffix = '_experimental'
 # suffix = ''
 dict_suffix = {'': 'EI',
-               'deepNF': 'DeepNF',
-               'mashup': 'Mashup',
-               'coexpression': 'Coexpression',
-               'cooccurence': 'Coocuurence',
-               # 'database': 'Database',
-               'database': 'Curated database',
+               # 'deepNF': 'DeepNF',
+               # 'mashup': 'Mashup',
+               # 'coexpression': 'Coexpression',
+               # 'cooccurence': 'Coocuurence',
+               # # 'database': 'Database',
+               # 'database': 'Curated database',
+               #
+               # # 'experimental': 'Experimental',
+               # 'experimental': 'PPI',
+               # 'fusion': 'Fusion',
+               # 'neighborhood': 'Neighborhood'
+               }
 
-               # 'experimental': 'Experimental',
-               'experimental': 'PPI',
-               'fusion': 'Fusion',
-               'neighborhood': 'Neighborhood'}
 for suffix, val in dict_suffix.items():
     if suffix != '':
         ontology_suffix = ontology + '_' + suffix
@@ -64,10 +67,11 @@ for suffix, val in dict_suffix.items():
     go_by_count_dict = {
                         # 'EIdata_500_1000_{}.jobs'.format(ontology_suffix):np.logical_and((go_pos_count>500), (go_pos_count<=1000)),
                         # 'EIdata_1000_{}.jobs'.format(ontology_suffix): go_pos_count > 1000,
-                        # 'EIdata_200_500_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>200), (go_pos_count<500)),
-                        'EIdata_10_50_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>10), (go_pos_count<50)),
-                        'EIdata_50_100_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>50), (go_pos_count<100)),
-                        'EIdata_100_200_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>100), (go_pos_count<200)),
+                        # 'EIdata_200_500_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>200), (go_pos_count<=500)),
+                        # 'EIdata_10_50_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>10), (go_pos_count<50)),
+                        # 'EIdata_10_{}.jobs'.format(ontology_suffix): go_pos_count<=10,
+                        # 'EIdata_50_100_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>50), (go_pos_count<100)),
+                        'EIdata_100_200_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>100), (go_pos_count<=200)),
                         }
 
     IC_list = []
