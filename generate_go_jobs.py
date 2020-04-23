@@ -46,16 +46,16 @@ go_pos_count = sum(pos_entry)
 # suffix = '_experimental'
 # suffix = ''
 dict_suffix = {'': 'EI',
-               'deepNF': 'DeepNF',
+               # 'deepNF': 'DeepNF',
                'mashup': 'Mashup',
                'coexpression': 'Coexpression',
-               'cooccurence': 'Coocuurence',
-               # 'database': 'Database',
-               'database': 'Curated database',
-
-               # 'experimental': 'Experimental',
-               'experimental': 'PPI',
-               'fusion': 'Fusion',
+               # 'cooccurence': 'Coocuurence',
+               # # 'database': 'Database',
+               # 'database': 'Curated database',
+               #
+               # # 'experimental': 'Experimental',
+               # 'experimental': 'PPI',
+               # 'fusion': 'Fusion',
                'neighborhood': 'Neighborhood'
                }
 
@@ -65,12 +65,12 @@ for suffix, val in dict_suffix.items():
     else:
         ontology_suffix = ontology
     go_by_count_dict = {
-                        'EIdata_500_1000_{}.jobs'.format(ontology_suffix):np.logical_and((go_pos_count>500), (go_pos_count<=1000)),
-                        'EIdata_1000_{}.jobs'.format(ontology_suffix): go_pos_count > 1000,
-                        'EIdata_200_500_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>200), (go_pos_count<=500)),
-                        'EIdata_10_50_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>10), (go_pos_count<50)),
-                        'EIdata_10_{}.jobs'.format(ontology_suffix): go_pos_count<=10,
-                        'EIdata_50_100_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>50), (go_pos_count<100)),
+                        # 'EIdata_500_1000_{}.jobs'.format(ontology_suffix):np.logical_and((go_pos_count>500), (go_pos_count<=1000)),
+                        # 'EIdata_1000_{}.jobs'.format(ontology_suffix): go_pos_count > 1000,
+                        # 'EIdata_200_500_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>200), (go_pos_count<=500)),
+                        # 'EIdata_10_50_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>10), (go_pos_count<50)),
+                        # 'EIdata_10_{}.jobs'.format(ontology_suffix): go_pos_count<=10,
+                        # 'EIdata_50_100_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>50), (go_pos_count<100)),
                         'EIdata_100_200_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>100), (go_pos_count<=200)),
                         }
 
