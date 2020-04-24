@@ -48,9 +48,10 @@ if __name__ == "__main__":
     dir_list = find_dir('{}*'.format(args.term_prefix), args.path)
     for go_dir in dir_list:
         data = go_dir.split('/')[-1]
+        data_dir = go_dir.split('/')[-2]
         print('submitting EI ensemble job to hpc...')
         ####### Write the lsf fileqn1
-        script = open(data + '.lsf', 'w')
+        script = open(data_dir+'_'+data + '.lsf', 'w')
         script.write(
             '#!/bin/bash\n#BSUB -P acc_pandeg01a\n#BSUB -q %s\n#BSUB -J %s\n#BSUB -W %s\n#BSUB -R rusage[mem=%s]\n#BSUB -n %s\n#BSUB -sp 100\n' % (
             args.queue, data, args.time, args.memory, args.node))
