@@ -49,9 +49,10 @@ if __name__ == "__main__":
     for go_dir in dir_list:
         data = go_dir.split('/')[-1]
         data_dir = go_dir.split('/')[-2]
+        lsf_fn = data_dir+'_'+data + '.lsf'
         print('submitting EI ensemble job to hpc...')
         ####### Write the lsf fileqn1
-        script = open(data_dir+'_'+data + '.lsf', 'w')
+        script = open(lsf_fn, 'w')
         script.write(
             '#!/bin/bash\n#BSUB -P acc_pandeg01a\n#BSUB -q %s\n#BSUB -J %s\n#BSUB -W %s\n#BSUB -R rusage[mem=%s]\n#BSUB -n %s\n#BSUB -sp 100\n' % (
             args.queue, data, args.time, args.memory, args.node))
@@ -70,5 +71,5 @@ if __name__ == "__main__":
         # script.write('rm %s.jobs' % data)
         script.close()
         ####### Submit the lsf job and remove lsf script
-        system('bsub < %s.lsf' % data)
-        remove('%s.lsf' % data)
+        system('bsub < %s' % lsf_fn)
+        remove(lsf_fn)
