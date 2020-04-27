@@ -83,7 +83,7 @@ if __name__ == "__main__":
                    'deepNF': 'DeepNF',
                    'mashup': 'Mashup',
                    'coexpression': 'Coexpression',
-                   'cooccurence': 'Coocuurence',
+                   'cooccurence': 'Cooccurence',
                    # 'database': 'Database',
                    'database': 'Curated database',
 

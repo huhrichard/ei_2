@@ -73,7 +73,7 @@ job_file.close()
 
 ### submit to hpc if args.hpc != False
 if args.hpc:
-	lsf_fn = 'run_%s.lsf' %data_name
+	lsf_fn = 'run_%s_%s.lsf' %(data_source_dir, data_name)
 	fn = open(lsf_fn,'w')
 	fn.write('#!/bin/bash\n#BSUB -J EI-%s\n#BSUB -P acc_pandeg01a\n#BSUB -q %s\n#BSUB -n %s\n#BSUB -sp 100\n#BSUB -W %s\n#BSUB -o %s.stdout\n#BSUB -eo %s.stderr\n#BSUB -R rusage[mem=20000]\n' %(data_name,args.queue,args.node,args.time,data_name,data_name))
 	# fn.write('module load python/2.7.14\n')
