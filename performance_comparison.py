@@ -150,8 +150,8 @@ if __name__ == "__main__":
         data_list.append(val)
         ensemble_df_list.append(ensemble_df)
 
-    print(median_fmax_list)
-    print(len(fmax_list), len(median_fmax_list))
+    # print(median_fmax_list)
+    # print(len(fmax_list), len(median_fmax_list))
     sorted_fmax_list = [f for m, f in sorted(zip(median_fmax_list, fmax_list), reverse=True, key=lambda x: x[0])]
     sorted_dataname_list = [f for m, f in sorted(zip(median_fmax_list, data_list), reverse=True, key=lambda x: x[0])]
     sorted_cp = [f for m, f in sorted(zip(median_fmax_list, cp), reverse=True, key=lambda x: x[0])]
@@ -161,6 +161,7 @@ if __name__ == "__main__":
         img_str = 'go'
     ylabel = r'$F_{max}$'
     print(sorted_dataname_list)
+    print(sorted_fmax_list)
 
 
     ensemble_df_cat = pd.concat(ensemble_df_list)
