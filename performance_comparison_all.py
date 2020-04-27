@@ -9,11 +9,12 @@ dict_to_compare = {
                     '200-500': '200_500_',
                     '100-200': '100_200_',
                     '50-100': '50_100_',
+                    '10-50': '10_50_'
                     }
 #
 list_ontology = [
-                 'go',
-                 # 'hpo'
+                 # 'go',
+                 'hpo'
                 ]
 python_cmd = 'python performance_comparison.py {} {}'
 system('module load R')
