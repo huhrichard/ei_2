@@ -13,7 +13,7 @@ dict_to_compare = {
                     }
 #
 list_ontology = [
-                 # 'go',
+                 'go',
                  'hpo'
                 ]
 python_cmd = 'python performance_comparison.py {} {}'
