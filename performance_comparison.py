@@ -21,6 +21,7 @@ import sys
 from os import system
 
 system('module load R')
+plot_dir = './plot/'
 
 def find(pattern, path):
     result = []
@@ -190,7 +191,7 @@ if __name__ == "__main__":
     ax1.set_ylabel(ylabel)
     ax1.set_xlabel('')
     ax1.set_title(title_name)
-    fig1.savefig('f_max_{}_comparison_{}.png'.format(img_str, sys.argv[-2]), bbox_inches="tight")
+    fig1.savefig('{}f_max_{}_comparison_{}.png'.format(plot_dir, img_str, sys.argv[-2]), bbox_inches="tight")
 
     if is_go:
         fig2_plot_only = ['Mashup', 'DeepNF', 'EI']
@@ -208,7 +209,7 @@ if __name__ == "__main__":
         ax2.set_ylabel(ylabel)
         ax2.set_xlabel('Depth in GO Hierarchy')
         ax2.set_title(title_name)
-        fig2.savefig('f_max_{}_by_depth_{}.png'.format(img_str, sys.argv[-2]), bbox_inches="tight")
+        fig2.savefig('{}f_max_{}_by_depth_{}.png'.format(plot_dir, img_str, sys.argv[-2]), bbox_inches="tight")
 
         # fig2_plot_only = ['Mashup', 'DeepNF', 'EI']
         # idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
@@ -236,7 +237,7 @@ if __name__ == "__main__":
         ax3.set_ylabel(ylabel)
         ax3.set_xlabel('Information Content')
         ax3.set_title(title_name)
-        fig3.savefig('f_max_{}_by_ic_{}.png'.format(img_str, sys.argv[-2]), bbox_inches="tight")
+        fig3.savefig('{}f_max_{}_by_ic_{}.png'.format(plot_dir, img_str, sys.argv[-2]), bbox_inches="tight")
 
     #
     # ax1.boxplot(sorted_fmax_list)
