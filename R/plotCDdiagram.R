@@ -15,8 +15,9 @@ if(length(args)==0){
 }
 
 cd_input <- read.csv(file = cd_fn)
-
-png(file=gsub("csv", "png", cd_fn), width=900, bg="white")
+fn <- gsub("csv", "png", cd_fn)
+fn <- gsub("../", "../plot/")
+png(file=fn, width=900, bg="white")
 par(mar=c(1,5,1,5))
 cdplot <- plotCD(cd_input, alpha=0.05, cex=0.9)  +
   geom_point() +
