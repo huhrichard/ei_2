@@ -110,7 +110,7 @@ for ontology in list_ontology:
             list_id_vars = [ontology]
 
         cd_df_melted = pd.melt(cd_df, id_vars=list_id_vars, value_vars=algo_names, value_name='fmax')
-        cd_df_melted.rename(columns={'variable': 'algo'})
+        cd_df_melted.rename(columns={'variable': 'algo'}, inplace=True)
         print(cd_df_melted)
         title_name = "#annotated proteins: {}".format(group)
         fig1 = plt.figure()
