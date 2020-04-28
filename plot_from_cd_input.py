@@ -114,7 +114,7 @@ for ontology in list_ontology:
         title_name = "#annotated proteins: {}".format(group)
         fig1 = plt.figure()
         ax1 = fig1.add_subplot(111)
-        ax1 = sns.boxplot(ax=ax1, y='best_fmax', x='input',
+        ax1 = sns.boxplot(ax=ax1, y='best_fmax', x='algo',
                           data=cd_df_melted, palette=sorted_cp, order=sorted_algo_names)
         for tick in ax1.get_xticklabels():
             tick.set_rotation(45)
@@ -131,9 +131,9 @@ for ontology in list_ontology:
             fig2 = plt.figure()
             ax2 = fig2.add_subplot(111)
             ax2 = sns.boxplot(ax=ax2, y='best_fmax', x='go_depth',
-                              data=cd_df_melted[cd_df_melted['input'].isin(fig2_plot_only)],
+                              data=cd_df_melted[cd_df_melted['algo'].isin(fig2_plot_only)],
                               # palette=c,
-                              hue='input', hue_order=fig2_plot_only,
+                              hue='algo', hue_order=fig2_plot_only,
                               order=sorted(set(cd_df_melted['go_depth'].values)))
             ax2.get_legend().remove()
             ax2.legend(loc='upper right')
@@ -160,9 +160,9 @@ for ontology in list_ontology:
             fig3 = plt.figure()
             ax3 = fig3.add_subplot(111)
             ax3 = sns.boxplot(ax=ax3, y='best_fmax', x='ic_group',
-                              data=cd_df_melted[cd_df_melted['input'].isin(fig2_plot_only)],
+                              data=cd_df_melted[cd_df_melted['algo'].isin(fig2_plot_only)],
                               # palette=c,
-                              hue='input', hue_order=fig2_plot_only,
+                              hue='algo', hue_order=fig2_plot_only,
                               order=ic_group_list)
             ax3.get_legend().remove()
             ax3.legend(loc='upper right')
