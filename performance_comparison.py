@@ -83,7 +83,7 @@ if __name__ == "__main__":
                    'deepNF': 'DeepNF',
                    'mashup': 'Mashup',
                    'coexpression': 'Coexpression',
-                   'cooccurence': 'Cooccurence',
+                   'cooccurence': 'Co-occurrence',
                    # 'database': 'Database',
                    'database': 'Curated database',
 
@@ -130,7 +130,7 @@ if __name__ == "__main__":
                 try:
                     depth = gosubdag.go2obj[go_term].depth
                     ic = get_info_content(go_term, termcounts)
-                    depth = gosubdag.go2obj[go_term].level
+                    # depth = gosubdag.go2obj[go_term].level
                 except:
                     depth = 0
                     ic = 0
