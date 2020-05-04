@@ -69,6 +69,7 @@ def processTermFeature_3(param, impute):
     go_hpo_df.replace(1, 'pos', inplace=True)
 
     if impute:
+        # temp_df = feature_df.fillna(0)
         f = feature_df.values
         # u = feature_df.index.values
         # v = feature_df.columns.values
@@ -76,7 +77,9 @@ def processTermFeature_3(param, impute):
         # node2idx = {prot: i for i, prot in enumerate(nodes)}
         # i = [node2idx[n] for n in u]
         # j = [node2idx[n] for n in v]
+        # print(a)
         W = csr_matrix(f)
+        print(W)
         if (W.T != W).nnz == 0:
             pass
         else:
