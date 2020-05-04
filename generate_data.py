@@ -12,6 +12,7 @@ import arff
 # from soft_impute import SoftImpute
 from scipy.sparse import coo_matrix, csr_matrix, eye, load_npz, save_npz
 from rwr_from_jeff import *
+import networkx as nx
 
 def convert_to_arff(df, path):
     fn = open(path, 'w')
@@ -72,6 +73,8 @@ def processTermFeature_3(param, impute):
         # temp_df = feature_df.fillna(0)
 
         f = feature_df.values
+        G = nx.from_pandas_adjacency(feature_df)
+        print(nx.info(G))
         print(f.shape)
         u = feature_df.index.values
         v = feature_df.columns.values
@@ -79,6 +82,7 @@ def processTermFeature_3(param, impute):
         node2idx = {prot: i for i, prot in enumerate(nodes)}
         i = [node2idx[n] for n in u]
         j = [node2idx[n] for n in v]
+
         # print(a)
         W = csr_matrix(f)
         print(W.shape)
