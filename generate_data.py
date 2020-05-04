@@ -78,8 +78,8 @@ def processTermFeature_3(param, impute):
         u, v, w = [], [], []
         for row_prot, col_prots in feature_df.iterrows():
             for col_prot, weight in col_prots.iteritems():
-                print(row_prot, col_prot, weight)
-                if weight != 0 and (np.isnan(weight) is False):
+                # print(row_prot, col_prot, weight)
+                if (weight != 0) and (np.isnan(weight) == False):
                     u.append(row_prot)
                     v.append(col_prot)
                     w.append(weight)
