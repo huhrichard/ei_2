@@ -72,19 +72,33 @@ def processTermFeature_3(param, impute):
     if impute:
         # temp_df = feature_df.fillna(0)
 
-        f = feature_df.values
-        G = nx.from_pandas_adjacency(feature_df)
-        print(nx.info(G))
-        print(f.shape)
-        u = feature_df.index.values
-        v = feature_df.columns.values
+        # f = feature_df.values
+        # G = nx.Graph()
+        # edge_list = []
+        u, v, w = [], [], []
+        for row_prot, col_prots in feature_df.iterrows():
+            for col_prot, weight in col_prots.iteritems():
+                if weight != 0 and (np.isnan(weight) is False):
+                    u.append(row_prot)
+                    v.append(col_prot)
+                    w.append(weight)
+                    # edge_list.append((row_prot, col_prot, weight))
         nodes = sorted(set(list(u)) | set(list(v)))
-        node2idx = {prot: i for i, prot in enumerate(nodes)}
+        node2idx = {prot: idx for idx, prot in enumerate(nodes)}
+
         i = [node2idx[n] for n in u]
         j = [node2idx[n] for n in v]
+        W = coo_matrix((w, (i, j)), shape=(len(nodes), len(nodes))).tocsr()
+        #
+        # u = feature_df.index.values
+        # v = feature_df.columns.values
+        # nodes = sorted(set(list(u)) | set(list(v)))
+        # node2idx = {prot: i for i, prot in enumerate(nodes)}
+        # i = [node2idx[n] for n in u]
+        # j = [node2idx[n] for n in v]
 
         # print(a)
-        W = csr_matrix(f)
+        # W = csr_matrix(f)
         print(W.shape)
         if (W.T != W).nnz == 0:
             pass
@@ -95,16 +109,19 @@ def processTermFeature_3(param, impute):
 
         P = normalizeGraphEdgeWeights(W)
         X = run_rwr(P)
-        feature_df[:] = X.toarray()
+        print(X.shape)
+        filled_df = pd.DataFrame(X.toarray(), index=nodes, columns=nodes)
+        # feature_df[:] = X.toarray()
 
     else:
-        feature_df.fillna(0, inplace=True)
-    cols = (feature_df == 0).all(axis=0)
+        # feature_df.fillna(0, inplace=True)
+        filled_df = feature_df.fillna(0)
+    cols = (filled_df == 0).all(axis=0)
     cols = cols.loc[cols == False].index.tolist()
-    feature_df = feature_df[cols]
-    feature_df = feature_df.round(3)
-    # merged_df = pd.merge(feature_df, go_hpo_df, how='inner')
-    merged_df = pd.concat([feature_df, go_hpo_df], axis=1, join='inner')
+    filled_df = filled_df[cols]
+    filled_df = filled_df.round(3)
+    # merged_df = pd.merge(filled_df, go_hpo_df, how='inner')
+    merged_df = pd.concat([filled_df, go_hpo_df], axis=1, join='inner')
     merged_df.rename(columns={term: 'cls'}, inplace=True)
     merged_df['seqID'] = merged_df.index
     print('before', merged_df.shape)
