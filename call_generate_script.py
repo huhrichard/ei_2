@@ -11,7 +11,7 @@ for job in jobs_list:
     fn = open(lsf_fn, 'w')
     fn.write('#!/bin/bash\n')
     fn.write('#BSUB -J {}_{}\n'.format(data_dir, term))
-    fn.write('#BSUB -P acc_pandeg01a\n#BSUB -q premium\n#BSUB -n 6\n#BSUB -W 1:00\n')
+    fn.write('#BSUB -P acc_pandeg01a\n#BSUB -q premium\n#BSUB -n 6\n#BSUB -W 10:00\n')
     fn.write('#BSUB -o gen_{}.stdout\n'.format(data_dir))
     fn.write('#BSUB -eo gen_{}.stderr\n'.format(data_dir))
     fn.write('#BSUB -R rusage[mem=20480]\nmodule purge\nmodule load java\nmodule load python\nmodule load groovy\nmodule load selfsched\n')

@@ -99,7 +99,7 @@ for ontology in list_ontology:
                 try:
                     depth = gosubdag.go2obj[go_term].depth
                     ic = get_info_content(go_term, termcounts)
-                    # depth = gosubdag.go2obj[go_term].level
+
                 except:
                     depth = 0
                     ic = 0

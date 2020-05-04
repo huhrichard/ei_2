@@ -23,9 +23,9 @@ if __name__ == "__main__":
     dir_list = find_dir('EIdata*_{}*.jobs'.format(ontology), './jobs/')
     scratch_path = '/sc/hydra/scratch/liy42/'
     # dir_list = find_dir('GO0071704', sys.argv[-1])
-    if ontology == 'go':
+    if 'go' in ontology:
         prefix = 'GO'
-    else:
+    elif 'hpo' in ontology:
         prefix = 'HP'
     for go_dir in dir_list:
 

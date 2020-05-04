@@ -9,9 +9,9 @@ from glob import glob
 from multiprocessing import Pool
 from itertools import product
 import arff
-from soft_impute import SoftImpute
-
-
+# from soft_impute import SoftImpute
+from scipy.sparse import coo_matrix, csr_matrix, eye, load_npz, save_npz
+from rwr_from_jeff import *
 
 def convert_to_arff(df, path):
     fn = open(path, 'w')
@@ -69,14 +69,25 @@ def processTermFeature_3(param, impute):
     go_hpo_df.replace(1, 'pos', inplace=True)
 
     if impute:
-        # from fancyimpute import SoftImpute
-        imp = SoftImpute()
-
         f = feature_df.values
-        imp.fit(f)
-        imputed_f = imp.predict(f)
-        # imputed_f = imp.transform(f)
-        feature_df[:] = imputed_f
+        # u = feature_df.index.values
+        # v = feature_df.columns.values
+        # nodes = sorted(set(list(u)) | set(list(v)))
+        # node2idx = {prot: i for i, prot in enumerate(nodes)}
+        # i = [node2idx[n] for n in u]
+        # j = [node2idx[n] for n in v]
+        W = csr_matrix(f)
+        if (W.T != W).nnz == 0:
+            pass
+        else:
+            print("### Matrix not symmetric!")
+            W = W + W.T
+            print("### Matrix converted to symmetric.")
+
+        P = normalizeGraphEdgeWeights(W)
+        X = run_rwr(P)
+        feature_df[:] = X.toarray()
+
     else:
         feature_df.fillna(0, inplace=True)
     cols = (feature_df == 0).all(axis=0)
