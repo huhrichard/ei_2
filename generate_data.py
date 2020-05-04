@@ -83,6 +83,9 @@ def processTermFeature_3(param, impute):
                     v.append(col_prot)
                     w.append(weight)
                     # edge_list.append((row_prot, col_prot, weight))
+        print(len(u))
+        print(len(v))
+        print(len(w))
         nodes = sorted(set(list(u)) | set(list(v)))
         node2idx = {prot: idx for idx, prot in enumerate(nodes)}
 
