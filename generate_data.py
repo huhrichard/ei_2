@@ -79,11 +79,14 @@ def processTermFeature_3(param, impute):
         for row_prot, col_prots in feature_df.iterrows():
             for col_prot, weight in col_prots.iteritems():
                 # print(row_prot, col_prot, weight)
-                u.append(row_prot)
-                v.append(col_prot)
+
                 if np.isnan(weight):
+                    u.append(row_prot)
+                    v.append(col_prot)
                     w.append(0)
                 elif weight != 0:
+                    u.append(row_prot)
+                    v.append(col_prot)
                     w.append(weight)
                     # edge_list.append((row_prot, col_prot, weight))
         print(len(u))
