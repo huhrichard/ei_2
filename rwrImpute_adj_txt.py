@@ -11,22 +11,26 @@ csv_dir = 'not_on_github/csv/'
 def setup_sparse_net_v2(network_file, node2idx_file=node_fn):
     sparse_net_file = network_file.replace('.' + network_file.split('.')[-1], '.npz')
     nodes = pd.read_csv(node2idx_file, header=None, index_col=None, squeeze=True).values
-    u, v, w = [], [], []
-    with open(network_file, 'r') as f:
-        for line in f:
-            line = line.decode() if network_file.endswith('.gz') else line
-            if line[0] == '#':
-                continue
-            line = line.rstrip().split('\t')
-            u.append(line[0])
-            v.append(line[1])
-            w.append(float(line[2]))
-    print(min(u), min(v))
+    # u, v, w = [], [], []
+    # with open(network_file, 'r') as f:
+    #     for line in f:
+    #         line = line.decode() if network_file.endswith('.gz') else line
+    #         if line[0] == '#':
+    #             continue
+    #         line = line.rstrip().split('\t')
+    #         u.append(line[0])
+    #         v.append(line[1])
+    #         w.append(float(line[2]))
+    # print(min(u), min(v))
+    u, v, w = np.loadtxt(network_file).T
+    u = (u-1).astype(int)
+    v = (v-1).astype(int)
+    w[w<0] = 0
 
-    node2idx = {prot: i for i, prot in enumerate(nodes)}
-    i = [node2idx[n] for n in u]
-    j = [node2idx[n] for n in v]
-    W = coo_matrix((w, (i, j)), shape=(len(nodes), len(nodes))).tocsr()
+    # node2idx = {prot: i for i, prot in enumerate(nodes)}
+    # i = [node2idx[n] for n in u]
+    # j = [node2idx[n] for n in v]
+    W = coo_matrix((w, (u, v)), shape=(len(nodes), len(nodes))).tocsr()
     # make sure it is symmetric
     if (W.T != W).nnz == 0:
         pass
