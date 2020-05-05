@@ -39,7 +39,7 @@ def setup_sparse_net_v2(network_file, node2idx_file=node_fn):
     return W, nodes
 
 def main_v2(net_file, out_file, node_file=node_fn, **kwargs):
-    W, prots = setup_sparse_network(net_file, node2idx_file=node_file, forced=kwargs.get('forced', False))
+    W, prots = setup_sparse_net_v2(net_file, node2idx_file=node_file)
 
     # column-normalize the network
     P = normalizeGraphEdgeWeights(W)
