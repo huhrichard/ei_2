@@ -48,7 +48,7 @@ def main_v2(net_file, out_file, node_file=node_fn, **kwargs):
     # column-normalize the network
     P = normalizeGraphEdgeWeights(W)
     # run RWR
-    X = run_rwr(P, alpha=kwargs['alpha'], eps=kwargs['eps'], max_iters=kwargs['max_iters'], verbose=True)
+    X = run_rwr(P, verbose=True)
 
     filled_df = pd.DataFrame(X.toarray(), index=prots, columns=prots)
 
