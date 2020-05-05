@@ -83,7 +83,7 @@ def processTermFeature_3(param, impute):
                 v.append(col_prot)
                 if np.isnan(weight):
                     w.append(0)
-                else:
+                elif weight != 0:
                     w.append(weight)
                     # edge_list.append((row_prot, col_prot, weight))
         print(len(u))
