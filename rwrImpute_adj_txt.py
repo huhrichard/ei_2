@@ -62,6 +62,6 @@ def main_v2(net_file, out_file, node_file=node_fn, **kwargs):
 
 
 for sub_net in sub_network_list:
-    main_v2(net_file=edge_txt_format.format(sub_net),
+    main_v2(net_file=txt_dir+edge_txt_format.format(sub_net),
             out_file="{}rwrImputed_{}.csv".format(csv_dir, sub_net))
 
