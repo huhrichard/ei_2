@@ -1,5 +1,5 @@
 from rwr_from_jeff import *
-
+import csv
 
 edge_txt_format = 'human_string_{}_adjacency.txt'
 
@@ -11,21 +11,11 @@ csv_dir = 'not_on_github/csv/'
 def setup_sparse_net_v2(network_file, node2idx_file=node_fn):
     sparse_net_file = network_file.replace('.' + network_file.split('.')[-1], '.npz')
     nodes = pd.read_csv(node2idx_file, header=None, index_col=None, squeeze=True).values
-    # u, v, w = [], [], []
-    # with open(network_file, 'r') as f:
-    #     for line in f:
-    #         line = line.decode() if network_file.endswith('.gz') else line
-    #         if line[0] == '#':
-    #             continue
-    #         line = line.rstrip().split('\t')
-    #         u.append(line[0])
-    #         v.append(line[1])
-    #         w.append(float(line[2]))
-    # print(min(u), min(v))
     u, v, w = np.loadtxt(network_file).T
     u = (u-1).astype(int)
     v = (v-1).astype(int)
     w[w<0] = 0
+    print('# of nodes:', len(u))
 
     # node2idx = {prot: i for i, prot in enumerate(nodes)}
     # i = [node2idx[n] for n in u]
@@ -35,10 +25,13 @@ def setup_sparse_net_v2(network_file, node2idx_file=node_fn):
     if (W.T != W).nnz == 0:
         pass
     else:
+        print(network_file)
         print("### Matrix not symmetric!")
         W = W + W.T
         print("### Matrix converted to symmetric.")
-    save_npz(sparse_net_file, W)
+
+
+    # save_npz(sparse_net_file, W)
 
     return W, nodes
 
@@ -50,9 +43,18 @@ def main_v2(net_file, out_file, node_file=node_fn, **kwargs):
     # run RWR
     X = run_rwr(P, verbose=True)
 
-    filled_df = pd.DataFrame(X.toarray(), index=prots, columns=prots)
+    A=X.toarray()
+
+    imputed_network_edge_fn = net_file.replace('.'+net_file.split('.')[-1], '_rwrImputed.txt')
+    with open(imputed_network_edge_fn, 'w') as f:
+        writer = csv.writer(f)
+        for (n, m), val in np.ndenumerate(A):
+            writer.writerow([int(n+1), int(m+1), val])
+
+    filled_df = pd.DataFrame(A, index=prots, columns=prots)
 
     filled_df.to_csv(out_file, index_label=False)
+
     # edge_list
 
     # save to a file
