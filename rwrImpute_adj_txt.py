@@ -49,9 +49,11 @@ def main_v2(net_file, out_file, node_file=node_fn, **kwargs):
     with open(imputed_network_edge_fn, 'w') as f:
         writer = csv.writer(f)
         for (n, m), val in np.ndenumerate(A):
+            if val != 0:
             writer.writerow([int(n+1), int(m+1), val])
 
     filled_df = pd.DataFrame(A, index=prots, columns=prots)
+    print(A.shape, filled_df.shape)
 
     filled_df.to_csv(out_file, index_label=False)
 
