@@ -90,12 +90,12 @@ for suffix, val in dict_suffix.items():
                         if suffix != '':
                             f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], suffix))
                         else:
-                            f.write('python generate_data.py {} {}/ \n'.format(go, fn.split('.')[0]))
+                            f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], 'EI'))
                 else:
                     if suffix != '':
                         f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], suffix))
                     else:
-                        f.write('python generate_data.py {} {}/ \n'.format(go, fn.split('.')[0]))
+                        f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], 'EI'))
 
             except KeyError:
                 pass

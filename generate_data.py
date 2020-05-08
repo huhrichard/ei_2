@@ -63,7 +63,7 @@ def convert_to_arff(df, path):
 def processTermFeature_3(param, impute):
     term, feature, go_hpo_df, csv_filepath = param
     if impute:
-        feature_df = pd.read_csv('rwrImputed_{}{}.csv'.format(csv_filepath, feature), index_col=0)
+        feature_df = pd.read_csv('{}rwrImputed_{}.csv'.format(csv_filepath, feature), index_col=0)
     else:
         feature_df = pd.read_csv('{}{}.csv'.format(csv_filepath, feature), index_col=0)
     before_shape = feature_df.shape
@@ -212,7 +212,7 @@ if __name__ == "__main__":
     else:
         go_to_hpo_file = 'pos-neg-O-10.tsv'
     print(len(argv))
-    if len(argv) == 4:
+    if argv[3] != 'EI':
         features = [argv[3]]
     else:
         features = ['coexpression', 'cooccurence', 'database', 'experimental', 'fusion', 'neighborhood']
