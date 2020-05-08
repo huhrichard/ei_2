@@ -61,8 +61,11 @@ def convert_to_arff(df, path):
 #         convert_to_arff(feature_df,path)
 
 def processTermFeature_3(param, impute):
-    term, feature, go_hpo_df, csv_file = param
-    feature_df = pd.read_csv('{}{}.csv'.format(csv_file, feature), index_col=0)
+    term, feature, go_hpo_df, csv_filepath = param
+    if impute:
+        feature_df = pd.read_csv('rwrImputed_{}{}.csv'.format(csv_filepath, feature), index_col=0)
+    else:
+        feature_df = pd.read_csv('{}{}.csv'.format(csv_filepath, feature), index_col=0)
     before_shape = feature_df.shape
     # go_hpo_df.fillna(0, inplace=True)
     go_hpo_df = go_hpo_df[go_hpo_df != 0]
