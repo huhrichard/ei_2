@@ -42,7 +42,7 @@ if __name__ == "__main__":
             fn.write('#BSUB -eo term_{}.stderr\n'.format(data_dir))
             fn.write('#BSUB -R rusage[mem=20480]\nmodule purge\nmodule load java\nmodule load python\nmodule load groovy\nmodule load selfsched\n')
             fn.write(job)
-            train_base_cmd = 'python train_base.py --path {}\n'.format(data_dir+'/'+term_dir)
+            train_base_cmd = 'python train_base.py --path {}\n'.format(scratch_path+data_dir+'/'+term_dir)
             # ensemble_cmd = 'python ensemble.py --path {}\n'.format(data_dir+'/'+term_dir)
             fn.write(train_base_cmd)
             # fn.write(ensemble_cmd)

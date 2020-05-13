@@ -64,6 +64,7 @@ def processTermFeature_3(param, impute):
     term, feature, go_hpo_df, csv_filepath = param
     if impute:
         feature_df = pd.read_csv('{}rwrImputed_{}.csv'.format(csv_filepath, feature), index_col=0)
+        print('using imputed data')
     else:
         feature_df = pd.read_csv('{}{}.csv'.format(csv_filepath, feature), index_col=0)
     before_shape = feature_df.shape
