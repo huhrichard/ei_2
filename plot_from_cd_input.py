@@ -12,7 +12,7 @@ from goatools.semantic import TermCounts
 from goatools.base import download_go_basic_obo
 import seaborn as sns
 
-plt.rcParams.update({'font.size': 20, 'figure.figsize':(12, 8)})
+plt.rcParams.update({'font.size': 20, 'figure.figsize':(10, 6)})
 
 obo_fname = download_go_basic_obo()
 from os.path import abspath
