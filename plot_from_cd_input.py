@@ -32,13 +32,13 @@ def find(pattern, path):
                 result.append(os.path.join(path, name))
     return result
 
-dict_suffix = ['EI',
+dict_suffix = ['Ensemble\nIntegration',
                 'DeepNF',
                 'Mashup',
                 'Coexpression',
                 'Co-occurrence',
                    # 'database': 'Database',
-                'Curated database',
+                'Curated\nDatabases',
                  'PPI',
                  'Fusion',
                  'Neighborhood']
@@ -72,17 +72,20 @@ for ontology in list_ontology:
         algo_names = cd_df.columns
         if 'Coocuurence' in algo_names:
             cd_df.rename(columns={'Coocuurence': 'Co-occurrence'}, inplace=True)
-
-            cd_df.to_csv(file, index_label=False)
         if 'Cooccurence' in algo_names:
             cd_df.rename(columns={'Cooccurence': 'Co-occurrence'}, inplace=True)
-            cd_df.to_csv(file, index_label=False)
+        if 'EI' in algo_names:
+            cd_df.rename(columns={'EI': 'Ensemble\nIntegration'}, inplace=True)
+        if 'Curated database' in algo_names:
+            cd_df.rename(columns={'Curated database': 'Curated\nDatabases'}, inplace=True)
 
+        cd_df.to_csv(file, index_label=False)
         cmd = "R CMD BATCH --no-save --no-restore '--args cd_fn=\"{}\"' R/plotCDdiagram.R".format(file.split('/')[-1])
         os.system(cmd)
-
-        algo_names = cd_df.columns
+        # cd_df.rename(columns={'EI':'Ensemble\nIntegration', })
+        algo_names = cd_df.columns.values.tolist()
         cd_df_median = cd_df[dict_suffix].median()
+        # algo_names =
         print(cd_df_median)
         sorted_tuple = sorted(zip(cd_df_median, dict_suffix, cp), reverse=True, key=lambda x: x[0])
         sorted_algo_names = [s[1] for s in sorted_tuple]
@@ -127,6 +130,7 @@ for ontology in list_ontology:
         fig1.savefig('{}f_max_{}_comparison_{}.png'.format(plot_dir, ontology, group_fn_suffix), bbox_inches="tight")
         #
         if ontology == 'go':
+            cd_df_melted.replace({'Ensemble\nIntegration':'EI'}, inplace=True)
             fig2_plot_only = ['Mashup', 'DeepNF', 'EI']
             # idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
             # cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
