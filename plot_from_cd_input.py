@@ -126,7 +126,7 @@ for ontology in list_ontology:
             tick.set_fontsize(16)
             tick.set_rotation(45)
             tick.set_horizontalalignment("right")
-        ax1.
+        # ax1.
         ax1.set_ylabel(ylabel, fontsize=22)
         ax1.set_xlabel('')
         ax1.set_title(title_name)
