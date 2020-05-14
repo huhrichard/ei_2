@@ -123,7 +123,7 @@ for ontology in list_ontology:
                           data=cd_df_melted, palette=sorted_cp, order=sorted_algo_names)
 
         for tick in ax1.get_xticklabels():
-            tick.label.set_fontsize(16)
+            tick.set_fontsize(16)
             tick.set_rotation(45)
             tick.set_horizontalalignment("right")
         ax1.set_ylabel(ylabel)
