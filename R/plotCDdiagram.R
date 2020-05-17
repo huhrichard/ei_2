@@ -16,7 +16,10 @@ if(length(args)==0){
 
 cd_input <- read.csv(file = cd_fn)
 fn <- gsub("csv", "png", cd_fn)
-fn <- gsub("cd_input", "./plot/cd_input", fn)
+# fn <- gsub("cd_input", "./plot/cd_input", fn)
+prefix = './plot/'
+fn <- strsplit(fn, '/')
+fn <- paste(prefix, fn[length(fn)])
 print(fn)
 png(file=fn, width=1000, bg="white")
 par(mar=c(1,5,1,5))
