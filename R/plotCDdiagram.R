@@ -21,7 +21,7 @@ fn <- gsub("csv", "png", cd_fn)
 prefix = './plot/'
 # fn <- strsplit(fn, '/')
 fn <- gsub("^.*/", "", fn)
-fn <- paste(prefix, fn)
+fn <- paste(prefix, fn, sep="")
 print(fn)
 png(file=fn, width=1000, bg="white")
 par(mar=c(1,5,1,5))
