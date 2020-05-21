@@ -148,7 +148,7 @@ if __name__ == "__main__":
         # performance_df['delta_fmax_LR.S'] = performance_df['fmax_LR.S'] - performance_df['fmax_best base']
         # best_base_df = extract_df_by_method(performance_df, method='best base')
         # performance_df_dict[val] = performance_df
-        print(val, ensemble_df.shape)
+        print(val, group, ensemble_df.shape)
         fmax_list.append(ensemble_df['best_fmax'].values)
         median_fmax_list.append(np.median(ensemble_df['best_fmax'].values))
         data_list.append(val)
