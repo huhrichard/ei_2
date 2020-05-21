@@ -93,7 +93,8 @@ if __name__ == "__main__":
                    'neighborhood': 'Neighborhood'}
     # rwr_dict_suffix = {'rwrImpute_'+k : v+('\n(RWR Impute)') for k, v in dict_suffix.items() if k != ''}
     # rwr_dict_suffix['rwrImpute'] = 'Ensemble\nIntegration\n(RWR Impute)'
-    rwr_dict_suffix = {k : v+('\n(RWR Impute)') for k, v in dict_suffix.items()}
+    if 'Impute' in file_prefix:
+        dict_suffix = {k : v+('\n(RWR Impute)') for k, v in dict_suffix.items()}
     # rwr_dict_suffix['rwrImpute'] = 'Ensemble\nIntegration\n(RWR Impute)'
     cp = sns.color_palette(n_colors=len(dict_suffix))
 
