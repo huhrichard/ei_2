@@ -17,11 +17,11 @@ list_ontology = [
                  'go_rwrImpute',
                  # 'hpo'
                 ]
-python_cmd = 'python performance_comparison.py {} {}'
+python_cmd = 'python performance_comparison.py {} {} {}'
 system('module load R')
 
 for o in list_ontology:
     for key, val in dict_to_compare.items():
-        cmd = python_cmd.format(key, dir_prefix+val+o)
+        cmd = python_cmd.format(o, key, dir_prefix+val+o)
         print(cmd)
         system(cmd)

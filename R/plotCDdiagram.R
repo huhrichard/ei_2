@@ -20,7 +20,7 @@ fn <- gsub("csv", "png", cd_fn)
 # fn <- gsub("cd_input", "./plot/cd_input", fn)
 prefix = './plot/'
 # fn <- strsplit(fn, '/')
-gsub("^.*/", "", fn)
+fn <- gsub("^.*/", "", fn)
 fn <- paste(prefix, fn)
 print(fn)
 png(file=fn, width=1000, bg="white")

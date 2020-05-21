@@ -78,7 +78,7 @@ if __name__ == "__main__":
     if '-' not in group:
         group = '>' + group
     title_name = "#annotated proteins: {}".format(group)
-    file_prefix = sys.argv[-1]
+    file_prefix = sys.argv[-3]
     dict_suffix = {'': 'Ensemble\nIntegration',
                    # 'deepNF': 'DeepNF',
                    # 'mashup': 'Mashup',
@@ -160,9 +160,9 @@ if __name__ == "__main__":
     sorted_dataname_list = [f for m, f in sorted(zip(median_fmax_list, data_list), reverse=True, key=lambda x: x[0])]
     sorted_cp = [f for m, f in sorted(zip(median_fmax_list, cp), reverse=True, key=lambda x: x[0])]
 
-    img_str = 'hpo'
-    if is_go:
-        img_str = 'go'
+    # img_str = 'hpo'
+    # if is_go:
+    #     img_str = 'go'
     ylabel = r'$F_{max}$'
     print(sorted_dataname_list)
     print(sorted_fmax_list)
@@ -175,7 +175,7 @@ if __name__ == "__main__":
 
     cd_input_df = cd_input.pivot_table('best_fmax', ['data_name'],'input').reset_index()
     cd_input_df.set_index('data_name', inplace=True)
-    cd_csv_fn = '{}cd_input_{}_{}.csv'.format(plot_dir+'cd_csv/', img_str, sys.argv[-2])
+    cd_csv_fn = '{}cd_input_{}_{}.csv'.format(plot_dir+'cd_csv/', file_prefix, group)
     cd_input_df.to_csv(cd_csv_fn, index_label=False)
     cmd = "R CMD BATCH --no-save --no-restore '--args cd_fn=\"{}\"' R/plotCDdiagram.R".format(cd_csv_fn)
     os.system(cmd)
@@ -196,7 +196,7 @@ if __name__ == "__main__":
     ax1.set_ylabel(ylabel)
     ax1.set_xlabel('')
     ax1.set_title(title_name)
-    fig1.savefig('{}f_max_{}_comparison_{}.png'.format(plot_dir, img_str, sys.argv[-2]), bbox_inches="tight")
+    fig1.savefig('{}f_max_{}_comparison_{}.png'.format(plot_dir, file_prefix, group), bbox_inches="tight")
 
     # if is_go:
     #     fig2_plot_only = ['Mashup', 'DeepNF', 'EI']
