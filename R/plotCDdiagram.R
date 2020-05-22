@@ -23,7 +23,7 @@ prefix = './plot/'
 fn <- gsub("^.*/", "", fn)
 fn <- paste(prefix, fn, sep="")
 print(fn)
-png(file=fn, width=1000, bg="white")
+png(file=fn, width=1300, bg="white")
 par(mar=c(1,5,1,5))
 cdplot <- plotCD(cd_input, alpha=0.05, cex=0.9)  +
   geom_point() +
