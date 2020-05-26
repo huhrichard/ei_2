@@ -19,6 +19,7 @@ from sklearn.tree import DecisionTreeClassifier  # Decision Tree
 from sklearn.ensemble import GradientBoostingClassifier  # Logit Boost with parameter(loss='deviance')
 from sklearn.neighbors import KNeighborsClassifier  # K nearest neighbors (IBk in weka)
 from sklearn.svm import SVC
+import sklearn
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -119,7 +120,9 @@ def CES_fmax(path, fold_count=5, agg=1):
     predictions_df['metric'] = 'fmax'
     predictions_df.to_csv('%s/analysis/selection-%s-%s.csv' % (path, method, 'fmax'), index=False)
     fmax = '%.3f' % (common.fmax_score(predictions_df.label, predictions_df.prediction))
-    return float(fmax)
+    auc = '%.3f' % (sklearn.metrics.roc_auc_score(predictions_df.label, predictions_df.prediction))
+
+    return float(fmax), float(auc)
 
 
 def mean_fmax(path, fold_count=5, agg=1):
@@ -135,7 +138,9 @@ def mean_fmax(path, fold_count=5, agg=1):
         predictions = append(predictions, predict)
         labels = append(labels, label)
     fmax = '%.3f' % (common.fmax_score(labels, predictions))
-    return float(fmax)
+    auc = '%.3f' % (sklearn.metrics.roc_auc_score(labels, predictions))
+
+    return float(fmax), float(auc)
 
 
 def bestbase_fmax(path, fold_count=5, agg=1):
@@ -151,7 +156,10 @@ def bestbase_fmax(path, fold_count=5, agg=1):
         labels = append(labels, label)
     predictions = pd.concat(predictions)
     fmax_list = [common.fmax_score(labels, predictions.iloc[:, i]) for i in range(len(predictions.columns))]
-    return max(fmax_list)
+    auc_list = [sklearn.metrics.roc_auc_score(labels, predictions.iloc[:, i]) for i in range(len(predictions.columns))]
+
+
+    return max(fmax_list), max(auc_list)
 
 
 def stacked_generalization(path, stacker_name, stacker, fold, agg):
@@ -169,23 +177,27 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg):
 
 def main(path, fold_count=5, agg=1):
     dn = abspath(path).split('/')[-1]
-    cols = ['data_name', 'fmax', 'method']
+    # cols = ['data_name', 'fmax', 'method']
+    cols = ['data_name', 'fmax', 'method', 'auc']
     dfs = []
     print('[CES] Start building model #################################')
     ces = CES_fmax(path, fold_count, agg)
     print('[CES] Finished evaluating model ############################')
-    print('[CES] F-max score is %s.' % ces)
+    print('[CES] F-max score is %s.' % ces[0])
+    print('[CES] AUC score is %s.' % ces[1])
     print('[Mean] Start building model ################################')
     mean = mean_fmax(path, fold_count, agg)
     print('[Mean] Finished evaluating model ###########################')
-    print('[Mean] F-max score is %s.' % mean)
+    print('[Mean] F-max score is %s.' % mean[0])
+    print('[Mean] AUC score is %s.' % mean[1])
     print('[Best Base] Start building model ###########################')
     bestbase = bestbase_fmax(path, fold_count, agg)
     print('[Best Base] Finished evaluating model ######################')
-    print('[Best Base] F-max score is %s.' % bestbase)
-    dfs.append(pd.DataFrame(data=[[dn, ces, 'CES']], columns=cols, index=[0]))
-    dfs.append(pd.DataFrame(data=[[dn, mean, 'Mean']], columns=cols, index=[0]))
-    dfs.append(pd.DataFrame(data=[[dn, bestbase, 'best base']], columns=cols, index=[0]))
+    print('[Best Base] F-max score is %s.' % bestbase[0])
+    print('[Best Base] AUC score is %s.' % bestbase[1])
+    dfs.append(pd.DataFrame(data=[[dn, ces[0], 'CES', ces[1]]], columns=cols, index=[0]))
+    dfs.append(pd.DataFrame(data=[[dn, mean[0], 'Mean', mean[1]]], columns=cols, index=[0]))
+    dfs.append(pd.DataFrame(data=[[dn, bestbase[0], 'best base', bestbase[1]]], columns=cols, index=[0]))
     # Get Stacking Fmax scores
     stackers = [RandomForestClassifier(n_estimators=200, max_depth=2, bootstrap=False, random_state=0),
                 SVC(C=1.0, cache_size=10000, class_weight=None, coef0=0.0,
@@ -199,9 +211,11 @@ def main(path, fold_count=5, agg=1):
         predictions_dfs = [stacked_generalization(path, stacker_name, stacker, fold, agg) for fold in range(fold_count)]
         predictions_df = pd.concat(predictions_dfs)
         fmax = common.fmax_score(predictions_df.label, predictions_df.prediction)
+        auc = sklearn.metrics.roc_auc_score(predictions_df.label, predictions_df.prediction)
         print('[%s] Finished evaluating model ###########################' % (stacker_name))
         print('[%s] F-max score is %s.' % (stacker_name, fmax))
-        df = pd.DataFrame(data=[[dn, fmax, stacker_name]], columns=cols, index=[0])
+        print('[%s] AUC score is %s.' % (stacker_name, auc))
+        df = pd.DataFrame(data=[[dn, fmax, stacker_name, auc]], columns=cols, index=[0])
         dfs.append(df)
     dfs = pd.concat(dfs)
     # Save results

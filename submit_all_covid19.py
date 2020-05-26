@@ -1,7 +1,7 @@
 import os
 import sys
 
-base_path = '/sc/hydra/scratch/liy42/covid19_DECEASED_INDICATOR'
+base_path = '/sc/hydra/scratch/liy42/covid19_DECEASED_INDICATOR/'
 
 list_of_method = ['EI', 'demographics',
                   'labs_type', 'medications_frequency', 'vitals_numeric', 'concatenated']
@@ -21,7 +21,7 @@ for m in list_of_method:
         script.write(
             '#!/bin/bash\n#BSUB -J train_all_base\n#BSUB -P acc_pandeg01a\n#BSUB -q premium\n#BSUB -n 4\n#BSUB -W 10:00\n#BSUB -o train_all_base.stdout\n#BSUB -eo train_all_base.stderr\n#BSUB -R rusage[mem=10000]\n')
         script.write('module purge\nmodule load java\nmodule load python\nmodule load groovy\nmodule load selfsched\n')
-        dir_name = outcome+'_'+m
+        dir_name = base_path+outcome+'_'+m
         cmd = base_command.format(script, dir_name)
         script.write(cmd)
         script.close()
