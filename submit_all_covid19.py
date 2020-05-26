@@ -8,7 +8,7 @@ list_of_method = ['EI', 'demographics',
 
 outcome_list = ['DECEASED_INDICATOR']
 
-script = sys.argv[-1]
+calling_script = str(sys.argv[-1])
 
 base_command = 'python {} --path {}'
 
@@ -23,7 +23,8 @@ for m in list_of_method:
         script.write('module purge\nmodule load java\nmodule load groovy\nmodule load selfsched\n')
         dir_name = base_path+outcome+'_'+m
         print(dir_name)
-        cmd = base_command.format(script, dir_name)
+        cmd = base_command.format(calling_script, dir_name)
+        # print(cmd)
         script.write(cmd)
         script.close()
         os.system('bsub < {}'.format(lsf_fn))
