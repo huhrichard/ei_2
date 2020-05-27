@@ -62,7 +62,7 @@ sorted_algo_names_by_fmax = [s[1] for s in sorted_tuple_by_fmax]
 sorted_cp_by_fmax = [s[2] for s in sorted_tuple_by_fmax]
 print(sorted_tuple_by_fmax)
 
-sorted_tuple_by_auc = sorted(zip(fmax_median_list, dict_suffix, cp), reverse=True, key=lambda x: x[0])
+sorted_tuple_by_auc = sorted(zip(auc_median_list, dict_suffix, cp), reverse=True, key=lambda x: x[0])
 sorted_algo_names_by_auc = [s[1] for s in sorted_tuple_by_auc]
 sorted_cp_by_auc = [s[2] for s in sorted_tuple_by_auc]
 print(sorted_tuple_by_auc)
