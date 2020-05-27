@@ -24,7 +24,7 @@ for m in list_of_method:
         dir_name = base_path+outcome+'_'+m
         print(dir_name)
         cmd = base_command.format(calling_script, dir_name)
-        # print(cmd)
+        print(cmd)
         script.write(cmd)
         script.close()
         os.system('bsub < {}'.format(lsf_fn))
