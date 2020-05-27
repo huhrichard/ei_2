@@ -76,7 +76,7 @@ def custom_boxplot(boxplot_y_metric, boxplot_ylabel, sorted_algo_names, sorted_c
         tick.set_fontsize(16)
         tick.set_rotation(45)
         tick.set_horizontalalignment("right")
-        tick.set_verticalalignment("center")
+        # tick.set_verticalalignment("center")
 
     ax1.set_title('COVID-19 Deceased Prediction')
     fig1.savefig('{}covid19_{}_comparison.png'.format(plot_dir, boxplot_y_metric), bbox_inches="tight")
