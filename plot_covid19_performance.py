@@ -53,7 +53,7 @@ sorted_cp_by_auc = [s[2] for s in sorted_tuple_by_auc]
 print(sorted_tuple_by_auc)
 fmax_label = r'$F_{max}$'
 def custom_boxplot(boxplot_y_metric, boxplot_ylabel, sorted_algo_names, sorted_cp):
-    fig1, ax1 = plt.add_subplot(1,1)
+    fig1, ax1 = plt.subplots(1,1)
     ax1 = sns.boxplot(ax=ax1, y=boxplot_y_metric, x='data_name', data=performance_cat_df,
                       palette=sorted_cp, order=sorted_algo_names)
     ax1.set_ylabel(boxplot_ylabel, fontsize=22)
