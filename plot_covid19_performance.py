@@ -24,6 +24,7 @@ base_command = 'python {} --path {}'
 path_of_performance = '/analysis/performance.csv'
 
 dict_of_method = {'EI':'Ensemble\nIntegration',
+                  'EI_PowerSet':'Ensemble Integration\nPower Set',
                   'demographics':'Demographics',
                   'labs':'Labs',
                   'medications': 'Medications',
@@ -89,16 +90,16 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
 
 list_of_method_dict = {'weka_impute':['EI', 'demographics',
                                   'labs', 'medications',
-                                  'vitals', 'concatenated'],
-                    'svd_impute': ['demographics', 'medications',
-                                          'vitals', 'EI_svdImpute',
-                                          'concatenated_svdImpute', 'labs_svdImpute'],
-                       'svd_impute_rank5':  ['demographics', 'medications',
-                                              'vitals', 'EI_svdImpute_rank_5',
-                                              'concatenated_svdImpute_rank_5', 'labs_svdImpute_rank_5'],
-                        'svd_impute_rank20':  ['demographics', 'medications',
-                                              'vitals', 'EI_svdImpute_rank_20',
-                                              'concatenated_svdImpute_rank_20', 'labs_svdImpute_rank_20']
+                                  'vitals', 'concatenated', 'EI_PowerSet'],
+                    # 'svd_impute': ['demographics', 'medications',
+                    #                       'vitals', 'EI_svdImpute',
+                    #                       'concatenated_svdImpute', 'labs_svdImpute'],
+                    #    'svd_impute_rank5':  ['demographics', 'medications',
+                    #                           'vitals', 'EI_svdImpute_rank_5',
+                    #                           'concatenated_svdImpute_rank_5', 'labs_svdImpute_rank_5'],
+                    #     'svd_impute_rank20':  ['demographics', 'medications',
+                    #                           'vitals', 'EI_svdImpute_rank_20',
+                    #                           'concatenated_svdImpute_rank_20', 'labs_svdImpute_rank_20']
                        }
 
 for k, v in list_of_method_dict.items():
