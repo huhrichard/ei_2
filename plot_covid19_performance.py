@@ -91,13 +91,13 @@ list_of_method_dict = {'weka_impute':['EI', 'demographics',
                                   'labs', 'medications',
                                   'vitals', 'concatenated'],
                     'svd_impute': ['demographics', 'medications',
-                                          'vitals', 'concatenated', 'EI_svdImpute',
+                                          'vitals', 'EI_svdImpute',
                                           'concatenated_svdImpute', 'labs_svdImpute'],
                        'svd_impute_rank5':  ['demographics', 'medications',
-                                              'vitals', 'concatenated', 'EI_svdImpute_rank_5',
+                                              'vitals', 'EI_svdImpute_rank_5',
                                               'concatenated_svdImpute_rank_5', 'labs_svdImpute_rank_5'],
                         'svd_impute_rank20':  ['demographics', 'medications',
-                                              'vitals', 'concatenated', 'EI_svdImpute_rank_20',
+                                              'vitals', 'EI_svdImpute_rank_20',
                                               'concatenated_svdImpute_rank_20', 'labs_svdImpute_rank_20']
                        }
 
