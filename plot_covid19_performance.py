@@ -43,7 +43,7 @@ dict_of_method = {'EI':'Ensemble\nIntegration',
 
 def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
     cp = sns.color_palette(n_colors=len(list_of_method))
-    dict_suffix = [v for k, v in dict_of_method.items() if k in list_of_method]
+    dict_suffix = [dict_of_method[k] for k in list_of_method]
     fmax_median_list = []
     auc_median_list = []
     performance_df_list = []
