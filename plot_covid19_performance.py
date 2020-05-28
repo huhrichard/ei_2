@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-base_path = '/sc/hydra/scratch/liy42/covid19_DECEASED_INDICATOR/'
+base_path = '/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR/'
 
 # list_of_method = ['EI', 'demographics',
 #                   'labs', 'medications',
