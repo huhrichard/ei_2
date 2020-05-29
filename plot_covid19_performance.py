@@ -2,10 +2,10 @@ import os
 import sys
 import pandas as pd
 from matplotlib import rc
-import scikit_posthocs as sp
+# import scikit_posthocs as sp
 
 
-rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+# rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
 
 base_path = '/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR/'
 
