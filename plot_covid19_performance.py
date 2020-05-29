@@ -26,7 +26,7 @@ path_of_performance = '/analysis/performance.csv'
 dict_of_method = {'EI':'Ensemble\nIntegration',
                   'EI_PowerSet':'Ensemble Integration\nPower Set',
                   'demographics':'Demographics',
-                  'labs':'Labs',
+                  'labs':'Laboratory\ntests',
                   'medications': 'Medications',
                   'vitals': 'Vitals',
                   'concatenated': 'Concantenated\nAll',
@@ -75,9 +75,11 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
         ax1 = sns.boxplot(ax=ax1, y=boxplot_y_metric, x='data_name', data=performance_cat_df,
                           palette=sorted_cp, order=sorted_algo_names)
         ax1.set_ylabel(boxplot_ylabel, fontsize=22)
+
         for tick in ax1.get_xticklabels():
-            tick.set_fontsize(16)
+            tick.set_fontsize(12)
             tick.set_rotation(45)
+            tick.set_fontweight('bold')
             tick.set_horizontalalignment("right")
             # tick.set_verticalalignment("center")
         ax1.set_xlabel('')
