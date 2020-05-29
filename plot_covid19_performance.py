@@ -71,7 +71,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
     print(sorted_tuple_by_auc)
     fmax_label = r'$F_{max}$'
     def custom_boxplot(boxplot_y_metric, boxplot_ylabel, sorted_algo_names, sorted_cp):
-        fig1, ax1 = plt.subplots(1,1, figsize=(7,6))
+        fig1, ax1 = plt.subplots(1,1, figsize=(4,6))
         ax1 = sns.boxplot(ax=ax1, y=boxplot_y_metric, x='data_name', data=performance_cat_df,
                           palette=sorted_cp, order=sorted_algo_names)
         ax1.set_ylabel(boxplot_ylabel, fontsize=22)
@@ -81,7 +81,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
             tick.set_horizontalalignment("right")
             # tick.set_verticalalignment("center")
         ax1.set_xlabel('')
-        ax1.set_title('COVID-19 Deceased Prediction')
+        # ax1.set_title('COVID-19 Deceased Prediction')
         fig1.savefig('{}covid19_{}_{}_comparison.png'.format(plot_dir, boxplot_y_metric, fig_fn_suffix), bbox_inches="tight")
 
     custom_boxplot('fmax', fmax_label, sorted_algo_names_by_fmax, sorted_cp_by_fmax)
