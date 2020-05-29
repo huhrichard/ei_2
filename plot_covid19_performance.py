@@ -1,10 +1,18 @@
 import os
 import sys
 import pandas as pd
+from matplotlib import rc
+
+
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+
+base_path = '/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR/'
+
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-base_path = '/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR/'
+
 
 # list_of_method = ['EI', 'demographics',
 #                   'labs', 'medications',
@@ -60,17 +68,13 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
 
     performance_cat_df = pd.concat(performance_df_list)
 
-    sorted_tuple_by_fmax = sorted(zip(fmax_median_list, dict_suffix, cp), reverse=True, key=lambda x: x[0])
-    sorted_algo_names_by_fmax = [s[1] for s in sorted_tuple_by_fmax]
-    sorted_cp_by_fmax = [s[2] for s in sorted_tuple_by_fmax]
-    print(sorted_tuple_by_fmax)
-
-    sorted_tuple_by_auc = sorted(zip(auc_median_list, dict_suffix, cp), reverse=True, key=lambda x: x[0])
-    sorted_algo_names_by_auc = [s[1] for s in sorted_tuple_by_auc]
-    sorted_cp_by_auc = [s[2] for s in sorted_tuple_by_auc]
-    print(sorted_tuple_by_auc)
     fmax_label = r'$F_{max}$'
-    def custom_boxplot(boxplot_y_metric, boxplot_ylabel, sorted_algo_names, sorted_cp):
+    def custom_boxplot(boxplot_y_metric, boxplot_ylabel, metric_median_list):
+        sorted_tuple = sorted(zip(metric_median_list, dict_suffix, cp), reverse=True, key=lambda x: x[0])
+        sorted_algo_names = [s[1] for s in sorted_tuple]
+        sorted_cp = [s[2] for s in sorted_tuple]
+        print(sorted_tuple)
+
         fig1, ax1 = plt.subplots(1,1, figsize=(6,6))
         ax1 = sns.boxplot(ax=ax1, y=boxplot_y_metric, x='data_name', data=performance_cat_df,
                           palette=sorted_cp, order=sorted_algo_names)
@@ -92,8 +96,17 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
         # ax1.set_title('COVID-19 Deceased Prediction')
         fig1.savefig('{}covid19_{}_{}_comparison.png'.format(plot_dir, boxplot_y_metric, fig_fn_suffix), bbox_inches="tight")
 
-    custom_boxplot('fmax', fmax_label, sorted_algo_names_by_fmax, sorted_cp_by_fmax)
-    custom_boxplot('auc', 'AUC', sorted_algo_names_by_auc, sorted_cp_by_auc)
+        cd_input = performance_cat_df[['data_name', boxplot_y_metric, 'method']]
+
+        cd_input_df = cd_input.pivot_table(boxplot_y_metric, ['method'], 'data_name').reset_index()
+        cd_input_df.set_index('data_name', inplace=True)
+        cd_csv_fn = '{}cd_input_{}_{}.csv'.format(plot_dir + 'cd_csv/', boxplot_y_metric, fig_fn_suffix)
+        cd_input_df.to_csv(cd_csv_fn, index_label=False)
+        cmd = "R CMD BATCH --no-save --no-restore '--args cd_fn=\"{}\"' R/plotCDdiagram.R".format(cd_csv_fn)
+        os.system(cmd)
+
+    custom_boxplot('fmax', fmax_label, fmax_median_list)
+    custom_boxplot('auc', 'AUC', auc_median_list)
 
 
 list_of_method_dict = {'weka_impute':['EI', 'demographics',
