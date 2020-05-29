@@ -2,9 +2,10 @@ import os
 import sys
 import pandas as pd
 from matplotlib import rc
+import scikit_posthocs as sp
 
 
-# rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
 
 base_path = '/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR/'
 
@@ -78,6 +79,8 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
         fig1, ax1 = plt.subplots(1,1, figsize=(6,6))
         ax1 = sns.boxplot(ax=ax1, y=boxplot_y_metric, x='data_name', data=performance_cat_df,
                           palette=sorted_cp, order=sorted_algo_names)
+        params = {'mathtext.default': 'regular'}
+        plt.rcParams.update(params)
         ax1.set_ylabel(boxplot_ylabel, fontsize=22)
 
         for tick in ax1.get_xticklabels():
@@ -104,6 +107,9 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
         cd_input_df.to_csv(cd_csv_fn, index_label=False)
         cmd = "R CMD BATCH --no-save --no-restore '--args cd_fn=\"{}\"' R/plotCDdiagram.R".format(cd_csv_fn)
         os.system(cmd)
+        pairwise_df = sp.posthoc_nemenyi_friedman(cd_input_df)
+        print(pairwise_df)
+        pairwise_df.to_csv('{}covid19_pairwise_difference_{}_{}.csv'.format(plot_dir + 'cd_csv/', boxplot_y_metric, fig_fn_suffix))
 
     custom_boxplot('fmax', fmax_label, fmax_median_list)
     custom_boxplot('auc', 'AUC', auc_median_list)
