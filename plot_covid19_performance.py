@@ -4,7 +4,7 @@ import pandas as pd
 from matplotlib import rc
 
 
-rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+# rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
 
 base_path = '/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR/'
 
@@ -98,9 +98,9 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
 
         cd_input = performance_cat_df[['data_name', boxplot_y_metric, 'method']]
 
-        cd_input_df = cd_input.pivot_table(boxplot_y_metric, ['method'], 'data_name').reset_index()
+        cd_input_df = cd_input.pivot_table(boxplot_y_metric, ['data_name'], 'method').reset_index()
         cd_input_df.set_index('data_name', inplace=True)
-        cd_csv_fn = '{}cd_input_{}_{}.csv'.format(plot_dir + 'cd_csv/', boxplot_y_metric, fig_fn_suffix)
+        cd_csv_fn = '{}covid19_cd_input_{}_{}.csv'.format(plot_dir + 'cd_csv/', boxplot_y_metric, fig_fn_suffix)
         cd_input_df.to_csv(cd_csv_fn, index_label=False)
         cmd = "R CMD BATCH --no-save --no-restore '--args cd_fn=\"{}\"' R/plotCDdiagram.R".format(cd_csv_fn)
         os.system(cmd)
