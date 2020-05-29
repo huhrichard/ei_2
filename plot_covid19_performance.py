@@ -71,7 +71,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
     print(sorted_tuple_by_auc)
     fmax_label = r'$F_{max}$'
     def custom_boxplot(boxplot_y_metric, boxplot_ylabel, sorted_algo_names, sorted_cp):
-        fig1, ax1 = plt.subplots(1,1, figsize=(15,5))
+        fig1, ax1 = plt.subplots(1,1, figsize=(9,6))
         ax1 = sns.boxplot(ax=ax1, y=boxplot_y_metric, x='data_name', data=performance_cat_df,
                           palette=sorted_cp, order=sorted_algo_names)
         ax1.set_ylabel(boxplot_ylabel, fontsize=22)
@@ -90,18 +90,22 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
 
 list_of_method_dict = {'weka_impute':['EI', 'demographics',
                                   'labs', 'medications',
-                                  'vitals', 'concatenated',
+                                  'vitals',
+                                      # 'concatenated',
                                       # 'EI_PowerSet'
                                       ],
                     'svd_impute': ['demographics', 'medications',
                                           'vitals', 'EI_svdImpute',
-                                          'concatenated_svdImpute', 'labs_svdImpute'],
+                                          # 'concatenated_svdImpute',
+                                   'labs_svdImpute'],
                        'svd_impute_rank5':  ['demographics', 'medications',
                                               'vitals', 'EI_svdImpute_rank_5',
-                                              'concatenated_svdImpute_rank_5', 'labs_svdImpute_rank_5'],
+                                              # 'concatenated_svdImpute_rank_5',
+                                             'labs_svdImpute_rank_5'],
                         'svd_impute_rank20':  ['demographics', 'medications',
                                               'vitals', 'EI_svdImpute_rank_20',
-                                              'concatenated_svdImpute_rank_20', 'labs_svdImpute_rank_20']
+                                              # 'concatenated_svdImpute_rank_20',
+                                               'labs_svdImpute_rank_20']
                        }
 
 for k, v in list_of_method_dict.items():
