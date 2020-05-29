@@ -107,9 +107,9 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
         cd_input_df.to_csv(cd_csv_fn, index_label=False)
         cmd = "R CMD BATCH --no-save --no-restore '--args cd_fn=\"{}\"' R/plotCDdiagram.R".format(cd_csv_fn)
         os.system(cmd)
-        pairwise_df = sp.posthoc_nemenyi_friedman(cd_input_df)
-        print(pairwise_df)
-        pairwise_df.to_csv('{}covid19_pairwise_difference_{}_{}.csv'.format(plot_dir + 'cd_csv/', boxplot_y_metric, fig_fn_suffix))
+        # pairwise_df = sp.posthoc_nemenyi_friedman(cd_input_df)
+        # print(pairwise_df)
+        # pairwise_df.to_csv('{}covid19_pairwise_difference_{}_{}.csv'.format(plot_dir + 'cd_csv/', boxplot_y_metric, fig_fn_suffix))
 
     custom_boxplot('fmax', fmax_label, fmax_median_list)
     custom_boxplot('auc', 'AUC', auc_median_list)
