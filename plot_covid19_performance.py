@@ -97,7 +97,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
             # tick.set_verticalalignment("center")
         ax1.set_xlabel('')
         # ax1.set_title('COVID-19 Deceased Prediction')
-        fig1.savefig('{}covid19_{}_{}_comparison.png'.format(plot_dir, boxplot_y_metric, fig_fn_suffix), bbox_inches="tight")
+        fig1.savefig('{}covid19_{}_{}_comparison.pdf'.format(plot_dir, boxplot_y_metric, fig_fn_suffix), bbox_inches="tight")
 
         cd_input = performance_cat_df[['data_name', boxplot_y_metric, 'method']]
 
