@@ -6,7 +6,7 @@ Date:  12/27/2018
 from os.path import exists,abspath,isdir,dirname
 from sys import argv
 from os import listdir,environ
-from common import load_properties
+from common import load_properties, load_arff_headers
 import pandas as pd
 import numpy as np
 
@@ -17,12 +17,23 @@ fns = [fn for fn in fns if fn != 'analysis']
 fns = [data_folder  + '/' + fn for fn in fns]
 feature_folders = [fn for fn in fns if isdir(fn)]
 
-foldValues = range(int(argv[2]))
+# foldValues = range(int(argv[2]))
+p = load_properties(data_folder)
+# fold_count = int(p['foldCount'])
+if 'foldAttribute' in p:
+	input_fn = '%s/%s' % (feature_folders[0], 'data.arff')
+	assert exists(input_fn)
+	headers = load_arff_headers(input_fn)
+	fold_values = headers[p['foldAttribute']]
+else:
+	fold_values = range(int(p['foldCount']))
+
 
 prediction_dfs = []
 validation_dfs = []
 
-for value in foldValues:
+# for value in foldValues:
+for value in fold_values:
 	prediction_dfs = []
 	validation_dfs = []
 	for folder in feature_folders:
