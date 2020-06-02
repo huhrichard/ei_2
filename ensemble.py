@@ -114,8 +114,8 @@ def CES_fmax(path, fold_count=range(5), agg=1):
     for seedval in seeds:
         # for fold in range(fold_count):
         for fold in fold_count:
-            # if 'test' in fold:
-            if ('test' in fold and 'foldAttribute' in p) or (not 'foldAttribute' in p):
+            # if '67890' in fold:
+            if ('67890' in fold and 'foldAttribute' in p) or (not 'foldAttribute' in p):
                 pred_df, perf_df = method_function(fold, seedval, path, agg)
                 predictions_dfs.append(pred_df)
                 performance_dfs.append(perf_df)
@@ -139,7 +139,7 @@ def mean_fmax(path, fold_count=range(5), agg=1):
     labels = []
     # for fold in range(fold_count):
     for fold in fold_count:
-        if ('test' in fold and 'foldAttribute' in p) or (not 'foldAttribute' in p):
+        if ('67890' in fold and 'foldAttribute' in p) or (not 'foldAttribute' in p):
             _, _, test_df, label = common.read_fold(path, fold)
             test_df = common.unbag(test_df, agg)
             predict = test_df.mean(axis=1).values
@@ -160,8 +160,8 @@ def bestbase_fmax(path, fold_count=range(5), agg=1):
 
     # for fold in range(fold_count):
     for fold in fold_count:
-        # if 'test' in fold:
-        if ('test' in fold and 'foldAttribute' in p) or (not 'foldAttribute' in p):
+        # if '67890' in fold:
+        if ('67890' in fold and 'foldAttribute' in p) or (not 'foldAttribute' in p):
             _, _, test_df, label = common.read_fold(path, fold)
             test_df = common.unbag(test_df, agg)
             predictions.append(test_df)
@@ -243,7 +243,7 @@ def main(path, fold_count=5, agg=1):
         if (not 'foldAttribute' in p):
             predictions_dfs = [stacked_generalization(path, stacker_name, stacker, fold, agg) for fold in fold_values]
         else:
-            predictions_dfs = [stacked_generalization(path, stacker_name, stacker, fold, agg) for fold in fold_values]
+            predictions_dfs = [stacked_generalization(path, stacker_name, stacker, '67890', agg)]
         predictions_df = pd.concat(predictions_dfs)
         fmax = common.fmax_score(predictions_df.label, predictions_df.prediction)
         auc = sklearn.metrics.roc_auc_score(predictions_df.label, predictions_df.prediction)
