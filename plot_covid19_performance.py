@@ -2,6 +2,7 @@ import os
 import sys
 import pandas as pd
 from matplotlib import rc
+import numpy as np
 # import scikit_posthocs as sp
 
 
@@ -32,10 +33,12 @@ base_command = 'python {} --path {}'
 
 path_of_performance = '/analysis/performance.csv'
 
-dict_of_method = {'EI':'Ensemble\nIntegration',
+dict_of_method = {'EI': 'EI',
+                  # 'EI':'Ensemble\nIntegration',
                   'EI_PowerSet':'Ensemble Integration\nPower Set',
                   'demographics':'Demographics',
-                  'labs':'Laboratory\ntests',
+                  # 'labs':'Laboratory\ntests',
+                  'labs':'lab tests',
                   'medications': 'Medications',
                   'comorbidities': 'Comorbidities',
                   'vitals': 'Vital\nsigns',
@@ -77,11 +80,13 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
         sorted_cp = [s[2] for s in sorted_tuple]
         print(sorted_tuple)
 
+        sep_space = 1.5
         fig1, ax1 = plt.subplots(1,1, figsize=(6,6))
         ax1 = sns.boxplot(ax=ax1, y=boxplot_y_metric, x='data_name',
                           data=performance_cat_df,
                           palette=sorted_cp, order=sorted_algo_names,
-                          linewidth=2)
+                          linewidth=2,
+                          positions=np.linspace(0, (len(list_of_method)-1)*sep_space, sep_space))
         params = {'mathtext.default': 'regular'}
         plt.rcParams.update(params)
         ax1.set_ylabel(boxplot_ylabel, fontsize=22)
@@ -89,7 +94,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
         for tick in ax1.get_xticklabels():
             tick.set_fontsize(16)
             tick.set_rotation(45)
-            # tick.set_fontweight('bold')
+            tick.set_fontweight('bold')
             tick.set_horizontalalignment("right")
 
         for tick in ax1.get_yticklabels():
