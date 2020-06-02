@@ -82,7 +82,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
         print(sorted_tuple)
 
         sep_space = 1.5
-        fig1, ax1 = plt.subplots(1,1, figsize=(8,6))
+        fig1, ax1 = plt.subplots(1,1, figsize=(7.5,6))
         ax1 = sns.boxplot(ax=ax1, y=boxplot_y_metric, x='data_name',
                           data=performance_cat_df,
                           palette=sorted_cp, order=sorted_algo_names,
@@ -95,7 +95,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
         for tick in ax1.get_xticklabels():
             tick.set_fontsize(14)
             # tick.set_rotation(45)
-            tick.set_fontweight('bold')
+            # tick.set_fontweight('bold')
             # tick.set_horizontalalignment("right")
 
         for tick in ax1.get_yticklabels():
