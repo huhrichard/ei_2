@@ -93,9 +93,9 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
 
         for tick in ax1.get_xticklabels():
             tick.set_fontsize(14)
-            tick.set_rotation(45)
+            # tick.set_rotation(45)
             tick.set_fontweight('bold')
-            tick.set_horizontalalignment("right")
+            # tick.set_horizontalalignment("right")
 
         for tick in ax1.get_yticklabels():
             tick.set_fontsize(16)
