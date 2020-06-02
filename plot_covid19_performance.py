@@ -81,7 +81,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
         ax1 = sns.boxplot(ax=ax1, y=boxplot_y_metric, x='data_name',
                           data=performance_cat_df,
                           palette=sorted_cp, order=sorted_algo_names,
-                          linewidth=5)
+                          linewidth=2)
         params = {'mathtext.default': 'regular'}
         plt.rcParams.update(params)
         ax1.set_ylabel(boxplot_ylabel, fontsize=22)
