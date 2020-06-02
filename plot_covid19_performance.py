@@ -33,12 +33,13 @@ base_command = 'python {} --path {}'
 
 path_of_performance = '/analysis/performance.csv'
 
-dict_of_method = {'EI': 'EI',
-                  # 'EI':'Ensemble\nIntegration',
+dict_of_method = {
+                    # 'EI': 'EI',
+                  'EI':'Ensemble\nIntegration',
                   'EI_PowerSet':'Ensemble Integration\nPower Set',
                   'demographics':'Demo-\ngraphics',
                   # 'labs':'Laboratory\ntests',
-                  'labs':'lab\ntests',
+                  'labs':'Lab\ntests',
                   'medications': 'Medica-\ntions',
                   'comorbidities': 'Co-\nmorbi-\ndities',
                   'vitals': 'Vital\nsigns',
