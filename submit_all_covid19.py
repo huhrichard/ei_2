@@ -1,7 +1,7 @@
 import os
 import sys
 
-base_path = '/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR/'
+base_path = '/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR_test/'
 
 
 list_of_method = ['EI', 'demographics',
