@@ -38,11 +38,11 @@ for value in fold_values:
 	validation_dfs = []
 	for folder in feature_folders:
 		feature_name = folder.split('/')[-1]
-		prediction_df = pd.read_csv(folder + '/predictions-%d.csv.gz' %value,compression='gzip')
+		prediction_df = pd.read_csv(folder + '/predictions-%s.csv.gz' %value,compression='gzip')
 		prediction_df.set_index(['id','label'],inplace=True)
 		prediction_df.columns = ['%s.%s' %(feature_name,col) for col in prediction_df.columns]
 
-		validation_df = pd.read_csv(folder + '/validation-%d.csv.gz' %value,compression='gzip')
+		validation_df = pd.read_csv(folder + '/validation-%s.csv.gz' %value,compression='gzip')
 		validation_df.set_index(['id','label'],inplace=True)
 		validation_df.columns = ['%s.%s' %(feature_name,col) for col in validation_df.columns]
 
@@ -52,5 +52,5 @@ for value in fold_values:
 	prediction_dfs = pd.concat(prediction_dfs,axis=1)
 	validation_dfs = pd.concat(validation_dfs,axis=1)
 
-	prediction_dfs.to_csv(data_folder + '/predictions-%d.csv.gz' %value,compression='gzip')
-	validation_dfs.to_csv(data_folder + '/validation-%d.csv.gz' %value,compression='gzip')
+	prediction_dfs.to_csv(data_folder + '/predictions-%s.csv.gz' %value,compression='gzip')
+	validation_dfs.to_csv(data_folder + '/validation-%s.csv.gz' %value,compression='gzip')

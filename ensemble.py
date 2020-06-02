@@ -21,6 +21,9 @@ from sklearn.neighbors import KNeighborsClassifier  # K nearest neighbors (IBk i
 from sklearn.svm import SVC
 import sklearn
 import warnings
+from common import load_arff_headers, load_properties
+from os.path import abspath, isdir
+from os import remove, system, listdir
 
 warnings.filterwarnings("ignore")
 
@@ -91,7 +94,7 @@ def selection(fold, seedval, path, agg):
     return get_predictions(test_df, best_ensemble, fold, seedval), pd.DataFrame.from_records(test_performance)
 
 
-def CES_fmax(path, fold_count=5, agg=1):
+def CES_fmax(path, fold_count=range(5), agg=1):
     assert exists(path)
     if not exists('%s/analysis' % path):
         mkdir('%s/analysis' % path)
@@ -109,10 +112,13 @@ def CES_fmax(path, fold_count=5, agg=1):
     seeds = range(agg)
 
     for seedval in seeds:
-        for fold in range(fold_count):
-            pred_df, perf_df = method_function(fold, seedval, path, agg)
-            predictions_dfs.append(pred_df)
-            performance_dfs.append(perf_df)
+        # for fold in range(fold_count):
+        for fold in fold_count:
+            # if 'test' in fold:
+            if ('test' in fold and 'foldAttribute' in p) or (not 'foldAttribute' in p):
+                pred_df, perf_df = method_function(fold, seedval, path, agg)
+                predictions_dfs.append(pred_df)
+                performance_dfs.append(perf_df)
     performance_df = pd.concat(performance_dfs)
     performance_df.to_csv('%s/analysis/selection-%s-%s-iterations.csv' % (path, method, 'fmax'), index=False)
     predictions_df = pd.concat(predictions_dfs)
@@ -125,35 +131,41 @@ def CES_fmax(path, fold_count=5, agg=1):
     return float(fmax), float(auc)
 
 
-def mean_fmax(path, fold_count=5, agg=1):
+def mean_fmax(path, fold_count=range(5), agg=1):
     assert exists(path)
     if not exists('%s/analysis' % path):
         mkdir('%s/analysis' % path)
     predictions = []
     labels = []
-    for fold in range(fold_count):
-        _, _, test_df, label = common.read_fold(path, fold)
-        test_df = common.unbag(test_df, agg)
-        predict = test_df.mean(axis=1).values
-        predictions = append(predictions, predict)
-        labels = append(labels, label)
+    # for fold in range(fold_count):
+    for fold in fold_count:
+        if ('test' in fold and 'foldAttribute' in p) or (not 'foldAttribute' in p):
+            _, _, test_df, label = common.read_fold(path, fold)
+            test_df = common.unbag(test_df, agg)
+            predict = test_df.mean(axis=1).values
+            predictions = append(predictions, predict)
+            labels = append(labels, label)
     fmax = '%.3f' % (common.fmax_score(labels, predictions))
     auc = '%.3f' % (sklearn.metrics.roc_auc_score(labels, predictions))
 
     return float(fmax), float(auc)
 
 
-def bestbase_fmax(path, fold_count=5, agg=1):
+def bestbase_fmax(path, fold_count=range(5), agg=1):
     assert exists(path)
     if not exists('%s/analysis' % path):
         mkdir('%s/analysis' % path)
     predictions = []
     labels = []
-    for fold in range(fold_count):
-        _, _, test_df, label = common.read_fold(path, fold)
-        test_df = common.unbag(test_df, agg)
-        predictions.append(test_df)
-        labels = append(labels, label)
+
+    # for fold in range(fold_count):
+    for fold in fold_count:
+        # if 'test' in fold:
+        if ('test' in fold and 'foldAttribute' in p) or (not 'foldAttribute' in p):
+            _, _, test_df, label = common.read_fold(path, fold)
+            test_df = common.unbag(test_df, agg)
+            predictions.append(test_df)
+            labels = append(labels, label)
     predictions = pd.concat(predictions)
     fmax_list = [common.fmax_score(labels, predictions.iloc[:, i]) for i in range(len(predictions.columns))]
     auc_list = [sklearn.metrics.roc_auc_score(labels, predictions.iloc[:, i]) for i in range(len(predictions.columns))]
@@ -176,22 +188,42 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg):
 
 
 def main(path, fold_count=5, agg=1):
+
     dn = abspath(path).split('/')[-1]
     # cols = ['data_name', 'fmax', 'method']
     cols = ['data_name', 'fmax', 'method', 'auc']
+
+    # data_path = abspath(args.path)
+    # fns = listdir(data_path)
+    # fns = [fn for fn in fns if fn != 'analysis']
+    # fns = [data_path + '/' + fn for fn in fns]
+    # feature_folders = [fn for fn in fns if isdir(fn)]
+    # assert len(feature_folders) > 0
+    # ### get weka properties from weka.properties
+    # p = load_properties(data_path)
+    # # fold_values = range(int(p['foldCount']))
+    # assert ('foldAttribute' in p) or ('foldCount' in p)
+    # if 'foldAttribute' in p:
+    #     input_fn = '%s/%s' % (feature_folders[0], 'data.arff')
+    #     assert exists(input_fn)
+    #     headers = load_arff_headers(input_fn)
+    #     fold_values = headers[p['foldAttribute']]
+    # else:
+    #     fold_values = range(int(p['foldCount']))
+
     dfs = []
     print('[CES] Start building model #################################')
-    ces = CES_fmax(path, fold_count, agg)
+    ces = CES_fmax(path, fold_values, agg)
     print('[CES] Finished evaluating model ############################')
     print('[CES] F-max score is %s.' % ces[0])
     print('[CES] AUC score is %s.' % ces[1])
     print('[Mean] Start building model ################################')
-    mean = mean_fmax(path, fold_count, agg)
+    mean = mean_fmax(path, fold_values, agg)
     print('[Mean] Finished evaluating model ###########################')
     print('[Mean] F-max score is %s.' % mean[0])
     print('[Mean] AUC score is %s.' % mean[1])
     print('[Best Base] Start building model ###########################')
-    bestbase = bestbase_fmax(path, fold_count, agg)
+    bestbase = bestbase_fmax(path, fold_values, agg)
     print('[Best Base] Finished evaluating model ######################')
     print('[Best Base] F-max score is %s.' % bestbase[0])
     print('[Best Base] AUC score is %s.' % bestbase[1])
@@ -208,7 +240,10 @@ def main(path, fold_count=5, agg=1):
     stacker_names = ["RF.S", "SVM.S", "NB.S", "LR.S", "AB.S", "DT.S", "LB.S", "KNN.S"]
     for i, (stacker_name, stacker) in enumerate(zip(stacker_names, stackers)):
         print('[%s] Start building model ################################' % (stacker_name))
-        predictions_dfs = [stacked_generalization(path, stacker_name, stacker, fold, agg) for fold in range(fold_count)]
+        if (not 'foldAttribute' in p):
+            predictions_dfs = [stacked_generalization(path, stacker_name, stacker, fold, agg) for fold in fold_values]
+        else:
+            predictions_dfs = [stacked_generalization(path, stacker_name, stacker, fold, agg) for fold in fold_values]
         predictions_df = pd.concat(predictions_dfs)
         fmax = common.fmax_score(predictions_df.label, predictions_df.prediction)
         auc = sklearn.metrics.roc_auc_score(predictions_df.label, predictions_df.prediction)
@@ -231,4 +266,22 @@ parser.add_argument('--path', '-P', type=str, required=True, help='data path')
 parser.add_argument('--fold', '-F', type=int, default=5, help='cross-validation fold')
 parser.add_argument('--aggregate', '-A', type=int, default=1, help='if aggregate is needed, feed bagcount, else 1')
 args = parser.parse_args()
+data_path = abspath(args.path)
+fns = listdir(data_path)
+fns = [fn for fn in fns if fn != 'analysis']
+fns = [data_path + '/' + fn for fn in fns]
+feature_folders = [fn for fn in fns if isdir(fn)]
+assert len(feature_folders) > 0
+### get weka properties from weka.properties
+p = load_properties(data_path)
+# fold_values = range(int(p['foldCount']))
+assert ('foldAttribute' in p) or ('foldCount' in p)
+if 'foldAttribute' in p:
+    input_fn = '%s/%s' % (feature_folders[0], 'data.arff')
+    assert exists(input_fn)
+    headers = load_arff_headers(input_fn)
+    fold_values = headers[p['foldAttribute']]
+else:
+    fold_values = range(int(p['foldCount']))
+
 main(args.path, args.fold, args.aggregate)
