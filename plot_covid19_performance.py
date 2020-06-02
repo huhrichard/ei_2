@@ -41,7 +41,7 @@ dict_of_method = {
                   # 'labs':'Laboratory\ntests',
                   'labs':'Lab\ntests',
                   'medications': 'Medica-\ntions',
-                  'comorbidities': 'Co-\nmorbi-\ndities',
+                  'comorbidities': 'Co-morbi-\ndities',
                   'vitals': 'Vital\nsigns',
                   'concatenated': 'Concantenated\nAll',
                   'EI_svdImpute': 'Ensemble Integration\nSVDImpute',
