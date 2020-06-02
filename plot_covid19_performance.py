@@ -119,7 +119,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
 list_of_method_dict = {'weka_impute':['EI', 'demographics',
                                   'labs', 'medications',
                                   'vitals','comorbidities',
-                                      'concatenated',
+                                      # 'concatenated',
                                       # 'EI_PowerSet'
                                       ],
                     # 'svd_impute': ['demographics', 'medications',
