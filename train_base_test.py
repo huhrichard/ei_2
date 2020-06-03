@@ -53,10 +53,11 @@ p = load_properties(data_path)
 # fold_values = range(int(p['foldCount']))
 assert ('foldAttribute' in p) or ('foldCount' in p)
 if 'foldAttribute' in p:
-    input_fn = '%s/%s' % (feature_folders[0], 'data.arff')
-    assert exists(input_fn)
-    headers = load_arff_headers(input_fn)
-    fold_values = headers[p['foldAttribute']]
+    # input_fn = '%s/%s' % (feature_folders[0], 'data.arff')
+    # assert exists(input_fn)
+    # headers = load_arff_headers(input_fn)
+    # fold_values = headers[p['foldAttribute']]
+    fold_values = ['67890']
 else:
     fold_values = range(int(p['foldCount']))
 bag_values = range(int(p['bagCount']))

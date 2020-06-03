@@ -35,7 +35,7 @@ path_of_performance = '/analysis/performance.csv'
 
 dict_of_method = {
                     # 'EI': 'EI',
-                  'EI':'Ensemble\nIntegration\n(111)',
+                  'EI':'Ensemble\nIntegration',
                   'EI_PowerSet':'Ensemble Integration\nPower Set',
                   'demographics':'Demo-\ngraphics\n(11)',
                   # 'labs':'Laboratory\ntests',
