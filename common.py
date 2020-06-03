@@ -43,7 +43,7 @@ def fmeasure_score(labels, predictions, beta = 1.0, pos_label = 1, thres=None):
     else:
         predictions[predictions > thres] = 1
         predictions[predictions <= thres] = 0
-        precision, recall, fmeasure = sklearn.metrics.precision_recall_fscore_support(labels,
+        precision, recall, fmeasure, _ = sklearn.metrics.precision_recall_fscore_support(labels,
                                                                                       predictions, average='binary')
         return {'P':precision, 'R':recall, 'F':fmeasure}
 
