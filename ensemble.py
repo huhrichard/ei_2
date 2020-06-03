@@ -190,11 +190,11 @@ def bestbase_fmax(path, fold_count=range(5), agg=1):
             test_df = common.unbag(test_df, agg)
             predictions.append(test_df)
             labels = append(labels, label)
-            thres = thres_fmax(train_label, common.unbag(train_df, agg))
+            # thres = thres_fmax(train_label, common.unbag(train_df, agg))
     predictions = pd.concat(predictions)
 
     # need to be changed
-    fmax_list = [common.fmeasure_score(labels, predictions.iloc[:, i], thres)['F'] for i in range(len(predictions.columns))]
+    fmax_list = [common.fmeasure_score(labels, predictions.iloc[:, i], None)['F'] for i in range(len(predictions.columns))]
     auc_list = [sklearn.metrics.roc_auc_score(labels, predictions.iloc[:, i]) for i in range(len(predictions.columns))]
 
     return {'f-measure':max(fmax_list), 'auc':max(auc_list)}
