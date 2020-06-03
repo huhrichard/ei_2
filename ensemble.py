@@ -185,7 +185,7 @@ def bestbase_fmax(path, fold_count=range(5), agg=1):
     # for fold in range(fold_count):
     for fold in fold_count:
         # if '67890' in fold:
-        if ('67890' in fold and 'foldAttribute' in p) or (not 'foldAttribute' in p):
+        if testing_bool or (not 'foldAttribute' in p):
             train_df, train_label, test_df, label = common.read_fold(path, fold)
             test_df = common.unbag(test_df, agg)
             predictions.append(test_df)
@@ -194,7 +194,7 @@ def bestbase_fmax(path, fold_count=range(5), agg=1):
     predictions = pd.concat(predictions)
 
     # need to be changed
-    fmax_list = [common.fmeasure_score(labels, predictions.iloc[:, i], None)['F'] for i in range(len(predictions.columns))]
+    fmax_list = [common.fmeasure_score(labels, predictions.iloc[:, i])['F'] for i in range(len(predictions.columns))]
     auc_list = [sklearn.metrics.roc_auc_score(labels, predictions.iloc[:, i]) for i in range(len(predictions.columns))]
 
     return {'f-measure':max(fmax_list), 'auc':max(auc_list)}
