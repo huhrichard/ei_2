@@ -150,7 +150,7 @@ list_of_method_dict = {'weka_impute':['EI', 'demographics',
                     #                            'comorbidities']
                        }
 base_path_27may = ('before_27May','/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR/')
-base_path_1Jun = ('before_27MayToJun1','/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR_test/')
+base_path_1Jun = ('27MayToJun1','/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR_test/')
 
 for k, v in list_of_method_dict.items():
     plot_boxplot_fmax_auc(v, k, base_path_27may)

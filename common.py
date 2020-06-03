@@ -2,6 +2,7 @@ from numpy import argmax, argmin, argsort, corrcoef, mean, nanmax, sqrt, triu_in
 from pandas import DataFrame, concat, read_csv
 from scipy.io.arff import loadarff
 import sklearn.metrics
+import numpy as np
 
 def argsortbest(x):
     return argsort(x) if greater_is_better else argsort(x)[::-1]
@@ -29,15 +30,24 @@ def confusion_matrix_fpr(labels, predictions, false_discovery_rate = 0.1):
     print(sklearn.metrics.confusion_matrix(labels, predictions > thresholds[max_fpr_index]))
 
 
-def fmax_score(labels, predictions, beta = 1.0, pos_label = 1):
+def fmeasure_score(labels, predictions, beta = 1.0, pos_label = 1, thres=None):
     """
         Radivojac, P. et al. (2013). A Large-Scale Evaluation of Computational Protein Function Prediction. Nature Methods, 10(3), 221-227.
         Manning, C. D. et al. (2008). Evaluation in Information Retrieval. In Introduction to Information Retrieval. Cambridge University Press.
     """
-    precision, recall, _ = sklearn.metrics.precision_recall_curve(labels, predictions, pos_label)
-    f1 = (1 + beta**2) * (precision * recall) / ((beta**2 * precision) + recall)
-    return nanmax(f1)
+    if thres is None:
+        precision, recall, threshold = sklearn.metrics.precision_recall_curve(labels, predictions, pos_label)
+        f1 = (1 + beta**2) * (precision * recall) / ((beta**2 * precision) + recall)
+        return {'F':nanmax(f1), 'thres':threshold[where(nanmax(f1)==f1.max())]}
 
+    else:
+        predictions[predictions > thres] = 1
+        predictions[predictions <= thres] = 0
+        precision, recall, fmeasure = sklearn.metrics.precision_recall_fscore_support(labels,
+                                                                                      predictions, average='binary')
+        return {'P':precision, 'R':recall, 'F':fmeasure}
+
+# def fmeasure(labels, predictions)
 
 def load_arff(filename):
     return DataFrame.from_records(loadarff(filename)[0])
@@ -92,4 +102,4 @@ score = sklearn.metrics.roc_auc_score
 greater_is_better = True
 best = max if greater_is_better else min
 argbest = argmax if greater_is_better else argmin
-fmax_scorer = sklearn.metrics.make_scorer(fmax_score, greater_is_better = True, needs_threshold = True)
+fmax_scorer = sklearn.metrics.make_scorer(fmeasure_score, greater_is_better = True, needs_threshold = True)

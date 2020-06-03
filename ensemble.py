@@ -40,7 +40,7 @@ def checkFolder(path, fold_count=5):
 def get_performance(df, ensemble, fold, seedval):
     labels = df.index.get_level_values('label').values
     predictions = df[ensemble].mean(axis=1)
-    return {'fold': fold, 'seed': seedval, 'score': common.fmax_score(labels, predictions), 'ensemble': ensemble[-1],
+    return {'fold': fold, 'seed': seedval, 'score': common.fmeasure_score(labels, predictions), 'ensemble': ensemble[-1],
             'ensemble_size': len(ensemble)}
 
 
@@ -78,7 +78,7 @@ def selection(fold, seedval, path, agg):
     train_df, train_labels, test_df, test_labels = common.read_fold(path, fold)
     train_df = common.unbag(train_df, agg)
     test_df = common.unbag(test_df, agg)
-    best_classifiers = train_df.apply(lambda x: common.fmax_score(train_labels, x)).sort_values(
+    best_classifiers = train_df.apply(lambda x: common.fmeasure_score(train_labels, x)['F']).sort_values(
         ascending=not common.greater_is_better)
     train_performance = []
     test_performance = []
@@ -91,8 +91,18 @@ def selection(fold, seedval, path, agg):
     train_performance_df = pd.DataFrame.from_records(train_performance)
     best_ensemble_size = common.get_best_performer(train_performance_df).ensemble_size.values
     best_ensemble = train_performance_df.ensemble[:best_ensemble_size.item(0) + 1]
-    return get_predictions(test_df, best_ensemble, fold, seedval), pd.DataFrame.from_records(test_performance)
+    return get_predictions(test_df, best_ensemble, fold, seedval), \
+           pd.DataFrame.from_records(test_performance), \
+           get_predictions(train_df, best_ensemble, fold, seedval)
 
+def thres_fmax(train_label_df, train_pred_df):
+    if testing_bool:
+        fmax_training = common.fmeasure_score(train_label_df, train_pred_df)
+        thres = fmax_training['thres']
+    else:
+        thres = None
+
+    return thres
 
 def CES_fmax(path, fold_count=range(5), agg=1):
     assert exists(path)
@@ -108,6 +118,7 @@ def CES_fmax(path, fold_count=range(5), agg=1):
     accuracy_weight = 0.5
     max_clusters = 20
     predictions_dfs = []
+    train_predictions_dfs = []
     performance_dfs = []
     seeds = range(agg)
 
@@ -115,23 +126,33 @@ def CES_fmax(path, fold_count=range(5), agg=1):
         # for fold in range(fold_count):
         for fold in fold_count:
             # if '67890' in fold:
-            if ('67890' in fold and 'foldAttribute' in p) or (not 'foldAttribute' in p):
-                pred_df, perf_df = method_function(fold, seedval, path, agg)
+            if testing_bool or (not 'foldAttribute' in p):
+                pred_df, perf_df, train_pred_df = method_function(fold, seedval, path, agg)
                 predictions_dfs.append(pred_df)
+                train_predictions_dfs.append(train_pred_df)
                 performance_dfs.append(perf_df)
+                thres = thres_fmax(train_pred_df.label, train_pred_df.prediction)
     performance_df = pd.concat(performance_dfs)
     performance_df.to_csv('%s/analysis/selection-%s-%s-iterations.csv' % (path, method, 'fmax'), index=False)
     predictions_df = pd.concat(predictions_dfs)
     predictions_df['method'] = method
     predictions_df['metric'] = 'fmax'
     predictions_df.to_csv('%s/analysis/selection-%s-%s.csv' % (path, method, 'fmax'), index=False)
-    fmax = '%.3f' % (common.fmax_score(predictions_df.label, predictions_df.prediction))
     auc = '%.3f' % (sklearn.metrics.roc_auc_score(predictions_df.label, predictions_df.prediction))
 
-    return float(fmax), float(auc)
+    # if ('67890' in fold_count and 'foldAttribute' in p):
+    #     train_predictions_df = pd.concat(train_predictions_dfs)
+    #
+    #
+    # else:
+    fmax = (common.fmeasure_score(predictions_df.label, predictions_df.prediction, thres=thres))
+    return {'f-measure':fmax, 'auc':float(auc)}
 
 
 def mean_fmax(path, fold_count=range(5), agg=1):
+    def _unbag_mean(df, agg=agg):
+        df = common.unbag(df, agg)
+        return df.mean(axis=1).values
     assert exists(path)
     if not exists('%s/analysis' % path):
         mkdir('%s/analysis' % path)
@@ -139,16 +160,18 @@ def mean_fmax(path, fold_count=range(5), agg=1):
     labels = []
     # for fold in range(fold_count):
     for fold in fold_count:
-        if ('67890' in fold and 'foldAttribute' in p) or (not 'foldAttribute' in p):
-            _, _, test_df, label = common.read_fold(path, fold)
-            test_df = common.unbag(test_df, agg)
-            predict = test_df.mean(axis=1).values
+
+        if testing_bool or (not 'foldAttribute' in p):
+            train_df, train_label, test_df, test_label = common.read_fold(path, fold)
+            predict = _unbag_mean(test_df, agg)
             predictions = append(predictions, predict)
-            labels = append(labels, label)
-    fmax = '%.3f' % (common.fmax_score(labels, predictions))
+            labels = append(labels, test_label)
+            thres = thres_fmax(train_label, _unbag_mean(train_df))
+
+    fmax = common.fmeasure_score(labels, predictions, thres)
     auc = '%.3f' % (sklearn.metrics.roc_auc_score(labels, predictions))
 
-    return float(fmax), float(auc)
+    return {'f-measure':fmax, 'auc':float(auc)}
 
 
 def bestbase_fmax(path, fold_count=range(5), agg=1):
@@ -162,29 +185,35 @@ def bestbase_fmax(path, fold_count=range(5), agg=1):
     for fold in fold_count:
         # if '67890' in fold:
         if ('67890' in fold and 'foldAttribute' in p) or (not 'foldAttribute' in p):
-            _, _, test_df, label = common.read_fold(path, fold)
+            train_df, train_label, test_df, label = common.read_fold(path, fold)
             test_df = common.unbag(test_df, agg)
             predictions.append(test_df)
             labels = append(labels, label)
+            thres = thres_fmax(train_label, common.unbag(train_df, agg))
     predictions = pd.concat(predictions)
-    fmax_list = [common.fmax_score(labels, predictions.iloc[:, i]) for i in range(len(predictions.columns))]
+
+    # need to be changed
+    fmax_list = [common.fmeasure_score(labels, predictions.iloc[:, i], thres)['F'] for i in range(len(predictions.columns))]
     auc_list = [sklearn.metrics.roc_auc_score(labels, predictions.iloc[:, i]) for i in range(len(predictions.columns))]
 
-
-    return max(fmax_list), max(auc_list)
+    return {'f-measure':max(fmax_list), 'auc':max(auc_list)}
+    # return max(fmax_list), max(auc_list)
 
 
 def stacked_generalization(path, stacker_name, stacker, fold, agg):
     train_df, train_labels, test_df, test_labels = common.read_fold(path, fold)
     test_df = common.unbag(test_df, agg)
+    stacker = stacker.fit(train_df, train_labels)
     try:
-        test_predictions = stacker.fit(train_df, train_labels).predict_proba(test_df)[:, 1]
+        test_predictions = stacker.predict_proba(test_df)[:, 1]
+        train_predictions = stacker.predict_proba(train_df)[:, 1]
     except:
-        test_predictions = stacker.fit(train_df, train_labels).predict(test_df)[:, 1]
+        test_predictions = stacker.predict(test_df)[:, 1]
+        train_predictions = stacker.predict(train_df)[:, 1]
     df = pd.DataFrame(
         {'fold': fold, 'id': test_df.index.get_level_values('id'), 'label': test_labels, 'prediction': test_predictions,
          'diversity': common.diversity_score(test_df.values)})
-    return df
+    return {'testing_df':df, "training": [train_labels, train_predictions]}
 
 
 def main(path, fold_count=5, agg=1):
@@ -193,43 +222,25 @@ def main(path, fold_count=5, agg=1):
     # cols = ['data_name', 'fmax', 'method']
     cols = ['data_name', 'fmax', 'method', 'auc']
 
-    # data_path = abspath(args.path)
-    # fns = listdir(data_path)
-    # fns = [fn for fn in fns if fn != 'analysis']
-    # fns = [data_path + '/' + fn for fn in fns]
-    # feature_folders = [fn for fn in fns if isdir(fn)]
-    # assert len(feature_folders) > 0
-    # ### get weka properties from weka.properties
-    # p = load_properties(data_path)
-    # # fold_values = range(int(p['foldCount']))
-    # assert ('foldAttribute' in p) or ('foldCount' in p)
-    # if 'foldAttribute' in p:
-    #     input_fn = '%s/%s' % (feature_folders[0], 'data.arff')
-    #     assert exists(input_fn)
-    #     headers = load_arff_headers(input_fn)
-    #     fold_values = headers[p['foldAttribute']]
-    # else:
-    #     fold_values = range(int(p['foldCount']))
-
     dfs = []
     print('[CES] Start building model #################################')
     ces = CES_fmax(path, fold_values, agg)
     print('[CES] Finished evaluating model ############################')
-    print('[CES] F-max score is %s.' % ces[0])
-    print('[CES] AUC score is %s.' % ces[1])
+    print('[CES] F-max score is %s.' % ces['fmax']['F'])
+    print('[CES] AUC score is %s.' % ces['auc'])
     print('[Mean] Start building model ################################')
     mean = mean_fmax(path, fold_values, agg)
     print('[Mean] Finished evaluating model ###########################')
-    print('[Mean] F-max score is %s.' % mean[0])
-    print('[Mean] AUC score is %s.' % mean[1])
+    print('[Mean] F-max score is %s.' % mean['fmax']['F'])
+    print('[Mean] AUC score is %s.' % mean['auc'])
     print('[Best Base] Start building model ###########################')
     bestbase = bestbase_fmax(path, fold_values, agg)
     print('[Best Base] Finished evaluating model ######################')
-    print('[Best Base] F-max score is %s.' % bestbase[0])
-    print('[Best Base] AUC score is %s.' % bestbase[1])
-    dfs.append(pd.DataFrame(data=[[dn, ces[0], 'CES', ces[1]]], columns=cols, index=[0]))
-    dfs.append(pd.DataFrame(data=[[dn, mean[0], 'Mean', mean[1]]], columns=cols, index=[0]))
-    dfs.append(pd.DataFrame(data=[[dn, bestbase[0], 'best base', bestbase[1]]], columns=cols, index=[0]))
+    print('[Best Base] F-max score is %s.' % bestbase['fmax'])
+    print('[Best Base] AUC score is %s.' % bestbase['auc'])
+    dfs.append(pd.DataFrame(data=[[dn, ces['fmax']['F'], 'CES', ces['auc']]], columns=cols, index=[0]))
+    dfs.append(pd.DataFrame(data=[[dn, mean['fmax']['F'], 'Mean', mean['auc']]], columns=cols, index=[0]))
+    dfs.append(pd.DataFrame(data=[[dn, bestbase['fmax'], 'best base', bestbase['auc']]], columns=cols, index=[0]))
     # Get Stacking Fmax scores
     stackers = [RandomForestClassifier(n_estimators=200, max_depth=2, bootstrap=False, random_state=0),
                 SVC(C=1.0, cache_size=10000, class_weight=None, coef0=0.0,
@@ -241,14 +252,20 @@ def main(path, fold_count=5, agg=1):
     for i, (stacker_name, stacker) in enumerate(zip(stacker_names, stackers)):
         print('[%s] Start building model ################################' % (stacker_name))
         if (not 'foldAttribute' in p):
-            predictions_dfs = [stacked_generalization(path, stacker_name, stacker, fold, agg) for fold in fold_values]
+            stacking_output = [stacked_generalization(path, stacker_name, stacker, fold, agg) for fold in fold_values]
         else:
-            predictions_dfs = [stacked_generalization(path, stacker_name, stacker, '67890', agg)]
+            stacking_output = [stacked_generalization(path, stacker_name, stacker, '67890', agg)]
+        predictions_dfs = [s['testing_df'] for s in stacking_output]
+        _training = stacking_output[0]['training']
+        thres = thres_fmax(_training[0], _training[1])
+
         predictions_df = pd.concat(predictions_dfs)
-        fmax = common.fmax_score(predictions_df.label, predictions_df.prediction)
+        fmax = common.fmeasure_score(predictions_df.label, predictions_df.prediction, thres)
         auc = sklearn.metrics.roc_auc_score(predictions_df.label, predictions_df.prediction)
         print('[%s] Finished evaluating model ###########################' % (stacker_name))
-        print('[%s] F-max score is %s.' % (stacker_name, fmax))
+        print('[%s] F-measure score is %s.' % (stacker_name, fmax['F']))
+        print('[%s] Precision score is %s.' % (stacker_name, fmax['P']))
+        print('[%s] Recall score is %s.' % (stacker_name, fmax['R']))
         print('[%s] AUC score is %s.' % (stacker_name, auc))
         df = pd.DataFrame(data=[[dn, fmax, stacker_name, auc]], columns=cols, index=[0])
         dfs.append(df)
@@ -284,5 +301,5 @@ if 'foldAttribute' in p:
     fold_values = ['67890']
 else:
     fold_values = range(int(p['foldCount']))
-
+testing_bool = ('67890' in fold and 'foldAttribute' in p)
 main(args.path, args.fold, args.aggregate)
