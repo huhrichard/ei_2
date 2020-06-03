@@ -30,7 +30,7 @@ def confusion_matrix_fpr(labels, predictions, false_discovery_rate = 0.1):
     print(sklearn.metrics.confusion_matrix(labels, predictions > thresholds[max_fpr_index]))
 
 
-def fmeasure_score(labels, predictions, beta = 1.0, pos_label = 1, thres=None):
+def fmeasure_score(labels, predictions, thres=None, beta = 1.0, pos_label = 1):
     """
         Radivojac, P. et al. (2013). A Large-Scale Evaluation of Computational Protein Function Prediction. Nature Methods, 10(3), 221-227.
         Manning, C. D. et al. (2008). Evaluation in Information Retrieval. In Introduction to Information Retrieval. Cambridge University Press.
