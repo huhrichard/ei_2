@@ -40,7 +40,7 @@ def checkFolder(path, fold_count=5):
 def get_performance(df, ensemble, fold, seedval):
     labels = df.index.get_level_values('label').values
     predictions = df[ensemble].mean(axis=1)
-    return {'fold': fold, 'seed': seedval, 'score': common.fmeasure_score(labels, predictions), 'ensemble': ensemble[-1],
+    return {'fold': fold, 'seed': seedval, 'score': common.fmeasure_score(labels, predictions)['F'], 'ensemble': ensemble[-1],
             'ensemble_size': len(ensemble)}
 
 
