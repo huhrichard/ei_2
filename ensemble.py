@@ -301,5 +301,5 @@ if 'foldAttribute' in p:
     fold_values = ['67890']
 else:
     fold_values = range(int(p['foldCount']))
-testing_bool = ('67890' in fold and 'foldAttribute' in p)
+testing_bool = ('67890' in fold_values and 'foldAttribute' in p)
 main(args.path, args.fold, args.aggregate)
