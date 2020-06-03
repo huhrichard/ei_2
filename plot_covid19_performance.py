@@ -93,7 +93,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
         params = {'mathtext.default': 'regular'}
         plt.rcParams.update(params)
         ax1.set_ylabel(boxplot_ylabel, fontsize=22)
-        ax.set_xticks([1, 2, 2.8, 3.8, 4.6, 5.6, 6.6], sorted_algo_names)
+        ax1.set_xticks([1, 2, 2.8, 3.8, 4.6, 5.6, 6.6], sorted_algo_names)
         for tick in ax1.get_xticklabels():
             tick.set_fontsize(14)
             # tick.set_rotation(45)
