@@ -145,6 +145,7 @@ def CES_fmax(path, fold_count=range(5), agg=1):
     #
     #
     # else:
+    # print(thres)
     fmax = (common.fmeasure_score(predictions_df.label, predictions_df.prediction, thres=thres))
     return {'f-measure':fmax, 'auc':float(auc)}
 
