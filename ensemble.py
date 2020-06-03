@@ -263,6 +263,7 @@ def main(path, fold_count=5, agg=1):
         predictions_df = pd.concat(predictions_dfs)
         print(thres)
         fmax = common.fmeasure_score(predictions_df.label, predictions_df.prediction, thres)
+        print(fmax)
         auc = sklearn.metrics.roc_auc_score(predictions_df.label, predictions_df.prediction)
         print('[%s] Finished evaluating model ###########################' % (stacker_name))
         print('[%s] F-measure score is %s.' % (stacker_name, fmax['F']))
