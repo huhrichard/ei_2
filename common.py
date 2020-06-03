@@ -65,8 +65,8 @@ def load_properties(dirname):
 
 
 def read_fold(path, fold):
-    train_df        = read_csv('%s/validation-%i.csv.gz' % (path, fold), index_col = [0, 1], compression = 'gzip')
-    test_df         = read_csv('%s/predictions-%i.csv.gz' % (path, fold), index_col = [0, 1], compression = 'gzip')
+    train_df        = read_csv('%s/validation-%s.csv.gz' % (path, fold), index_col = [0, 1], compression = 'gzip')
+    test_df         = read_csv('%s/predictions-%s.csv.gz' % (path, fold), index_col = [0, 1], compression = 'gzip')
     train_labels    = train_df.index.get_level_values('label').values
     test_labels     = test_df.index.get_level_values('label').values
     return train_df, train_labels, test_df, test_labels
