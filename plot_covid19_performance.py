@@ -8,7 +8,7 @@ import numpy as np
 
 # rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
 rc('axes', linewidth=2)
-base_path = '/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR/'
+
 
 
 import matplotlib.pyplot as plt
@@ -55,7 +55,8 @@ dict_of_method = {
                   'labs_svdImpute_rank_20': 'Labs\nSVDImpute(rank=20)'
                   }
 
-def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
+def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
+    exp_name, base_path = base_path_tuple
     cp = sns.color_palette(n_colors=len(list_of_method))
     dict_suffix = [dict_of_method[k] for k in list_of_method]
     fmax_median_list = []
@@ -109,13 +110,13 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix):
             # tick.set_verticalalignment("center")
         ax1.set_xlabel('')
         # ax1.set_title('COVID-19 Deceased Prediction')
-        fig1.savefig('{}covid19_{}_{}_comparison.pdf'.format(plot_dir, boxplot_y_metric, fig_fn_suffix), bbox_inches="tight")
+        fig1.savefig('{}covid19_{}_{}_comparison_{}.pdf'.format(plot_dir, boxplot_y_metric, fig_fn_suffix, exp_name), bbox_inches="tight")
 
         cd_input = performance_cat_df[['data_name', boxplot_y_metric, 'method']]
 
         cd_input_df = cd_input.pivot_table(boxplot_y_metric, ['method'], 'data_name').reset_index()
         cd_input_df.set_index('method', inplace=True)
-        cd_csv_fn = '{}covid19_cd_input_{}_{}.csv'.format(plot_dir + 'cd_csv/', boxplot_y_metric, fig_fn_suffix)
+        cd_csv_fn = '{}covid19_cd_input_{}_{}_{}.csv'.format(plot_dir + 'cd_csv/', boxplot_y_metric, fig_fn_suffix, exp_name)
         cd_input_df.to_csv(cd_csv_fn, index_label=False)
         cmd = "R CMD BATCH --no-save --no-restore '--args cd_fn=\"{}\"' R/plotCDdiagram.R".format(cd_csv_fn)
         os.system(cmd)
@@ -148,9 +149,12 @@ list_of_method_dict = {'weka_impute':['EI', 'demographics',
                     #                            'labs_svdImpute_rank_20',
                     #                            'comorbidities']
                        }
+base_path_27may = ('before_27May','/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR/')
+base_path_1Jun = ('before_27MayToJun1','/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR_test/')
 
 for k, v in list_of_method_dict.items():
-    plot_boxplot_fmax_auc(v, k)
+    plot_boxplot_fmax_auc(v, k, base_path_27may)
+    plot_boxplot_fmax_auc(v, k, base_path_1Jun)
 
 # list_of_method_weka_impute = ['demographics', 'medications',
 #                   'vitals', 'concatenated', 'EI_svdImpute',
