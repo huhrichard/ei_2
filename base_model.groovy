@@ -184,6 +184,7 @@ header = sprintf "# %s@%s %.2f minutes %s\n", System.getProperty("user.name"), j
 writer.write(header)
 writer.write("id,label,prediction,fold,bag,classifier\n")
 for (instance in test) {
+// String or int?
     int id = instance.value(test.attribute(idAttribute))
     double prediction
     if (!regression) {
@@ -203,8 +204,36 @@ if (nestedFoldCount == 0) {
     System.exit(0)
 }
 
-train = data.trainCV(foldCount, Integer.valueOf(currentFold), new Random(1))
-printf "[%s] re-generated training data, starting %d-fold nested cv\n", shortClassifierName, nestedFoldCount
+// train = data.trainCV(foldCount, Integer.valueOf(currentFold), new Random(1))
+// printf "[%s] re-generated training data, starting %d-fold nested cv\n", shortClassifierName, nestedFoldCount
+if (foldAttribute != "") {
+    foldCount = data.attribute(foldAttribute).numValues()
+    foldAttributeIndex = String.valueOf(data.attribute(foldAttribute).index() + 1) // 1-indexed
+    foldAttributeValueIndex = String.valueOf(data.attribute(foldAttribute).indexOfValue(currentFold) + 1) // 1-indexed
+    printf "[%s] generating %s folds for leave-one-value-out CV\n", shortClassifierName, foldCount
+
+    testFoldFilter = new RemoveWithValues()
+    testFoldFilter.setModifyHeader(false)
+    testFoldFilter.setAttributeIndex(foldAttributeIndex)
+    testFoldFilter.setNominalIndices(foldAttributeValueIndex)
+    testFoldFilter.setInvertSelection(true)
+    testFoldFilter.setInputFormat(data)
+    test = Filter.useFilter(data, testFoldFilter)
+
+    trainingFoldFilter = new RemoveWithValues()
+    trainingFoldFilter.setModifyHeader(false)
+    trainingFoldFilter.setAttributeIndex(foldAttributeIndex)
+    trainingFoldFilter.setNominalIndices(foldAttributeValueIndex)
+    trainingFoldFilter.setInvertSelection(false)
+    trainingFoldFilter.setInputFormat(data)
+    train = Filter.useFilter(data, trainingFoldFilter)
+} else {
+    printf "[%s] generating folds for %s-fold CV\n", shortClassifierName, foldCount
+    test = data.testCV(foldCount, Integer.valueOf(currentFold))
+    train = data.trainCV(foldCount, Integer.valueOf(currentFold), new Random(randomSeed))
+}
+
+
 for (currentNestedFold in 0..nestedFoldCount - 1) {
     nestedTest = train.testCV(nestedFoldCount, currentNestedFold)
     nestedTrain = train.trainCV(nestedFoldCount, currentNestedFold, new Random(1))
