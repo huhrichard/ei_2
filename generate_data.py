@@ -198,7 +198,7 @@ def processTermFeature_3(param, impute):
 
 if __name__ == "__main__":
 
-    scratch_data_dir = '/sc/hydra/scratch/liy42/'
+    scratch_data_dir = '/sc/arion/scratch/liy42/'
     group_number_goterm = argv[2]
 
     if 'Impute' in group_number_goterm:
