@@ -230,7 +230,7 @@ if (foldAttribute != "") {
 } else {
     printf "[%s] generating folds for %s-fold CV\n", shortClassifierName, foldCount
     test = data.testCV(foldCount, Integer.valueOf(currentFold))
-    train = data.trainCV(foldCount, Integer.valueOf(currentFold), new Random(randomSeed))
+    train = data.trainCV(foldCount, Integer.valueOf(currentFold), new Random(1))
 }
 
 
