@@ -278,8 +278,9 @@ def main(path, fold_count=5, agg=1):
         auc = sklearn.metrics.roc_auc_score(predictions_df.label, predictions_df.prediction)
         print('[%s] Finished evaluating model ###########################' % (stacker_name))
         print('[%s] F-measure score is %s.' % (stacker_name, fmax['F']))
-        print('[%s] Precision score is %s.' % (stacker_name, fmax['P']))
-        print('[%s] Recall score is %s.' % (stacker_name, fmax['R']))
+        if 'P' in fmax:
+            print('[%s] Precision score is %s.' % (stacker_name, fmax['P']))
+            print('[%s] Recall score is %s.' % (stacker_name, fmax['R']))
         print('[%s] AUC score is %s.' % (stacker_name, auc))
         df = pd.DataFrame(data=[[dn, fmax, stacker_name, auc]], columns=cols, index=[0])
         dfs.append(df)
