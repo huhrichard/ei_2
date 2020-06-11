@@ -154,7 +154,7 @@ base_path_1Jun = ('27MayToJun1','/sc/arion/scratch/liy42/covid19_DECEASED_INDICA
 
 for k, v in list_of_method_dict.items():
     plot_boxplot_fmax_auc(v, k, base_path_27may)
-    plot_boxplot_fmax_auc(v, k, base_path_1Jun)
+    # plot_boxplot_fmax_auc(v, k, base_path_1Jun)
 
 # list_of_method_weka_impute = ['demographics', 'medications',
 #                   'vitals', 'concatenated', 'EI_svdImpute',
