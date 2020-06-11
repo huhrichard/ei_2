@@ -205,7 +205,7 @@ def bestbase_fmax(path, fold_count=range(5), agg=1):
 
 def stacked_generalization(path, stacker_name, stacker, fold, agg):
     train_df, train_labels, test_df, test_labels = common.read_fold(path, fold)
-    train_df_cols = train_df.columns()
+    train_df_cols = train_df.columns
     f_train_base = [common.fmeasure_score(train_labels, train_df[c].values) for c in train_df_cols]
     thres_train_base = [f['thres'] for f in f_train_base]
     # fscore_train_base = [f['F'] for f in f_train_base]

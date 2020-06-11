@@ -43,7 +43,7 @@ dict_of_method = {
                   'medications': 'Medica-\ntions\n(26)',
                   'comorbidities': 'Co-morbi-\ndities\n(19)',
                   'vitals': 'Vital\nsigns\n(6)',
-                  'concatenated': 'Concantenated\nAll',
+                  'concatenated': 'Concat-\nenated\nAll',
                   'EI_svdImpute': 'Ensemble Integration\nSVDImpute',
                   'EI_svdImpute_rank_5':'Ensemble Integration\nSVDImpute(rank=5)',
                   'EI_svdImpute_rank_20': 'Ensemble Integration\nSVDImpute(rank=20)',
@@ -131,7 +131,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
 list_of_method_dict = {'weka_impute':['EI', 'demographics',
                                   'labs', 'medications',
                                   'vitals','comorbidities',
-                                      # 'concatenated',
+                                      'concatenated',
                                       # 'EI_PowerSet'
                                       ],
                     # 'svd_impute': ['demographics', 'medications',
