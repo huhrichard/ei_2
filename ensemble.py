@@ -282,7 +282,7 @@ def main(path, fold_count=5, agg=1):
             print('[%s] Precision score is %s.' % (stacker_name, fmax['P']))
             print('[%s] Recall score is %s.' % (stacker_name, fmax['R']))
         print('[%s] AUC score is %s.' % (stacker_name, auc))
-        df = pd.DataFrame(data=[[dn, fmax, stacker_name, auc]], columns=cols, index=[0])
+        df = pd.DataFrame(data=[[dn, fmax['F'], stacker_name, auc]], columns=cols, index=[0])
         dfs.append(df)
     dfs = pd.concat(dfs)
     # Save results
