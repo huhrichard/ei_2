@@ -24,6 +24,8 @@ import warnings
 from common import load_arff_headers, load_properties
 from os.path import abspath, isdir
 from os import remove, system, listdir
+import matplotlib.pyplot as plt
+import numpy as np
 
 warnings.filterwarnings("ignore")
 
@@ -203,14 +205,23 @@ def bestbase_fmax(path, fold_count=range(5), agg=1):
 
 def stacked_generalization(path, stacker_name, stacker, fold, agg):
     train_df, train_labels, test_df, test_labels = common.read_fold(path, fold)
-    test_df = common.unbag(test_df, agg)
+    train_df_cols = train_df.columns()
+    f_train_base = [common.fmeasure_score(train_labels, train_df[c].values) for c in train_df_cols]
+    thres_train_base = [f['thres'] for f in f_train_base]
+    # fscore_train_base = [f['F'] for f in f_train_base]
+    # fscore_test_base = [common.fmeasure_score(test_labels, test_df[c].values, thres_train_base[idx]) for idx, c in enumerate(train_df_cols)]
+
+    train_df = train_df - np.array(thres_train_base)
+    test_df = test_df - np.array(thres_train_base)
     stacker = stacker.fit(train_df, train_labels)
+
     try:
         test_predictions = stacker.predict_proba(test_df)[:, 1]
         train_predictions = stacker.predict_proba(train_df)[:, 1]
     except:
         test_predictions = stacker.predict(test_df)[:, 1]
         train_predictions = stacker.predict(train_df)[:, 1]
+
     df = pd.DataFrame(
         {'fold': fold, 'id': test_df.index.get_level_values('id'), 'label': test_labels, 'prediction': test_predictions,
          'diversity': common.diversity_score(test_df.values)})
@@ -291,6 +302,8 @@ fns = listdir(data_path)
 fns = [fn for fn in fns if fn != 'analysis']
 fns = [data_path + '/' + fn for fn in fns]
 feature_folders = [fn for fn in fns if isdir(fn)]
+if len(feature_folders) == 0:
+    feature_folders.append('./')
 assert len(feature_folders) > 0
 ### get weka properties from weka.properties
 p = load_properties(data_path)
