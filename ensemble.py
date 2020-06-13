@@ -222,8 +222,9 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df):
     elif hasattr(stacker, 'theta_'):
         feat_imp = stacker.theta_
     if len(feat_imp)>0:
-        feat_imp = np.squeeze(feat_imp)
-
+        # feat_imp = np.squeeze(feat_imp)
+        if feat_imp.shape[0] > 1:
+            feat_imp = feat_imp[-1,:]
         # if not fold in stacked_df['fold']:
         new_df = pd.DataFrame({'f_train_base':fscore_train_base,
                                'f_test_base': fscore_test_base,
@@ -233,7 +234,7 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df):
                                })
 
         split_str = pd.Series(train_df_cols).str.split('.',expand=True)
-        print(split_str[0])
+        # print(split_str[0])
         # new_df.loc[:,['base_data', 'base_cls', 'base_bag']] = ''
         new_df.loc[:,['base_data', 'base_cls', 'base_bag']] = split_str
         new_df['fold'] = fold
