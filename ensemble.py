@@ -214,21 +214,31 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df):
     fscore_test_base = [common.fmeasure_score(test_labels, test_df[c].values, thres_train_base[idx]) for idx, c in enumerate(train_df_cols)]
 
     stacker = stacker.fit(train_df, train_labels)
+    feat_imp = None
+    if hasattr(stacker, 'feature_importances_'):
+        feat_imp = stacker.feature_importances_
+    elif hasattr(stacker, 'coef_'):
+        feat_imp = stacker.coef_
+    elif hasattr(stacker, 'theta_'):
+        feat_imp = stacker.theta_
+    if feat_imp != None:
+        feat_imp = np.squeeze(feat_imp, axis=0)
 
-    # if not fold in stacked_df['fold']:
-    new_df = pd.DataFrame({'f_train_base':fscore_train_base,
-                           'f_test_base': fscore_test_base,
-                           # 'base': train_df_cols,
-                           'feat_imp': stacker.feature_importances_,
-                           'base_data':'', 'base_cls':'', 'base_bag': ''
-                           })
-    split_str = pd.Series(train_df_cols).str.split('.',expand=True)
-    print(split_str[0])
-    # new_df.loc[:,['base_data', 'base_cls', 'base_bag']] = ''
-    new_df.loc[:,['base_data', 'base_cls', 'base_bag']] = split_str
-    new_df['fold'] = fold
-    new_df['stacker'] = stacker_name
-    stacked_df = pd.concat([stacked_df, new_df])
+        # if not fold in stacked_df['fold']:
+        new_df = pd.DataFrame({'f_train_base':fscore_train_base,
+                               'f_test_base': fscore_test_base,
+                               # 'base': train_df_cols,
+                               'feat_imp': feat_imp,
+                               'base_data':'', 'base_cls':'', 'base_bag': ''
+                               })
+
+        split_str = pd.Series(train_df_cols).str.split('.',expand=True)
+        print(split_str[0])
+        # new_df.loc[:,['base_data', 'base_cls', 'base_bag']] = ''
+        new_df.loc[:,['base_data', 'base_cls', 'base_bag']] = split_str
+        new_df['fold'] = fold
+        new_df['stacker'] = stacker_name
+        stacked_df = pd.concat([stacked_df, new_df])
     try:
         test_predictions = stacker.predict_proba(test_df)[:, 1]
         train_predictions = stacker.predict_proba(train_df)[:, 1]
