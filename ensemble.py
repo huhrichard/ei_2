@@ -211,8 +211,8 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df):
     f_train_base = [common.fmeasure_score(train_labels, train_df[c].values) for c in train_df_cols]
     thres_train_base = [f['thres'] for f in f_train_base]
     fscore_train_base = [f['F'] for f in f_train_base]
-    fscore_test_base = [common.fmeasure_score(test_labels, test_df[c].values, thres_train_base[idx]) for idx, c in enumerate(train_df_cols)]
-
+    f_test_base = [common.fmeasure_score(test_labels, test_df[c].values, thres_train_base[idx]) for idx, c in enumerate(train_df_cols)]
+    fscore_test_base = [f['F'] for f in f_test_base]
     stacker = stacker.fit(train_df, train_labels)
     feat_imp = []
     if hasattr(stacker, 'feature_importances_'):
