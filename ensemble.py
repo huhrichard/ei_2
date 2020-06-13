@@ -239,6 +239,7 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df):
         new_df.loc[:,['base_data', 'base_cls', 'base_bag']] = split_str
         new_df['fold'] = fold
         new_df['stacker'] = stacker_name
+        print(new_df)
         stacked_df = pd.concat([stacked_df, new_df])
     try:
         test_predictions = stacker.predict_proba(test_df)[:, 1]
@@ -334,6 +335,7 @@ def main(path, fold_count=5, agg=1):
     plot_path = './plot/feat_imp_'+path.split('/')[-1]
     common.check_dir_n_mkdir(plot_path)
     params_list = list(product(x_list, y_list, hue_list))
+    # print(stacked_df)
     for params in params_list:
         x, y, hue = params
         fn = 'scatter_{}_by_{}'
