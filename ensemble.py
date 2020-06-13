@@ -222,8 +222,8 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df):
                            'feat_imp': stacker.feature_importances_,
                            'base_data':'', 'base_cls':'', 'base_bag': ''
                            })
-    split_str = train_df_cols.str.split('.',expand=True)
-    print(split_str)
+    split_str = pd.Series(train_df_cols).str.split('.',expand=True)
+    print(split_str[0])
     # new_df.loc[:,['base_data', 'base_cls', 'base_bag']] = ''
     new_df.loc[:,['base_data', 'base_cls', 'base_bag']] = split_str
     new_df['fold'] = fold
