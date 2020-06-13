@@ -344,7 +344,7 @@ def main(path, fold_count=5, agg=1):
         else:
             fn = fn.format('test', hue)
             title = title.format('test', hue)
-        plot_scatter(df=stacked_df, x_col=x, y_col=y, hue_col=hue, fn=fn, title=title)
+        plot_scatter(df=stacked_df, x_col=x, y_col=y, hue_col=hue, fn=fn, path=plot_path, title=title)
 
     # Save results
     print('Saving results #############################################')
