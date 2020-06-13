@@ -239,7 +239,7 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df):
         new_df.loc[:,['base_data', 'base_cls', 'base_bag']] = split_str
         new_df['fold'] = fold
         new_df['stacker'] = stacker_name
-        print(new_df)
+        print(new_df.to_string())
         stacked_df = pd.concat([stacked_df, new_df])
     try:
         test_predictions = stacker.predict_proba(test_df)[:, 1]
