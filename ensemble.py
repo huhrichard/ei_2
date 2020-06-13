@@ -236,7 +236,10 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df):
         split_str = pd.Series(train_df_cols).str.split('.',expand=True)
         # print(split_str[0])
         # new_df.loc[:,['base_data', 'base_cls', 'base_bag']] = ''
-        new_df.loc[:,['base_data', 'base_cls', 'base_bag']] = split_str
+        # new_df.loc[:,['base_data', 'base_cls', 'base_bag']] =
+        new_df.loc[:,'base_data'] = split_str[0]
+        new_df.loc[:,'base_cls'] = split_str[1]
+        new_df.loc[:,'base_bag'] = split_str[2]
         new_df['fold'] = fold
         new_df['stacker'] = stacker_name
         print(new_df.to_string())
