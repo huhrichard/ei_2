@@ -214,14 +214,14 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df):
     fscore_test_base = [common.fmeasure_score(test_labels, test_df[c].values, thres_train_base[idx]) for idx, c in enumerate(train_df_cols)]
 
     stacker = stacker.fit(train_df, train_labels)
-    feat_imp = None
+    feat_imp = []
     if hasattr(stacker, 'feature_importances_'):
         feat_imp = stacker.feature_importances_
     elif hasattr(stacker, 'coef_'):
         feat_imp = stacker.coef_
     elif hasattr(stacker, 'theta_'):
         feat_imp = stacker.theta_
-    if feat_imp != None:
+    if len(feat_imp)>0:
         feat_imp = np.squeeze(feat_imp, axis=0)
 
         # if not fold in stacked_df['fold']:
