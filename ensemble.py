@@ -219,11 +219,12 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df):
     new_df = pd.DataFrame({'f_train_base':fscore_train_base,
                            'f_test_base': fscore_test_base,
                            # 'base': train_df_cols,
-                           'feat_imp': stacker.feature_importances_
+                           'feat_imp': stacker.feature_importances_,
+                           'base_data':'', 'base_cls':'', 'base_bag': ''
                            })
     split_str = train_df_cols.str.split('.',expand=True)
     print(split_str)
-    new_df.loc[:,['base_data', 'base_cls', 'base_bag']] = ''
+    # new_df.loc[:,['base_data', 'base_cls', 'base_bag']] = ''
     new_df.loc[:,['base_data', 'base_cls', 'base_bag']] = split_str
     new_df['fold'] = fold
     new_df['stacker'] = stacker_name
