@@ -258,7 +258,7 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df):
 
 def plot_scatter(df, path, x_col, y_col, hue_col, fn, title):
     fig, ax = plt.subplots(1,1)
-    ax = sns.scatterplot(ax=ax, data=df, x=x_col, y=y_col, hue=hue_col)
+    ax = sns.scatterplot(ax=ax, data=df, x=x_col, y=y_col, hue=hue_col, alpha=0.7)
     ax.set_title(title)
     fig.savefig(path+'/'+fn, bbox_inches="tight")
 
