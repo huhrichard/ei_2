@@ -26,6 +26,8 @@ from os.path import abspath, isdir
 from os import remove, system, listdir
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
+from itertools import product
 
 warnings.filterwarnings("ignore")
 
@@ -203,18 +205,25 @@ def bestbase_fmax(path, fold_count=range(5), agg=1):
     # return max(fmax_list), max(auc_list)
 
 
-def stacked_generalization(path, stacker_name, stacker, fold, agg):
+def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df):
     train_df, train_labels, test_df, test_labels = common.read_fold(path, fold)
     train_df_cols = train_df.columns
     f_train_base = [common.fmeasure_score(train_labels, train_df[c].values) for c in train_df_cols]
     thres_train_base = [f['thres'] for f in f_train_base]
-    # fscore_train_base = [f['F'] for f in f_train_base]
-    # fscore_test_base = [common.fmeasure_score(test_labels, test_df[c].values, thres_train_base[idx]) for idx, c in enumerate(train_df_cols)]
+    fscore_train_base = [f['F'] for f in f_train_base]
+    fscore_test_base = [common.fmeasure_score(test_labels, test_df[c].values, thres_train_base[idx]) for idx, c in enumerate(train_df_cols)]
 
-    train_df = train_df - np.array(thres_train_base)
-    test_df = test_df - np.array(thres_train_base)
     stacker = stacker.fit(train_df, train_labels)
 
+    # if not fold in stacked_df['fold']:
+    new_df = pd.DataFrame({'f_train_base':fscore_train_base,
+                           'f_test_base': fscore_test_base,
+                           # 'base': train_df_cols,
+                           'feat_imp': stacker.feature_importances_})
+    new_df[['base_data', 'base_cls', 'base_bag']] = train_df_cols.str.split('.',expand=True)
+    new_df['fold'] = fold
+    new_df['stacker'] = stacker_name
+    stacked_df = pd.concat([stacked_df, new_df])
     try:
         test_predictions = stacker.predict_proba(test_df)[:, 1]
         train_predictions = stacker.predict_proba(train_df)[:, 1]
@@ -225,7 +234,13 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg):
     df = pd.DataFrame(
         {'fold': fold, 'id': test_df.index.get_level_values('id'), 'label': test_labels, 'prediction': test_predictions,
          'diversity': common.diversity_score(test_df.values)})
-    return {'testing_df':df, "training": [train_labels, train_predictions]}
+    return {'testing_df':df, "training": [train_labels, train_predictions], 'stacked_df':stacked_df}
+
+def plot_scatter(df, path, x_col, y_col, hue_col, fn, title):
+    fig, ax = plt.subplots(1,1)
+    ax = sns.scatterplot(ax=ax, data=df, x=x_col, y=y_col, hue=hue_col)
+    ax.set_title(title)
+    fig.savefig(path+fn, bbox_inches="tight")
 
 
 def main(path, fold_count=5, agg=1):
@@ -261,12 +276,23 @@ def main(path, fold_count=5, agg=1):
                     tol=0.001, verbose=False), GaussianNB(), LogisticRegression(), AdaBoostClassifier(),
                 DecisionTreeClassifier(), GradientBoostingClassifier(loss='deviance'), KNeighborsClassifier()]
     stacker_names = ["RF.S", "SVM.S", "NB.S", "LR.S", "AB.S", "DT.S", "LB.S", "KNN.S"]
+    # stacker_names_feat_imp = ['{}_stacked_feat_imp'.format(s) for s in stacker_names]
+    df_cols = ['f_train_base','f_test_base', 'fold', 'stacker',
+               'feat_imp', 'base_data', 'base_cls', 'base_bag']
+    stacked_df = pd.DataFrame(columns= df_cols)
     for i, (stacker_name, stacker) in enumerate(zip(stacker_names, stackers)):
         print('[%s] Start building model ################################' % (stacker_name))
+
+
         if (not 'foldAttribute' in p):
-            stacking_output = [stacked_generalization(path, stacker_name, stacker, fold, agg) for fold in fold_values]
+            stacking_output = []
+            for fold in fold_values:
+                stack = stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df)
+                stacked_df = stack.pop('stacked_df')
+                stacking_output.append(stack)
         else:
-            stacking_output = [stacked_generalization(path, stacker_name, stacker, '67890', agg)]
+            stacking_output = [stacked_generalization(path, stacker_name, stacker, '67890', agg, stacked_df)]
+            stacked_df = stacking_output[0].pop('stacked_df')
         predictions_dfs = [s['testing_df'] for s in stacking_output]
         _training = stacking_output[0]['training']
         thres = thres_fmax(_training[0], _training[1])
@@ -285,6 +311,25 @@ def main(path, fold_count=5, agg=1):
         df = pd.DataFrame(data=[[dn, fmax['F'], stacker_name, auc]], columns=cols, index=[0])
         dfs.append(df)
     dfs = pd.concat(dfs)
+
+    hue_list = ['stacker','base_data', 'base_cls']
+    y_list = ['f_train_base','f_test_base']
+    x_list = ['feat_imp']
+    plot_path = './plot/feat_imp_'+path.split('/')[-1]
+    common.check_dir_n_mkdir(plot_path)
+    params_list = list(product(x_list, y_list, hue_list))
+    for params in params_list:
+        x, y, hue = params
+        fn = 'scatter_{}_by_{}'
+        title = 'F measure of {} base classifier VS Feature Importance of stackers (by {})'
+        if 'train' in y:
+            fn = fn.format('train', hue)
+            title = title.format('train', hue)
+        else:
+            fn = fn.format('test', hue)
+            title = title.format('test', hue)
+        plot_scatter(df=stacked_df, x_col=x, y_col=y, hue_col=hue, fn=fn, title=title)
+
     # Save results
     print('Saving results #############################################')
     if not exists('%s/analysis' % path):

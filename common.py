@@ -3,6 +3,7 @@ from pandas import DataFrame, concat, read_csv
 from scipy.io.arff import loadarff
 import sklearn.metrics
 import numpy as np
+import os
 
 def argsortbest(x):
     return argsort(x) if greater_is_better else argsort(x)[::-1]
@@ -96,6 +97,9 @@ def unbag(df, bag_count):
     df.columns = names
     return df
 
+def check_dir_n_mkdir(path):
+    if not os.path.exists(path):
+        os.mkdir(path)
 
 diversity_score = average_pearson_score
 score = sklearn.metrics.roc_auc_score
