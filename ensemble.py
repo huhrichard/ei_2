@@ -257,7 +257,7 @@ def plot_scatter(df, path, x_col, y_col, hue_col, fn, title):
     fig, ax = plt.subplots(1,1)
     ax = sns.scatterplot(ax=ax, data=df, x=x_col, y=y_col, hue=hue_col)
     ax.set_title(title)
-    fig.savefig(path+fn, bbox_inches="tight")
+    fig.savefig(path+'/'+fn, bbox_inches="tight")
 
 
 def main(path, fold_count=5, agg=1):
