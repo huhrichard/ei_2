@@ -209,43 +209,43 @@ def bestbase_fmax(path, fold_count=range(5), agg=1):
 
 def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df):
     train_df, train_labels, test_df, test_labels = common.read_fold(path, fold)
-    train_df_cols = train_df.columns
-    f_train_base = [common.fmeasure_score(train_labels, train_df[c].values) for c in train_df_cols]
-    thres_train_base = [f['thres'] for f in f_train_base]
-    fscore_train_base = [f['F'] for f in f_train_base]
-    f_test_base = [common.fmeasure_score(test_labels, test_df[c].values, thres_train_base[idx]) for idx, c in enumerate(train_df_cols)]
-    fscore_test_base = [f['F'] for f in f_test_base]
+    # train_df_cols = train_df.columns
+    # f_train_base = [common.fmeasure_score(train_labels, train_df[c].values) for c in train_df_cols]
+    # thres_train_base = [f['thres'] for f in f_train_base]
+    # fscore_train_base = [f['F'] for f in f_train_base]
+    # f_test_base = [common.fmeasure_score(test_labels, test_df[c].values, thres_train_base[idx]) for idx, c in enumerate(train_df_cols)]
+    # fscore_test_base = [f['F'] for f in f_test_base]
     stacker = stacker.fit(train_df, train_labels)
-    feat_imp = []
-    if hasattr(stacker, 'feature_importances_'):
-        feat_imp = stacker.feature_importances_
-    elif hasattr(stacker, 'coef_'):
-        feat_imp = stacker.coef_
-    elif hasattr(stacker, 'theta_'):
-        feat_imp = stacker.theta_
-    if len(feat_imp)>0:
-        # feat_imp = np.squeeze(feat_imp)
-        if len(feat_imp.shape) > 1:
-            feat_imp = feat_imp[-1,:]
-        # if not fold in stacked_df['fold']:
-        new_df = pd.DataFrame({'f_train_base':fscore_train_base,
-                               'f_test_base': fscore_test_base,
-                               # 'base': train_df_cols,
-                               'feat_imp': feat_imp,
-                               'base_data':'', 'base_cls':'', 'base_bag': ''
-                               })
-
-        split_str = pd.Series(train_df_cols).str.split('.',expand=True)
-        # print(split_str[0])
-        # new_df.loc[:,['base_data', 'base_cls', 'base_bag']] = ''
-        # new_df.loc[:,['base_data', 'base_cls', 'base_bag']] =
-        new_df.loc[:,'base_data'] = split_str[0]
-        new_df.loc[:,'base_cls'] = split_str[1]
-        new_df.loc[:,'base_bag'] = split_str[2]
-        new_df['fold'] = fold
-        new_df['stacker'] = stacker_name
-        # print(new_df.to_string())
-        stacked_df = pd.concat([stacked_df, new_df])
+    # feat_imp = []
+    # if hasattr(stacker, 'feature_importances_'):
+    #     feat_imp = stacker.feature_importances_
+    # elif hasattr(stacker, 'coef_'):
+    #     feat_imp = stacker.coef_
+    # elif hasattr(stacker, 'theta_'):
+    #     feat_imp = stacker.theta_
+    # if len(feat_imp)>0:
+    #     # feat_imp = np.squeeze(feat_imp)
+    #     if len(feat_imp.shape) > 1:
+    #         feat_imp = feat_imp[-1,:]
+    #     # if not fold in stacked_df['fold']:
+    #     new_df = pd.DataFrame({'f_train_base':fscore_train_base,
+    #                            'f_test_base': fscore_test_base,
+    #                            # 'base': train_df_cols,
+    #                            'feat_imp': feat_imp,
+    #                            'base_data':'', 'base_cls':'', 'base_bag': ''
+    #                            })
+    #
+    #     split_str = pd.Series(train_df_cols).str.split('.',expand=True)
+    #     # print(split_str[0])
+    #     # new_df.loc[:,['base_data', 'base_cls', 'base_bag']] = ''
+    #     # new_df.loc[:,['base_data', 'base_cls', 'base_bag']] =
+    #     new_df.loc[:,'base_data'] = split_str[0]
+    #     new_df.loc[:,'base_cls'] = split_str[1]
+    #     new_df.loc[:,'base_bag'] = split_str[2]
+    #     new_df['fold'] = fold
+    #     new_df['stacker'] = stacker_name
+    #     # print(new_df.to_string())
+    #     stacked_df = pd.concat([stacked_df, new_df])
     try:
         test_predictions = stacker.predict_proba(test_df)[:, 1]
         train_predictions = stacker.predict_proba(train_df)[:, 1]
@@ -334,24 +334,24 @@ def main(path, fold_count=5, agg=1):
         dfs.append(df)
     dfs = pd.concat(dfs)
 
-    hue_list = ['stacker','base_data', 'base_cls']
-    y_list = ['f_train_base','f_test_base']
-    x_list = ['feat_imp']
-    plot_path = './plot/feat_imp_'+path.split('/')[-1]
-    common.check_dir_n_mkdir(plot_path)
-    params_list = list(product(x_list, y_list, hue_list))
-    # print(stacked_df)
-    for params in params_list:
-        x, y, hue = params
-        fn = 'scatter_{}_by_{}'
-        title = 'F measure of {} base classifier VS Feature Importance of stackers (by {})'
-        if 'train' in y:
-            fn = fn.format('train', hue)
-            title = title.format('train', hue)
-        else:
-            fn = fn.format('test', hue)
-            title = title.format('test', hue)
-        plot_scatter(df=stacked_df, x_col=x, y_col=y, hue_col=hue, fn=fn, path=plot_path, title=title)
+    # hue_list = ['stacker','base_data', 'base_cls']
+    # y_list = ['f_train_base','f_test_base']
+    # x_list = ['feat_imp']
+    # plot_path = './plot/feat_imp_'+path.split('/')[-1]
+    # common.check_dir_n_mkdir(plot_path)
+    # params_list = list(product(x_list, y_list, hue_list))
+    # # print(stacked_df)
+    # for params in params_list:
+    #     x, y, hue = params
+    #     fn = 'scatter_{}_by_{}'
+    #     title = 'F measure of {} base classifier VS Feature Importance of stackers (by {})'
+    #     if 'train' in y:
+    #         fn = fn.format('train', hue)
+    #         title = title.format('train', hue)
+    #     else:
+    #         fn = fn.format('test', hue)
+    #         title = title.format('test', hue)
+    #     plot_scatter(df=stacked_df, x_col=x, y_col=y, hue_col=hue, fn=fn, path=plot_path, title=title)
 
     # Save results
     print('Saving results #############################################')
