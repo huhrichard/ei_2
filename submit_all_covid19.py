@@ -7,6 +7,7 @@ base_path = '/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR/'
 list_of_method = ['EI', 'demographics',
                   'labs', 'medications',
                   'vitals', 'concatenated','comorbidities',
+                    'medications_binary', 'EI_med_binary', 'concatenated_med_binary'
                   # 'EI_svdImpute', 'EI_svdImpute_rank_5', 'EI_svdImpute_rank_20',
                   # 'concatenated_svdImpute', 'concatenated_svdImpute_rank_5', 'concatenated_svdImpute_rank_20',
                   # 'labs_svdImpute', 'labs_svdImpute_rank_5', 'labs_svdImpute_rank_20'
