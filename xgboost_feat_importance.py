@@ -23,9 +23,9 @@ for c, dtype in concat_dtype.items():
         concat_df.drop(columns=[c], inplace=True)
         # print(concat_df.columns)
 
-concat_df = concat_df.apply(pd.to_numeric)
-concat_df=(concat_df-concat_df.mean())/concat_df.std()
-concat_df[:] = IterativeSVD().fit_transform(concat_df.values)
+# concat_df = concat_df.apply(pd.to_numeric)
+# concat_df=(concat_df-concat_df.mean())/concat_df.std()
+# concat_df[:] = IterativeSVD().fit_transform(concat_df.values)
 
 data_outcome_df = pd.concat([concat_df, outcome_df], axis=1, join='inner')
 
