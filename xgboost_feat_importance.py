@@ -61,19 +61,20 @@ test_pred = np.concatenate(test_pred_list)
 test_label = np.concatenate(test_label_list)
 f_max = common.fmeasure_score(test_label, test_pred)
 print(f_max)
+# {'F': 0.813500347947112, 'thres': 0.37644184}
 
 feat_imp_df = pd.DataFrame(data=feat_imp, columns=X_cols)
 # feat_imp_df = feat_imp_df.stack()
 feat_imp_median = feat_imp_df.median(axis=0)
 feat_imp_median.sort_values(inplace=True, ascending=False)
-
+#
 
 feat_imp_df['idx'] = feat_imp_df.index
 print(feat_imp_median)
 feat_imp_df = pd.melt(feat_imp_df, id_vars=['idx'], value_vars=X_cols,
                       var_name='feature', value_name='feature_importance')
 
-fig, ax = plt.subplots(1,1, figsize=(6,18))
+fig, ax = plt.subplots(1,1, figsize=(6,20))
 ax = sns.boxplot(ax=ax, data=feat_imp_df, x='feature_importance',
                  y='feature', orient='h', order=feat_imp_median.index.to_list())
 fig.savefig('plot/feat_imp_xgboost.pdf', bbox_inches="tight")
