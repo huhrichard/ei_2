@@ -18,6 +18,10 @@ from sklearn.ensemble import AdaBoostClassifier  # Adaboost
 from sklearn.tree import DecisionTreeClassifier  # Decision Tree
 from sklearn.ensemble import GradientBoostingClassifier  # Logit Boost with parameter(loss='deviance')
 from sklearn.neighbors import KNeighborsClassifier  # K nearest neighbors (IBk in weka)
+from sklearn.neural_network import MLPClassifier
+from sklearn.gaussian_process import GaussianProcessClassifier
+from sklearn.linear_model import RidgeClassifier
+
 from xgboost import XGBClassifier
 from sklearn.svm import SVC
 # XGBoost?
@@ -298,9 +302,10 @@ def main(path, fold_count=5, agg=1):
                     max_iter=1e8, random_state=None, shrinking=True,
                     tol=0.001, verbose=False), GaussianNB(), LogisticRegression(), AdaBoostClassifier(),
                 DecisionTreeClassifier(), GradientBoostingClassifier(loss='deviance'), KNeighborsClassifier(),
-                XGBClassifier()
+                XGBClassifier(), MLPClassifier(), GaussianProcessClassifier(), RidgeClassifier()
                 ]
-    stacker_names = ["RF.S", "SVM.S", "NB.S", "LR.S", "AB.S", "DT.S", "LB.S", "KNN.S", "XGB.S"]
+    stacker_names = ["RF.S", "SVM.S", "NB.S", "LR.S", "AB.S", "DT.S", "LB.S", "KNN.S",
+                     "XGB.S","MLP.S", "GP.S", "Ridge.S"]
     # stacker_names_feat_imp = ['{}_stacked_feat_imp'.format(s) for s in stacker_names]
     df_cols = ['f_train_base','f_test_base', 'fold', 'stacker',
                'feat_imp', 'base_data', 'base_cls', 'base_bag']
