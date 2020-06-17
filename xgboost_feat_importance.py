@@ -4,7 +4,7 @@ from sklearn.model_selection import KFold
 import numpy as np
 from pandas.api.types import is_string_dtype
 # from ... import common
-from fancyimpute import IterativeSVD
+# from fancyimpute import IterativeSVD
 
 # f_path = 'msdw_covid19_27May2020'
 f_path = '.'
