@@ -65,7 +65,7 @@ print(f_max)
 feat_imp_df = pd.DataFrame(data=feat_imp, columns=X_cols)
 # feat_imp_df = feat_imp_df.stack()
 feat_imp_median = feat_imp_df.median(axis=1)
-feat_imp_median.sort_values(by=0, axis=1, inplace=True)
+feat_imp_median.sort_values(axis=1, inplace=True)
 
 
 feat_imp_df['idx'] = feat_imp_df.index
