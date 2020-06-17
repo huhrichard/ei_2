@@ -3,7 +3,9 @@ import pandas as pd
 from sklearn.model_selection import KFold
 import numpy as np
 from pandas.api.types import is_string_dtype
-# from ... import common
+import common
+import seaborn as sns
+import matplotlib.pyplot as plt
 # from fancyimpute import IterativeSVD
 
 # f_path = 'msdw_covid19_27May2020'
@@ -37,6 +39,7 @@ kf = KFold(n_splits=5, shuffle=True, random_state=1)
 outcome = 'DECEASED_INDICATOR'
 y = data_outcome_df[outcome].values.astype(float)
 X = data_outcome_df.drop(columns=[outcome]).values.astype(float)
+X_cols = data_outcome_df.drop(columns=[outcome]).columns.to_list()
 feat_imp_list = []
 test_pred_list = []
 test_label_list = []
@@ -56,6 +59,19 @@ for train_idx, test_idx in kf.split(X):
 feat_imp = np.array(feat_imp_list)
 test_pred = np.concatenate(test_pred_list)
 test_label = np.concatenate(test_label_list)
+f_max = common.fmeasure_score(test_label, test_pred)
+print(f_max)
+
+feat_imp_df = pd.DataFrame(data=feat_imp, columns=X_cols)
+feat_imp_df = feat_imp_df.stack()
+feat_imp_df['idx'] = feat_imp_df.index
+feat_imp_df = pd.melt(feat_imp_df, id_vars=['idx'], value_vars=X_cols,
+                      var_name='feature', value_name='feature_importance')
+
+fig, ax = plt.subplots(1,1, size=(6,12))
+ax = sns.boxplot(ax=ax, data=feat_imp_df, x='feature_importance',
+                 y='feature', orient='h')
+fig.savefig('plot/feat_imp_xgboost.pdf', bbox_inches="tight")
 
 print(feat_imp.shape)
 print(test_pred.shape)
