@@ -69,13 +69,13 @@ feat_imp_median.sort_values(inplace=True)
 
 
 feat_imp_df['idx'] = feat_imp_df.index
-print(feat_imp_df)
+print(feat_imp_median)
 feat_imp_df = pd.melt(feat_imp_df, id_vars=['idx'], value_vars=X_cols,
                       var_name='feature', value_name='feature_importance')
 
 fig, ax = plt.subplots(1,1, figsize=(6,18))
 ax = sns.boxplot(ax=ax, data=feat_imp_df, x='feature_importance',
-                 y='feature', orient='h', order=feat_imp_median.index.to_list())
+                 y='feature', orient='h')
 fig.savefig('plot/feat_imp_xgboost.pdf', bbox_inches="tight")
 
 print(feat_imp.shape)
