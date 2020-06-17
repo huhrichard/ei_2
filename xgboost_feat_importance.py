@@ -64,14 +64,18 @@ print(f_max)
 
 feat_imp_df = pd.DataFrame(data=feat_imp, columns=X_cols)
 # feat_imp_df = feat_imp_df.stack()
+feat_imp_median = feat_imp_df.median(axis=1)
+feat_imp_median.sort_values(by=0, axis=1, inplace=True)
+
+
 feat_imp_df['idx'] = feat_imp_df.index
 print(feat_imp_df)
 feat_imp_df = pd.melt(feat_imp_df, id_vars=['idx'], value_vars=X_cols,
                       var_name='feature', value_name='feature_importance')
 
-fig, ax = plt.subplots(1,1, figsize=(6,12))
+fig, ax = plt.subplots(1,1, figsize=(6,18))
 ax = sns.boxplot(ax=ax, data=feat_imp_df, x='feature_importance',
-                 y='feature', orient='h')
+                 y='feature', orient='h', order=feat_imp_median.columns.to_list())
 fig.savefig('plot/feat_imp_xgboost.pdf', bbox_inches="tight")
 
 print(feat_imp.shape)
