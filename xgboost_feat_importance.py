@@ -69,7 +69,7 @@ print(feat_imp_df)
 feat_imp_df = pd.melt(feat_imp_df, id_vars=['idx'], value_vars=X_cols,
                       var_name='feature', value_name='feature_importance')
 
-fig, ax = plt.subplots(1,1, size=(6,12))
+fig, ax = plt.subplots(1,1, figsize=(6,12))
 ax = sns.boxplot(ax=ax, data=feat_imp_df, x='feature_importance',
                  y='feature', orient='h')
 fig.savefig('plot/feat_imp_xgboost.pdf', bbox_inches="tight")
