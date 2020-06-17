@@ -63,11 +63,12 @@ f_max = common.fmeasure_score(test_label, test_pred)
 print(f_max)
 
 feat_imp_df = pd.DataFrame(data=feat_imp, columns=X_cols)
-feat_imp_df = feat_imp_df.stack()
+# feat_imp_df = feat_imp_df.stack()
 feat_imp_df['idx'] = feat_imp_df.index
+print(feat_imp_df)
 feat_imp_df = pd.melt(feat_imp_df, id_vars=['idx'], value_vars=X_cols,
                       var_name='feature', value_name='feature_importance')
-print(feat_imp_df)
+
 fig, ax = plt.subplots(1,1, size=(6,12))
 ax = sns.boxplot(ax=ax, data=feat_imp_df, x='feature_importance',
                  y='feature', orient='h')
