@@ -1,5 +1,6 @@
 import xgboost
 import pandas as pd
+import sklearn
 from sklearn.model_selection import KFold
 import numpy as np
 from pandas.api.types import is_string_dtype
@@ -60,6 +61,7 @@ feat_imp = np.array(feat_imp_list)
 test_pred = np.concatenate(test_pred_list)
 test_label = np.concatenate(test_label_list)
 f_max = common.fmeasure_score(test_label, test_pred)
+auc = sklearn.metrics.roc_auc_score(test_label, test_pred)
 print(f_max)
 # {'F': 0.813500347947112, 'thres': 0.37644184}
 
