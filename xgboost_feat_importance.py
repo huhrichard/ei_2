@@ -63,6 +63,7 @@ test_label = np.concatenate(test_label_list)
 f_max = common.fmeasure_score(test_label, test_pred)
 auc = sklearn.metrics.roc_auc_score(test_label, test_pred)
 print(f_max)
+print('AUC:', auc)
 # {'F': 0.813500347947112, 'thres': 0.37644184}
 
 feat_imp_df = pd.DataFrame(data=feat_imp, columns=X_cols)
