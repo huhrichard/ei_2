@@ -4,7 +4,7 @@ import pandas as pd
 from matplotlib import rc
 import numpy as np
 # import scikit_posthocs as sp
-
+from itertools import chain, combinations
 
 # rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
 rc('axes', linewidth=2)
@@ -33,6 +33,8 @@ base_command = 'python {} --path {}'
 
 path_of_performance = '/analysis/performance.csv'
 
+
+
 dict_of_method = {
                     # 'EI': 'EI',
                   'EI':'Ensemble\nIntegration',
@@ -58,6 +60,30 @@ dict_of_method = {
                   'labs_svdImpute_rank_20': 'Labs\nSVDImpute(rank=20)'
 
                   }
+
+list_of_method = []
+def powerset(iterable):
+    "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
+    s = list(iterable)
+    return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
+
+list_of_data = ['demographics',
+                  'labs', 'medications',
+                  'vitals','comorbidities']
+
+feature_power_set = powerset(list_of_data)
+
+for s in feature_power_set:
+    # print(s, len(s))
+    if len(s) > 1 and len(s) < len(list_of_data):
+        feat = ''
+        dict_name = ''
+        for sub in s:
+            feat = feat + '+' + sub
+            dict_name = dict_name + '+\n' + dict_of_method[feat]
+        list_of_method.append(feat[1:])
+        dict_of_method[feat[1:]] = dict_name[1:]
+
 
 def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
     exp_name, base_path = base_path_tuple
@@ -87,7 +113,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
         print(sorted_tuple)
 
         sep_space = 1.5
-        fig1, ax1 = plt.subplots(1,1, figsize=(14,6))
+        fig1, ax1 = plt.subplots(1,1, figsize=(30,6))
         ax1 = sns.boxplot(ax=ax1, y=boxplot_y_metric, x='data_name',
                           data=performance_cat_df,
                           palette=sorted_cp, order=sorted_algo_names,
@@ -132,13 +158,14 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
     custom_boxplot('auc', 'AUC', auc_median_list)
 
 
+
 list_of_method_dict = {'weka_impute':['EI', 'demographics',
                                   'labs', 'medications',
                                   'vitals','comorbidities',
                                       'concatenated',
                                     'medications_binary', 'EI_med_binary', 'concatenated_med_binary'
                                       # 'EI_PowerSet'
-                                      ],
+                                      ]+list_of_method,
                     # 'svd_impute': ['demographics', 'medications',
                     #                       'vitals', 'EI_svdImpute',
                     #                       'concatenated_svdImpute',
