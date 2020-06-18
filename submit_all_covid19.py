@@ -1,6 +1,6 @@
 import os
 import sys
-
+from itertools import chain, combinations
 base_path = '/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR/'
 
 
@@ -19,7 +19,24 @@ calling_script = str(sys.argv[-1])
 
 base_command = 'python {} --path {}'
 
+def powerset(iterable):
+    "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
+    s = list(iterable)
+    return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
 
+list_of_data = ['demographics',
+                  'labs', 'medications',
+                  'vitals','comorbidities']
+
+feature_power_set = powerset(list_of_data)
+
+for s in feature_power_set:
+    # print(s, len(s))
+    if len(s) > 1 and len(s) < len(list_of_data):
+        feat = ''
+        for sub in s:
+            feat = feat + '+' + sub
+        list_of_method.append(feat[1:])
 
 for m in list_of_method:
     for outcome in outcome_list:
