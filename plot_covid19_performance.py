@@ -83,7 +83,7 @@ for s in feature_power_set:
             dict_name = dict_name + '+\n' + dict_of_method[sub]
         lm.append(feat[1:])
         dict_of_method[feat[1:]] = dict_name[2:]
-
+print(dict_of_method)
 
 def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
     exp_name, base_path = base_path_tuple
