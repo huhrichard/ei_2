@@ -105,7 +105,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
             auc_median_list.append(df['auc'].median())
 
     performance_cat_df = pd.concat(performance_df_list)
-    print(df['data_name'])
+    print(performance_cat_df['data_name'])
     fmax_label = r'$F_{max}$'
     def custom_boxplot(boxplot_y_metric, boxplot_ylabel, metric_median_list):
         sorted_tuple = sorted(zip(metric_median_list, dict_suffix, cp), reverse=True, key=lambda x: x[0])
