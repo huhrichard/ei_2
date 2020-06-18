@@ -163,7 +163,7 @@ list_of_method_dict = {'weka_impute':['EI', 'demographics',
                                   'labs', 'medications',
                                   'vitals','comorbidities',
                                       'concatenated',
-                                    'medications_binary', 'EI_med_binary', 'concatenated_med_binary'
+                                    # 'medications_binary', 'EI_med_binary', 'concatenated_med_binary'
                                       # 'EI_PowerSet'
                                       ]+lm,
                     # 'svd_impute': ['demographics', 'medications',
