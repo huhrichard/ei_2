@@ -61,7 +61,7 @@ dict_of_method = {
 
                   }
 
-list_of_method = []
+lm = []
 def powerset(iterable):
     "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
     s = list(iterable)
@@ -81,7 +81,7 @@ for s in feature_power_set:
         for sub in s:
             feat = feat + '+' + sub
             dict_name = dict_name + '+\n' + dict_of_method[sub]
-        list_of_method.append(feat[1:])
+        lm.append(feat[1:])
         dict_of_method[feat[1:]] = dict_name[2:]
 
 
@@ -113,7 +113,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
         print(sorted_tuple)
 
         sep_space = 1.5
-        fig1, ax1 = plt.subplots(1,1, figsize=(30,6))
+        fig1, ax1 = plt.subplots(1,1, figsize=(36,6))
         ax1 = sns.boxplot(ax=ax1, y=boxplot_y_metric, x='data_name',
                           data=performance_cat_df,
                           palette=sorted_cp, order=sorted_algo_names,
@@ -165,7 +165,7 @@ list_of_method_dict = {'weka_impute':['EI', 'demographics',
                                       'concatenated',
                                     'medications_binary', 'EI_med_binary', 'concatenated_med_binary'
                                       # 'EI_PowerSet'
-                                      ]+list_of_method,
+                                      ]+lm,
                     # 'svd_impute': ['demographics', 'medications',
                     #                       'vitals', 'EI_svdImpute',
                     #                       'concatenated_svdImpute',
