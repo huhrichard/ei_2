@@ -98,7 +98,8 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
             dir_name = base_path+outcome+'_'+m
             df = pd.read_csv(dir_name+path_of_performance)
             df['data_name'] = df['data_name'].str.replace("DECEASED_INDICATOR_", "")
-            df['data_name'] = df['data_name'].str.replace(m, dict_of_method[m])
+            # print(dict_of_method[m])
+            df['data_name'] = df['data_name'].str.replace(m, dict_of_method[m], regex=False)
             # df.rename(columns='')
             performance_df_list.append(df)
             fmax_median_list.append(df['fmax'].median())
