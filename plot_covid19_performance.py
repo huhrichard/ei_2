@@ -107,12 +107,14 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
             print(df['data_name'])
             # df.rename(columns='')
             performance_df_list.append(df)
-            fmax_median_list.append(df['fmax'].median())
-            auc_median_list.append(df['auc'].median())
+            # fmax_median_list.append(df['fmax'].median())
+            # auc_median_list.append(df['auc'].median())
 
 
     performance_cat_df = pd.concat(performance_df_list)
     dict_suffix = performance_cat_df['data_name'].unique().tolist()
+    fmax_median_list = [performance_cat_df.loc[performance_cat_df['data_name']==k, 'fmax'].median() for k in dict_suffix]
+    auc_median_list = [performance_cat_df.loc[performance_cat_df['data_name']==k, 'auc'].median() for k in dict_suffix]
     cp = sns.color_palette(n_colors=len(dict_suffix))
     print(performance_cat_df['data_name'])
     fmax_label = r'$F_{max}$'
