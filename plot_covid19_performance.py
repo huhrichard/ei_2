@@ -103,7 +103,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
             rows_with_plus =  df['data_name'].str.contains('\+')
             count =  df.loc[rows_with_plus, 'data_name'].str.count('\+',).add(1).astype(str)
             print(count)
-            df.loc[rows_with_plus, 'data_name'] = '\#dataset\nincluded=' + count
+            df.loc[rows_with_plus, 'data_name'] = '#dataset\nincluded=' + count
             print(df['data_name'])
             # df.rename(columns='')
             performance_df_list.append(df)
@@ -125,7 +125,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
         print(sorted_tuple)
 
         sep_space = 1.5
-        fig1, ax1 = plt.subplots(1,1, figsize=(42,6))
+        fig1, ax1 = plt.subplots(1,1, figsize=(12,6))
         ax1 = sns.boxplot(ax=ax1, y=boxplot_y_metric, x='data_name',
                           data=performance_cat_df,
                           palette=sorted_cp, order=sorted_algo_names,
