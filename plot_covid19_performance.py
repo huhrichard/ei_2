@@ -103,7 +103,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
             rows_with_plus =  df['data_name'].str.contains('\+')
             count =  df.loc[rows_with_plus, 'data_name'].str.count('\+',).add(1).astype(str)
             print(count)
-            df.loc[rows_with_plus, 'data_name'] = pd.Series(count).add_prefix('\#dataset\nincluded=')
+            df.loc[rows_with_plus, 'data_name'] = '\#dataset\nincluded=' + count
             print(df['data_name'])
             # df.rename(columns='')
             performance_df_list.append(df)
