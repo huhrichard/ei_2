@@ -100,7 +100,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
             df['data_name'] = df['data_name'].str.replace("DECEASED_INDICATOR_", "")
             # print(dict_of_method[m])
             df['data_name'] = df['data_name'].str.replace(m, dict_of_method[m], regex=False)
-            if df['data_name'].str.contain('+'):
+            if df['data_name'].str.contains('+'):
                 count =  df['data_name'].str.count('+').add(1)
                 df.loc[:, 'data_name'] = count.add_prefix('#dataset\nincluded=')
 
