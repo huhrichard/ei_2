@@ -87,8 +87,8 @@ print(dict_of_method)
 
 def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
     exp_name, base_path = base_path_tuple
-    cp = sns.color_palette(n_colors=len(list_of_method))
-    dict_suffix = [dict_of_method[k] for k in list_of_method]
+
+    # dict_suffix = [dict_of_method[k] for k in list_of_method]
     fmax_median_list = []
     auc_median_list = []
     performance_df_list = []
@@ -100,11 +100,17 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
             df['data_name'] = df['data_name'].str.replace("DECEASED_INDICATOR_", "")
             # print(dict_of_method[m])
             df['data_name'] = df['data_name'].str.replace(m, dict_of_method[m], regex=False)
+            if df['data_name'].str.contain('+'):
+                count =  df['data_name'].str.count('+').add(1)
+                df.loc[:, 'data_name'] = count.add_prefix('#dataset\nincluded=')
+
             # df.rename(columns='')
             performance_df_list.append(df)
             fmax_median_list.append(df['fmax'].median())
             auc_median_list.append(df['auc'].median())
 
+    dict_suffix = df['data_name'].unique().tolist()
+    cp = sns.color_palette(n_colors=len(dict_suffix))
     performance_cat_df = pd.concat(performance_df_list)
     print(performance_cat_df['data_name'])
     fmax_label = r'$F_{max}$'
