@@ -100,7 +100,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
             df['data_name'] = df['data_name'].str.replace("DECEASED_INDICATOR_", "")
             # print(dict_of_method[m])
             df['data_name'] = df['data_name'].str.replace(m, dict_of_method[m], regex=False)
-            rows_with_plus =  df['data_name'].str.contains('+', regex=False)
+            rows_with_plus =  df['data_name'].str.contains('\+')
             count =  df.loc[rows_with_plus, 'data_name'].str.count('\+',).add(1)
             df.loc[rows_with_plus, 'data_name'] = count.add_prefix('#dataset\nincluded=')
 
@@ -109,9 +109,10 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
             fmax_median_list.append(df['fmax'].median())
             auc_median_list.append(df['auc'].median())
 
-    dict_suffix = df['data_name'].unique().tolist()
-    cp = sns.color_palette(n_colors=len(dict_suffix))
+
     performance_cat_df = pd.concat(performance_df_list)
+    dict_suffix = performance_cat_df['data_name'].unique().tolist()
+    cp = sns.color_palette(n_colors=len(dict_suffix))
     print(performance_cat_df['data_name'])
     fmax_label = r'$F_{max}$'
     def custom_boxplot(boxplot_y_metric, boxplot_ylabel, metric_median_list):
