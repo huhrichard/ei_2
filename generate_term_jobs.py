@@ -45,14 +45,14 @@ go_pos_count = sum(pos_entry)
 
 # suffix = '_experimental'
 # suffix = ''
-dict_suffix = {'': 'EI',
+dict_suffix = {'EI': 'EI',
                'deepNF': 'DeepNF',
                'mashup': 'Mashup',
                'coexpression': 'Coexpression',
                'cooccurence': 'Cooccurence',
                # 'database': 'Database',
                'database': 'Curated database',
-               #
+
                # 'experimental': 'Experimental',
                'experimental': 'PPI',
                'fusion': 'Fusion',
@@ -60,12 +60,9 @@ dict_suffix = {'': 'EI',
                }
 
 for suffix, val in dict_suffix.items():
-    if suffix != '':
-        ontology_suffix = ontology + '_' + suffix
-    else:
-        ontology_suffix = ontology
+    ontology_suffix = ontology + '_' + suffix
     go_by_count_dict = {
-                        'EIdata_500_1000_{}.jobs'.format(ontology_suffix):np.logical_and((go_pos_count>500), (go_pos_count<=1000)),
+                        # 'EIdata_500_1000_{}.jobs'.format(ontology_suffix):np.logical_and((go_pos_count>500), (go_pos_count<=1000)),
                         'EIdata_1000_{}.jobs'.format(ontology_suffix): go_pos_count > 1000,
                         # 'EIdata_200_500_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>200), (go_pos_count<=500)),
                         # 'EIdata_10_50_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>10), (go_pos_count<=50)),
@@ -87,26 +84,9 @@ for suffix, val in dict_suffix.items():
                 if is_go:
                     depth_go = godag[go].depth
                     if depth_go >= 2:
-                        if suffix != '':
-                            f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], suffix))
-                        else:
-                            f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], 'EI'))
-                else:
-                    if suffix != '':
                         f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], suffix))
-                    else:
-                        f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], 'EI'))
-
+                else:
+                    f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], suffix))
             except KeyError:
                 pass
-
-        # plt.hist(IC_list, weights=np.ones(len(IC_list))/len(IC_list))
-        #
-        # plt.title(fn.split('.')[0])
-        # plt.xlabel('Information Content')
-        # plt.ylabel('Fraction of GO')
-        # IC_list = []
-        # plt.savefig(fn.split('.')[0]+'.png')
-        # plt.clf()
-        # print(fn, go_stats)
         f.close()
