@@ -60,7 +60,7 @@ def write_submit_del_job(ensemble_dir):
     script.write(
         #     # 'module load python\n'+
         #     # 'module load py_packages\n'
-        'module load java\nmodule load groovy\nmodule load python\nmodule load selfsched\nmodule load weka\n')
+        'module load java\nmodule load groovy\nmodule load selfsched\nmodule load weka\n')
     script.write('export _JAVA_OPTIONS=\"-XX:ParallelGCThreads=10\"\nexport JAVA_OPTS=\"-Xmx10g\"\n')
     # script.write('mpirun selfsched < %s.jobs\n' % second_sub)
     python_cmd = 'python ensemble.py --path {}\n'.format(ensemble_dir)
