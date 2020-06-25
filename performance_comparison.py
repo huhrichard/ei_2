@@ -134,7 +134,7 @@ if __name__ == "__main__":
         performance_file_list = []
         for term_dir in term_dirs:
 
-            file_name = term_dir + key + 'analysis/' + 'performance.csv'
+            file_name = term_dir + file_prefix + 'analysis/' + 'performance.csv'
             print(file_name)
             if exists(file_name):
                 performance_file_list.append(file_name)
