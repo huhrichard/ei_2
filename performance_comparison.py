@@ -132,6 +132,9 @@ if __name__ == "__main__":
         performance_file_list = []
         for term_dir in term_dirs:
             if not '/' in key:
+                # performance_file_list += find('performance.csv', term_dir + 'analysis/')
+                temp = find('performance.csv', term_dir + 'analysis/')
+                print(temp)
                 performance_file_list += find('performance.csv', term_dir + 'analysis/')
             else:
                 performance_file_list += find('performance.csv', term_dir + key + '/')
