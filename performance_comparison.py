@@ -184,15 +184,18 @@ if __name__ == "__main__":
         # performance_df_dict[val] = performance_df
         print(val, group, ensemble_df.shape)
         fmax_list.append(ensemble_df['best_fmax'].values)
-        median_fmax_list.append(np.median(ensemble_df['best_fmax'].values))
+        median_fmax_list.append(np.nanmedian(ensemble_df['best_fmax'].values))
         data_list.append(val)
         ensemble_df_list.append(ensemble_df)
 
     # print(median_fmax_list)
     # print(len(fmax_list), len(median_fmax_list))
-    sorted_fmax_list = [f for m, f in sorted(zip(median_fmax_list, fmax_list), reverse=True, key=lambda x: x[0])]
-    sorted_dataname_list = [f for m, f in sorted(zip(median_fmax_list, data_list), reverse=True, key=lambda x: x[0])]
-    sorted_cp = [f for m, f in sorted(zip(median_fmax_list, cp), reverse=True, key=lambda x: x[0])]
+    sorted_list =  sorted(zip(median_fmax_list, fmax_list, data_list, cp), reverse=True, key=lambda x: x[0])
+    sorted_dataname_list = [s[2] for s in sorted_list]
+    sorted_cp = [s[3] for s in sorted_list]
+    # sorted_fmax_list = [f for m, f in sorted(zip(median_fmax_list, fmax_list), reverse=True, key=lambda x: x[0])]
+    # sorted_dataname_list = [f for m, f in sorted(zip(median_fmax_list, data_list), reverse=True, key=lambda x: x[0])]
+    # sorted_cp = [f for m, f in sorted(zip(median_fmax_list, cp), reverse=True, key=lambda x: x[0])]
 
     # img_str = 'hpo'
     # if is_go:
