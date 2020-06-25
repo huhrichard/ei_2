@@ -79,18 +79,18 @@ if __name__ == "__main__":
         group = '>' + group
     title_name = "#annotated proteins: {}".format(group)
     file_prefix = sys.argv[-3]
-    dict_suffix = {'': 'Ensemble\nIntegration',
+    dict_suffix = {'EI': 'Ensemble\nIntegration',
                    # 'deepNF': 'DeepNF',
                    # 'mashup': 'Mashup',
-                   'coexpression': 'Coexpression',
-                   'cooccurence': 'Co-occurrence',
+                   '/coexpression': 'Coexpression',
+                   '/cooccurence': 'Co-occurrence',
                    # 'database': 'Database',
-                   'database': 'Curated\nDatabases',
+                   '/database': 'Curated\nDatabases',
 
                    # 'experimental': 'Experimental',
-                   'experimental': 'PPI',
-                   'fusion': 'Fusion',
-                   'neighborhood': 'Neighborhood'}
+                   '/experimental': 'PPI',
+                   '/fusion': 'Fusion',
+                   '/neighborhood': 'Neighborhood'}
     # rwr_dict_suffix = {'rwrImpute_'+k : v+('\n(RWR Impute)') for k, v in dict_suffix.items() if k != ''}
     # rwr_dict_suffix['rwrImpute'] = 'Ensemble\nIntegration\n(RWR Impute)'
     if 'Impute' in file_prefix:
@@ -109,10 +109,14 @@ if __name__ == "__main__":
     ensemble_df_list = []
     is_go = False
     for key, val in dict_suffix.items():
-        if len(key) > 0:
-            go_dir = sys.argv[-1] + '_' + key
+        # if len(key) > 0:
+        #     go_dir = sys.argv[-1] + '_' + key
+        # else:
+        #     go_dir = sys.argv[-1]
+        if not '/' in key:
+            go_dir = sys.argv[-1] + key
         else:
-            go_dir = sys.argv[-1]
+            go_dir = sys.argv[-1] + '_' + key
         performance_file_list = find('performance.csv', go_dir)
 
         # dir = sys.argv[-1].split('/')[-2]

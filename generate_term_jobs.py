@@ -48,15 +48,15 @@ go_pos_count = sum(pos_entry)
 dict_suffix = {'EI': 'EI',
                'deepNF': 'DeepNF',
                'mashup': 'Mashup',
-               'coexpression': 'Coexpression',
-               'cooccurence': 'Cooccurence',
+               # 'coexpression': 'Coexpression',
+               # 'cooccurence': 'Cooccurence',
                # 'database': 'Database',
-               'database': 'Curated database',
+               # 'database': 'Curated database',
 
                # 'experimental': 'Experimental',
-               'experimental': 'PPI',
-               'fusion': 'Fusion',
-               'neighborhood': 'Neighborhood'
+               # 'experimental': 'PPI',
+               # 'fusion': 'Fusion',
+               # 'neighborhood': 'Neighborhood'
                }
 
 for suffix, val in dict_suffix.items():
