@@ -135,7 +135,7 @@ if __name__ == "__main__":
         for term_dir in term_dirs:
 
             file_name = term_dir + '/' +sub_data_folder + 'analysis/' + 'performance.csv'
-            print(file_name)
+            # print(file_name)
             if exists(file_name):
                 performance_file_list.append(file_name)
             # if not '/' in key:
@@ -145,8 +145,8 @@ if __name__ == "__main__":
             #     performance_file_list += find('performance.csv', term_dir + 'analysis/')
             # else:
             #     performance_file_list += find('performance.csv', term_dir + key + '/')
-        print(key, term_dirs)
-        print(performance_file_list)
+        # print(key, term_dirs)
+        # print(performance_file_list)
         # dir = sys.argv[-1].split('/')[-2]
         performance_df_list = []
         for performance_file in performance_file_list:
