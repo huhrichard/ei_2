@@ -73,61 +73,6 @@ def processTermFeature_3(param, impute):
     go_hpo_df.replace(-1, 'neg', inplace=True)
     go_hpo_df.replace(1, 'pos', inplace=True)
 
-    # if impute:
-    #     # temp_df = feature_df.fillna(0)
-    #
-    #     # f = feature_df.values
-    #     # G = nx.Graph()
-    #     # edge_list = []
-    #     u, v, w = [], [], []
-    #     for row_prot, col_prots in feature_df.iterrows():
-    #         for col_prot, weight in col_prots.iteritems():
-    #             # print(row_prot, col_prot, weight)
-    #
-    #             if np.isnan(weight):
-    #                 u.append(row_prot)
-    #                 v.append(col_prot)
-    #                 w.append(0)
-    #             elif weight != 0:
-    #                 u.append(row_prot)
-    #                 v.append(col_prot)
-    #                 w.append(weight)
-    #                 # edge_list.append((row_prot, col_prot, weight))
-    #     print(len(u))
-    #     print(len(v))
-    #     print(len(w))
-    #     nodes = sorted(set(list(u)) | set(list(v)))
-    #     node2idx = {prot: idx for idx, prot in enumerate(nodes)}
-    #
-    #     i = [node2idx[n] for n in u]
-    #     j = [node2idx[n] for n in v]
-    #     W = coo_matrix((w, (i, j)), shape=(len(nodes), len(nodes))).tocsr()
-    #     #
-    #     # u = feature_df.index.values
-    #     # v = feature_df.columns.values
-    #     # nodes = sorted(set(list(u)) | set(list(v)))
-    #     # node2idx = {prot: i for i, prot in enumerate(nodes)}
-    #     # i = [node2idx[n] for n in u]
-    #     # j = [node2idx[n] for n in v]
-    #
-    #     # print(a)
-    #     # W = csr_matrix(f)
-    #     print(W.shape)
-    #     if (W.T != W).nnz == 0:
-    #         pass
-    #     else:
-    #         print("### Matrix not symmetric!")
-    #         W = W + W.T
-    #         print("### Matrix converted to symmetric.")
-    #
-    #     P = normalizeGraphEdgeWeights(W)
-    #     X = run_rwr(P)
-    #     print(X.shape)
-    #     filled_df = pd.DataFrame(X.toarray(), index=nodes, columns=nodes)
-    #     # feature_df[:] = X.toarray()
-    #
-    # else:
-    #     # feature_df.fillna(0, inplace=True)
     filled_df = feature_df.fillna(0)
     cols = (filled_df == 0).all(axis=0)
     cols = cols.loc[cols == False].index.tolist()
@@ -140,7 +85,7 @@ def processTermFeature_3(param, impute):
     print('before', merged_df.shape)
     merged_df.dropna(inplace=True)
     print('after', merged_df.shape)
-    del merged_df.index.name
+    # del merged_df.index.name
     # print(term, 'merged df')
     p = os.path.join(scratch_data_dir, feature)
     if not exists(p):
