@@ -14,7 +14,9 @@ from goatools.base import download_go_basic_obo
 import seaborn as sns
 
 obo_fname = download_go_basic_obo()
-from os.path import abspath
+# from os.path import abspath
+from os.path import abspath, isdir
+from os import remove, system, listdir
 
 import os, fnmatch
 import sys
@@ -80,8 +82,8 @@ if __name__ == "__main__":
     title_name = "#annotated proteins: {}".format(group)
     file_prefix = sys.argv[-3]
     dict_suffix = {'EI': 'Ensemble\nIntegration',
-                   # 'deepNF': 'DeepNF',
-                   # 'mashup': 'Mashup',
+                   'deepNF': 'DeepNF',
+                   'mashup': 'Mashup',
                    '/coexpression': 'Coexpression',
                    '/cooccurence': 'Co-occurrence',
                    # 'database': 'Database',
@@ -114,10 +116,25 @@ if __name__ == "__main__":
         # else:
         #     go_dir = sys.argv[-1]
         if not '/' in key:
-            go_dir = sys.argv[-1] + key
-        else:
             go_dir = sys.argv[-1] + '_' + key
-        performance_file_list = find('performance.csv', go_dir)
+            file_prefix = ''
+        else:
+            go_dir = sys.argv[-1] + '_EI'
+            file_prefix = key+'/'
+
+        fns = listdir(go_dir)
+        # fns = [fn for fn in fns if fn != 'analysis']
+        fns = [go_dir + '/' + fn for fn in fns]
+        term_dirs = [fn for fn in fns if isdir(fn)]
+        # if len(feature_folders) == 0:
+        #     feature_folders.append('./')
+        # assert len(feature_folders) > 0
+        performance_file_list = []
+        for term_dir in term_dirs:
+            if not '/' in key:
+                performance_file_list += find('performance.csv', term_dir + 'analysis/')
+            else:
+                performance_file_list += find('performance.csv', term_dir + key + '/')
 
         # dir = sys.argv[-1].split('/')[-2]
         performance_df_list = []
