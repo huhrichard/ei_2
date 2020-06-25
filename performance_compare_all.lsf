@@ -10,7 +10,6 @@
 
 module purge
 module load java
-module load python
 module load groovy
 module load selfsched
 module load R
