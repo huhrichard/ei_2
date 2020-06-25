@@ -15,7 +15,7 @@ import seaborn as sns
 
 obo_fname = download_go_basic_obo()
 # from os.path import abspath
-from os.path import abspath, isdir
+from os.path import abspath, isdir, exists
 from os import remove, system, listdir
 
 import os, fnmatch
@@ -27,6 +27,7 @@ plot_dir = './plot/'
 
 def find(pattern, path):
     result = []
+    print(path)
     for root, dirs, files in os.walk(path):
         print(root, dirs, files)
         for name in files:
@@ -132,13 +133,17 @@ if __name__ == "__main__":
         # assert len(feature_folders) > 0
         performance_file_list = []
         for term_dir in term_dirs:
-            if not '/' in key:
-                # performance_file_list += find('performance.csv', term_dir + 'analysis/')
-                temp = find('performance.csv', term_dir + 'analysis/')
-                print(temp)
-                performance_file_list += find('performance.csv', term_dir + 'analysis/')
-            else:
-                performance_file_list += find('performance.csv', term_dir + key + '/')
+
+            file_name = term_dir + key + 'analysis/' + 'performance.csv'
+            if exists(file_name):
+                performance_file_list.append(file_name)
+            # if not '/' in key:
+            #     # performance_file_list += find('performance.csv', term_dir + 'analysis/')
+            #     # temp = find('performance.csv', term_dir + 'analysis/')
+            #     # print(temp)
+            #     performance_file_list += find('performance.csv', term_dir + 'analysis/')
+            # else:
+            #     performance_file_list += find('performance.csv', term_dir + key + '/')
         print(key, term_dirs)
         print(performance_file_list)
         # dir = sys.argv[-1].split('/')[-2]
