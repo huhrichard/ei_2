@@ -119,10 +119,10 @@ if __name__ == "__main__":
         #     go_dir = sys.argv[-1]
         if not '/' in key:
             go_dir = sys.argv[-1] + '_' + key
-            file_prefix = ''
+            sub_data_folder = ''
         else:
             go_dir = sys.argv[-1] + '_EI'
-            file_prefix = key+'/'
+            sub_data_folder = key+'/'
 
         fns = listdir(go_dir)
         # fns = [fn for fn in fns if fn != 'analysis']
@@ -134,7 +134,7 @@ if __name__ == "__main__":
         performance_file_list = []
         for term_dir in term_dirs:
 
-            file_name = term_dir + '/' +file_prefix + 'analysis/' + 'performance.csv'
+            file_name = term_dir + '/' +sub_data_folder + 'analysis/' + 'performance.csv'
             print(file_name)
             if exists(file_name):
                 performance_file_list.append(file_name)
