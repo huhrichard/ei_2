@@ -135,6 +135,7 @@ if __name__ == "__main__":
                 performance_file_list += find('performance.csv', term_dir + 'analysis/')
             else:
                 performance_file_list += find('performance.csv', term_dir + key + '/')
+        print(key, term_dirs)
         print(performance_file_list)
         # dir = sys.argv[-1].split('/')[-2]
         performance_df_list = []
