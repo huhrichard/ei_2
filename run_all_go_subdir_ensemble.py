@@ -86,7 +86,11 @@ if __name__ == "__main__":
             fns = [go_dir + '/' + fn for fn in fns]
             feature_folders = [fn for fn in fns if isdir(fn)]
             for f_dir in feature_folders:
-                write_submit_del_job(f_dir[:-1])
+                if f_dir[-1] == '/':
+                    edited_f_dir = f_dir[:-1]
+                else:
+                    edited_f_dir = f_dir
+                write_submit_del_job(f_dir)
 
         write_submit_del_job(go_dir)
 

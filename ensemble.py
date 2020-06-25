@@ -8,7 +8,7 @@ from sys import argv
 from numpy import array, column_stack, append
 from numpy.random import choice, seed
 from sklearn.cluster import MiniBatchKMeans
-from sklearn.externals.joblib import Parallel, delayed
+# from sklearn.externals.joblib import Parallel, delayed
 from sklearn.linear_model import SGDClassifier
 from sklearn.ensemble import RandomForestClassifier  # Random Forest
 from sklearn.linear_model import SGDClassifier  # SGD
