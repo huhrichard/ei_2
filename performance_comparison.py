@@ -192,6 +192,7 @@ if __name__ == "__main__":
     # print(len(fmax_list), len(median_fmax_list))
     sorted_list =  sorted(zip(median_fmax_list, fmax_list, data_list, cp), reverse=True, key=lambda x: x[0])
     sorted_dataname_list = [s[2] for s in sorted_list]
+    print(sorted_dataname_list)
     sorted_cp = [s[3] for s in sorted_list]
     # sorted_fmax_list = [f for m, f in sorted(zip(median_fmax_list, fmax_list), reverse=True, key=lambda x: x[0])]
     # sorted_dataname_list = [f for m, f in sorted(zip(median_fmax_list, data_list), reverse=True, key=lambda x: x[0])]
