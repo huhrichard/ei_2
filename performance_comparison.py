@@ -131,13 +131,14 @@ if __name__ == "__main__":
         # if len(feature_folders) == 0:
         #     feature_folders.append('./')
         # assert len(feature_folders) > 0
-        performance_file_list = []
+        performance_file_list = {}
         for term_dir in term_dirs:
 
             file_name = term_dir + '/' +sub_data_folder + 'analysis/' + 'performance.csv'
             # print(file_name)
+            term_name = term_dir.split('/')[-1]
             if exists(file_name):
-                performance_file_list.append(file_name)
+                performance_file_list[term_name] = file_name
             # if not '/' in key:
             #     # performance_file_list += find('performance.csv', term_dir + 'analysis/')
             #     # temp = find('performance.csv', term_dir + 'analysis/')
@@ -149,8 +150,9 @@ if __name__ == "__main__":
         # print(performance_file_list)
         # dir = sys.argv[-1].split('/')[-2]
         performance_df_list = []
-        for performance_file in performance_file_list:
+        for term_name, performance_file in performance_file_list.items():
             df = pd.read_csv(performance_file)
+            df['data_name'] = term_name
             performance_df_list.append(df)
 
         performance_df = pd.concat(performance_df_list)
@@ -228,7 +230,7 @@ if __name__ == "__main__":
     ax1.set_ylabel(ylabel)
     ax1.set_xlabel('')
     ax1.set_title(title_name)
-    fig1.savefig('{}f_max_{}_comparison_{}.png'.format(plot_dir, file_prefix, sys.argv[-2]), bbox_inches="tight")
+    fig1.savefig('{}f_max_{}_comparison_{}.pdf'.format(plot_dir, file_prefix, sys.argv[-2]), bbox_inches="tight")
 
     # if is_go:
     #     fig2_plot_only = ['Mashup', 'DeepNF', 'EI']
