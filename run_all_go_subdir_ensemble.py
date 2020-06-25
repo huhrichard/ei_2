@@ -2,7 +2,8 @@ import os, fnmatch
 import sys
 from os import remove, system
 from os.path import abspath
-
+from os.path import abspath, isdir
+from os import remove, system, listdir
 import glob
 import argparse
 
@@ -41,35 +42,54 @@ def find_dir(pattern, path):
 
     return result
 
+def write_submit_del_job(ensemble_dir):
+    second_sub = ensemble_dir.split('/')[-1]
+    first_sub = ensemble_dir.split('/')[-2]
+
+
+    lsf_fn = first_sub + '_' + second_sub + '.lsf'
+    print('submitting EI ensemble job to hpc...')
+    ####### Write the lsf fileqn1
+    script = open(lsf_fn, 'w')
+    script.write(
+        '#!/bin/bash\n#BSUB -P acc_pandeg01a\n#BSUB -q %s\n#BSUB -J %s\n#BSUB -W %s\n#BSUB -R rusage[mem=%s]\n#BSUB -n %s\n#BSUB -sp 100\n' % (
+            args.queue, second_sub, args.time, args.memory, args.node))
+    script.write('#BSUB -o %s.stdout\n#BSUB -eo %s.stderr\n#BSUB -L /bin/bash\n' % (second_sub, second_sub))
+    script.write('module purge')
+    # script.write('conda activate largegopred')
+    script.write(
+        #     # 'module load python\n'+
+        #     # 'module load py_packages\n'
+        'module load java\nmodule load groovy\nmodule load python\nmodule load selfsched\nmodule load weka\n')
+    script.write('export _JAVA_OPTIONS=\"-XX:ParallelGCThreads=10\"\nexport JAVA_OPTS=\"-Xmx10g\"\n')
+    # script.write('mpirun selfsched < %s.jobs\n' % second_sub)
+    python_cmd = 'python ensemble.py --path {}\n'.format(ensemble_dir)
+    print(python_cmd)
+    script.write(python_cmd)
+    # script.write('rm %s.jobs' % second_sub)
+    script.close()
+    ####### Submit the lsf job and remove lsf script
+    system('bsub < %s' % lsf_fn)
+    remove(lsf_fn)
 
 
 if __name__ == "__main__":
     # file_list = find_dir('GO*',sys.argv[-1])
     dir_list = find_dir('{}*'.format(args.term_prefix), args.path)
     for go_dir in dir_list:
+
         data = go_dir.split('/')[-1]
         data_dir = go_dir.split('/')[-2]
-        lsf_fn = data_dir+'_'+data + '.lsf'
-        print('submitting EI ensemble job to hpc...')
-        ####### Write the lsf fileqn1
-        script = open(lsf_fn, 'w')
-        script.write(
-            '#!/bin/bash\n#BSUB -P acc_pandeg01a\n#BSUB -q %s\n#BSUB -J %s\n#BSUB -W %s\n#BSUB -R rusage[mem=%s]\n#BSUB -n %s\n#BSUB -sp 100\n' % (
-            args.queue, data, args.time, args.memory, args.node))
-        script.write('#BSUB -o %s.stdout\n#BSUB -eo %s.stderr\n#BSUB -L /bin/bash\n' % (data, data))
-        script.write('module purge')
-        # script.write('conda activate largegopred')
-        script.write(
-        #     # 'module load python\n'+
-        #     # 'module load py_packages\n'
-            'module load java\nmodule load groovy\nmodule load python\nmodule load selfsched\nmodule load weka\n')
-        script.write('export _JAVA_OPTIONS=\"-XX:ParallelGCThreads=10\"\nexport JAVA_OPTS=\"-Xmx10g\"\n')
-        # script.write('mpirun selfsched < %s.jobs\n' % data)
-        python_cmd = 'python ensemble.py --path {}\n'.format(go_dir)
-        print(python_cmd)
-        script.write(python_cmd)
-        # script.write('rm %s.jobs' % data)
-        script.close()
-        ####### Submit the lsf job and remove lsf script
-        system('bsub < %s' % lsf_fn)
-        remove(lsf_fn)
+        if data_dir.split('_')[-1] == 'EI':
+            fns = listdir(go_dir)
+            fns = [fn for fn in fns if fn != 'analysis']
+            fns = [go_dir + '/' + fn for fn in fns]
+            feature_folders = [fn for fn in fns if isdir(fn)]
+            for f_dir in feature_folders:
+                write_submit_del_job(f_dir[:-1])
+
+        write_submit_del_job(go_dir)
+
+
+
+
