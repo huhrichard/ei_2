@@ -271,7 +271,7 @@ def plot_scatter(df, path, x_col, y_col, hue_col, fn, title):
 
 
 def main(path, fold_count=5, agg=1):
-    # 
+    #
     dn = abspath(path).split('/')[-1]
     # cols = ['data_name', 'fmax', 'method']
     cols = ['data_name', 'fmax', 'method', 'auc']
