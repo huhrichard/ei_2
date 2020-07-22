@@ -122,7 +122,7 @@ if __name__ == "__main__":
     # [0.792166012708175, 0.181916503786071, 0.496022076576958, 0.288841990422850, 0.601756633539571, 0.119360449779481]]]
     #                        )
     print('test')
-    test_tensor = np.random.randn(10, 5000, 10)
+    test_tensor = np.random.randn(5, 20000, 10)
     print(test_tensor.shape)
 
     var_mats, cov_t = var_cov_ten_calculation(test_tensor)
