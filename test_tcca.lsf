@@ -2,7 +2,7 @@
 #BSUB -J tcca
 #BSUB -P acc_pandeg01a
 #BSUB -q premium
-#BSUB -n 10
+#BSUB -n 4
 #BSUB -W 10:00
 #BSUB -o tcca.stdout
 #BSUB -eo tcca.stderr
