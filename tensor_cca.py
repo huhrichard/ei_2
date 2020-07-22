@@ -2,7 +2,7 @@
 Python Implementation of Tensor CCA: https://github.com/yluopku/TCCA
 
 """
-from sktensor import cp_als, dtensor
+# from sktensor import cp_als, dtensor
 # from sktensor import ttm
 import tensorly as tl
 from tensorly.tenalg import mode_dot, multi_mode_dot
