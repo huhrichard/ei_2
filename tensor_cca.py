@@ -29,7 +29,7 @@ def var_cov_ten_calculation(X):
         u = []
         for v in range(nbView):
             # u.append(tl.tensor(np.expand_dims(X[v, n, :].T, axis=1)))
-            u.append(tl.tensor(np.expand_dims(X[v, n, :], axis=1)))
+            u.append(tl.tensor(np.expand_dims(X[v][n, :], axis=1)))
             # print(u[-1])
         # print()
         # u = np.array(u)
@@ -47,7 +47,7 @@ def var_cov_ten_calculation(X):
 
 
 def tcca(X, var_mats, cov_ten, **kargs):
-    use_inv2 = kargs.get('use_inv2', False)
+    use_inv2 = kargs.get('use_inv2', True)
     rDim = kargs.get('rDim', 3)
     eps = kargs.get('eps', 1e-6)
     var_mats_inv2 = []
@@ -63,7 +63,7 @@ def tcca(X, var_mats, cov_ten, **kargs):
         # print(np.matmul(np.matmul(var_mat_inv2, var_mat_inv2), var_mat_plus_eps))
         var_mats_inv2.append(var_mat_inv2)
 
-    print(var_mats_inv2[0]/(var_mats_inv2[0][0,0]))
+    # print(var_mats_inv2[0]/(var_mats_inv2[0][0,0]))
     var_mats_inv2 = np.array(var_mats_inv2)
     # Tensor times matrix (MATLAB: ttm)
     # M_ten = mode_dot(cov_ten, var_mats_inv2)
@@ -122,7 +122,7 @@ if __name__ == "__main__":
     # [0.792166012708175, 0.181916503786071, 0.496022076576958, 0.288841990422850, 0.601756633539571, 0.119360449779481]]]
     #                        )
     print('test')
-    test_tensor = np.random.randn(5, 20000, 10)
+    test_tensor = [np.random.randn(20000, 10) for n in range(5)]
     print(test_tensor.shape)
 
     var_mats, cov_t = var_cov_ten_calculation(test_tensor)
