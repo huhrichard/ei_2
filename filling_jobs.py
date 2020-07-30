@@ -14,7 +14,7 @@ fn = 'EIdata_{}_{}_{}.jobs'.format(annotation_understroke, term, data)
 jobs_fn = './jobs/'+fn
 f = open(fn, 'w')
 
-missed_term = cd_df.isnull().any(axis=1).index
+missed_term = cd_df[cd_df.isnull().any(axis=1)].index
 print(missed_term)
 cmd_str = 'python generate_data.py {} {}/ {}\n'
 for t in missed_term:
