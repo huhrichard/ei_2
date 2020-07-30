@@ -12,7 +12,7 @@ data = 'EI'
 
 fn = 'EIdata_{}_{}_{}.jobs'.format(annotation_understroke, term, data)
 jobs_fn = './jobs/'+fn
-f = open(fn, 'w')
+f = open(jobs_fn, 'w')
 
 missed_term = cd_df[cd_df.isnull().any(axis=1)].index
 print(missed_term)
