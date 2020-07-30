@@ -15,6 +15,7 @@ jobs_fn = './jobs/'+fn
 f = open(fn, 'w')
 
 missed_term = cd_df.isnull().any(axis=1).index
+print(missed_term)
 cmd_str = 'python generate_data.py {} {}/ {}\n'
 for t in missed_term:
     f.write(cmd_str.format(t, fn.split('.')[0], data))
