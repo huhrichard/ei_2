@@ -49,7 +49,7 @@ def var_cov_ten_calculation(X):
 def tcca(X, var_mats, cov_ten, **kargs):
     use_inv2 = kargs.get('use_inv2', True)
     rDim = kargs.get('rDim', 3)
-    eps = kargs.get('eps', 1e-6)
+    # eps = kargs.get('eps', 1e-6)
     var_mats_inv2 = []
     nbV = X.shape[0]
 
