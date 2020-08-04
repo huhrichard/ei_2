@@ -77,6 +77,7 @@ if __name__ == "__main__":
     parser.add_argument('--path', '-P', type=str, required=True, help='data path')
     parser.add_argument('--fold', '-F', type=int, default=5, help='cross-validation fold')
     parser.add_argument('--aggregate', '-A', type=int, default=1, help='if aggregate is needed, feed bagcount, else 1')
+    parser.add_argument('--rdim', '-R', type=int, default=3, help='desired reduced dimension')
     args = parser.parse_args()
     data_path = abspath(args.path)
 
@@ -113,22 +114,43 @@ if __name__ == "__main__":
         test_base_preds = []
         train_labels = []
         test_labels = []
+        train_id, test_id = None, None
         for view_path in feature_folders:
             train_df, train_labels, test_df, test_labels = common.read_fold(view_path, fold)
             train_df = common.unbag(train_df, args.aggregate)
+
             test_df = common.unbag(test_df, args.aggregate)
             train_base_preds.append(train_df.values)
             test_base_preds.append(test_df.values)
-        H_train, Z_train = tcca_projection(train_base_preds)
+            train_id = train_df.index
+            test_id = test_df.index
+        H_train, Z_train = tcca_projection(train_base_preds, rDim=args.rdim)
         Z_test = []
+        feat_col_name = []
+
+        for view_path in feature_folders:
+            for r in range(args.rdim):
+                feat_col_name.append('{}.tcca{}.0'.format(view_path.split('/')[-1], r))
+
         for v in range(len(H_train)):
             Z_test.append(np.matmul(test_base_preds[v], H_train[v]))
-        project_train_df = np.hstack(Z_train)
-        project_test_df = np.hstack(Z_test)
+        project_train_array = np.hstack(Z_train)
+        project_test_array = np.hstack(Z_test)
         Z_test = np.array(Z_test)
         train_fn = '%s/validation-%s.csv.gz' % (tcca_path, fold)
         test_fn = '%s/prediction-%s.csv.gz' % (tcca_path, fold)
-        
+
+        projected_train_df = pd.DataFrame(data=project_train_array,
+                                          columns=feat_col_name,
+                                          index=train_id)
+
+        projected_test_df = pd.DataFrame(data=project_test_array,
+                                          columns=feat_col_name,
+                                          index=test_id)
+
+        projected_train_df.to_csv(train_fn, compression='gzip')
+        projected_test_df.to_csv(test_fn, compression='gzip')
+
 
 
 
