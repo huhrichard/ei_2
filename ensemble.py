@@ -211,6 +211,35 @@ def bestbase_fmax(path, fold_count=range(5), agg=1):
     return {'f-measure':max(fmax_list), 'auc':max(auc_list)}
     # return max(fmax_list), max(auc_list)
 
+def reshape_base_pred_to_tensor(base_pred_df):
+    base_pred_cols = base_pred_df.columns
+    new_df = pd.DataFrame({'pred': 0.0,
+                           'base_data':'', 'base_cls':'', 'base_bag': '', 'idx': ''
+                           })
+    base_pred_df['idx'] = base_pred_cols.index
+    melt_base_pred_df = pd.melt(base_pred_df, id_vars=['idx'],
+                                value_vars=base_pred_cols,
+                                var_name='data_cls_bag')
+
+    melt_base_pred_df['base_data'] = ''
+    melt_base_pred_df['base_cls'] = ''
+    # melt_base_pred_df['base_bag'] = ''
+
+    melt_base_pred_df['base_data'] = melt_base_pred_df['data_cls_bag'].str.split('.')[0]
+    melt_base_pred_df['base_cls'] = melt_base_pred_df['data_cls_bag'].str.split('.')[1]
+    # melt_base_pred_df['base_bag'] = melt_base_pred_df['value'].str.split('.')[2]
+
+    # gpby_df = pd.group_by(['base_data', 'base_cls'])
+    pivoted_df = pd.pivot_table(melt_base_pred_df, values='value',
+                                 index=['idx'], columns=['base_data', 'base_cls'],
+                                aggfunc=np.mean)
+
+    dim0 = len(pivoted_df.columns.get_level_values(0).unique())
+    dim1 = len(pivoted_df.columns.get_level_values(1).unique())
+    base_pred_tensor = pivoted_df.values.reshape((dim0, dim1, pivoted_df.shape[1]))
+
+    return base_pred_tensor
+
 
 def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df):
     train_df, train_labels, test_df, test_labels = common.read_fold(path, fold)
@@ -377,7 +406,9 @@ parser.add_argument('--aggregate', '-A', type=int, default=1, help='if aggregate
 args = parser.parse_args()
 data_path = abspath(args.path)
 fns = listdir(data_path)
-fns = [fn for fn in fns if fn != 'analysis']
+excluding_folder = ['analysis', 'tcca']
+fns = [fn for fn in fns if not fn in excluding_folder]
+# fns = [fn for fn in fns if fn != 'analysis']
 fns = [data_path + '/' + fn for fn in fns]
 feature_folders = [fn for fn in fns if isdir(fn)]
 if len(feature_folders) == 0:
