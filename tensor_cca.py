@@ -16,8 +16,9 @@ eps = 2.2204e-16
 Tested the whole function
 """
 def var_cov_ten_calculation(X):
-    nbView = X.shape[0]
-    nbSample = X.shape[1]
+    # nbView = X.shape[0]
+    nbView = len(X)
+    nbSample = X[0].shape[0]
     var_mats = []
     for v in range(nbView):
         var_mat = np.matmul(X[v].T, X[v])
