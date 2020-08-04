@@ -108,6 +108,8 @@ if __name__ == "__main__":
     tcca_path = os.path.join(data_path, 'tcca/')
     if not os.path.exists(tcca_path):
         os.mkdir(tcca_path)
+    os.system('cp {} {}'.format(os.path.join(data_path, 'classifiers.txt'),tcca_path))
+    os.system('cp {} {}'.format(os.path.join(data_path, 'weka.properties'),tcca_path))
 
     for fold in fold_values:
         train_base_preds = []
@@ -137,8 +139,8 @@ if __name__ == "__main__":
         project_train_array = np.hstack(Z_train)
         project_test_array = np.hstack(Z_test)
         Z_test = np.array(Z_test)
-        train_fn = '%s/validation-%s.csv.gz' % (tcca_path, fold)
-        test_fn = '%s/prediction-%s.csv.gz' % (tcca_path, fold)
+        train_fn = '%s/validations-%s.csv.gz' % (tcca_path, fold)
+        test_fn = '%s/predictions-%s.csv.gz' % (tcca_path, fold)
 
         projected_train_df = pd.DataFrame(data=project_train_array,
                                           columns=feat_col_name,
