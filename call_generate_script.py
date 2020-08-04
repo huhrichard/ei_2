@@ -27,7 +27,7 @@ nc = 64
 fn = open(lsf_fn, 'w')
 fn.write('#!/bin/bash\n')
 fn.write('#BSUB -J {}_{}\n'.format(data, 'generate'))
-fn.write('#BSUB -P acc_pandeg01a\n#BSUB -q premium\n#BSUB -n {}\n#BSUB -W 10:00\n'.format(nc))
+fn.write('#BSUB -P acc_pandeg01a\n#BSUB -q express\n#BSUB -n {}\n#BSUB -W 10:00\n'.format(nc))
 fn.write('#BSUB -o gen_{}.stdout\n'.format(data))
 fn.write('#BSUB -eo gen_{}.stderr\n'.format(data))
 fn.write('module purge\nmodule load java\nmodule load python\nmodule load groovy\nmodule load selfsched\n')
