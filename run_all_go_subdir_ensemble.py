@@ -72,6 +72,7 @@ def write_submit_del_job(ensemble_dir):
     system('bsub < %s' % lsf_fn)
     remove(lsf_fn)
 
+excluding_folder = ['analysis']
 
 if __name__ == "__main__":
     # file_list = find_dir('GO*',sys.argv[-1])
@@ -81,8 +82,9 @@ if __name__ == "__main__":
         data = go_dir.split('/')[-1]
         data_dir = go_dir.split('/')[-2]
         if data_dir.split('_')[-1] == 'EI':
+            os.system('python tcca_projection.py --path {}'.format(go_dir))
             fns = listdir(go_dir)
-            fns = [fn for fn in fns if fn != 'analysis']
+            fns = [fn for fn in fns if not fn in excluding_folder]
             fns = [go_dir + '/' + fn for fn in fns]
             feature_folders = [fn for fn in fns if isdir(fn)]
             for f_dir in feature_folders:

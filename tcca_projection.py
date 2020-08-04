@@ -77,7 +77,7 @@ if __name__ == "__main__":
     parser.add_argument('--path', '-P', type=str, required=True, help='data path')
     parser.add_argument('--fold', '-F', type=int, default=5, help='cross-validation fold')
     parser.add_argument('--aggregate', '-A', type=int, default=1, help='if aggregate is needed, feed bagcount, else 1')
-    parser.add_argument('--rdim', '-R', type=int, default=3, help='desired reduced dimension')
+    parser.add_argument('--rdim', '-R', type=int, default=5, help='desired reduced dimension')
     args = parser.parse_args()
     data_path = abspath(args.path)
 
@@ -126,6 +126,7 @@ if __name__ == "__main__":
             test_base_preds.append(test_df.values)
             train_id = train_df.index
             test_id = test_df.index
+
         H_train, Z_train = tcca_projection(train_base_preds, rDim=args.rdim)
         Z_test = []
         feat_col_name = []
