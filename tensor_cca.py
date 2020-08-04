@@ -51,8 +51,8 @@ def tcca(X, var_mats, cov_ten, **kargs):
     rDim = kargs.get('rDim', 3)
     # eps = kargs.get('eps', 1e-6)
     var_mats_inv2 = []
-    nbV = X.shape[0]
-
+    # nbV = X.shape[0]
+    nbV = len(X)
     for v in range(nbV):
         # var_mat_inv2 = (var_mats[v] + eps * np.eye(len(var_mats[v])))**(-0.5)
         var_mat_plus_eps = var_mats[v] + eps * np.eye(len(var_mats[v]))
