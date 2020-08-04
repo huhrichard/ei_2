@@ -139,7 +139,7 @@ if __name__ == "__main__":
         project_train_array = np.hstack(Z_train)
         project_test_array = np.hstack(Z_test)
         Z_test = np.array(Z_test)
-        train_fn = '%s/validations-%s.csv.gz' % (tcca_path, fold)
+        train_fn = '%s/validation-%s.csv.gz' % (tcca_path, fold)
         test_fn = '%s/predictions-%s.csv.gz' % (tcca_path, fold)
 
         projected_train_df = pd.DataFrame(data=project_train_array,
