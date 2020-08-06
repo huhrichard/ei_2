@@ -138,7 +138,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
         # sorted_algo_names = [s[1] for s in sorted_tuple]
         # sorted_cp = [s[2] for s in sorted_tuple]
 
-        sorted_tuple = zip(metric_median_list, dict_suffix, cp)
+        sorted_tuple = list(zip(metric_median_list, dict_suffix, cp))
         sorted_algo_names = [s[1] for s in sorted_tuple]
         sorted_cp = [s[2] for s in sorted_tuple]
         print(sorted_tuple)
