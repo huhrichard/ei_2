@@ -176,10 +176,10 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
                      pil_kwargs = {"compression": "tiff_lzw"}
                      )
 
-        fig2, ax2 = plt.subplots(1, 1, figsize=(10, 7))
+        fig2, ax2 = plt.subplots(1, 1, figsize=(8, 12))
         pivoted = performance_cat_df.pivot("data_name", "method", boxplot_y_metric)
-        pivoted.reindex(sorted_algo_names)
-        pivoted.reindex(pivoted.median().sort_values().index, axis=1)
+        pivoted = pivoted.reindex(sorted_algo_names)
+        pivoted = pivoted.reindex(pivoted.median().sort_values().index, axis=1)
         # pivoted.assign(m=pivoted.median(axis=1)).sort_values('m').drop('m', axis=1)
 
         print(pivoted)
