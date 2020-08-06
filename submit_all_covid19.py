@@ -26,26 +26,29 @@ def powerset(iterable):
 
 list_of_data = ['demographics',
                   'labs', 'medications',
-                  'vitals','comorbidities']
+                  'vitals','comorbidities', 'EI']
 
-feature_power_set = powerset(list_of_data)
+# feature_power_set = powerset(list_of_data)
+#
+# for s in feature_power_set:
+#     # print(s, len(s))
+#     if len(s) > 1 and len(s) < len(list_of_data):
+#         feat = ''
+#         for sub in s:
+#             feat = feat + '+' + sub
+#         list_of_method.append(feat[1:])
 
-for s in feature_power_set:
-    # print(s, len(s))
-    if len(s) > 1 and len(s) < len(list_of_data):
-        feat = ''
-        for sub in s:
-            feat = feat + '+' + sub
-        list_of_method.append(feat[1:])
-
-for m in list_of_method:
+for m in list_of_data:
     for outcome in outcome_list:
         lsf_fn = 'train_all_base_{}_{}.lsf'.format(outcome, m)
         script = open(lsf_fn, 'w')
         script.write(
             '#!/bin/bash\n#BSUB -J train_all_base\n#BSUB -P acc_pandeg01a\n#BSUB -q premium\n#BSUB -n 4\n#BSUB -W 10:00\n#BSUB -o train_all_base.stdout\n#BSUB -eo train_all_base.stderr\n#BSUB -R rusage[mem=10000]\n')
         script.write('module purge\nmodule load java\nmodule load groovy\nmodule load selfsched\n')
-        dir_name = base_path+outcome+'_'+m
+        if m == 'EI':
+            dir_name = base_path+outcome+'_'+m
+        else:
+            dir_name = base_path +outcome+ '_EI/' + m
         print(dir_name)
         cmd = base_command.format(calling_script, dir_name)
         print(cmd)
