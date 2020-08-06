@@ -67,7 +67,7 @@ tcca_list = []
 for r in rdim:
     k = 'tcca{}'.format(r)
     tcca_list.append(k)
-    dict_of_method['tcca{}'.format(r)] = 'EI_TensorCCA({})'.format(r)
+    dict_of_method['tcca{}'.format(r)] = 'EI_TCCA\n({})'.format(r)
 
 lm = []
 def powerset(iterable):
