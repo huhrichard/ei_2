@@ -331,10 +331,12 @@ def main(path, fold_count=5, agg=1):
                     max_iter=1e8, random_state=None, shrinking=True,
                     tol=0.001, verbose=False), GaussianNB(), LogisticRegression(), AdaBoostClassifier(),
                 DecisionTreeClassifier(), GradientBoostingClassifier(loss='deviance'), KNeighborsClassifier(),
-                # XGBClassifier(), MLPClassifier(), GaussianProcessClassifier()
+                XGBClassifier(),
+                # MLPClassifier(), GaussianProcessClassifier()
                 ]
     stacker_names = ["RF.S", "SVM.S", "NB.S", "LR.S", "AB.S", "DT.S", "LB.S", "KNN.S",
-                     # "XGB.S","MLP.S", "GP.S"
+                     "XGB.S",
+                     # ,"MLP.S", "GP.S"
                      ]
     # stacker_names_feat_imp = ['{}_stacked_feat_imp'.format(s) for s in stacker_names]
     df_cols = ['f_train_base','f_test_base', 'fold', 'stacker',

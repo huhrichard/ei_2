@@ -46,7 +46,7 @@ dict_of_method = {
                   'comorbidities': 'Co-morbi-\ndities\n(19)',
                   'vitals': 'Vital\nsigns\n(6)',
                   'concatenated': 'Concat-\nenated\nAll',
-                  'tcca': 'EI_TensorCCA()',
+                  # 'tcca': 'EI_TensorCCA()',
                   # 'medications_binary': 'Medica-\ntions\n(binary)\n(26)',
                   # 'EI_med_binary':'Ensemble\nIntegration\n(binary\nmed)',
                   # 'concatenated_med_binary': 'Concat-\nenated\nAll\n(binary\nmed)',
@@ -61,6 +61,13 @@ dict_of_method = {
                   # 'labs_svdImpute_rank_20': 'Labs\nSVDImpute(rank=20)'
 
                   }
+
+rdim = np.array(range(10))+1
+tcca_list = []
+for r in rdim:
+    k = 'tcca{}'.format(r)
+    tcca_list.append(k)
+    dict_of_method['tcca{}'.format(r)] = 'EI_TensorCCA({})'.format(r)
 
 lm = []
 def powerset(iterable):
@@ -178,13 +185,14 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
 
 
 
-list_of_method_dict = {'weka_impute':['EI', 'demographics',
-                                  'labs', 'medications',
-                                  'vitals','comorbidities',
-                                      'concatenated','tcca'
+list_of_method_dict = {'weka_impute':['EI',
+                                      # 'demographics',
+                                  # 'labs', 'medications',
+                                  # 'vitals','comorbidities',
+                                      'concatenated'
                                     # 'medications_binary', 'EI_med_binary', 'concatenated_med_binary'
                                       # 'EI_PowerSet'
-                                      ],
+                                      ]+tcca_list,
                     # 'svd_impute': ['demographics', 'medications',
                     #                       'vitals', 'EI_svdImpute',
                     #                       'concatenated_svdImpute',

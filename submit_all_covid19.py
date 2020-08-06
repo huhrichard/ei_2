@@ -1,6 +1,7 @@
 import os
 import sys
 from itertools import chain, combinations
+import numpy as np
 base_path = '/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR/'
 
 
@@ -24,9 +25,11 @@ def powerset(iterable):
     s = list(iterable)
     return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
 
-list_of_data = ['demographics',
+list_of_data = [
+                'demographics',
                   'labs', 'medications',
-                  'vitals','comorbidities', 'EI']
+                  'vitals','comorbidities',
+                'EI', 'concatenated']
 
 # feature_power_set = powerset(list_of_data)
 #
@@ -37,18 +40,27 @@ list_of_data = ['demographics',
 #         for sub in s:
 #             feat = feat + '+' + sub
 #         list_of_method.append(feat[1:])
+rdim = np.array(range(10))+1
+tcca_list = []
+for r in rdim:
+    k = 'tcca{}'.format(r)
+    tcca_list.append(k)
+    # dict_of_method['tcca{}'.format(r)] = 'EI_TensorCCA({})'.format(r)
+list_of_method = list_of_method + tcca_list
 
-for m in list_of_data:
-    for outcome in outcome_list:
+for outcome in outcome_list:
+    for m in list_of_data:
+        if m == 'EI' or m == 'concatenated':
+            dir_name = base_path+outcome+'_'+m
+        elif calling_script == 'ensemble.py':
+            dir_name = base_path +outcome+ '_EI/' + m
+        else:
+            continue
         lsf_fn = 'train_all_base_{}_{}.lsf'.format(outcome, m)
         script = open(lsf_fn, 'w')
         script.write(
             '#!/bin/bash\n#BSUB -J train_all_base\n#BSUB -P acc_pandeg01a\n#BSUB -q premium\n#BSUB -n 4\n#BSUB -W 10:00\n#BSUB -o train_all_base.stdout\n#BSUB -eo train_all_base.stderr\n#BSUB -R rusage[mem=10000]\n')
         script.write('module purge\nmodule load java\nmodule load groovy\nmodule load selfsched\n')
-        if m == 'EI':
-            dir_name = base_path+outcome+'_'+m
-        else:
-            dir_name = base_path +outcome+ '_EI/' + m
         print(dir_name)
         cmd = base_command.format(calling_script, dir_name)
         print(cmd)
