@@ -176,7 +176,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
                      pil_kwargs = {"compression": "tiff_lzw"}
                      )
 
-        fig2, ax2 = plt.subplots(1, 1, figsize=(8, 15))
+        fig2, ax2 = plt.subplots(1, 1, figsize=(8, 12))
         pivoted = performance_cat_df.pivot("data_name", "method", boxplot_y_metric)
         pivoted = pivoted.reindex(sorted_algo_names)
         pivoted = pivoted.reindex(pivoted.median().sort_values().index, axis=1)
@@ -187,10 +187,10 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
                           data=pivoted,
                           annot=True, fmt='.3f')
 
-        ax2.set_yticklabels(ax2.get_yticklabels(), rotation=270)
-        fig2.tight_layout()
+        ax2.set_yticklabels(ax2.get_yticklabels(), rotation=0)
+        # fig2.tight_layout()
         fig2.savefig('{}covid19_{}_{}_heatmap_{}.tif'.format(plot_dir, boxplot_y_metric, fig_fn_suffix, exp_name),
-                     # bbox_inches="tight",
+                     bbox_inches="tight",
                      pil_kwargs={"compression": "tiff_lzw"}
                      )
 
