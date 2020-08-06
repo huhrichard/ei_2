@@ -83,8 +83,9 @@ if __name__ == "__main__":
 
     fns = listdir(data_path)
 
-    excluding_folder = ['analysis', 'tcca']
+    excluding_folder = ['analysis']
     fns = [fn for fn in fns if not fn in excluding_folder]
+    fns = [fn for fn in fns if not 'tcca' in fn]
 
     fns = [data_path + '/' + fn for fn in fns]
     feature_folders = [fn for fn in fns if isdir(fn)]
