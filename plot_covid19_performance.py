@@ -134,7 +134,11 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
     print(performance_cat_df['data_name'])
     fmax_label = r'$F_{max}$'
     def custom_boxplot(boxplot_y_metric, boxplot_ylabel, metric_median_list):
-        sorted_tuple = sorted(zip(metric_median_list, dict_suffix, cp), reverse=True, key=lambda x: x[0])
+        # sorted_tuple = sorted(zip(metric_median_list, dict_suffix, cp), reverse=True, key=lambda x: x[0])
+        # sorted_algo_names = [s[1] for s in sorted_tuple]
+        # sorted_cp = [s[2] for s in sorted_tuple]
+
+        sorted_tuple = zip(metric_median_list, dict_suffix, cp)
         sorted_algo_names = [s[1] for s in sorted_tuple]
         sorted_cp = [s[2] for s in sorted_tuple]
         print(sorted_tuple)
