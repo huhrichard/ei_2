@@ -111,6 +111,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
             df = df[~(df['method']=='CES')]
             df = df[~(df['method']=='Mean')]
             df = df[~(df['method']=='best base')]
+            df = df[~(df['method']=='DT.S')]
             df['data_name'] = df['data_name'].str.replace("DECEASED_INDICATOR_", "")
             # print(dict_of_method[m])
             df['data_name'] = df['data_name'].str.replace(m, dict_of_method[m], regex=False)
