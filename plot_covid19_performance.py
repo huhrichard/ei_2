@@ -177,8 +177,10 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
                      )
 
         fig2, ax2 = plt.subplots(1, 1, figsize=(10, 10))
+        pivoted = performance_cat_df.pivot("data_name", "method", boxplot_y_metric)
+        print(pivoted)
         ax2 = sns.heatmap(ax=ax2,
-                          data=performance_cat_df.pivot_table(values=boxplot_y_metric, index=["data_name"], columns="method", aggfunc=sum),
+                          data=pivoted,
                           annot=True, fmt='.3f')
         fig2.savefig('{}covid19_{}_{}_heatmap_{}.tif'.format(plot_dir, boxplot_y_metric, fig_fn_suffix, exp_name),
                      bbox_inches="tight",
