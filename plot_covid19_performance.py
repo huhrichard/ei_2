@@ -38,7 +38,7 @@ path_of_performance = '/analysis/performance.csv'
 dict_of_method = {
                     # 'EI': 'EI',
                   'EI':'Ensemble\nIntegration',
-                  'EI_PowerSet':'Ensemble Integration\nPower Set',
+                  # 'EI_PowerSet':'Ensemble Integration\nPower Set',
                   'demographics':'Demo-\ngraphics\n(11)',
                   # 'labs':'Laboratory\ntests',
                   'labs':'Lab\ntests\n(49)',
@@ -46,18 +46,19 @@ dict_of_method = {
                   'comorbidities': 'Co-morbi-\ndities\n(19)',
                   'vitals': 'Vital\nsigns\n(6)',
                   'concatenated': 'Concat-\nenated\nAll',
-                  'medications_binary': 'Medica-\ntions\n(binary)\n(26)',
-                  'EI_med_binary':'Ensemble\nIntegration\n(binary\nmed)',
-                  'concatenated_med_binary': 'Concat-\nenated\nAll\n(binary\nmed)',
-                  'EI_svdImpute': 'Ensemble Integration\nSVDImpute',
-                  'EI_svdImpute_rank_5':'Ensemble Integration\nSVDImpute(rank=5)',
-                  'EI_svdImpute_rank_20': 'Ensemble Integration\nSVDImpute(rank=20)',
-                  'concatenated_svdImpute': 'Concantenated All\nSVDImpute',
-                  'concatenated_svdImpute_rank_5': 'Concantenated All\nSVDImpute(rank=5)',
-                  'concatenated_svdImpute_rank_20': 'Concantenated All\nSVDImpute(rank=20)',
-                  'labs_svdImpute': 'Labs\nSVDImpute',
-                  'labs_svdImpute_rank_5':'Labs\nSVDImpute(rank=5)',
-                  'labs_svdImpute_rank_20': 'Labs\nSVDImpute(rank=20)'
+                  'tcca': 'EI_TensorCCA()',
+                  # 'medications_binary': 'Medica-\ntions\n(binary)\n(26)',
+                  # 'EI_med_binary':'Ensemble\nIntegration\n(binary\nmed)',
+                  # 'concatenated_med_binary': 'Concat-\nenated\nAll\n(binary\nmed)',
+                  # 'EI_svdImpute': 'Ensemble Integration\nSVDImpute',
+                  # 'EI_svdImpute_rank_5':'Ensemble Integration\nSVDImpute(rank=5)',
+                  # 'EI_svdImpute_rank_20': 'Ensemble Integration\nSVDImpute(rank=20)',
+                  # 'concatenated_svdImpute': 'Concantenated All\nSVDImpute',
+                  # 'concatenated_svdImpute_rank_5': 'Concantenated All\nSVDImpute(rank=5)',
+                  # 'concatenated_svdImpute_rank_20': 'Concantenated All\nSVDImpute(rank=20)',
+                  # 'labs_svdImpute': 'Labs\nSVDImpute',
+                  # 'labs_svdImpute_rank_5':'Labs\nSVDImpute(rank=5)',
+                  # 'labs_svdImpute_rank_20': 'Labs\nSVDImpute(rank=20)'
 
                   }
 
@@ -95,7 +96,10 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
     print(list_of_method)
     for m in list_of_method:
         for outcome in outcome_list:
-            dir_name = base_path+outcome+'_'+m
+            if m == 'concatenated' or m == 'EI':
+                dir_name = base_path+outcome+'_'+m
+            else:
+                dir_name = base_path+outcome+'_EI/'+m
             df = pd.read_csv(dir_name+path_of_performance)
             df['data_name'] = df['data_name'].str.replace("DECEASED_INDICATOR_", "")
             # print(dict_of_method[m])
@@ -174,10 +178,10 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
 list_of_method_dict = {'weka_impute':['EI', 'demographics',
                                   'labs', 'medications',
                                   'vitals','comorbidities',
-                                      'concatenated',
+                                      'concatenated','tcca'
                                     # 'medications_binary', 'EI_med_binary', 'concatenated_med_binary'
                                       # 'EI_PowerSet'
-                                      ]+lm,
+                                      ],
                     # 'svd_impute': ['demographics', 'medications',
                     #                       'vitals', 'EI_svdImpute',
                     #                       'concatenated_svdImpute',
@@ -194,7 +198,7 @@ list_of_method_dict = {'weka_impute':['EI', 'demographics',
                     #                            'comorbidities']
                        }
 base_path_27may = ('before_27May','/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR/')
-base_path_1Jun = ('27MayToJun1','/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR_test/')
+# base_path_1Jun = ('27MayToJun1','/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR_test/')
 
 for k, v in list_of_method_dict.items():
     plot_boxplot_fmax_auc(v, k, base_path_27may)
