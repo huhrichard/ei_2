@@ -61,8 +61,8 @@ dict_suffix = {'EI': 'EI',
 
 sorted = np.argsort(-1*go_pos_count)[:2]
 print(sorted)
-top2_bool = np.zeros(len(go_pos_count)).astype(int)
-top2_bool[sorted] = 1
+top2_bool = np.zeros(len(go_pos_count)).astype(bool)
+top2_bool[sorted] = True
 for suffix, val in dict_suffix.items():
     ontology_suffix = ontology + '_' + suffix
     go_by_count_dict = {
@@ -84,6 +84,7 @@ for suffix, val in dict_suffix.items():
         go_stats = 0
         # plt.figure()
         go_by_groups = go_terms_from_tsv[bool_array]
+        print(len(go_by_groups))
         for go in go_by_groups:
             try:
                 if is_go:
