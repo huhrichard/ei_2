@@ -46,8 +46,8 @@ go_pos_count = sum(pos_entry)
 # suffix = '_experimental'
 # suffix = ''
 dict_suffix = {'EI': 'EI',
-               'deepNF': 'DeepNF',
-               'mashup': 'Mashup',
+               # 'deepNF': 'DeepNF',
+               # 'mashup': 'Mashup',
                # 'coexpression': 'Coexpression',
                # 'cooccurence': 'Cooccurence',
                # 'database': 'Database',
@@ -59,11 +59,15 @@ dict_suffix = {'EI': 'EI',
                # 'neighborhood': 'Neighborhood'
                }
 
+sorted = np.argsort(-1*go_pos_count)[:2]
+top2_bool = np.zeros(len(go_pos_count))
+top2_bool[sorted] = 1
 for suffix, val in dict_suffix.items():
     ontology_suffix = ontology + '_' + suffix
     go_by_count_dict = {
+                        'EIdata_top2_{}.jobs'.format(ontology_suffix): top2_bool
                         # 'EIdata_500_1000_{}.jobs'.format(ontology_suffix):np.logical_and((go_pos_count>500), (go_pos_count<=1000)),
-                        'EIdata_1000_{}.jobs'.format(ontology_suffix): go_pos_count > 1000,
+                        # 'EIdata_1000_{}.jobs'.format(ontology_suffix): go_pos_count > 1000,
                         # 'EIdata_200_500_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>200), (go_pos_count<=500)),
                         # 'EIdata_10_50_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>10), (go_pos_count<=50)),
                         # 'EIdata_10_{}.jobs'.format(ontology_suffix): go_pos_count<=10,
