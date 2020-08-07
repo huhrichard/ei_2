@@ -60,6 +60,7 @@ dict_suffix = {'EI': 'EI',
                }
 
 sorted = np.argsort(-1*go_pos_count)[:2]
+print(sorted)
 top2_bool = np.zeros(len(go_pos_count)).astype(int)
 top2_bool[sorted] = 1
 for suffix, val in dict_suffix.items():
