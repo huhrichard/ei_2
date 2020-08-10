@@ -24,10 +24,11 @@ import seaborn as sns
 #                   'labs_svdImpute', 'labs_svdImpute_rank_5', 'labs_svdImpute_rank_20'
 #                   ]
 
-outcome_list = ['DECEASED_INDICATOR']
+# outcome_list = ['DECEASED_INDICATOR']
+outcome_list = ['HP0012638', 'HP0000707']
 
 calling_script = str(sys.argv[-1])
-plot_dir = './plot/covid19/'
+plot_dir = './plot/tcca_test/'
 
 base_command = 'python {} --path {}'
 
@@ -103,10 +104,14 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
     print(list_of_method)
     for m in list_of_method:
         for outcome in outcome_list:
+            # if m == 'concatenated' or m == 'EI':
+            #     dir_name = base_path+outcome+'_'+m
+            # else:
+            #     dir_name = base_path+outcome+'_EI/'+m
             if m == 'concatenated' or m == 'EI':
-                dir_name = base_path+outcome+'_'+m
+                dir_name = base_path+outcome
             else:
-                dir_name = base_path+outcome+'_EI/'+m
+                dir_name = base_path+outcome+'/'+m
             df = pd.read_csv(dir_name+path_of_performance)
             df = df[~(df['method']=='CES')]
             df = df[~(df['method']=='Mean')]
@@ -215,7 +220,7 @@ list_of_method_dict = {'weka_impute':[
                                       # 'demographics',
                                   # 'labs', 'medications',
                                   # 'vitals','comorbidities',
-                                      'concatenated',
+                                  #     'concatenated',
                                         'EI',
                                     # 'medications_binary', 'EI_med_binary', 'concatenated_med_binary'
                                       # 'EI_PowerSet'
@@ -235,7 +240,8 @@ list_of_method_dict = {'weka_impute':[
                     #                            'labs_svdImpute_rank_20',
                     #                            'comorbidities']
                        }
-base_path_27may = ('before_27May','/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR/')
+# base_path_27may = ('before_27May','/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR/')
+base_path_27may = ('hpo_test','/sc/arion/scratch/liy42/EIdata_top2_hpo_EI/')
 # base_path_1Jun = ('27MayToJun1','/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR_test/')
 
 for k, v in list_of_method_dict.items():
