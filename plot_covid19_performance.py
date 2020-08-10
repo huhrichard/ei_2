@@ -94,6 +94,82 @@ for s in feature_power_set:
         dict_of_method[feat[1:]] = dict_name[2:]
 print(dict_of_method)
 
+
+def custom_boxplot(boxplot_y_metric, boxplot_ylabel, metric_median_list, dict_suffix, cp,
+                   performance_cat_df, exp_name, outcome, fig_fn_suffix):
+    # sorted_tuple = sorted(zip(metric_median_list, dict_suffix, cp), reverse=True, key=lambda x: x[0])
+    # sorted_algo_names = [s[1] for s in sorted_tuple]
+    # sorted_cp = [s[2] for s in sorted_tuple]
+
+    sorted_tuple = list(zip(metric_median_list, dict_suffix, cp))
+    sorted_algo_names = [s[1] for s in sorted_tuple]
+    sorted_cp = [s[2] for s in sorted_tuple]
+    print(sorted_tuple)
+
+    sep_space = 1.5
+    fig1, ax1 = plt.subplots(1, 1, figsize=(18, 6))
+    ax1 = sns.boxplot(ax=ax1, y=boxplot_y_metric, x='data_name',
+                      data=performance_cat_df,
+                      palette=sorted_cp, order=sorted_algo_names,
+                      linewidth=2, width=0.5
+                      )
+
+    params = {'mathtext.default': 'regular'}
+    plt.rcParams.update(params)
+    ax1.set_ylabel(boxplot_ylabel, fontsize=22, fontweight='semibold')
+    # ax1.set_xticks([1, 2, 2.8, 3.8, 4.6, 5.6], sorted_algo_names)
+    for tick in ax1.get_xticklabels():
+        tick.set_fontsize(14)
+        # tick.set_rotation(45)
+        tick.set_fontweight('semibold')
+        # tick.set_horizontalalignment("right")
+
+    for tick in ax1.get_yticklabels():
+        tick.set_fontsize(16)
+        tick.set_fontweight('semibold')
+        # tick.set_rotation(45)
+        # tick.set_fontweight('bold')
+        # tick.set_horizontalalignment("right")
+        # tick.set_verticalalignment("center")
+    ax1.set_xlabel('')
+    # ax1.set_title('COVID-19 Deceased Prediction')
+    fig1.savefig('{}covid19_{}_{}_comparison_{}.tif'.format(plot_dir, boxplot_y_metric, fig_fn_suffix, exp_name),
+                 bbox_inches="tight",
+                 pil_kwargs={"compression": "tiff_lzw"}
+                 )
+
+    fig2, ax2 = plt.subplots(1, 1, figsize=(8, 12))
+    pivoted = performance_cat_df.pivot("data_name", "method", boxplot_y_metric)
+    pivoted = pivoted.reindex(sorted_algo_names)
+    pivoted = pivoted.reindex(pivoted.median().sort_values().index, axis=1)
+    # pivoted.assign(m=pivoted.median(axis=1)).sort_values('m').drop('m', axis=1)
+
+    print(pivoted)
+    ax2 = sns.heatmap(ax=ax2,
+                      data=pivoted,
+                      annot=True, fmt='.3f')
+
+    ax2.set_yticklabels(ax2.get_yticklabels(), rotation=0)
+    # fig2.tight_layout()
+    fig2.savefig('{}covid19_{}_{}_heatmap_{}.tif'.format(plot_dir, boxplot_y_metric, fig_fn_suffix, exp_name),
+                 bbox_inches="tight",
+                 pil_kwargs={"compression": "tiff_lzw"}
+                 )
+
+    cd_input = performance_cat_df[['data_name', boxplot_y_metric, 'method']]
+
+    cd_input_df = cd_input.pivot_table(boxplot_y_metric, ['method'], 'data_name').reset_index()
+    cd_input_df.set_index('method', inplace=True)
+    cd_csv_fn = '{}covid19_cd_input_{}_{}_{}_{}.csv'.format(plot_dir + 'cd_csv/', boxplot_y_metric, fig_fn_suffix,
+                                                         exp_name, outcome)
+    cd_input_df.to_csv(cd_csv_fn, index_label=False)
+    cmd = "R CMD BATCH --no-save --no-restore '--args cd_fn=\"{}\"' R/plotCDdiagram.R".format(cd_csv_fn)
+    os.system(cmd)
+    # pairwise_df = sp.posthoc_nemenyi_friedman(cd_input_df)
+    # print(pairwise_df)
+    # pairwise_df.to_csv('{}covid19_pairwise_difference_{}_{}.csv'.format(plot_dir + 'cd_csv/', boxplot_y_metric, fig_fn_suffix))
+
+
 def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
     exp_name, base_path = base_path_tuple
 
@@ -102,8 +178,8 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
     auc_median_list = []
     performance_df_list = []
     print(list_of_method)
-    for m in list_of_method:
-        for outcome in outcome_list:
+    for outcome in outcome_list:
+        for m in list_of_method:
             # if m == 'concatenated' or m == 'EI':
             #     dir_name = base_path+outcome+'_'+m
             # else:
@@ -133,88 +209,19 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
             # auc_median_list.append(df['auc'].median())
 
 
-    performance_cat_df = pd.concat(performance_df_list)
-    dict_suffix = performance_cat_df['data_name'].unique().tolist()
-    fmax_median_list = [performance_cat_df.loc[performance_cat_df['data_name']==k, 'fmax'].median() for k in dict_suffix]
-    auc_median_list = [performance_cat_df.loc[performance_cat_df['data_name']==k, 'auc'].median() for k in dict_suffix]
-    cp = sns.color_palette(n_colors=len(dict_suffix))
-    print(performance_cat_df['data_name'])
-    fmax_label = r'$F_{max}$'
-    def custom_boxplot(boxplot_y_metric, boxplot_ylabel, metric_median_list):
-        # sorted_tuple = sorted(zip(metric_median_list, dict_suffix, cp), reverse=True, key=lambda x: x[0])
-        # sorted_algo_names = [s[1] for s in sorted_tuple]
-        # sorted_cp = [s[2] for s in sorted_tuple]
-
-        sorted_tuple = list(zip(metric_median_list, dict_suffix, cp))
-        sorted_algo_names = [s[1] for s in sorted_tuple]
-        sorted_cp = [s[2] for s in sorted_tuple]
-        print(sorted_tuple)
-
-        sep_space = 1.5
-        fig1, ax1 = plt.subplots(1,1, figsize=(18,6))
-        ax1 = sns.boxplot(ax=ax1, y=boxplot_y_metric, x='data_name',
-                          data=performance_cat_df,
-                          palette=sorted_cp, order=sorted_algo_names,
-                          linewidth=2, width=0.5
-                          )
+        performance_cat_df = pd.concat(performance_df_list)
+        dict_suffix = performance_cat_df['data_name'].unique().tolist()
+        fmax_median_list = [performance_cat_df.loc[performance_cat_df['data_name']==k, 'fmax'].median() for k in dict_suffix]
+        auc_median_list = [performance_cat_df.loc[performance_cat_df['data_name']==k, 'auc'].median() for k in dict_suffix]
+        cp = sns.color_palette(n_colors=len(dict_suffix))
+        print(performance_cat_df['data_name'])
+        fmax_label = r'$F_{max}$'
+        custom_boxplot('fmax', fmax_label, fmax_median_list, dict_suffix, cp,
+                   performance_cat_df, exp_name, outcome, fig_fn_suffix)
+        custom_boxplot('auc', 'AUC', auc_median_list, dict_suffix, cp,
+                   performance_cat_df, exp_name, outcome, fig_fn_suffix)
 
 
-        params = {'mathtext.default': 'regular'}
-        plt.rcParams.update(params)
-        ax1.set_ylabel(boxplot_ylabel, fontsize=22, fontweight='semibold')
-        # ax1.set_xticks([1, 2, 2.8, 3.8, 4.6, 5.6], sorted_algo_names)
-        for tick in ax1.get_xticklabels():
-            tick.set_fontsize(14)
-            # tick.set_rotation(45)
-            tick.set_fontweight('semibold')
-            # tick.set_horizontalalignment("right")
-
-        for tick in ax1.get_yticklabels():
-            tick.set_fontsize(16)
-            tick.set_fontweight('semibold')
-            # tick.set_rotation(45)
-            # tick.set_fontweight('bold')
-            # tick.set_horizontalalignment("right")
-            # tick.set_verticalalignment("center")
-        ax1.set_xlabel('')
-        # ax1.set_title('COVID-19 Deceased Prediction')
-        fig1.savefig('{}covid19_{}_{}_comparison_{}.tif'.format(plot_dir, boxplot_y_metric, fig_fn_suffix, exp_name),
-                     bbox_inches="tight",
-                     pil_kwargs = {"compression": "tiff_lzw"}
-                     )
-
-        fig2, ax2 = plt.subplots(1, 1, figsize=(8, 12))
-        pivoted = performance_cat_df.pivot("data_name", "method", boxplot_y_metric)
-        pivoted = pivoted.reindex(sorted_algo_names)
-        pivoted = pivoted.reindex(pivoted.median().sort_values().index, axis=1)
-        # pivoted.assign(m=pivoted.median(axis=1)).sort_values('m').drop('m', axis=1)
-
-        print(pivoted)
-        ax2 = sns.heatmap(ax=ax2,
-                          data=pivoted,
-                          annot=True, fmt='.3f')
-
-        ax2.set_yticklabels(ax2.get_yticklabels(), rotation=0)
-        # fig2.tight_layout()
-        fig2.savefig('{}covid19_{}_{}_heatmap_{}.tif'.format(plot_dir, boxplot_y_metric, fig_fn_suffix, exp_name),
-                     bbox_inches="tight",
-                     pil_kwargs={"compression": "tiff_lzw"}
-                     )
-
-        cd_input = performance_cat_df[['data_name', boxplot_y_metric, 'method']]
-
-        cd_input_df = cd_input.pivot_table(boxplot_y_metric, ['method'], 'data_name').reset_index()
-        cd_input_df.set_index('method', inplace=True)
-        cd_csv_fn = '{}covid19_cd_input_{}_{}_{}.csv'.format(plot_dir + 'cd_csv/', boxplot_y_metric, fig_fn_suffix, exp_name)
-        cd_input_df.to_csv(cd_csv_fn, index_label=False)
-        cmd = "R CMD BATCH --no-save --no-restore '--args cd_fn=\"{}\"' R/plotCDdiagram.R".format(cd_csv_fn)
-        os.system(cmd)
-        # pairwise_df = sp.posthoc_nemenyi_friedman(cd_input_df)
-        # print(pairwise_df)
-        # pairwise_df.to_csv('{}covid19_pairwise_difference_{}_{}.csv'.format(plot_dir + 'cd_csv/', boxplot_y_metric, fig_fn_suffix))
-
-    custom_boxplot('fmax', fmax_label, fmax_median_list)
-    custom_boxplot('auc', 'AUC', auc_median_list)
 
 
 
