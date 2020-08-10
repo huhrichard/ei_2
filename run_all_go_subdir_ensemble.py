@@ -82,7 +82,7 @@ if __name__ == "__main__":
         data = go_dir.split('/')[-1]
         data_dir = go_dir.split('/')[-2]
         if data_dir.split('_')[-1] == 'EI':
-            os.system('python tcca_projection.py --path {}'.format(go_dir))
+            # os.system('python tcca_projection.py --path {}'.format(go_dir))
             fns = listdir(go_dir)
             fns = [fn for fn in fns if not fn in excluding_folder]
             fns = [go_dir + '/' + fn for fn in fns]
