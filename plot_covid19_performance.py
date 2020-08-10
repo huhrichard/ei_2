@@ -151,7 +151,7 @@ def custom_boxplot(boxplot_y_metric, boxplot_ylabel, metric_median_list, dict_su
 
     ax2.set_yticklabels(ax2.get_yticklabels(), rotation=0)
     # fig2.tight_layout()
-    fig2.savefig('{}covid19_{}_{}_heatmap_{}.tif'.format(plot_dir, boxplot_y_metric, fig_fn_suffix, exp_name),
+    fig2.savefig('{}covid19_{}_{}_heatmap_{}_{}.tif'.format(plot_dir, boxplot_y_metric, fig_fn_suffix, exp_name, outcome),
                  bbox_inches="tight",
                  pil_kwargs={"compression": "tiff_lzw"}
                  )
