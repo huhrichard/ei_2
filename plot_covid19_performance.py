@@ -139,6 +139,7 @@ def custom_boxplot(boxplot_y_metric, boxplot_ylabel, metric_median_list, dict_su
                  )
 
     fig2, ax2 = plt.subplots(1, 1, figsize=(8, 12))
+    print(performance_cat_df)
     pivoted = performance_cat_df.pivot("data_name", "method", boxplot_y_metric)
     pivoted = pivoted.reindex(sorted_algo_names)
     pivoted = pivoted.reindex(pivoted.median().sort_values().index, axis=1)
@@ -200,9 +201,9 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
                 df['data_name'] = df['data_name'].str.replace(outcome, dict_of_method[m], regex=False)
             rows_with_plus =  df['data_name'].str.contains('\+')
             count =  df.loc[rows_with_plus, 'data_name'].str.count('\+',).add(1).astype(str)
-            print(count)
+            # print(count)
             df.loc[rows_with_plus, 'data_name'] = '#dataset\nincluded=' + count
-            print(df['data_name'])
+            # print(df['data_name'])
             # df.rename(columns='')
             performance_df_list.append(df)
             # fmax_median_list.append(df['fmax'].median())
