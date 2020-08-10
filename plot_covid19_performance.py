@@ -133,7 +133,7 @@ def custom_boxplot(boxplot_y_metric, boxplot_ylabel, metric_median_list, dict_su
         # tick.set_verticalalignment("center")
     ax1.set_xlabel('')
     # ax1.set_title('COVID-19 Deceased Prediction')
-    fig1.savefig('{}covid19_{}_{}_comparison_{}.tif'.format(plot_dir, boxplot_y_metric, fig_fn_suffix, exp_name),
+    fig1.savefig('{}covid19_{}_{}_comparison_{}_{}.tif'.format(plot_dir, boxplot_y_metric, fig_fn_suffix, exp_name, outcome),
                  bbox_inches="tight",
                  pil_kwargs={"compression": "tiff_lzw"}
                  )
