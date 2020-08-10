@@ -177,9 +177,10 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
     # dict_suffix = [dict_of_method[k] for k in list_of_method]
     fmax_median_list = []
     auc_median_list = []
-    performance_df_list = []
+
     print(list_of_method)
     for outcome in outcome_list:
+        performance_df_list = []
         for m in list_of_method:
             # if m == 'concatenated' or m == 'EI':
             #     dir_name = base_path+outcome+'_'+m
