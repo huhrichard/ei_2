@@ -14,7 +14,7 @@ for job in jobs_list:
     fn.write('#BSUB -P acc_pandeg01a\n#BSUB -q premium\n#BSUB -n 5\n#BSUB -W 10:00\n')
     fn.write('#BSUB -o gen_{}.stdout\n'.format(data_dir))
     fn.write('#BSUB -eo gen_{}.stderr\n'.format(data_dir))
-    fn.write('module purge\nmodule load java\nmodule load python\nmodule load groovy\nmodule load selfsched\n')
+    # fn.write('module purge\nmodule load java\nmodule load python\nmodule load groovy\nmodule load selfsched\n')
     fn.write(job)
 
     fn.close()
