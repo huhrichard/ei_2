@@ -6,6 +6,7 @@ from os.path import abspath, isdir
 from os import remove, system, listdir
 import glob
 import argparse
+import subprocess
 
 def str2bool(v):
     if v.lower() in ('yes', 'true', 't', 'y', '1'):
@@ -55,7 +56,7 @@ def write_submit_del_job(ensemble_dir):
         '#!/bin/bash\n#BSUB -P acc_pandeg01a\n#BSUB -q %s\n#BSUB -J %s\n#BSUB -W %s\n#BSUB -R rusage[mem=%s]\n#BSUB -n %s\n#BSUB -sp 100\n' % (
             args.queue, second_sub, args.time, args.memory, args.node))
     script.write('#BSUB -o %s.stdout\n#BSUB -eo %s.stderr\n#BSUB -L /bin/bash\n' % (second_sub, second_sub))
-    script.write('module purge')
+    # script.write('module purge')
     # script.write('conda activate largegopred')
     script.write(
         #     # 'module load python\n'+
@@ -82,7 +83,9 @@ if __name__ == "__main__":
         data = go_dir.split('/')[-1]
         data_dir = go_dir.split('/')[-2]
         if data_dir.split('_')[-1] == 'EI':
-            os.system('python tcca_projection.py --path {}'.format(go_dir))
+            # p = subprocess.Popen('python tcca_projection.py --path {}'.format(go_dir))
+            # p.wait()
+            # os.system('python tcca_projection.py --path {}'.format(go_dir))
             fns = listdir(go_dir)
             fns = [fn for fn in fns if not fn in excluding_folder]
             fns = [go_dir + '/' + fn for fn in fns]
