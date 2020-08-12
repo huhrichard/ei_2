@@ -92,7 +92,6 @@ def tcca(X, var_mats, cov_ten, **kargs):
         Z.append(np.matmul(X[v],H[v]))
     H = np.array(H)
     Z = np.array(Z)
-    print('rDim = {}, number of complex: {} out of {}'.format(rDim, np.sum(np.iscomplex(Z)), Z.size))
     return H, Z
 
 # test_tensor = np.random.rand(4,3,2)
