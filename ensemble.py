@@ -243,6 +243,8 @@ def reshape_base_pred_to_tensor(base_pred_df):
 
 def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df):
     train_df, train_labels, test_df, test_labels = common.read_fold(path, fold)
+    print('number of complex: {} out of {}'.format(np.sum(np.iscomplex(train_df.values)),
+                                                              train_df.values.size))
     # train_df_cols = train_df.columns
     # f_train_base = [common.fmeasure_score(train_labels, train_df[c].values) for c in train_df_cols]
     # thres_train_base = [f['thres'] for f in f_train_base]
