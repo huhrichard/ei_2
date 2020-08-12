@@ -139,10 +139,12 @@ if __name__ == "__main__":
 
             for v in range(len(H_train)):
                 Z_test.append(np.matmul(test_base_preds[v], H_train[v]))
-                print('rDim = {}, number of complex: {} out of {}'.format(rdim, np.sum(np.iscomplex(Z_test[-1])), Z_test[-1].size))
+
             project_train_array = np.hstack(Z_train)
             project_test_array = np.hstack(Z_test)
             Z_test = np.array(Z_test)
+            print('rDim = {}, number of complex: {} out of {}'.format(rdim, np.sum(np.iscomplex(project_test_array)),
+                                                                      project_test_array.size))
             train_fn = '%s/validation-%s.csv.gz' % (tcca_path, fold)
             test_fn = '%s/predictions-%s.csv.gz' % (tcca_path, fold)
 
