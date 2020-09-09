@@ -20,7 +20,7 @@ def convert_to_arff(df, path):
     fn.write('@relation yanchakli\n')
     col_counter = 0
     for col in df.columns:
-        if col not in ['cls', 'seqID']:
+        if col not in ['cls', 'seqID', 'fold']:
             fn.write('@attribute %s numeric\n' % col)
             col_counter += 1
         elif col == 'cls':
@@ -29,6 +29,7 @@ def convert_to_arff(df, path):
         elif col == 'seqID':
             fn.write('@attribute seqID string\n')
             col_counter += 1
+
     print('col counter:', col_counter)
 
     fn.write('@data\n')
