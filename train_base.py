@@ -28,8 +28,24 @@ def str2bool(v):
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
 def read_arff_to_pandas_df(arff_path):
-    data = arff.loadarff(arff_path)
-    return pd.DataFrame(data[0])
+    # loadarff doesn't support string attribute
+    # data = arff.loadarff(arff_path)
+    df = pd.read_csv(arff_path, comment='@')
+    num_col = df.shape[1]
+    columns = []
+    file1 = open(arff_path, 'r')
+    Lines = file1.readlines()
+
+    count = 0
+    # Strips the newline character
+    for line_idx, line in enumerate(Lines):
+        # if line_idx > num_col
+        if '@attribute' in line:
+            columns.append(line.strip().split(' ')[1])
+
+    df.columns = columns
+    return df
+
 
 ### parse arguments
 parser = argparse.ArgumentParser(description='Feed some bsub parameters')
