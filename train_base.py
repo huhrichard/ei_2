@@ -107,10 +107,11 @@ if ('foldAttribute' in p) and (len(feature_folders) > 1):
         train_nf = train_split_list[0][column_non_feature]
         test_X_raw = [t.drop(columns=column_non_feature).values for t in test_split_list]
         train_X_raw = [t.drop(columns=column_non_feature).values for t in train_split_list]
+        print(len(train_X_raw), train_X_raw[0].shape)
         H_train, Z_train = tcca_projection.project(train_X_raw, rDim=rdim)
         Z_test = []
         for v in range(len(H_train)):
-            Z_test.append(np.matmul(test_nf[v], H_train[v]))
+            Z_test.append(np.matmul(test_X_raw[v], H_train[v]))
 
         feat_col = ['ProjectedFeature{}'.format(i) for i in range(rdim)]
         projected_train_df_list = [pd.DataFrame(data=z_t,

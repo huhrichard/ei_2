@@ -66,6 +66,7 @@ def tcca(X, var_mats, cov_ten, **kargs):
 
     # print(var_mats_inv2[0]/(var_mats_inv2[0][0,0]))
     var_mats_inv2 = np.array(var_mats_inv2)
+    print('cov_tensor:', len(cov_ten), cov_ten)
     # Tensor times matrix (MATLAB: ttm)
     # M_ten = mode_dot(cov_ten, var_mats_inv2)
     M_ten = multi_mode_dot(cov_ten, var_mats_inv2)
