@@ -40,7 +40,7 @@ parser.add_argument('--time', '-T', type=str, default='20:00', help='number of h
 parser.add_argument('--memory', '-M', type=str,default='20000', help='memory requsted in MB')
 parser.add_argument('--classpath', '-CP', type=str,default='./weka.jar', help='default weka path')
 parser.add_argument('--hpc', type=str2bool,default='true', help='use HPC cluster or not')
-parser.add_argument('--fold', '-F', default='5', help='number of cross-validation fold')
+parser.add_argument('--fold', '-F', type=int, default=5, help='number of cross-validation fold')
 args = parser.parse_args()
 ### record starting time
 start = time()
