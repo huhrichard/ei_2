@@ -1,7 +1,7 @@
 '''
-	Scripts to train base classifiers in a nested cross-validation structure.
-	See README.md for detailed information.
-	@author: Linhua Wang
+    Scripts to train base classifiers in a nested cross-validation structure.
+    See README.md for detailed information.
+    @author: Linhua Wang
 '''
 from os.path import abspath, isdir
 from os import remove, system, listdir
@@ -28,8 +28,8 @@ def str2bool(v):
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
 def read_arff_to_pandas_df(arff_path):
-	data = arff.loadarff(arff_path)
-	return pd.DataFrame(data[0])
+    data = arff.loadarff(arff_path)
+    return pd.DataFrame(data[0])
 
 ### parse arguments
 parser = argparse.ArgumentParser(description='Feed some bsub parameters')
@@ -82,11 +82,11 @@ data_path_list = [f_path+'data_{}.arff' for f_path in feature_folders]
 rdim = 10
 
 if ('foldAttribute' in p) and (len(feature_folders) > 1):
-	fold_col = p['foldAttribute']
+    fold_col = p['foldAttribute']
     column_non_feature = [fold_col, id_col, label_col]
-	for outer_fold in fold_list:
-		test_split_list = [df[df[fold_col]==outer_fold] for df in arff_list]
-		train_split_list = [df[df[fold_col] != outer_fold] for df in arff_list]
+    for outer_fold in fold_list:
+        test_split_list = [df[df[fold_col]==outer_fold] for df in arff_list]
+        train_split_list = [df[df[fold_col] != outer_fold] for df in arff_list]
         test_nf = test_split_list[0][column_non_feature]
         train_nf = train_split_list[0][column_non_feature]
         test_X_raw = [t.drop(columns=column_non_feature, inplace=True).values for t in test_split_list]
@@ -127,37 +127,37 @@ all_parameters = list(product(feature_folders, classifiers,fold_values,bag_value
 jobs_fn = "temp_{}_{}.jobs".format(data_source_dir, data_name)
 job_file = open(jobs_fn,'w')
 for parameters in all_parameters:
-	project_path, classifier, fold, bag = parameters
-	# job_file.write('groovy -cp %s %s/base_model.groovy %s %s %s %s %s\n' % (classpath, working_dir,data_path, project_path, fold, bag,classifier))
+    project_path, classifier, fold, bag = parameters
+    # job_file.write('groovy -cp %s %s/base_model.groovy %s %s %s %s %s\n' % (classpath, working_dir,data_path, project_path, fold, bag,classifier))
     tcca_bool = True
-	job_file.write('groovy -cp %s %s/base_predictors_enable_tcca.groovy %s %s %s %s %s %s\n' % (classpath, working_dir,data_path, project_path, fold, bag, tcca_bool, classifier))
+    job_file.write('groovy -cp %s %s/base_predictors_enable_tcca.groovy %s %s %s %s %s %s\n' % (classpath, working_dir,data_path, project_path, fold, bag, tcca_bool, classifier))
 if not args.hpc:
-	job_file.write('python combine_individual_feature_preds.py %s\npython combine_feature_predicts.py %s %s\n' %(data_path,data_path,args.fold))
+    job_file.write('python combine_individual_feature_preds.py %s\npython combine_feature_predicts.py %s %s\n' %(data_path,data_path,args.fold))
 job_file.close()
 
 ### submit to hpc if args.hpc != False
 if args.hpc:
-	lsf_fn = 'run_%s_%s.lsf' %(data_source_dir, data_name)
-	fn = open(lsf_fn,'w')
-	fn.write('#!/bin/bash\n#BSUB -J EI-%s\n#BSUB -P acc_pandeg01a\n#BSUB -q %s\n#BSUB -n %s\n#BSUB -sp 100\n#BSUB -W %s\n#BSUB -o %s.stdout\n#BSUB -eo %s.stderr\n#BSUB -R rusage[mem=20000]\n' %(data_name,args.queue,args.node,args.time,data_name,data_name))
-	# fn.write('module load python/2.7.14\n')
-	# fn.write('module load py_packages\n')
-	fn.write('module purge')
-	# fn.write('conda activate ei')
-	fn.write('module load java\nmodule load python\nmodule load groovy\nmodule load selfsched\nmodule load weka\n')
-	fn.write('export _JAVA_OPTIONS="-XX:ParallelGCThreads=10"\nexport JAVA_OPTS="-Xmx15g"\nexport CLASSPATH=%s\n' %(args.classpath))
+    lsf_fn = 'run_%s_%s.lsf' %(data_source_dir, data_name)
+    fn = open(lsf_fn,'w')
+    fn.write('#!/bin/bash\n#BSUB -J EI-%s\n#BSUB -P acc_pandeg01a\n#BSUB -q %s\n#BSUB -n %s\n#BSUB -sp 100\n#BSUB -W %s\n#BSUB -o %s.stdout\n#BSUB -eo %s.stderr\n#BSUB -R rusage[mem=20000]\n' %(data_name,args.queue,args.node,args.time,data_name,data_name))
+    # fn.write('module load python/2.7.14\n')
+    # fn.write('module load py_packages\n')
+    fn.write('module purge')
+    # fn.write('conda activate ei')
+    fn.write('module load java\nmodule load python\nmodule load groovy\nmodule load selfsched\nmodule load weka\n')
+    fn.write('export _JAVA_OPTIONS="-XX:ParallelGCThreads=10"\nexport JAVA_OPTS="-Xmx15g"\nexport CLASSPATH=%s\n' %(args.classpath))
 
-	fn.write('mpirun selfsched < {}\n'.format(jobs_fn))
-	fn.write('rm {}\n'.format(jobs_fn))
-	fn.write('python combine_individual_feature_preds.py %s\npython combine_feature_predicts.py %s %s\n' %(data_path,data_path,args.fold))
-	fn.close()
-	system('bsub < %s' %lsf_fn)
-	system('rm %s' %lsf_fn)
+    fn.write('mpirun selfsched < {}\n'.format(jobs_fn))
+    fn.write('rm {}\n'.format(jobs_fn))
+    fn.write('python combine_individual_feature_preds.py %s\npython combine_feature_predicts.py %s %s\n' %(data_path,data_path,args.fold))
+    fn.close()
+    system('bsub < %s' %lsf_fn)
+    system('rm %s' %lsf_fn)
 
 ### run it sequentially otherwise
 else:
-	system('sh %s.jobs' %data_name)
-	system('rm %s.jobs' %data_name)
+    system('sh %s.jobs' %data_name)
+    system('rm %s.jobs' %data_name)
 end = time()
 if not args.hpc:
-	print('Elapsed time is: %s seconds' %(end - start))
+    print('Elapsed time is: %s seconds' %(end - start))
