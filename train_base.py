@@ -105,8 +105,8 @@ if ('foldAttribute' in p) and (len(feature_folders) > 1):
         train_split_list = [df[df[fold_col] != outer_fold] for df in arff_list]
         test_nf = test_split_list[0][column_non_feature]
         train_nf = train_split_list[0][column_non_feature]
-        test_X_raw = [t.drop(columns=column_non_feature, inplace=True).values for t in test_split_list]
-        train_X_raw = [t.drop(columns=column_non_feature, inplace=True).values for t in train_split_list]
+        test_X_raw = [t.drop(columns=column_non_feature).values for t in test_split_list]
+        train_X_raw = [t.drop(columns=column_non_feature).values for t in train_split_list]
         H_train, Z_train = tcca_projection.project(train_X_raw, rDim=rdim)
         Z_test = []
         for v in range(len(H_train)):
