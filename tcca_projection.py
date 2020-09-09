@@ -67,7 +67,7 @@ from itertools import product
 #     return base_pred_tensor
 
 import tensor_cca
-def tcca_projection(X, rDim=3):
+def project(X, rDim=3):
     var_mats, cov_t = tensor_cca.var_cov_ten_calculation(X)
     H, Z = tensor_cca.tcca(X, var_mats=var_mats, cov_ten=cov_t, rDim=rDim)
     return H, Z
@@ -106,6 +106,8 @@ if __name__ == "__main__":
         fold_values = range(int(p['foldCount']))
     testing_bool = ('67890' in fold_values and 'foldAttribute' in p)
     list_of_rdim = np.array(range(args.rdim))+1
+    # list_of_rdim = np.array(range(args.rdim))+1
+    # list_of_rdim = np.array(range(args.rdim))+1
     for rdim in list_of_rdim:
         tcca_path = os.path.join(data_path, 'tcca{}/'.format(rdim))
         if not os.path.exists(tcca_path):
@@ -129,7 +131,7 @@ if __name__ == "__main__":
                 train_id = train_df.index
                 test_id = test_df.index
 
-            H_train, Z_train = tcca_projection(train_base_preds, rDim=rdim)
+            H_train, Z_train = project(train_base_preds, rDim=rdim)
             Z_test = []
             feat_col_name = []
 

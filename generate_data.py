@@ -12,6 +12,7 @@ import arff
 # from soft_impute import SoftImpute
 from scipy.sparse import coo_matrix, csr_matrix, eye, load_npz, save_npz
 from rwr_from_jeff import *
+from sklearn.model_selection import KFold
 import networkx as nx
 
 def convert_to_arff(df, path):
@@ -60,13 +61,16 @@ def convert_to_arff(df, path):
 # #	arff.dump(path, feature_df.values, relation='linhuaw', names = feature_df.columns)
 #         convert_to_arff(feature_df,path)
 
-def processTermFeature_3(param, impute):
+def processTermFeature_3(param, impute, fold=5):
     term, feature, go_hpo_df, csv_filepath = param
     if impute:
         feature_df = pd.read_csv('{}rwrImputed_{}.csv'.format(csv_filepath, feature), index_col=0)
         print('using imputed data')
     else:
         feature_df = pd.read_csv('{}{}.csv'.format(csv_filepath, feature), index_col=0)
+
+
+
     before_shape = feature_df.shape
     # go_hpo_df.fillna(0, inplace=True)
     go_hpo_df = go_hpo_df[go_hpo_df != 0]
@@ -84,6 +88,12 @@ def processTermFeature_3(param, impute):
     merged_df['seqID'] = merged_df.index
     print('before', merged_df.shape)
     merged_df.dropna(inplace=True)
+    kf_split = KFold(n_splits=fold, shuffle=True, random_state=64)
+    kf_idx_list = kf_split.split(merged_df)
+    merged_df['fold'] = 0
+    for fold_attr, (kf_train_idx, kf_test_idx) in enumerate(kf_idx_list):
+        merged_df.loc[kf_test_idx, 'fold'] = fold_attr
+
     print('after', merged_df.shape)
     # del merged_df.index.name
     # print(term, 'merged df')
@@ -145,6 +155,14 @@ if __name__ == "__main__":
 
     scratch_data_dir = '/sc/arion/scratch/liy42/'
     group_number_goterm = argv[2]
+
+    # TODO: predefine foldAttribute
+    if len(argv) > 4:
+        fold = int(argv[4])
+    else:
+        fold = 5
+
+
 
     if 'Impute' in group_number_goterm:
         impute_graph = True
@@ -210,7 +228,7 @@ if __name__ == "__main__":
         '[STARTED: %s] start multithreads computing to generate feature files for GO term: %s...............................' % (
         str(datetime.datetime.now()), term))
     for param in params:
-        processTermFeature_3(param, impute=impute_graph)
+        processTermFeature_3(param, impute=impute_graph, fold=fold)
 
     # p = Pool(6)
 

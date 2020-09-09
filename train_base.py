@@ -13,6 +13,11 @@ from os.path import abspath, dirname, exists
 from sys import argv
 from common import load_arff_headers, load_properties
 from time import time
+from scipy.io import arff
+import pandas as pd
+import tcca_projection
+import numpy as np
+import generate_data
 
 def str2bool(v):
     if v.lower() in ('yes', 'true', 't', 'y', '1'):
@@ -21,6 +26,10 @@ def str2bool(v):
         return False
     else:
         raise argparse.ArgumentTypeError('Boolean value expected.')
+
+def read_arff_to_pandas_df(arff_path):
+	data = arff.loadarff(arff_path)
+	return pd.DataFrame(data[0])
 
 ### parse arguments
 parser = argparse.ArgumentParser(description='Feed some bsub parameters')
@@ -61,14 +70,67 @@ fns = [data_path  + '/' + fn for fn in fns]
 feature_folders = [fn for fn in fns if isdir(fn)]
 assert len(feature_folders) > 0
 
+### TODO: Read OuterCV and perform TCCA here?
+
+fold_list = range(args.fold)
+id_col = p['idAttribute']
+label_col = p['classAttribute']
+arff_list = [read_arff_to_pandas_df(f_path+'data.arff') for f_path in feature_folders]
+data_path_list = [f_path+'data_{}.arff' for f_path in feature_folders]
+
+
+rdim = 10
+
+if ('foldAttribute' in p) and (len(feature_folders) > 1):
+	fold_col = p['foldAttribute']
+    column_non_feature = [fold_col, id_col, label_col]
+	for outer_fold in fold_list:
+		test_split_list = [df[df[fold_col]==outer_fold] for df in arff_list]
+		train_split_list = [df[df[fold_col] != outer_fold] for df in arff_list]
+        test_nf = test_split_list[0][column_non_feature]
+        train_nf = train_split_list[0][column_non_feature]
+        test_X_raw = [t.drop(columns=column_non_feature, inplace=True).values for t in test_split_list]
+        train_X_raw = [t.drop(columns=column_non_feature, inplace=True).values for t in train_split_list]
+        H_train, Z_train = tcca_projection.project(train_X_raw, rDim=rdim)
+        Z_test = []
+        for v in range(len(H_train)):
+            Z_test.append(np.matmul(test_nf[v], H_train[v]))
+
+        feat_col = ['ProjectedFeature{}'.format(i) for i in range(rdim)]
+        projected_train_df_list = [pd.DataFrame(data=z_t,
+                                                columns=feat_col) for z_t in Z_train]
+        projected_train_df_with_nf = [pd.concat([df, train_nf],
+                                                axis=1, ignore_index=True) for df in projected_train_df_list]
+
+        projected_test_df_list = [pd.DataFrame(data=z_t,
+                                                columns=feat_col) for z_t in Z_test]
+        projected_test_df_with_nf = [pd.concat([df, test_nf],
+                                                axis=1, ignore_index=True) for df in projected_test_df_list]
+
+        projected_df_with_nf = [pd.concat([test_df,
+                                           train_df], ignore_index=True) for test_df, train_df in zip(projected_test_df_with_nf, projected_train_df_with_nf)]
+
+        # final_columns_list = projected_df_with_nf.columns
+        arff_fn_list = [f_path+'data_tcca_fold_{}.arff'.format(outer_fold) for f_path in feature_folders]
+        for v_fn, projected_df in zip(arff_fn_list, projected_df_with_nf):
+            generate_data.convert_to_arff(projected_df_with_nf, v_fn)
+
+
+
 ### write the individual tasks
 classpath = args.classpath
 all_parameters = list(product(feature_folders, classifiers,fold_values,bag_values))
+
+
+
+
 jobs_fn = "temp_{}_{}.jobs".format(data_source_dir, data_name)
 job_file = open(jobs_fn,'w')
 for parameters in all_parameters:
 	project_path, classifier, fold, bag = parameters
-	job_file.write('groovy -cp %s %s/base_model.groovy %s %s %s %s %s\n' % (classpath, working_dir,data_path, project_path, fold, bag,classifier))
+	# job_file.write('groovy -cp %s %s/base_model.groovy %s %s %s %s %s\n' % (classpath, working_dir,data_path, project_path, fold, bag,classifier))
+    tcca_bool = True
+	job_file.write('groovy -cp %s %s/base_predictors_enable_tcca.groovy %s %s %s %s %s %s\n' % (classpath, working_dir,data_path, project_path, fold, bag, tcca_bool, classifier))
 if not args.hpc:
 	job_file.write('python combine_individual_feature_preds.py %s\npython combine_feature_predicts.py %s %s\n' %(data_path,data_path,args.fold))
 job_file.close()
