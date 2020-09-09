@@ -115,16 +115,16 @@ if ('foldAttribute' in p) and (len(feature_folders) > 1):
         feat_col = ['ProjectedFeature{}'.format(i) for i in range(rdim)]
         projected_train_df_list = [pd.DataFrame(data=z_t,
                                                 columns=feat_col) for z_t in Z_train]
-        projected_train_df_with_nf = [pd.concat([df, train_nf],
+        projected_train_df_list = [pd.concat([df, train_nf],
                                                 axis=1, ignore_index=True) for df in projected_train_df_list]
 
         projected_test_df_list = [pd.DataFrame(data=z_t,
                                                 columns=feat_col) for z_t in Z_test]
-        projected_test_df_with_nf = [pd.concat([df, test_nf],
+        projected_test_df_list = [pd.concat([df, test_nf],
                                                 axis=1, ignore_index=True) for df in projected_test_df_list]
 
         projected_df_with_nf = [pd.concat([test_df,
-                                           train_df], ignore_index=True) for test_df, train_df in zip(projected_test_df_with_nf, projected_train_df_with_nf)]
+                                           train_df], ignore_index=True) for test_df, train_df in zip(projected_test_df_list, projected_train_df_list)]
 
         # final_columns_list = projected_df_with_nf.columns
         arff_fn_list = [f_path+'/data_tcca_fold_{}.arff'.format(outer_fold) for f_path in feature_folders]
