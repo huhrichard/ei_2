@@ -75,8 +75,8 @@ assert len(feature_folders) > 0
 fold_list = range(args.fold)
 id_col = p['idAttribute']
 label_col = p['classAttribute']
-arff_list = [read_arff_to_pandas_df(f_path+'data.arff') for f_path in feature_folders]
-data_path_list = [f_path+'data_{}.arff' for f_path in feature_folders]
+arff_list = [read_arff_to_pandas_df(f_path+'/data.arff') for f_path in feature_folders]
+data_path_list = [f_path+'/data_{}.arff' for f_path in feature_folders]
 
 
 rdim = 10
@@ -111,7 +111,7 @@ if ('foldAttribute' in p) and (len(feature_folders) > 1):
                                            train_df], ignore_index=True) for test_df, train_df in zip(projected_test_df_with_nf, projected_train_df_with_nf)]
 
         # final_columns_list = projected_df_with_nf.columns
-        arff_fn_list = [f_path+'data_tcca_fold_{}.arff'.format(outer_fold) for f_path in feature_folders]
+        arff_fn_list = [f_path+'/data_tcca_fold_{}.arff'.format(outer_fold) for f_path in feature_folders]
         for v_fn, projected_df in zip(arff_fn_list, projected_df_with_nf):
             generate_data.convert_to_arff(projected_df_with_nf, v_fn)
 
