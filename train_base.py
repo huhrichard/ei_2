@@ -97,13 +97,13 @@ data_path_list = [f_path+'/data_{}.arff' for f_path in feature_folders]
 import torch
 import tensorly as tl
 context_dict = {}
-if torch.cuda.is_available():
-    print('using pytorch as TL backend')
-    tl.set_backend('pytorch')
-    tl_pytorch = True
-    context_dict['device'] = torch.device('cuda')
-else:
-    tl_pytorch = False
+# if torch.cuda.is_available():
+#     # print('using pytorch as TL backend')
+#     # tl.set_backend('pytorch')
+#     # tl_pytorch = True
+#     # context_dict['device'] = torch.device('cuda')
+# else:
+tl_pytorch = False
 
 rdim = 10
 

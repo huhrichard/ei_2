@@ -18,13 +18,13 @@ Tested the whole function
 
 import torch
 context_dict = {}
-if torch.cuda.is_available():
-    print('using pytorch as TL backend')
-    tl.set_backend('pytorch')
-    tl_pytorch = True
-    context_dict['device'] = torch.device('cuda')
-else:
-    tl_pytorch = False
+# if torch.cuda.is_available():
+#     print('using pytorch as TL backend')
+#     tl.set_backend('pytorch')
+#     tl_pytorch = True
+#     context_dict['device'] = torch.device('cuda')
+# else:
+tl_pytorch = False
 
 def var_cov_ten_calculation(X):
     # nbView = X.shape[0]
@@ -35,9 +35,9 @@ def var_cov_ten_calculation(X):
     var_mats = []
     for v in range(nbView):
         if tl_pytorch:
-            var_mat = np.matmul(X[v].T, X[v])
-        else:
             var_mat = torch.matmul(X[v].T, X[v])
+        else:
+            var_mat = np.matmul(X[v].T, X[v])
         var_mat = var_mat/(nbSample-1)
         var_mats.append(var_mat+eps*tl.eye(var_mat.shape[0]))
 
