@@ -19,6 +19,7 @@ Tested the whole function
 import torch
 context_dict = {}
 if torch.cuda.is_available():
+    print('using pytorch as TL backend')
     tl.set_backend('pytorch')
     tl_pytorch = True
     context_dict['device'] = torch.device('cuda')
