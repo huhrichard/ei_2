@@ -119,6 +119,7 @@ if ('foldAttribute' in p) and (len(feature_folders) > 1):
                                 **context_dict) for t in test_split_list]
         train_X_raw = [tl.tensor(t.drop(columns=column_non_feature).values,
                                  **context_dict) for t in train_split_list]
+        print(train_split_list[0].columns)
         print(len(train_X_raw), train_X_raw[0].shape)
         H_train, Z_train = tcca_projection.project(train_X_raw, rDim=rdim)
         Z_test = []

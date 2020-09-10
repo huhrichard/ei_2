@@ -67,6 +67,17 @@ from itertools import product
 #     return base_pred_tensor
 
 import tensor_cca
+
+
+def str2bool(v):
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
+
+
 def project(X, rDim=3):
     var_mats, cov_t = tensor_cca.var_cov_ten_calculation(X)
     H, Z = tensor_cca.tcca(X, var_mats=var_mats, cov_ten=cov_t, rDim=rDim)
@@ -78,6 +89,7 @@ if __name__ == "__main__":
     parser.add_argument('--fold', '-F', type=int, default=5, help='cross-validation fold')
     parser.add_argument('--aggregate', '-A', type=int, default=1, help='if aggregate is needed, feed bagcount, else 1')
     parser.add_argument('--rdim', '-R', type=int, default=10, help='desired reduced dimension')
+    parser.add_argument('--clf_as_view', '-cav', type=str2bool, default='false', help='desired reduced dimension')
     args = parser.parse_args()
     data_path = abspath(args.path)
 
@@ -131,12 +143,18 @@ if __name__ == "__main__":
                 train_id = train_df.index
                 test_id = test_df.index
 
-            H_train, Z_train = project(train_base_preds, rDim=rdim)
+            if args.clf_as_view:
+                train_base_preds = np.swapaxes(np.array(train_base_preds), 0, -1)
+                test_base_preds = np.swapaxes(np.array(test_base_preds), 0, -1)
+            #     H_train, Z_train = project(train_base_preds, rDim=rdim)
+            # else:
+                H_train, Z_train = project(train_base_preds, rDim=rdim)
             Z_test = []
             feat_col_name = []
 
             for view_path in feature_folders:
                 for r in range(rdim):
+                    if args.clf_as_view:
                     feat_col_name.append('{}.tcca{}.0'.format(view_path.split('/')[-1], r))
 
             for v in range(len(H_train)):
