@@ -15,29 +15,40 @@ eps = 2.2204e-16
 """
 Tested the whole function
 """
+
+import torch
+context_dict = {}
+if torch.cuda.is_available():
+    tl.set_backend('pytorch')
+    tl_pytorch = True
+    context_dict['device'] = torch.device('cuda')
+else:
+    tl_pytorch = False
+
 def var_cov_ten_calculation(X):
     # nbView = X.shape[0]
+    # if tl_pytorch:
+    #     X = [tl.tensor(x) for x in X]
     nbView = len(X)
     nbSample = X[0].shape[0]
     var_mats = []
     for v in range(nbView):
-        var_mat = np.matmul(X[v].T, X[v])
+        if tl_pytorch:
+            var_mat = np.matmul(X[v].T, X[v])
+        else:
+            var_mat = torch.matmul(X[v].T, X[v])
         var_mat = var_mat/(nbSample-1)
-        var_mats.append(var_mat+eps*np.eye(var_mat.shape[0]))
+        var_mats.append(var_mat+eps*tl.eye(var_mat.shape[0]))
 
     cov_ten = 0
     for n in range(nbSample):
         u = []
         for v in range(nbView):
             # u.append(tl.tensor(np.expand_dims(X[v, n, :].T, axis=1)))
-            u.append(tl.tensor(np.expand_dims(X[v][n, :], axis=1)))
-            # print(u[-1])
-        # print()
-        # u = np.array(u)
-        # cov_x = ktensor(u)
-        # cov_x = tl.kruskal_to_tensor((np.ones((X.shape[-1])), u))
-        # print(u)
-        cov_x = tl.kruskal_to_tensor((np.ones((u[0].shape[1])), u))
+            # u.append(tl.tensor(np.expand_dims(X[v][n, :], axis=1)))
+            u.append(tl.tensor(X[v][n, :, None], axis=1))
+        # cov_x = tl.kruskal_to_tensor((tl.ones((u[0].shape[1])), u))
+        cov_x = tl.kruskal_to_tensor((None, u))
         # print(cov_x.shape)
         # print(cov_x.shape)
         cov_ten += cov_x
@@ -56,16 +67,16 @@ def tcca(X, var_mats, cov_ten, **kargs):
     nbV = len(X)
     for v in range(nbV):
         # var_mat_inv2 = (var_mats[v] + eps * np.eye(len(var_mats[v])))**(-0.5)
-        var_mat_plus_eps = var_mats[v] + eps * np.eye(len(var_mats[v]))
+        var_mat_plus_eps = var_mats[v] + eps * tl.eye(len(var_mats[v]))
         """
         Not matched with matlab
         """
-        var_mat_inv2 = sqrtm(np.linalg.inv((var_mat_plus_eps)))
+        var_mat_inv2 = tl.tensor(sqrtm(np.linalg.inv((np.array(var_mat_plus_eps)))), **context_dict)
         # print(np.matmul(np.matmul(var_mat_inv2, var_mat_inv2), var_mat_plus_eps))
         var_mats_inv2.append(var_mat_inv2)
 
     # print(var_mats_inv2[0]/(var_mats_inv2[0][0,0]))
-    var_mats_inv2 = np.array(var_mats_inv2)
+    # var_mats_inv2 = np.array(var_mats_inv2)
     print('cov_tensor:', len(cov_ten), cov_ten)
     # Tensor times matrix (MATLAB: ttm)
     # M_ten = mode_dot(cov_ten, var_mats_inv2)
