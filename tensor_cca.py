@@ -46,8 +46,8 @@ def var_cov_ten_calculation(X):
         u = []
         for v in range(nbView):
             # u.append(tl.tensor(np.expand_dims(X[v, n, :].T, axis=1)))
-            # u.append(tl.tensor(np.expand_dims(X[v][n, :], axis=1)))
-            u.append(tl.tensor(X[v][n, :, None], axis=1))
+            u.append(tl.tensor(np.expand_dims(X[v][n, :], axis=1)))
+            # u.append(tl.tensor(X[v][n, :, None], axis=1))
         # cov_x = tl.kruskal_to_tensor((tl.ones((u[0].shape[1])), u))
         cov_x = tl.kruskal_to_tensor((None, u))
         # print(cov_x.shape)
