@@ -147,12 +147,12 @@ if ('foldAttribute' in p) and (len(feature_folders) > 1):
         feat_col = ['ProjectedFeature{}'.format(i) for i in range(rdim)]
         projected_train_df_list = [pd.DataFrame(data=z_t,
                                                 columns=feat_col) for z_t in Z_train]
-        projected_train_df_list = [pd.concat([df, train_nf],
+        projected_train_df_list = [pd.concat([df.reset_index(drop=True), train_nf.reset_index(drop=True)],
                                                 axis=1) for df in projected_train_df_list]
 
         projected_test_df_list = [pd.DataFrame(data=z_t,
                                                 columns=feat_col) for z_t in Z_test]
-        projected_test_df_list = [pd.concat([df, test_nf],
+        projected_test_df_list = [pd.concat([df.reset_index(drop=True), test_nf.reset_index(drop=True)],
                                                 axis=1) for df in projected_test_df_list]
 
         projected_df_with_nf = [pd.concat([test_df,
