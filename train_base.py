@@ -94,6 +94,7 @@ label_col = p['classAttribute']
 arff_list = [read_arff_to_pandas_df(f_path+'/data.arff') for f_path in feature_folders]
 data_path_list = [f_path+'/data_{}.arff' for f_path in feature_folders]
 
+print(arff_list[0].shape)
 import torch
 import tensorly as tl
 context_dict = {}
@@ -119,7 +120,7 @@ if ('foldAttribute' in p) and (len(feature_folders) > 1):
                                 **context_dict) for t in test_split_list]
         train_X_raw = [tl.tensor(t.drop(columns=column_non_feature).values,
                                  **context_dict) for t in train_split_list]
-        print(train_split_list[0].columns)
+        print(train_split_list[0].columns, train_split_list[0].shape)
         print(len(train_X_raw), train_X_raw[0].shape)
         H_train, Z_train = tcca_projection.project(train_X_raw, rDim=rdim)
         Z_test = []
