@@ -94,7 +94,7 @@ def processTermFeature_3(param, impute, fold=5):
     merged_df.dropna(inplace=True)
     kf_split = KFold(n_splits=fold, shuffle=True, random_state=64)
     kf_idx_list = kf_split.split(merged_df)
-    merged_df.reset_index(inplace=True)
+    merged_df.reset_index(inplace=True, drop=True)
     merged_df['fold'] = 0
     for fold_attr, (kf_train_idx, kf_test_idx) in enumerate(kf_idx_list):
         # f_bool = np.zeros(merged_df.shape[0], int)
