@@ -10,6 +10,7 @@ from tensorly.decomposition import parafac
 from scipy.linalg import sqrtm
 import numpy as np
 
+
 eps = 2.2204e-16
 
 """
