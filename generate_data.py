@@ -29,6 +29,9 @@ def convert_to_arff(df, path):
         elif col == 'seqID':
             fn.write('@attribute seqID string\n')
             col_counter += 1
+        elif col == 'fold':
+            fn.write('@attribute fold {0,1,2,3,4}\n')
+
 
     print('col counter:', col_counter)
 
@@ -95,7 +98,7 @@ def processTermFeature_3(param, impute, fold=5):
     for fold_attr, (kf_train_idx, kf_test_idx) in enumerate(kf_idx_list):
         f_bool = np.zeros(merged_df.shape[0], int)
         # f_bool[kf_test_idx] = 1
-        merged_df.iloc[f_bool].loc[:,'fold'] = fold_attr
+        merged_df.loc[f_bool,'fold'] = fold_attr
 
     print('after', merged_df.shape)
     # del merged_df.index.name
