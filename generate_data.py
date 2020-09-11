@@ -93,9 +93,9 @@ def processTermFeature_3(param, impute, fold=5):
     kf_idx_list = kf_split.split(merged_df)
     merged_df['fold'] = 0
     for fold_attr, (kf_train_idx, kf_test_idx) in enumerate(kf_idx_list):
-        # f_bool = np.zeros(merged_df.shape[0], int)
+        f_bool = np.zeros(merged_df.shape[0], int)
         # f_bool[kf_test_idx] = 1
-        merged_df.iloc[kf_test_idx].loc[:,'fold'] = fold_attr
+        merged_df.iloc[f_bool].loc[:,'fold'] = fold_attr
 
     print('after', merged_df.shape)
     # del merged_df.index.name
