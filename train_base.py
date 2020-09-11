@@ -161,7 +161,7 @@ if ('foldAttribute' in p) and (len(feature_folders) > 1):
         # final_columns_list = projected_df_with_nf.columns
         arff_fn_list = [f_path+'/data_tcca_fold_{}.arff'.format(outer_fold) for f_path in feature_folders]
         for v_fn, projected_df in zip(arff_fn_list, projected_df_with_nf):
-            generate_data.convert_to_arff(projected_df_with_nf, v_fn)
+            generate_data.convert_to_arff(projected_df, v_fn)
 
 
 
