@@ -51,6 +51,7 @@ currentBag                  = Integer.valueOf(args[3])
 tcca_bool                   = Boolean.valueOf(args[4])
 if (tcca_bool){
     inputFilename		    = rootDir + "/data_pca_fold_$currentFold.arff"
+    printf "%s", inputFilename
 } else {
     inputFilename		    = rootDir + "/data.arff"
 }
