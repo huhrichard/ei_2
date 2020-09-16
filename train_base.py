@@ -112,7 +112,7 @@ rdim = 10
 
 if ('foldAttribute' in p) and (len(feature_folders) > 1):
     fold_col = p['foldAttribute']
-    column_non_feature = [fold_col, id_col, label_col]
+    column_non_feature = [fold_col, label_col, , id_col]
     for outer_fold in fold_list:
         test_split_list = [df[df[fold_col]==outer_fold] for df in arff_list]
         train_split_list = [df[df[fold_col] != outer_fold] for df in arff_list]
