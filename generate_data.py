@@ -30,7 +30,7 @@ def convert_to_arff(df, path):
             fn.write('@attribute seqID string\n')
             col_counter += 1
         elif col == 'fold':
-            fn.write('@attribute fold {0,1,2,3,4}\n')
+            fn.write('@attribute fold {10000,10001,10002,10003,10004}\n')
 
 
     print('col counter:', col_counter)
@@ -100,7 +100,7 @@ def processTermFeature_3(param, impute, fold=5):
         # f_bool = np.zeros(merged_df.shape[0], int)
         # f_bool[kf_test_idx] = 1
         # merged_df.loc[f_bool,'fold'] = fold_attr
-        merged_df.loc[kf_test_idx,'fold'] = fold_attr
+        merged_df.loc[kf_test_idx,'fold'] = fold_attr+10000
 
     print('after', merged_df.shape)
     # del merged_df.index.name

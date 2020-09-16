@@ -89,7 +89,7 @@ assert len(feature_folders) > 0
 
 ### TODO: Read OuterCV and perform TCCA here?
 
-fold_list = range(args.fold)
+fold_list = np.array(range(args.fold))+10000
 id_col = p['idAttribute']
 label_col = p['classAttribute']
 arff_list = [read_arff_to_pandas_df(f_path+'/data.arff') for f_path in feature_folders]
