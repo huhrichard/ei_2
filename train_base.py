@@ -69,7 +69,10 @@ working_dir = dirname(abspath(argv[0]))
 
 ### get weka properties from weka.properties
 p = load_properties(data_path)
-fold_values = range(int(p['foldCount']))
+if not ('foldAttribute' in p):
+    fold_values = range(int(p['foldCount']))
+else:
+    fold_values = np.array(range(args.fold)) + 10000
 bag_values = range(int(p['bagCount']))
 
 ### get the list of base classifiers
@@ -89,7 +92,7 @@ assert len(feature_folders) > 0
 
 ### TODO: Read OuterCV and perform TCCA here?
 
-fold_list = np.array(range(args.fold))+10000
+# fold_values = np.array(range(args.fold))+10000
 id_col = p['idAttribute']
 label_col = p['classAttribute']
 arff_list = [read_arff_to_pandas_df(f_path+'/data.arff') for f_path in feature_folders]
@@ -113,7 +116,7 @@ rdim = 10
 if ('foldAttribute' in p) and (len(feature_folders) > 1):
     fold_col = p['foldAttribute']
     column_non_feature = [fold_col, label_col, id_col]
-    for outer_fold in fold_list:
+    for outer_fold in fold_values:
         test_split_list = [df[df[fold_col]==outer_fold] for df in arff_list]
         train_split_list = [df[df[fold_col] != outer_fold] for df in arff_list]
         test_nf = test_split_list[0][column_non_feature]
