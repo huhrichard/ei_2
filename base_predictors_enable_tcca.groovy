@@ -54,7 +54,7 @@ if (tcca_bool){
 } else {
     inputFilename		    = rootDir + "/data.arff"
 }
-String[] classifierString   = args[4..-1]
+String[] classifierString   = args[5..-1]
 String classifierName       = classifierString[0]
 String shortClassifierName  = classifierName.split("\\.")[-1]
 String[] classifierOptions  = new String[0]
