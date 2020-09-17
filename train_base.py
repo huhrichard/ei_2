@@ -11,7 +11,7 @@ from itertools import product
 from os import environ, system
 from os.path import abspath, dirname, exists
 from sys import argv
-from common import load_arff_headers, load_properties
+from common import load_arff_headers, load_properties, read_arff_to_pandas_df
 from time import time
 from scipy.io import arff
 import pandas as pd
@@ -28,24 +28,7 @@ def str2bool(v):
     else:
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
-def read_arff_to_pandas_df(arff_path):
-    # loadarff doesn't support string attribute
-    # data = arff.loadarff(arff_path)
-    df = pd.read_csv(arff_path, comment='@')
-    num_col = df.shape[1]
-    columns = []
-    file1 = open(arff_path, 'r')
-    Lines = file1.readlines()
 
-    count = 0
-    # Strips the newline character
-    for line_idx, line in enumerate(Lines):
-        # if line_idx > num_col
-        if '@attribute' in line:
-            columns.append(line.strip().split(' ')[1])
-
-    df.columns = columns
-    return df
 
 
 ### parse arguments
@@ -69,10 +52,10 @@ working_dir = dirname(abspath(argv[0]))
 
 ### get weka properties from weka.properties
 p = load_properties(data_path)
-if not ('foldAttribute' in p):
-    fold_values = range(int(p['foldCount']))
-else:
-    fold_values = np.array(range(args.fold)) + 10000
+# if not ('foldAttribute' in p):
+#     fold_values = range(int(p['foldCount']))
+# else:
+#     fold_values = np.array(range(args.fold)) + 10000
 bag_values = range(int(p['bagCount']))
 
 ### get the list of base classifiers
@@ -90,6 +73,11 @@ fns = [data_path  + '/' + fn for fn in fns]
 feature_folders = [fn for fn in fns if isdir(fn)]
 assert len(feature_folders) > 0
 
+if 'foldAttribute' in p:
+	df = read_arff_to_pandas_df(feature_folders[0]+'/data.arff')
+	fold_values = df[p['foldAttribute']].unique()
+else:
+	fold_values = range(int(p['foldCount']))
 ### TODO: Read OuterCV and perform TCCA here?
 
 # fold_values = np.array(range(args.fold))+10000

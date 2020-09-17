@@ -6,16 +6,18 @@ Date:  12/27/2018
 from os.path import exists,abspath,isdir,dirname
 from sys import argv
 from os import listdir,environ
-from common import load_properties, load_arff_headers
+from common import load_properties, load_arff_headers, data_dir_list, read_arff_to_pandas_df
 import pandas as pd
 import numpy as np
 
 data_folder = abspath(argv[1])
+#
+# fns = listdir(data_folder)
+# fns = [fn for fn in fns if fn != 'analysis']
+# fns = [data_folder  + '/' + fn for fn in fns]
+# feature_folders = [fn for fn in fns if isdir(fn)]
 
-fns = listdir(data_folder)
-fns = [fn for fn in fns if fn != 'analysis']
-fns = [data_folder  + '/' + fn for fn in fns]
-feature_folders = [fn for fn in fns if isdir(fn)]
+feature_folders = data_dir_list(data_folder)
 
 # foldValues = range(int(argv[2]))
 p = load_properties(data_folder)
@@ -25,7 +27,9 @@ if 'foldAttribute' in p:
 	# assert exists(input_fn)
 	# headers = load_arff_headers(input_fn)
 	# fold_values = headers[p['foldAttribute']]
-	fold_values = ['67890']
+	# fold_values = ['67890']
+	df = read_arff_to_pandas_df(feature_folders[0]+'/data.arff')
+	fold_values = df[p['foldAttribute']].unique()
 else:
 	fold_values = range(int(p['foldCount']))
 

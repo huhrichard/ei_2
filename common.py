@@ -4,6 +4,10 @@ from scipy.io.arff import loadarff
 import sklearn.metrics
 import numpy as np
 import os
+from os.path import exists,abspath,isdir,dirname
+from sys import argv
+from os import listdir,environ
+import pandas as pd
 
 def argsortbest(x):
     return argsort(x) if greater_is_better else argsort(x)[::-1]
@@ -100,6 +104,34 @@ def unbag(df, bag_count):
 def check_dir_n_mkdir(path):
     if not os.path.exists(path):
         os.mkdir(path)
+
+def data_dir_list(data_path):
+    fns = listdir(data_path)
+    excluding_folder = ['analysis']
+    fns = [fn for fn in fns if not fn in excluding_folder]
+    fns = [fn for fn in fns if not 'tcca' in fn]
+    fns = [data_path + '/' + fn for fn in fns]
+    feature_folders = [fn for fn in fns if isdir(fn)]
+    return feature_folders
+
+def read_arff_to_pandas_df(arff_path):
+    # loadarff doesn't support string attribute
+    # data = arff.loadarff(arff_path)
+    df = pd.read_csv(arff_path, comment='@')
+    num_col = df.shape[1]
+    columns = []
+    file1 = open(arff_path, 'r')
+    Lines = file1.readlines()
+
+    count = 0
+    # Strips the newline character
+    for line_idx, line in enumerate(Lines):
+        # if line_idx > num_col
+        if '@attribute' in line:
+            columns.append(line.strip().split(' ')[1])
+
+    df.columns = columns
+    return df
 
 diversity_score = average_pearson_score
 score = sklearn.metrics.roc_auc_score
