@@ -9,7 +9,7 @@ import gzip
 from os.path import abspath, exists, isdir
 from os import listdir
 from sys import argv
-from common import load_arff_headers, load_properties
+from common import load_arff_headers, load_properties, data_dir_list, read_arff_to_pandas_df
 from pandas import concat, read_csv
 
 
@@ -56,11 +56,14 @@ def combine_individual(path):
 
 
 data_folder = abspath(argv[1])
-data_name = data_folder.split('/')[-1]
-fns = listdir(data_folder)
-fns = [fn for fn in fns if fn != 'analysis']
-fns = [data_folder + '/' + fn for fn in fns]
-feature_folders = [fn for fn in fns if isdir(fn)]
+feature_folders = data_dir_list(data_folder)
+# data_name = data_folder.split('/')[-1]
+# fns = listdir(data_folder)
+# fns = [fn for fn in fns if fn != 'analysis']
+# fns = [data_folder + '/' + fn for fn in fns]
+# feature_folders = [fn for fn in fns if isdir(fn)]
+
+
 
 p = load_properties(data_folder)
 # fold_count = int(p['foldCount'])
@@ -69,7 +72,8 @@ if 'foldAttribute' in p:
     # assert exists(input_fn)
     # headers = load_arff_headers(input_fn)
     # fold_values = headers[p['foldAttribute']]
-    fold_values = ['67890']
+    df = read_arff_to_pandas_df(feature_folders[0] + '/data.arff')
+    fold_values = df[p['foldAttribute']].unique()
 else:
     fold_values = range(int(p['foldCount']))
 
