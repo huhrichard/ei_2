@@ -81,7 +81,7 @@ if 'foldAttribute' in p:
 else:
     fold_values = range(int(p['foldCount']))
 
-pca_fold_values = ['pca_' + fv for fv in fold_values]
+pca_fold_values = ['pca_{}'.format(fv) for fv in fold_values]
 
 nested_fold_count = int(p['nestedFoldCount'])
 bag_count = max(1, int(p['bagCount']))

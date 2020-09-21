@@ -124,7 +124,7 @@ if not args.hpc:
     data_path, data_path))
 
 if args.pca:
-    pca_fold_values = ['pca_' + fv for fv in fold_values]
+    pca_fold_values = ['pca_{}'.format(fv) for fv in fold_values]
     fold_col = p['foldAttribute']
     column_non_feature = [fold_col, label_col, id_col]
     for outer_fold in fold_values:
