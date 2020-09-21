@@ -12,11 +12,9 @@ from sys import argv
 from common import load_arff_headers, load_properties, data_dir_list, read_arff_to_pandas_df
 from pandas import concat, read_csv
 
-
-def combine_individual(path):
+def merged_base_innerCV_by_outerfold(f_list, path):
     dirnames = sorted(filter(isdir, glob('%s/weka.classifiers.*' % path)))
-    # for fold in range(fold_count):
-    for fold in fold_values:
+    for fold in f_list:
         dirname_dfs = []
         for dirname in dirnames:
             classifier = dirname.split('.')[-1]
@@ -37,7 +35,7 @@ def combine_individual(path):
         concat(dirname_dfs, axis=1).sort_index().to_csv('%s/validation-%s.csv.gz' % (path, fold), compression='gzip')
 
     # for fold in range(fold_count):
-    for fold in fold_values:
+    for fold in f_list:
         dirname_dfs = []
         for dirname in dirnames:
             classifier = dirname.split('.')[-1]
@@ -53,6 +51,11 @@ def combine_individual(path):
                     print('file not existed or crashed %s' % filename)
             dirname_dfs.append(concat(bag_dfs, axis=1))
         concat(dirname_dfs, axis=1).sort_index().to_csv('%s/predictions-%s.csv.gz' % (path, fold), compression='gzip')
+
+def combine_individual(path):
+    merged_base_innerCV_by_outerfold(fold_values, path)
+    merged_base_innerCV_by_outerfold(pca_fold_values, path)
+
 
 
 data_folder = abspath(argv[1])
@@ -74,10 +77,13 @@ if 'foldAttribute' in p:
     # fold_values = headers[p['foldAttribute']]
     df = read_arff_to_pandas_df(feature_folders[0] + '/data.arff')
     fold_values = df[p['foldAttribute']].unique()
+
 else:
     fold_values = range(int(p['foldCount']))
 
+pca_fold_values = ['pca_' + fv for fv in fold_values]
+
 nested_fold_count = int(p['nestedFoldCount'])
 bag_count = max(1, int(p['bagCount']))
-for path in feature_folders:
-    combine_individual(path)
+for path_f in feature_folders:
+    combine_individual(path_f)
