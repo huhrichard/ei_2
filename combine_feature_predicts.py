@@ -43,7 +43,7 @@ validation_dfs = []
 
 
 def merge_base_feat_preds_by_fold(f_list):
-	for value in fold_values:
+	for value in f_list:
 		prediction_dfs = []
 		validation_dfs = []
 		for folder in feature_folders:
