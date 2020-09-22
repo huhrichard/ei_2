@@ -30,7 +30,7 @@ def convert_to_arff(df, path):
             fn.write('@attribute seqID string\n')
             col_counter += 1
         elif col == 'fold':
-            fold_values = list(df['fold'].unique())
+            fold_values = list(df['fold'].astype(str).unique())
             fold_str = ','.join(fold_values)
             fn.write('@attribute fold {' + fold_str + '}\n')
 
