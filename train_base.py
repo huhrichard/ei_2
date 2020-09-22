@@ -119,9 +119,7 @@ for parameters in all_parameters:
     # job_file.write('groovy -cp %s %s/base_model.groovy %s %s %s %s %s\n' % (classpath, working_dir,data_path, project_path, fold, bag,classifier))
     job_file.write('groovy -cp %s %s/base_predictors_pca_added.groovy %s %s %s %s %s %s\n' % (
         classpath, working_dir, data_path, project_path, fold, bag, False, classifier))
-if not args.hpc:
-    job_file.write('python combine_individual_feature_preds.py %s\npython combine_feature_predicts.py %s\n' % (
-    data_path, data_path))
+
 
 if args.pca:
     pca_fold_values = ['pca_{}'.format(fv) for fv in fold_values]
@@ -179,9 +177,11 @@ if args.pca:
         # job_file.write('groovy -cp %s %s/base_model.groovy %s %s %s %s %s\n' % (classpath, working_dir,data_path, project_path, fold, bag,classifier))
         job_file.write('groovy -cp %s %s/base_predictors_pca_added.groovy %s %s %s %s %s %s\n' % (
             classpath, working_dir, data_path, project_path, fold, bag, pca_bool, classifier))
-    if not args.hpc:
-        job_file.write('python combine_individual_feature_preds.py %s\npython combine_feature_predicts.py %s\n' % (
-            data_path, data_path))
+
+
+if not args.hpc:
+    job_file.write('python combine_individual_feature_preds.py %s\npython combine_feature_predicts.py %s\n' % (
+        data_path, data_path))
 
 job_file.close()
 
