@@ -50,7 +50,7 @@ currentBag                  = Integer.valueOf(args[3])
 // Add boolean of TCCA
 tcca_bool                   = Boolean.valueOf(args[4])
 if (tcca_bool){
-    inputFilename		    = rootDir + "/data_pca_" + currentFold + ".arff"
+    inputFilename		    = rootDir + "/data_" + currentFold + ".arff"
     printf "%s", inputFilename
 } else {
     inputFilename		    = rootDir + "/data.arff"
