@@ -68,6 +68,12 @@ from itertools import product
 
 import tensor_cca
 
+def mkdir_as_method(method_path):
+    if not os.path.exists(method_path):
+        os.mkdir(method_path)
+    os.system('cp {} {}'.format(os.path.join(data_path, 'classifiers.txt'), method_path))
+    os.system('cp {} {}'.format(os.path.join(data_path, 'weka.properties'), method_path))
+
 
 def str2bool(v):
     if v.lower() in ('yes', 'true', 't', 'y', '1'):
@@ -83,13 +89,140 @@ def project(X, rDim=3):
     H, Z = tensor_cca.tcca(X, var_mats=var_mats, cov_ten=cov_t, rDim=rDim)
     return H, Z
 
+def EI_tcca_v0(dest_path, f_list, rdim=10):
+    """
+    Only base predicted scores put into TCCA
+    :param dest_path:
+    :param f_list:
+    :param rdim:
+    :return:
+    """
+    for fold in f_list:
+        train_base_preds = []
+        test_base_preds = []
+        train_labels = []
+        test_labels = []
+        train_id, test_id = None, None
+        for view_path in feature_folders:
+            train_df, train_labels, test_df, test_labels = common.read_fold(view_path, fold)
+            train_df = common.unbag(train_df, args.aggregate)
+
+            test_df = common.unbag(test_df, args.aggregate)
+            train_base_preds.append(train_df.values)
+            test_base_preds.append(test_df.values)
+            train_id = train_df.index
+            test_id = test_df.index
+
+        # if args.clf_as_view:
+        #     train_base_preds = np.swapaxes(np.array(train_base_preds), 0, -1)
+        #     test_base_preds = np.swapaxes(np.array(test_base_preds), 0, -1)
+            #     H_train, Z_train = project(train_base_preds, rDim=rdim)
+            # else:
+        H_train, Z_train = project(train_base_preds, rDim=rdim)
+        Z_test = []
+        feat_col_name = []
+
+        for view_path in feature_folders:
+            for r in range(rdim):
+                if args.clf_as_view:
+                    feat_col_name.append('{}.tcca{}.0'.format(view_path.split('/')[-1], r))
+
+        for v in range(len(H_train)):
+            Z_test.append(np.matmul(test_base_preds[v], H_train[v]))
+
+        tcca_project_train_array = np.hstack(Z_train)
+        tcca_project_test_array = np.hstack(Z_test)
+        Z_test = np.array(Z_test)
+        print('rDim = {}, number of complex: {} out of {}'.format(rdim, np.sum(np.iscomplex(tcca_project_train_array)),
+                                                                  tcca_project_train_array.size))
+
+        train_fn = '%s/validation-%s.csv.gz' % (dest_path, fold)
+        test_fn = '%s/predictions-%s.csv.gz' % (dest_path, fold)
+
+        projected_train_df = pd.DataFrame(data=tcca_project_train_array,
+                                          columns=feat_col_name,
+                                          index=train_id)
+
+        projected_test_df = pd.DataFrame(data=tcca_project_test_array,
+                                         columns=feat_col_name,
+                                         index=test_id)
+
+        projected_train_df.to_csv(train_fn, compression='gzip')
+        projected_test_df.to_csv(test_fn, compression='gzip')
+
+def EI_tcca_v1(dest_path, f_list, rdim=10):
+    """
+    Perform TCCA with data concatenated base predicted score and PCA
+    :param dest_path:
+    :param f_list:
+    :param rdim:
+    :return:
+    """
+    for fold in f_list:
+        train_base_preds = []
+        test_base_preds = []
+        train_labels = []
+        test_labels = []
+        train_id, test_id = None, None
+        for view_path in feature_folders:
+            pca_df_name = os.path.join(view_path, 'data_pca_{}.arff'.format(fold))
+            pca_df = common.read_arff_to_pandas_df(pca_df_name)
+            pca_df.rename(columns={p['idAttribute']: 'id'}, inplace=True)
+            pca_df.drop(columns=[p['foldAttribute']], inplace=True)
+            pca_df.set_index('id')
+
+
+            train_df, train_labels, test_df, test_labels = common.read_fold(view_path, fold)
+            train_df = common.unbag(train_df, args.aggregate)
+            train_with_pca_df = pd.concat([train_df, pca_df], axis=1, join='inner')
+
+            test_df = common.unbag(test_df, args.aggregate)
+            test_with_pca_df = pd.concat([test_df, pca_df], axis=1, join='inner')
+
+            train_base_preds.append(train_with_pca_df.values)
+            test_base_preds.append(test_with_pca_df.values)
+            train_id = train_with_pca_df.index
+            test_id = test_with_pca_df.index
+
+        H_train, Z_train = project(train_base_preds, rDim=rdim)
+        Z_test = []
+        feat_col_name = []
+
+        for view_path in feature_folders:
+            for r in range(rdim):
+                if args.clf_as_view:
+                    feat_col_name.append('{}.tcca{}.0'.format(view_path.split('/')[-1], r))
+
+        for v in range(len(H_train)):
+            Z_test.append(np.matmul(test_base_preds[v], H_train[v]))
+
+        tcca_project_train_array = np.hstack(Z_train)
+        tcca_project_test_array = np.hstack(Z_test)
+        print('rDim = {}, number of complex: {} out of {}'.format(rdim, np.sum(np.iscomplex(tcca_project_train_array)),
+                                                                  tcca_project_train_array.size))
+
+        train_fn = '%s/validation-%s.csv.gz' % (dest_path, fold)
+        test_fn = '%s/predictions-%s.csv.gz' % (dest_path, fold)
+
+        projected_train_df = pd.DataFrame(data=tcca_project_train_array,
+                                          columns=feat_col_name,
+                                          index=train_id)
+
+        projected_test_df = pd.DataFrame(data=tcca_project_test_array,
+                                         columns=feat_col_name,
+                                         index=test_id)
+
+        projected_train_df.to_csv(train_fn, compression='gzip')
+        projected_test_df.to_csv(test_fn, compression='gzip')
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('--path', '-P', type=str, required=True, help='data path')
     parser.add_argument('--fold', '-F', type=int, default=5, help='cross-validation fold')
     parser.add_argument('--aggregate', '-A', type=int, default=1, help='if aggregate is needed, feed bagcount, else 1')
     parser.add_argument('--rdim', '-R', type=int, default=10, help='desired reduced dimension')
-    parser.add_argument('--clf_as_view', '-cav', type=str2bool, default='false', help='desired reduced dimension')
+    # parser.add_argument('--clf_as_view', '-cav', type=str2bool, default='false', help='desired reduced dimension')
     args = parser.parse_args()
     data_path = abspath(args.path)
 
@@ -109,75 +242,34 @@ if __name__ == "__main__":
     # fold_values = range(int(p['foldCount']))
     assert ('foldAttribute' in p) or ('foldCount' in p)
     if 'foldAttribute' in p:
-        # input_fn = '%s/%s' % (feature_folders[0], 'data.arff')
-        # assert exists(input_fn)
-        # headers = load_arff_headers(input_fn)
-        # fold_values = headers[p['foldAttribute']]
-        fold_values = ['67890']
+        df = common.read_arff_to_pandas_df(feature_folders[0] + '/data.arff')
+        fold_values = df[p['foldAttribute']].unique()
     else:
         fold_values = range(int(p['foldCount']))
+    pca_fold_values = ['pca_' + fv for fv in fold_values]
     testing_bool = ('67890' in fold_values and 'foldAttribute' in p)
-    list_of_rdim = np.array(range(args.rdim))+1
+    # list_of_rdim = np.array(range(args.rdim))+1
+    # list_of_rdim = [10]
     # list_of_rdim = np.array(range(args.rdim))+1
     # list_of_rdim = np.array(range(args.rdim))+1
-    for rdim in list_of_rdim:
-        tcca_path = os.path.join(data_path, 'tcca{}/'.format(rdim))
-        if not os.path.exists(tcca_path):
-            os.mkdir(tcca_path)
-        os.system('cp {} {}'.format(os.path.join(data_path, 'classifiers.txt'),tcca_path))
-        os.system('cp {} {}'.format(os.path.join(data_path, 'weka.properties'),tcca_path))
+    # for rdim in list_of_rdim:
 
-        for fold in fold_values:
-            train_base_preds = []
-            test_base_preds = []
-            train_labels = []
-            test_labels = []
-            train_id, test_id = None, None
-            for view_path in feature_folders:
-                train_df, train_labels, test_df, test_labels = common.read_fold(view_path, fold)
-                train_df = common.unbag(train_df, args.aggregate)
+    tcca_path = os.path.join(data_path, 'tcca_{}/'.format(10))
+    tcca_pca_path = os.path.join(data_path, 'tcca_{}_with_pca_feat/'.format(10))
+    pca_EI_path = os.path.join(data_path, 'pca_only_EI/')
+    base_pca_EI_path = os.path.join(data_path, 'base_cat_pca_EI/')
+    mkdir_as_method(tcca_path)
+    mkdir_as_method(tcca_pca_path)
+    mkdir_as_method(pca_EI_path)
+    mkdir_as_method(base_pca_EI_path)
 
-                test_df = common.unbag(test_df, args.aggregate)
-                train_base_preds.append(train_df.values)
-                test_base_preds.append(test_df.values)
-                train_id = train_df.index
-                test_id = test_df.index
+    EI_tcca_v0(tcca_path, fold_values)
+    EI_tcca_v1(tcca_pca_path, fold_values)
 
-            if args.clf_as_view:
-                train_base_preds = np.swapaxes(np.array(train_base_preds), 0, -1)
-                test_base_preds = np.swapaxes(np.array(test_base_preds), 0, -1)
-            #     H_train, Z_train = project(train_base_preds, rDim=rdim)
-            # else:
-                H_train, Z_train = project(train_base_preds, rDim=rdim)
-            Z_test = []
-            feat_col_name = []
 
-            for view_path in feature_folders:
-                for r in range(rdim):
-                    if args.clf_as_view:
-                        feat_col_name.append('{}.tcca{}.0'.format(view_path.split('/')[-1], r))
 
-            for v in range(len(H_train)):
-                Z_test.append(np.matmul(test_base_preds[v], H_train[v]))
 
-            project_train_array = np.hstack(Z_train)
-            project_test_array = np.hstack(Z_test)
-            Z_test = np.array(Z_test)
-            print('rDim = {}, number of complex: {} out of {}'.format(rdim, np.sum(np.iscomplex(project_train_array)),
-                                                                      project_train_array.size))
-            train_fn = '%s/validation-%s.csv.gz' % (tcca_path, fold)
-            test_fn = '%s/predictions-%s.csv.gz' % (tcca_path, fold)
 
-            projected_train_df = pd.DataFrame(data=project_train_array,
-                                              columns=feat_col_name,
-                                              index=train_id)
-
-            projected_test_df = pd.DataFrame(data=project_test_array,
-                                              columns=feat_col_name,
-                                              index=test_id)
-
-            projected_train_df.to_csv(train_fn, compression='gzip')
-            projected_test_df.to_csv(test_fn, compression='gzip')
 
 
 
