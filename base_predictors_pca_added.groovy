@@ -199,7 +199,8 @@ writer.write(header)
 writer.write("id,label,prediction,fold,bag,classifier\n")
 for (instance in test) {
 // String or int?
-    int id = instance.value(test.attribute(idAttribute))
+//     int id = instance.value(test.attribute(idAttribute))
+    id = String.valueOf(test.attribute(idAttribute))
     double prediction
     if (!regression) {
         label = (instance.stringValue(instance.classAttribute()).equals(predictClassValue)) ? 1 : 0
@@ -279,7 +280,8 @@ for (currentNestedFold in 0..nestedFoldCount - 1) {
     writer.write(header)
     writer.write("id,label,prediction,fold,nested_fold,bag,classifier\n")
     for (instance in nestedTest) {
-        int id = instance.value(nestedTest.attribute(idAttribute))
+//         int id = instance.value(nestedTest.attribute(idAttribute))
+        id = String.valueOf(nestedTest.attribute(idAttribute))
         double prediction
         if (!regression) {
             label = (instance.stringValue(instance.classAttribute()).equals(predictClassValue)) ? 1 : 0
