@@ -420,7 +420,7 @@ data_path = abspath(args.path)
 
 feature_folders = common.data_dir_list(data_path)
 if len(feature_folders) == 0:
-    feature_folders.append('./')
+    feature_folders = common.data_dir_list(os.path.join(data_path, '../'))
 assert len(feature_folders) > 0
 ### get weka properties from weka.properties
 p = load_properties(data_path)
