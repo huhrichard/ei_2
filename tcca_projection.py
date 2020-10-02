@@ -174,7 +174,7 @@ def EI_tcca_v1(dest_path, f_list, rdim=10):
         train_id, test_id = None, None
         for view_path in feature_folders:
             pca_df_name = os.path.join(view_path, 'data_pca_{}.arff'.format(fold))
-            pca_df = read_pca_arff(pca_df_name)
+            pca_df = read_pca_arff(pca_df_name, view_path)
 
 
             train_df, train_labels, test_df, test_labels = common.read_fold(view_path, fold)
@@ -249,7 +249,7 @@ def EI_base_cat_pca(dest_path, f_list):
         feat_col_name = []
         for view_path in feature_folders:
             pca_df_name = os.path.join(view_path, 'data_pca_{}.arff'.format(fold))
-            pca_df = read_pca_arff(pca_df_name)
+            pca_df = read_pca_arff(pca_df_name, view_path)
 
             train_df, train_labels, test_df, test_labels = common.read_fold(view_path, fold)
             train_df = common.unbag(train_df, args.aggregate)
