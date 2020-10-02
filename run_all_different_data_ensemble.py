@@ -49,7 +49,7 @@ def write_submit_del_job(scratch_path, python_cmd):
     first_sub = scratch_path
     # first_sub
 
-    lsf_fn = first_sub +  + '.lsf'
+    lsf_fn = first_sub + '.lsf'
     # print('submitting EI ensemble job to hpc...')
     ####### Write the lsf fileqn1
     script = open(lsf_fn, 'w')
