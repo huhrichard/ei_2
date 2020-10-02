@@ -75,7 +75,7 @@ def read_pca_arff(df_fn, v_path):
     pca_df.loc[:,'label'] = pca_df['label'].replace({'pos': '1', 'neg':
                                                      '0'}).astype(int)
     pca_df.drop(columns=[p['foldAttribute']], inplace=True)
-    pca_df.set_index(['id', 'label'])
+    pca_df.set_index(['id', 'label'], inplace=True)
     print(pca_df)
     v = v_path.split('/')[-1]
     pca_df = pca_df.add_prefix(v+'.')
