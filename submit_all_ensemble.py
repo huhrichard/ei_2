@@ -6,7 +6,7 @@ script = open(lsf_fn, 'w')
 script.write('#!/bin/bash\n#BSUB -J train_all_base\n#BSUB -P acc_pandeg01a\n#BSUB -q premium\n#BSUB -n 4\n#BSUB -W 10:00\n#BSUB -o ensemble_all.stdout\n#BSUB -eo ensemble_all.stderr\n#BSUB -R rusage[mem=10000]\n')
 script.write('module purge\nmodule load java\nmodule load python\nmodule load groovy\nmodule load selfsched\n')
 
-python_cmd = 'python run_all_different_data_ensemble.py {}'.format(ontology)
+python_cmd = 'python run_all_different_data_ensemble.py --path {}'.format(ontology)
 script.write(python_cmd)
 script.close()
 os.system('bsub < {}'.format(lsf_fn))
