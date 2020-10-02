@@ -70,12 +70,13 @@ import tensor_cca
 
 def read_pca_arff(df_fn, v_path):
     pca_df = common.read_arff_to_pandas_df(df_fn)
-    print(pca_df)
+    # print(pca_df)
     pca_df.rename(columns={p['idAttribute']: 'id', p['classAttribute']: 'label'}, inplace=True)
     pca_df.loc[:,'label'] = pca_df['label'].replace({'pos': '1', 'neg':
                                                      '0'}).astype(int)
     pca_df.drop(columns=[p['foldAttribute']], inplace=True)
     pca_df.set_index(['id', 'label'])
+    print(pca_df)
     v = v_path.split('/')[-1]
     pca_df = pca_df.add_prefix(v+'.')
     return pca_df
