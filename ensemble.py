@@ -349,7 +349,7 @@ def main(path, f_list, agg=1):
         print('[%s] Start building model ################################' % (stacker_name))
 
 
-        if (not 'foldAttribute' in p):
+        if (not testing_bool):
             stacking_output = []
             for fold in f_list:
                 stack = stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df)

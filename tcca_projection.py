@@ -133,8 +133,7 @@ def EI_tcca_v0(dest_path, f_list, rdim=10):
 
         for view_path in feature_folders:
             for r in range(rdim):
-                if args.clf_as_view:
-                    feat_col_name.append('{}.tcca{}.0'.format(view_path.split('/')[-1], r))
+                feat_col_name.append('{}.tcca{}.0'.format(view_path.split('/')[-1], r))
 
         for v in range(len(H_train)):
             Z_test.append(np.matmul(test_base_preds[v], H_train[v]))
