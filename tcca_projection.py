@@ -319,7 +319,7 @@ if __name__ == "__main__":
         fold_values = df[p['foldAttribute']].unique()
     else:
         fold_values = range(int(p['foldCount']))
-    pca_fold_values = ['pca_' + fv for fv in fold_values]
+    pca_fold_values = ['pca_{}'.format(fv) for fv in fold_values]
     testing_bool = ('67890' in fold_values and 'foldAttribute' in p)
     # list_of_rdim = np.array(range(args.rdim))+1
     # list_of_rdim = [10]

@@ -431,7 +431,7 @@ if 'foldAttribute' in p:
     # assert exists(input_fn)
     # headers = load_arff_headers(input_fn)
     # fold_values = headers[p['foldAttribute']]
-    df = common.read_arff_to_pandas_df(feature_folders[0] + '/data.arff')
+    df = common.read_arff_to_pandas_df(os.path.join(feature_folders[0],'data.arff'))
     fold_values = df[p['foldAttribute']].unique()
 else:
     fold_values = range(int(p['foldCount']))
