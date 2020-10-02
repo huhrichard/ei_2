@@ -68,6 +68,15 @@ from itertools import product
 
 import tensor_cca
 
+def read_pca_arff(df_fn, v_path):
+    pca_df = common.read_arff_to_pandas_df(df_fn)
+    pca_df.rename(columns={p['idAttribute']: 'id', p['classAttribute']: 'label'}, inplace=True)
+    pca_df.drop(columns=[p['foldAttribute']], inplace=True)
+    pca_df.set_index('id', 'label')
+    v = v_path.split('/')[-1]
+    pca_df = pca_df.add_prefix(v+'.')
+    return pca_df
+
 def mkdir_as_method(method_path):
     if not os.path.exists(method_path):
         os.mkdir(method_path)
@@ -166,10 +175,7 @@ def EI_tcca_v1(dest_path, f_list, rdim=10):
         train_id, test_id = None, None
         for view_path in feature_folders:
             pca_df_name = os.path.join(view_path, 'data_pca_{}.arff'.format(fold))
-            pca_df = common.read_arff_to_pandas_df(pca_df_name)
-            pca_df.rename(columns={p['idAttribute']: 'id'}, inplace=True)
-            pca_df.drop(columns=[p['foldAttribute']], inplace=True)
-            pca_df.set_index('id')
+            pca_df = read_pca_arff(pca_df_name)
 
 
             train_df, train_labels, test_df, test_labels = common.read_fold(view_path, fold)
@@ -200,6 +206,73 @@ def EI_tcca_v1(dest_path, f_list, rdim=10):
         tcca_project_test_array = np.hstack(Z_test)
         print('rDim = {}, number of complex: {} out of {}'.format(rdim, np.sum(np.iscomplex(tcca_project_train_array)),
                                                                   tcca_project_train_array.size))
+
+        train_fn = '%s/validation-%s.csv.gz' % (dest_path, fold)
+        test_fn = '%s/predictions-%s.csv.gz' % (dest_path, fold)
+
+        projected_train_df = pd.DataFrame(data=tcca_project_train_array,
+                                          columns=feat_col_name,
+                                          index=train_id)
+
+        projected_test_df = pd.DataFrame(data=tcca_project_test_array,
+                                         columns=feat_col_name,
+                                         index=test_id)
+
+        projected_train_df.to_csv(train_fn, compression='gzip')
+        projected_test_df.to_csv(test_fn, compression='gzip')
+
+def EI_pca_only(dest_path, f_list):
+    """
+    Move base score from pca to 'dest_path'
+    :param dest_path:
+    :param f_list:
+    :param rdim:
+    :return:
+    """
+    for fold in f_list:
+        os.system('cp {} {}'.format(os.path.join(data_path, 'predictions-pca_{}.csv.gz'.format(fold)), dest_path))
+        os.system('cp {} {}'.format(os.path.join(data_path, 'validation-pca_{}.csv.gz'.format(fold)), dest_path))
+
+def EI_base_cat_pca(dest_path, f_list):
+    """
+    Perform TCCA with data concatenated base predicted score and PCA
+    :param dest_path:
+    :param f_list:
+    :param rdim:
+    :return:
+    """
+    for fold in f_list:
+        train_base_preds = []
+        test_base_preds = []
+        train_labels = []
+        test_labels = []
+        train_id, test_id = None, None
+        feat_col_name = []
+        for view_path in feature_folders:
+            pca_df_name = os.path.join(view_path, 'data_pca_{}.arff'.format(fold))
+            pca_df = read_pca_arff(pca_df_name)
+
+            train_df, train_labels, test_df, test_labels = common.read_fold(view_path, fold)
+            train_df = common.unbag(train_df, args.aggregate)
+
+            # feat_col_name = feat_col_name + train_df.columns
+            # feat_col_name = feat_col_name + ['{}.pca_projected_feat.{}'.format(view_path.split('/')[-1], i) for i in range(pca_df.shape[1])]
+            train_with_pca_df = pd.concat([train_df, pca_df], axis=1, join='inner')
+
+
+            test_df = common.unbag(test_df, args.aggregate)
+            test_with_pca_df = pd.concat([test_df, pca_df], axis=1, join='inner')
+
+            train_base_preds.append(train_with_pca_df)
+            test_base_preds.append(test_with_pca_df)
+            train_id = train_with_pca_df.index
+            test_id = test_with_pca_df.index
+
+
+
+
+        tcca_project_train_array = np.hstack(train_base_preds)
+        tcca_project_test_array = np.hstack(test_base_preds)
 
         train_fn = '%s/validation-%s.csv.gz' % (dest_path, fold)
         test_fn = '%s/predictions-%s.csv.gz' % (dest_path, fold)
@@ -265,7 +338,8 @@ if __name__ == "__main__":
 
     EI_tcca_v0(tcca_path, fold_values)
     EI_tcca_v1(tcca_pca_path, fold_values)
-
+    EI_pca_only(pca_EI_path, fold_values)
+    EI_base_cat_pca(base_pca_EI_path, fold_values)
 
 
 

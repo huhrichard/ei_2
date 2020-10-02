@@ -3,6 +3,7 @@ import pandas as pd
 import argparse
 from time import time
 from os import mkdir
+import os
 from os.path import abspath, exists
 from sys import argv
 from numpy import array, column_stack, append
@@ -301,7 +302,7 @@ def plot_scatter(df, path, x_col, y_col, hue_col, fn, title):
     fig.savefig(path+'/'+fn, bbox_inches="tight")
 
 
-def main(path, fold_count=5, agg=1):
+def main(path, f_list, agg=1):
     #
     dn = abspath(path).split('/')[-1]
     # cols = ['data_name', 'fmax', 'method']
@@ -350,7 +351,7 @@ def main(path, fold_count=5, agg=1):
 
         if (not 'foldAttribute' in p):
             stacking_output = []
-            for fold in fold_values:
+            for fold in f_list:
                 stack = stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df)
                 stacked_df = stack.pop('stacked_df')
                 stacking_output.append(stack)
@@ -409,13 +410,15 @@ parser.add_argument('--fold', '-F', type=int, default=5, help='cross-validation 
 parser.add_argument('--aggregate', '-A', type=int, default=1, help='if aggregate is needed, feed bagcount, else 1')
 args = parser.parse_args()
 data_path = abspath(args.path)
-fns = listdir(data_path)
-excluding_folder = ['analysis']
-fns = [fn for fn in fns if not fn in excluding_folder]
-fns = [fn for fn in fns if not 'tcca' in fn]
+# fns = listdir(data_path)
+# excluding_folder = ['analysis']
+# fns = [fn for fn in fns if not fn in excluding_folder]
+# fns = [fn for fn in fns if not 'tcca' in fn]
 # fns = [fn for fn in fns if fn != 'analysis']
-fns = [data_path + '/' + fn for fn in fns]
-feature_folders = [fn for fn in fns if isdir(fn)]
+# fns = [data_path + '/' + fn for fn in fns]
+# feature_folders = [fn for fn in fns if isdir(fn)]
+
+feature_folders = common.data_dir_list(data_path)
 if len(feature_folders) == 0:
     feature_folders.append('./')
 assert len(feature_folders) > 0
@@ -428,8 +431,11 @@ if 'foldAttribute' in p:
     # assert exists(input_fn)
     # headers = load_arff_headers(input_fn)
     # fold_values = headers[p['foldAttribute']]
-    fold_values = ['67890']
+    df = common.read_arff_to_pandas_df(feature_folders[0] + '/data.arff')
+    fold_values = df[p['foldAttribute']].unique()
 else:
     fold_values = range(int(p['foldCount']))
+pca_fold_values = ['pca_' + fv for fv in fold_values]
 testing_bool = ('67890' in fold_values and 'foldAttribute' in p)
-main(args.path, args.fold, args.aggregate)
+main(args.path, fold_values, args.aggregate)
+# main(os.path.join(args.path, 'pca_EI'), pca_fold_values, args.aggregate)
