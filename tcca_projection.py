@@ -183,8 +183,11 @@ def EI_tcca_v1(dest_path, f_list, rdim=10):
 
             train_df, train_labels, test_df, test_labels = common.read_fold(view_path, fold)
             train_df = common.unbag(train_df, args.aggregate)
+            v = view_path.split('/')[-1]
+            train_df = train_df.add_prefix(v + '.')
             train_with_pca_df = pd.concat([train_df, pca_df], axis=1, join='inner')
             test_df = common.unbag(test_df, args.aggregate)
+            test_df = test_df.add_prefix(v + '.')
             test_with_pca_df = pd.concat([test_df, pca_df], axis=1, join='inner')
             # print(test_df)
 
@@ -192,6 +195,8 @@ def EI_tcca_v1(dest_path, f_list, rdim=10):
             test_base_preds.append(test_with_pca_df.values)
             train_id = train_with_pca_df.index
             test_id = test_with_pca_df.index
+
+            feat_col_name = feat_col_name + train_df.columns.tolist()
 
         H_train, Z_train = project(train_base_preds, rDim=rdim)
         Z_test = []
@@ -257,19 +262,22 @@ def EI_base_cat_pca(dest_path, f_list):
 
             train_df, train_labels, test_df, test_labels = common.read_fold(view_path, fold)
             train_df = common.unbag(train_df, args.aggregate)
-
+            v = view_path.split('/')[-1]
+            train_df = train_df.add_prefix(v+'.')
             # feat_col_name = feat_col_name + train_df.columns
             # feat_col_name = feat_col_name + ['{}.pca_projected_feat.{}'.format(view_path.split('/')[-1], i) for i in range(pca_df.shape[1])]
             train_with_pca_df = pd.concat([train_df, pca_df], axis=1, join='inner')
 
-
+            print(train_with_pca_df)
             test_df = common.unbag(test_df, args.aggregate)
+            test_df = test_df.add_prefix(v + '.')
             test_with_pca_df = pd.concat([test_df, pca_df], axis=1, join='inner')
 
             train_base_preds.append(train_with_pca_df)
             test_base_preds.append(test_with_pca_df)
             train_id = train_with_pca_df.index
             test_id = test_with_pca_df.index
+            feat_col_name = feat_col_name + train_df.columns.tolist()
 
 
 
