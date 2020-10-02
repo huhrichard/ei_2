@@ -175,12 +175,13 @@ def EI_tcca_v1(dest_path, f_list, rdim=10):
         for view_path in feature_folders:
             pca_df_name = os.path.join(view_path, 'data_pca_{}.arff'.format(fold))
             pca_df = read_pca_arff(pca_df_name, view_path)
+            print(pca_df)
+            print(test_df)
 
 
             train_df, train_labels, test_df, test_labels = common.read_fold(view_path, fold)
             train_df = common.unbag(train_df, args.aggregate)
             train_with_pca_df = pd.concat([train_df, pca_df], axis=1, join='inner')
-            print(train_with_pca_df)
             test_df = common.unbag(test_df, args.aggregate)
             test_with_pca_df = pd.concat([test_df, pca_df], axis=1, join='inner')
 
