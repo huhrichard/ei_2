@@ -435,7 +435,7 @@ if 'foldAttribute' in p:
     fold_values = df[p['foldAttribute']].unique()
 else:
     fold_values = range(int(p['foldCount']))
-pca_fold_values = ['pca_' + fv for fv in fold_values]
+pca_fold_values = ['pca_{}'.format(fv) for fv in fold_values]
 testing_bool = ('67890' in fold_values and 'foldAttribute' in p)
 main(args.path, fold_values, args.aggregate)
 # main(os.path.join(args.path, 'pca_EI'), pca_fold_values, args.aggregate)
