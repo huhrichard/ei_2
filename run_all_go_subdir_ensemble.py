@@ -43,7 +43,7 @@ def find_dir(pattern, path):
 
     return result
 
-def write_submit_del_job(ensemble_dir):
+def write_submit_del_job(ensemble_dir, python_cmd_list):
     second_sub = ensemble_dir.split('/')[-1]
     first_sub = ensemble_dir.split('/')[-2]
 
@@ -64,7 +64,7 @@ def write_submit_del_job(ensemble_dir):
         'module load java\nmodule load groovy\nmodule load selfsched\nmodule load weka\n')
     script.write('export _JAVA_OPTIONS=\"-XX:ParallelGCThreads=10\"\nexport JAVA_OPTS=\"-Xmx10g\"\n')
     # script.write('mpirun selfsched < %s.jobs\n' % second_sub)
-    python_cmd = 'python ensemble.py --path {}\n'.format(ensemble_dir)
+    python_cmd = "\n".join(python_cmd_list)
     print(python_cmd)
     script.write(python_cmd)
     # script.write('rm %s.jobs' % second_sub)
@@ -82,22 +82,21 @@ if __name__ == "__main__":
 
         data = go_dir.split('/')[-1]
         data_dir = go_dir.split('/')[-2]
+        python_cmd_list = []
         if data_dir.split('_')[-1] == 'EI':
             # p = subprocess.Popen('python tcca_projection.py --path {}'.format(go_dir))
             # p.wait()
-            os.system('python tcca_projection.py --path {}'.format(go_dir))
+            python_cmd_list.append('python tcca_projection.py --path {}'.format(go_dir))
             fns = listdir(go_dir)
             fns = [fn for fn in fns if not fn in excluding_folder]
-            fns = [go_dir + '/' + fn for fn in fns]
+            fns = [os.path.join(go_dir, fn) for fn in fns]
             feature_folders = [fn for fn in fns if isdir(fn)]
             for f_dir in feature_folders:
-                if f_dir[-1] == '/':
-                    edited_f_dir = f_dir[:-1]
-                else:
-                    edited_f_dir = f_dir
-                write_submit_del_job(f_dir)
+                python_cmd_list.append('python ensemble.py --path {}\n'.format(f_dir))
 
-        write_submit_del_job(go_dir)
+        python_cmd_list.append('python ensemble.py --path {}\n'.format(go_dir))
+
+        write_submit_del_job(go_dir, python_cmd_list=python_cmd_list)
 
 
 
