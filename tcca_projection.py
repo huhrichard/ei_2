@@ -327,16 +327,16 @@ if __name__ == "__main__":
     # for rdim in list_of_rdim:
 
     tcca_path = os.path.join(data_path, 'tcca_{}/'.format(10))
-    tcca_pca_path = os.path.join(data_path, 'tcca_{}_with_pca_feat/'.format(10))
+    # tcca_pca_path = os.path.join(data_path, 'tcca_{}_with_pca_feat/'.format(10))
     pca_EI_path = os.path.join(data_path, 'pca_only_EI/')
     base_pca_EI_path = os.path.join(data_path, 'base_cat_pca_EI/')
     mkdir_as_method(tcca_path)
-    mkdir_as_method(tcca_pca_path)
+    # mkdir_as_method(tcca_pca_path)
     mkdir_as_method(pca_EI_path)
     mkdir_as_method(base_pca_EI_path)
 
     EI_tcca_v0(tcca_path, fold_values)
-    EI_tcca_v1(tcca_pca_path, fold_values)
+    # EI_tcca_v1(tcca_pca_path, fold_values)
     EI_pca_only(pca_EI_path, fold_values)
     EI_base_cat_pca(base_pca_EI_path, fold_values)
 
