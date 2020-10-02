@@ -257,7 +257,7 @@ def EI_base_cat_pca(dest_path, f_list):
             # feat_col_name = feat_col_name + train_df.columns
             # feat_col_name = feat_col_name + ['{}.pca_projected_feat.{}'.format(view_path.split('/')[-1], i) for i in range(pca_df.shape[1])]
             train_with_pca_df = pd.concat([train_df, pca_df], axis=1, join='inner')
-            print(train_with_pca_df)
+            # print(train_with_pca_df)
 
             test_df = common.unbag(test_df, args.aggregate)
             test_with_pca_df = pd.concat([test_df, pca_df], axis=1, join='inner')
