@@ -16,7 +16,7 @@ def str2bool(v):
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
 parser = argparse.ArgumentParser(description='Feed some bsub parameters')
-# parser.add_argument('--path', '-P', type=str, required=True, help='data path')
+parser.add_argument('--path', '-P', type=str, required=True, help='data path')
 parser.add_argument('--queue', '-Q', type=str, default='premium', help='LSF queue to submit the job')
 parser.add_argument('--node', '-N', type=str, default='2', help='number of node requested')
 parser.add_argument('--time', '-T', type=str, default='10:00', help='number of hours requested')
@@ -74,7 +74,7 @@ def write_submit_del_job(scratch_path, python_cmd):
 
 
 if __name__ == "__main__":
-    ontology = sys.argv[-1]
+    ontology = args.path
     dir_list = find_dir('EIdata_*{}*.jobs'.format(ontology), './jobs/')
 
     scratch_path = '/sc/arion/scratch/liy42/'
