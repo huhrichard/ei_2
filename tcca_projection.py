@@ -72,8 +72,10 @@ def read_pca_arff(df_fn, v_path):
     pca_df = common.read_arff_to_pandas_df(df_fn)
     print(pca_df)
     pca_df.rename(columns={p['idAttribute']: 'id', p['classAttribute']: 'label'}, inplace=True)
+    pca_df.loc[:,'label'] = pca_df['label'].replace({'pos': '1', 'neg':
+                                                     '0'}).astype(int)
     pca_df.drop(columns=[p['foldAttribute']], inplace=True)
-    pca_df.set_index('id', 'label')
+    pca_df.set_index(['id', 'label'])
     v = v_path.split('/')[-1]
     pca_df = pca_df.add_prefix(v+'.')
     return pca_df
@@ -177,8 +179,6 @@ def EI_tcca_v1(dest_path, f_list, rdim=10):
             pca_df_name = os.path.join(view_path, 'data_pca_{}.arff'.format(fold))
             pca_df = read_pca_arff(pca_df_name, view_path)
             print(pca_df)
-
-
 
             train_df, train_labels, test_df, test_labels = common.read_fold(view_path, fold)
             train_df = common.unbag(train_df, args.aggregate)
