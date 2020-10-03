@@ -238,8 +238,10 @@ def EI_pca_only(dest_path, f_list):
     :return:
     """
     for fold in f_list:
-        os.system('cp {} {}'.format(os.path.join(data_path, 'predictions-pca_{}.csv.gz'.format(fold)), dest_path))
-        os.system('cp {} {}'.format(os.path.join(data_path, 'validation-pca_{}.csv.gz'.format(fold)), dest_path))
+        os.system('cp {} {}'.format(os.path.join(data_path, 'predictions-pca_{}.csv.gz'.format(fold)),
+                                    os.path.join(dest_path, 'predictions-{}.csv.gz'.format(fold))))
+        os.system('cp {} {}'.format(os.path.join(data_path, 'validation-pca_{}.csv.gz'.format(fold)),
+                                    os.path.join(dest_path, 'validation-{}.csv.gz'.format(fold))))
 
 def EI_base_cat_pca(dest_path, f_list):
     """
