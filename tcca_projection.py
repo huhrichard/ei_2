@@ -196,7 +196,7 @@ def EI_tcca_v1(dest_path, f_list, rdim=10):
             train_id = train_with_pca_df.index
             test_id = test_with_pca_df.index
 
-            feat_col_name = feat_col_name + train_df.columns.tolist()
+            feat_col_name = feat_col_name + train_with_pca_df.columns.tolist()
 
         H_train, Z_train = project(train_base_preds, rDim=rdim)
         Z_test = []
@@ -277,7 +277,7 @@ def EI_base_cat_pca(dest_path, f_list):
             test_base_preds.append(test_with_pca_df)
             train_id = train_with_pca_df.index
             test_id = test_with_pca_df.index
-            feat_col_name = feat_col_name + train_df.columns.tolist()
+            feat_col_name = feat_col_name + train_with_pca_df.columns.tolist()
 
 
 
