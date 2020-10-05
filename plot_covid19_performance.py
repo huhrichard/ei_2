@@ -104,13 +104,13 @@ print(dict_of_method)
 
 def custom_boxplot(boxplot_y_metric, boxplot_ylabel, metric_median_list, dict_suffix, cp,
                    performance_cat_df, exp_name, outcome, fig_fn_suffix):
-    # sorted_tuple = sorted(zip(metric_median_list, dict_suffix, cp), reverse=True, key=lambda x: x[0])
-    # sorted_algo_names = [s[1] for s in sorted_tuple]
-    # sorted_cp = [s[2] for s in sorted_tuple]
-
-    sorted_tuple = list(zip(metric_median_list, dict_suffix, cp))
+    sorted_tuple = sorted(zip(metric_median_list, dict_suffix, cp), reverse=True, key=lambda x: x[0])
     sorted_algo_names = [s[1] for s in sorted_tuple]
     sorted_cp = [s[2] for s in sorted_tuple]
+
+    # sorted_tuple = list(zip(metric_median_list, dict_suffix, cp))
+    # sorted_algo_names = [s[1] for s in sorted_tuple]
+    # sorted_cp = [s[2] for s in sorted_tuple]
     print(sorted_tuple)
 
     sep_space = 1.5
