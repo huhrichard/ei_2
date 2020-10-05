@@ -26,8 +26,8 @@ import seaborn as sns
 
 # outcome_list = ['DECEASED_INDICATOR']
 # outcome_list = ['HP0012638', 'HP0000707']
-# outcome_list = ['HP0007675', 'HP0002110']
-outcome_list = ['HP0009815', 'HP0009127']
+outcome_list = ['HP0007675', 'HP0002110']
+# outcome_list = ['HP0009815', 'HP0009127']
 
 calling_script = str(sys.argv[-1])
 plot_dir = './plot/oct_test/'
@@ -260,8 +260,8 @@ list_of_method_dict = {'weka_impute':[
                        }
 # base_path_27may = ('before_27May','/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR/')
 # base_path_27may = ('hpo_test','/sc/arion/scratch/liy42/EIdata_top2_hpo_EI/')
-# base_path_27may = ('hpo_test','/sc/arion/scratch/liy42/EIdata_2only_50_100_hpo_EI/')
-base_path_27may = ('hpo_test','/sc/arion/scratch/liy42/EIdata_2only_200_500_hpo_EI/')
+base_path_27may = ('hpo_test','/sc/arion/scratch/liy42/EIdata_2only_50_100_hpo_EI/')
+# base_path_27may = ('hpo_test','/sc/arion/scratch/liy42/EIdata_2only_200_500_hpo_EI/')
 # base_path_1Jun = ('27MayToJun1','/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR_test/')
 
 for k, v in list_of_method_dict.items():
