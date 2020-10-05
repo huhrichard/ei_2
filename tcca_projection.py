@@ -100,7 +100,7 @@ def str2bool(v):
 def project(X, rDim=3):
     var_mats, cov_t = tensor_cca.var_cov_ten_calculation(X)
     H, Z = tensor_cca.tcca(X, var_mats=var_mats, cov_ten=cov_t, rDim=rDim)
-    return H, Z
+    return H.real, Z.real
 
 def EI_tcca_v0(dest_path, f_list, rdim=10):
     """
@@ -201,6 +201,8 @@ def EI_tcca_v1(dest_path, f_list, rdim=10):
         H_train, Z_train = project(train_base_preds, rDim=rdim)
         Z_test = []
         feat_col_name = []
+
+
 
         for view_path in feature_folders:
             for r in range(rdim):
