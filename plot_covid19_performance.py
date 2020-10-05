@@ -30,7 +30,7 @@ import seaborn as sns
 outcome_list = ['HP0009815', 'HP0009127']
 
 calling_script = str(sys.argv[-1])
-plot_dir = './plot/tcca_test/'
+plot_dir = './plot/oct_test/'
 
 base_command = 'python {} --path {}'
 
