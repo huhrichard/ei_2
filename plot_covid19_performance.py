@@ -66,11 +66,16 @@ dict_of_method = {
                   }
 
 rdim = np.array(range(10))+1
-tcca_list = []
-for r in rdim:
-    k = 'tcca{}'.format(r)
-    tcca_list.append(k)
-    dict_of_method['tcca{}'.format(r)] = 'EI_TCCA\n({})'.format(r)
+# tcca_list = []
+# for r in rdim:
+#     k = 'tcca{}'.format(r)
+#     tcca_list.append(k)
+#     dict_of_method['tcca{}'.format(r)] = 'EI_TCCA\n({})'.format(r)
+
+tcca_list = ['base_cat_pca_EI', 'tcca_10', 'pca_only_EI']
+# dict_list = tcca_list
+for v in tcca_list:
+    dict_of_method[v] = v
 
 lm = []
 def powerset(iterable):
