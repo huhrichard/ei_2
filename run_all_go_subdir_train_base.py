@@ -76,6 +76,7 @@ if __name__ == "__main__":
     jobs_n = '{}.jobs'.format(jobs_prefix)
     jobs_txt = open(jobs_n, 'w')
     jobs_list = []
+    system('module load groovy')
     for go_dir in dir_list:
 
         python_cmd_train = 'python train_base.py --path {}'.format(go_dir)
