@@ -28,9 +28,9 @@ def find_dir(pattern, path):
 
 parser = argparse.ArgumentParser(description='Feed some bsub parameters')
 parser.add_argument('--path', '-P', type=str, required=True, help='data path')
-parser.add_argument('--queue', '-Q', type=str, default='premium', help='LSF queue to submit the job')
-parser.add_argument('--node', '-N', type=str, default='4', help='number of node requested')
-parser.add_argument('--time', '-T', type=str, default='20:00', help='number of hours requested')
+parser.add_argument('--queue', '-Q', type=str, default='express', help='LSF queue to submit the job')
+parser.add_argument('--node', '-N', type=str, default='1', help='number of node requested')
+parser.add_argument('--time', '-T', type=str, default='12:00', help='number of hours requested')
 parser.add_argument('--memory', '-M', type=str,default='12000', help='memory requsted in MB')
 parser.add_argument('--classpath', '-CP', type=str,default='./weka.jar', help='path to weka.jar')
 parser.add_argument('--hpc', '-MIN', type=str2bool,default='true', help='use hpc cluster or not')
@@ -66,7 +66,7 @@ def write_submit_del_job(scratch_path, python_cmd):
     script.close()
     ####### Submit the lsf job and remove lsf script
     system('bsub < %s' % lsf_fn)
-    # remove(lsf_fn)
+    remove(lsf_fn)
 
 
 if __name__ == "__main__":
@@ -74,8 +74,8 @@ if __name__ == "__main__":
     dir_list = find_dir('{}*'.format(args.term_prefix), args.path)
     # dir_list = find_dir('GO0071704', sys.argv[-1])
     jobs_prefix = args.path.split('/')[-1]
-    jobs_n = '{}.jobs'.format(jobs_prefix)
-    jobs_txt = open(jobs_n, 'w')
+    # jobs_n = '{}.jobs'.format(jobs_prefix)
+    # jobs_txt = open(jobs_n, 'w')
     jobs_list = []
     system('module load groovy')
     for go_dir in dir_list:

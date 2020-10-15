@@ -54,7 +54,7 @@ def merged_base_innerCV_by_outerfold(f_list, path):
 
 def combine_individual(path):
     merged_base_innerCV_by_outerfold(fold_values, path)
-    merged_base_innerCV_by_outerfold(pca_fold_values, path)
+    # merged_base_innerCV_by_outerfold(pca_fold_values, path)
 
 
 
@@ -80,6 +80,8 @@ if 'foldAttribute' in p:
 
 else:
     fold_values = range(int(p['foldCount']))
+
+
 
 pca_fold_values = ['pca_{}'.format(fv) for fv in fold_values]
 
