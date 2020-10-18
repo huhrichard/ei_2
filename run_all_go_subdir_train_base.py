@@ -77,7 +77,7 @@ if __name__ == "__main__":
     jobs_prefix = args.path.split('/')[-1]
     jobs_n = '{}.jobs'.format(jobs_prefix)
     jobs_txt = open(jobs_n, 'w')
-    jobs_list = []
+    jobs_list = ['module load groovy']
     system('module load groovy')
     for go_dir in dir_list:
 
