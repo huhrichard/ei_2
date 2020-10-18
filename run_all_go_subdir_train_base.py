@@ -29,7 +29,7 @@ def find_dir(pattern, path):
 parser = argparse.ArgumentParser(description='Feed some bsub parameters')
 parser.add_argument('--path', '-P', type=str, required=True, help='data path')
 parser.add_argument('--queue', '-Q', type=str, default='express', help='LSF queue to submit the job')
-parser.add_argument('--node', '-N', type=str, default='1', help='number of node requested')
+parser.add_argument('--node', '-N', type=str, default='64', help='number of node requested')
 parser.add_argument('--time', '-T', type=str, default='12:00', help='number of hours requested')
 parser.add_argument('--memory', '-M', type=str,default='12000', help='memory requsted in MB')
 parser.add_argument('--classpath', '-CP', type=str,default='./weka.jar', help='path to weka.jar')
@@ -39,13 +39,13 @@ parser.add_argument('--term_prefix', type=str, default='GO', help='term_prefix')
 parser.add_argument('--seed', '-S', type=str,default='1', help='the seed use to generate cross-validataion data')
 args = parser.parse_args()
 
-def write_submit_del_job(scratch_path, python_cmd):
-    second_sub = scratch_path.split('/')[-1]
-    first_sub = scratch_path.split('/')[-2]
+def write_submit_del_job(scratch_path, jobs_fn):
+    # second_sub = scratch_path.split('/')[-1]
+    first_sub = scratch_path.split('/')[-1]
     # first_sub
 
     # lsf_fn = first_sub + '.lsf'
-    lsf_fn = '{}_{}.lsf'.format(first_sub, second_sub)
+    lsf_fn = '{}_{}.lsf'.format(first_sub)
     # print('submitting EI ensemble job to hpc...')
     ####### Write the lsf fileqn1
     script = open(lsf_fn, 'w')
@@ -60,8 +60,8 @@ def write_submit_del_job(scratch_path, python_cmd):
         #     # 'module load py_packages\n'
         'module load java\nmodule load groovy\nmodule load selfsched\nmodule load weka\n')
     script.write('export _JAVA_OPTIONS=\"-XX:ParallelGCThreads=10\"\nexport JAVA_OPTS=\"-Xmx10g\"\n')
-    # script.write('mpirun -np {} selfsched < {}'.format(args.node, jobs_fn))
-    script.write(python_cmd)
+    script.write('mpirun -np {} selfsched < {}'.format(args.node, jobs_fn))
+    # script.write(python_cmd)
     # script.write('rm %s.jobs' % second_sub)
     script.close()
     ####### Submit the lsf job and remove lsf script
@@ -74,17 +74,19 @@ if __name__ == "__main__":
     dir_list = find_dir('{}*'.format(args.term_prefix), args.path)
     # dir_list = find_dir('GO0071704', sys.argv[-1])
     jobs_prefix = args.path.split('/')[-1]
-    # jobs_n = '{}.jobs'.format(jobs_prefix)
-    # jobs_txt = open(jobs_n, 'w')
+    jobs_n = '{}.jobs'.format(jobs_prefix)
+    jobs_txt = open(jobs_n, 'w')
     jobs_list = []
     system('module load groovy')
     for go_dir in dir_list:
 
-        python_cmd_train = 'python train_base.py --path {}'.format(go_dir)
-        write_submit_del_job(go_dir, python_cmd=python_cmd_train)
-        # jobs_list.append(python_cmd_train)
+        python_cmd_train = 'python train_base.py --path {} --hpc=False'.format(go_dir)
+        # write_submit_del_job(go_dir, python_cmd=python_cmd_train)
+        jobs_list.append(python_cmd_train)
         # print(python_cmd_train)
         # # system(python_cmd)
         # go_dir_splitted = go_dir.split('/')
-    # jobs_txt.write('\n'.join(jobs_list))
-    # jobs_txt.close()
+
+    jobs_txt.write('\n'.join(jobs_list))
+    jobs_txt.close()
+    write_submit_del_job(args.path, jobs_fn=jobs_n)
