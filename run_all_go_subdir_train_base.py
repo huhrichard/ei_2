@@ -45,7 +45,8 @@ def write_submit_del_job(scratch_path, jobs_fn):
     # first_sub
 
     # lsf_fn = first_sub + '.lsf'
-    lsf_fn = '{}_{}.lsf'.format(first_sub)
+    # lsf_fn = '{}.lsf'.format(first_sub)
+    lsf_fn = '{}.lsf'.format(first_sub)
     # print('submitting EI ensemble job to hpc...')
     ####### Write the lsf fileqn1
     script = open(lsf_fn, 'w')
