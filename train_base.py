@@ -33,7 +33,7 @@ def str2bool(v):
 ### parse arguments
 parser = argparse.ArgumentParser(description='Feed some bsub parameters')
 parser.add_argument('--path', '-P', type=str, required=True, help='data path')
-parser.add_argument('--queue', '-Q', type=str, default='express', help='LSF queue to submit the job')
+parser.add_argument('--queue', '-Q', type=str, default='premium', help='LSF queue to submit the job')
 parser.add_argument('--node', '-N', type=str, default='4', help='number of node requested')
 parser.add_argument('--time', '-T', type=str, default='12:00', help='number of hours requested')
 parser.add_argument('--memory', '-M', type=str, default='12000', help='memory requsted in MB')

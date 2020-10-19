@@ -28,7 +28,7 @@ def find_dir(pattern, path):
 
 parser = argparse.ArgumentParser(description='Feed some bsub parameters')
 parser.add_argument('--path', '-P', type=str, required=True, help='data path')
-parser.add_argument('--queue', '-Q', type=str, default='express', help='LSF queue to submit the job')
+parser.add_argument('--queue', '-Q', type=str, default='premium', help='LSF queue to submit the job')
 parser.add_argument('--node', '-N', type=str, default='64', help='number of node requested')
 parser.add_argument('--time', '-T', type=str, default='12:00', help='number of hours requested')
 parser.add_argument('--memory', '-M', type=str,default='12000', help='memory requsted in MB')
@@ -61,7 +61,7 @@ def write_submit_del_job(scratch_path, jobs_fn):
         #     # 'module load py_packages\n'
         'module load java\nmodule load groovy\nmodule load selfsched\nmodule load weka\n')
     script.write('export _JAVA_OPTIONS=\"-XX:ParallelGCThreads=10\"\nexport JAVA_OPTS=\"-Xmx10g\"\n')
-    script.write('mpirun -np {} selfsched < {}'.format(args.node, jobs_fn))
+    script.write('mpirun selfsched < {}'.format(jobs_fn))
     # script.write(python_cmd)
     # script.write('rm %s.jobs' % second_sub)
     script.close()
