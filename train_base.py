@@ -212,8 +212,8 @@ if args.hpc:
 
 ### run it sequentially otherwise
 else:
-    system('sh %s.jobs' % data_name)
-    system('rm %s.jobs' % data_name)
+    system('sh %s' % jobs_fn)
+    system('rm %s' % jobs_fn)
 end = time()
 if not args.hpc:
     print('Elapsed time is: %s seconds' % (end - start))
