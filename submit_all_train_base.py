@@ -1,7 +1,7 @@
 import sys, os
 
 ontology = sys.argv[-1]
-queue_n = 'premium'
+queue_n = 'express'
 lsf_fn = 'train_all_base_{}.lsf'.format(ontology)
 script = open(lsf_fn, 'w')
 script.write('#!/bin/bash\n#BSUB -J train_all_base\n#BSUB -P acc_pandeg01a\n#BSUB -q {}\n'
