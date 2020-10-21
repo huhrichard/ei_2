@@ -33,7 +33,7 @@ fn.write('#BSUB -P acc_pandeg01a\n#BSUB -q premium\n#BSUB -n {}\n#BSUB -W 24:00\
 fn.write('#BSUB -o gen_{}.stdout\n'.format(data))
 fn.write('#BSUB -eo gen_{}.stderr\n'.format(data))
 fn.write('module purge\nmodule load java\nmodule load groovy\nmodule load selfsched\n')
-fn.write('mpirun selfsched < {} --mca routed radix'.format(jobs_file))
+fn.write('mpirun selfsched < {} --mca routed binomial'.format(jobs_file))
 # fn.write(job)
 
 fn.close()
