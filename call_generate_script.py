@@ -23,7 +23,7 @@ jobs_list = open(jobs_file, 'r').readlines()
 #     system('bsub < %s' % lsf_fn)
 #     system('rm %s' % lsf_fn)
 
-data = jobs_file.split('/')[-1].split('.')[0].split('_')[-1]
+data = jobs_file.split('/')[-1].split('.')[0]
 lsf_fn = 'run_{}_generate.lsf'.format(jobs_file.split('/')[-1].split('.')[0])
 nc = 32
 fn = open(lsf_fn, 'w')
