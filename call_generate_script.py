@@ -25,11 +25,11 @@ jobs_list = open(jobs_file, 'r').readlines()
 
 data = jobs_file.split('/')[-1].split('.')[0]
 lsf_fn = 'run_{}_generate.lsf'.format(jobs_file.split('/')[-1].split('.')[0])
-nc = 32
+nc = 64
 fn = open(lsf_fn, 'w')
 fn.write('#!/bin/bash\n')
 fn.write('#BSUB -J {}_{}\n'.format(data, 'generate'))
-fn.write('#BSUB -P acc_pandeg01a\n#BSUB -q premium\n#BSUB -n {}\n#BSUB -W 24:00\n'.format(nc))
+fn.write('#BSUB -P acc_pandeg01a\n#BSUB -q premium\n#BSUB -n {}\n#BSUB -W 48:00\n'.format(nc))
 fn.write('#BSUB -R rusage[mem={}]\n'.format(10000))
 fn.write('#BSUB -o gen_{}.stdout\n'.format(data))
 fn.write('#BSUB -eo gen_{}.stderr\n'.format(data))
