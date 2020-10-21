@@ -38,5 +38,5 @@ fn.write('mpirun selfsched < {}'.format(jobs_file))
 # fn.write(job)
 
 fn.close()
-system('bsub < %s' % lsf_fn)
-system('rm %s' % lsf_fn)
+# system('bsub < %s' % lsf_fn)
+# system('rm %s' % lsf_fn)
