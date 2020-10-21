@@ -2,7 +2,7 @@ from os import system
 import sys
 
 jobs_file = sys.argv[-1]
-jobs_list = open(jobs_file, 'r').readlines()
+# jobs_list = open(jobs_file, 'r').readlines()
 
 # for job in jobs_list:
 #     term = job.split(' ')[2]
@@ -25,7 +25,7 @@ jobs_list = open(jobs_file, 'r').readlines()
 
 data = jobs_file.split('/')[-1].split('.')[0]
 lsf_fn = 'run_{}_generate.lsf'.format(jobs_file.split('/')[-1].split('.')[0])
-nc = 64
+nc = 32
 fn = open(lsf_fn, 'w')
 fn.write('#!/bin/bash\n')
 fn.write('#BSUB -J {}_{}\n'.format(data, 'generate'))
