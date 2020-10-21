@@ -18,9 +18,9 @@ def str2bool(v):
 
 parser = argparse.ArgumentParser(description='Feed some bsub parameters')
 parser.add_argument('--path', '-P', type=str, required=True, help='data path')
-parser.add_argument('--queue', '-Q', type=str, default='express', help='LSF queue to submit the job')
-parser.add_argument('--node', '-N', type=str, default='2', help='number of node requested')
-parser.add_argument('--time', '-T', type=str, default='5:00', help='number of hours requested')
+parser.add_argument('--queue', '-Q', type=str, default='premium', help='LSF queue to submit the job')
+parser.add_argument('--node', '-N', type=str, default='32', help='number of node requested')
+parser.add_argument('--time', '-T', type=str, default='24:00', help='number of hours requested')
 parser.add_argument('--memory', '-M', type=str,default='10000', help='memory requsted in MB')
 parser.add_argument('--classpath', '-CP', type=str,default='./weka.jar', help='path to weka.jar')
 parser.add_argument('--hpc', '-MIN', type=str2bool,default='true', help='use hpc cluster or not')
@@ -43,7 +43,7 @@ def find_dir(pattern, path):
 
     return result
 
-def write_submit_del_job(ensemble_dir, python_cmd_list):
+def write_submit_del_job(ensemble_dir, jobs_fn):
     second_sub = ensemble_dir.split('/')[-1]
     first_sub = ensemble_dir.split('/')[-2]
 
@@ -63,10 +63,10 @@ def write_submit_del_job(ensemble_dir, python_cmd_list):
         #     # 'module load py_packages\n'
         'module load java\nmodule load groovy\nmodule load selfsched\nmodule load weka\n')
     script.write('export _JAVA_OPTIONS=\"-XX:ParallelGCThreads=10\"\nexport JAVA_OPTS=\"-Xmx10g\"\n')
-    # script.write('mpirun selfsched < %s.jobs\n' % second_sub)
-    python_cmd = "\n".join(python_cmd_list)
-    print(python_cmd)
-    script.write(python_cmd)
+    script.write('mpirun selfsched < %s' % jobs_fn)
+    # python_cmd = "\n".join(python_cmd_list)
+    # print(python_cmd)
+    # script.write(python_cmd)
     # script.write('rm %s.jobs' % second_sub)
     script.close()
     ####### Submit the lsf job and remove lsf script
@@ -78,25 +78,30 @@ excluding_folder = ['analysis']
 if __name__ == "__main__":
     # file_list = find_dir('GO*',sys.argv[-1])
     dir_list = find_dir('{}*'.format(args.term_prefix), args.path)
+    jobs_prefix = args.path.split('/')[-1]
+    jobs_n = 'ensemble_{}.jobs'.format(jobs_prefix)
+    jobs_txt = open(jobs_n, 'w')
+    jobs_list = []
+    python_cmd_list = []
     for go_dir in dir_list:
 
         data = go_dir.split('/')[-1]
         data_dir = go_dir.split('/')[-2]
-        python_cmd_list = []
         if data_dir.split('_')[-1] == 'EI':
             # p = subprocess.Popen('python tcca_projection.py --path {}'.format(go_dir))
             # p.wait()
-            python_cmd_list.append('python tcca_projection.py --path {}'.format(go_dir))
+            # python_cmd_list.append('python tcca_projection.py --path {}'.format(go_dir))
             fns = listdir(go_dir)
             fns = [fn for fn in fns if not fn in excluding_folder]
             fns = [os.path.join(go_dir, fn) for fn in fns]
             feature_folders = [fn for fn in fns if isdir(fn)]
             for f_dir in feature_folders:
-                python_cmd_list.append('python ensemble.py --path {}\n'.format(f_dir))
+                jobs_list.append('python ensemble.py --path {}\n'.format(f_dir))
 
-        python_cmd_list.append('python ensemble.py --path {}\n'.format(go_dir))
-
-        write_submit_del_job(go_dir, python_cmd_list=python_cmd_list)
+        jobs_list.append('python ensemble.py --path {}\n'.format(go_dir))
+    jobs_txt.write('\n'.join(jobs_list))
+    jobs_txt.close()
+    write_submit_del_job(args.path, jobs_n)
 
 
 
