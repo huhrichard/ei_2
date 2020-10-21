@@ -35,7 +35,7 @@ def convert_to_arff(df, path):
             fn.write('@attribute fold {' + fold_str + '}\n')
 
 
-    print('col counter:', col_counter)q
+    print('col counter:', col_counter)
 
     fn.write('@data\n')
     print(path, 'start to write df')
