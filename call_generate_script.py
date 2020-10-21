@@ -32,7 +32,7 @@ fn.write('#BSUB -J {}_{}\n'.format(data, 'generate'))
 fn.write('#BSUB -P acc_pandeg01a\n#BSUB -q premium\n#BSUB -n {}\n#BSUB -W 24:00\n'.format(nc))
 fn.write('#BSUB -o gen_{}.stdout\n'.format(data))
 fn.write('#BSUB -eo gen_{}.stderr\n'.format(data))
-fn.write('module purge\nmodule load java\nmodule load python\nmodule load groovy\nmodule load selfsched\n')
+fn.write('module purge\nmodule load java\nmodule load groovy\nmodule load selfsched\n')
 fn.write('mpirun selfsched < {}'.format(jobs_file))
 # fn.write(job)
 

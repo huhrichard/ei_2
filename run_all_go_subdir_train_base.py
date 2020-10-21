@@ -53,7 +53,7 @@ def write_submit_del_job(scratch_path, jobs_fn):
     script.write(
         '#!/bin/bash\n#BSUB -P acc_pandeg01a\n#BSUB -q %s\n#BSUB -J %s\n#BSUB -W %s\n#BSUB -R rusage[mem=%s]\n#BSUB -n %s\n#BSUB -sp 100\n' % (
             args.queue, first_sub, args.time, args.memory, args.node))
-    script.write('#BSUB -o %s.stdout\n#BSUB -eo %s.stderr\n#BSUB -L /bin/bash\n' % (first_sub, first_sub))
+    script.write('#BSUB -o train_base_%s.stdout\n#BSUB -eo train_base_%s.stderr\n#BSUB -L /bin/bash\n' % (first_sub, first_sub))
     # script.write('module purge')
     # script.write('conda activate largegopred')
     script.write(
