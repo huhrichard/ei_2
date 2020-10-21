@@ -11,7 +11,7 @@ from itertools import product
 import arff
 # from soft_impute import SoftImpute
 from scipy.sparse import coo_matrix, csr_matrix, eye, load_npz, save_npz
-from rwr_from_jeff import *
+# from rwr_from_jeff import *
 from sklearn.model_selection import KFold
 import networkx as nx
 
