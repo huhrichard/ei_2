@@ -29,7 +29,7 @@ nc = 32
 fn = open(lsf_fn, 'w')
 fn.write('#!/bin/bash\n')
 fn.write('#BSUB -J {}_{}\n'.format(data, 'generate'))
-fn.write('#BSUB -P acc_pandeg01a\n#BSUB -q premium\n#BSUB -n {}\n#BSUB -W 24:00\n'.format(nc))
+fn.write('#BSUB -P acc_pandeg01a\n#BSUB -q express\n#BSUB -n {}\n#BSUB -W 12:00\n'.format(nc))
 fn.write('#BSUB -R rusage[mem={}]\n'.format(25000))
 fn.write('#BSUB -o gen_{}.stdout\n'.format(data))
 fn.write('#BSUB -eo gen_{}.stderr\n'.format(data))
