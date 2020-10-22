@@ -31,7 +31,7 @@ parser.add_argument('--path', '-P', type=str, required=True, help='data path')
 parser.add_argument('--queue', '-Q', type=str, default='premium', help='LSF queue to submit the job')
 parser.add_argument('--node', '-N', type=str, default='32', help='number of node requested')
 parser.add_argument('--time', '-T', type=str, default='48:00', help='number of hours requested')
-parser.add_argument('--memory', '-M', type=str,default='32000', help='memory requsted in MB')
+parser.add_argument('--memory', '-M', type=str,default='64000', help='memory requsted in MB')
 parser.add_argument('--classpath', '-CP', type=str,default='./weka.jar', help='path to weka.jar')
 parser.add_argument('--hpc', '-MIN', type=str2bool,default='true', help='use hpc cluster or not')
 parser.add_argument('--term_prefix', type=str, default='GO', help='term_prefix')
@@ -53,7 +53,7 @@ def write_submit_del_job(scratch_path, jobs_fn):
     script.write(
         '#!/bin/bash\n#BSUB -P acc_pandeg01a\n#BSUB -q %s\n#BSUB -J %s\n#BSUB -W %s\n#BSUB -R rusage[mem=%s]\n#BSUB -n %s\n#BSUB -sp 100\n' % (
             args.queue, first_sub, args.time, args.memory, args.node))
-    script.write('#BSUB -R span[ptile=4]\n #BSUB -o train_base_%s.stdout\n#BSUB -eo train_base_%s.stderr\n#BSUB -L /bin/bash\n' % (first_sub, first_sub))
+    script.write('#BSUB -o train_base_%s.stdout\n#BSUB -eo train_base_%s.stderr\n#BSUB -L /bin/bash\n' % (first_sub, first_sub))
     # script.write('module purge')
     # script.write('conda activate largegopred')
     script.write(
