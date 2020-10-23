@@ -114,6 +114,8 @@ all_parameters = list(product(feature_folders, classifiers, fold_values, bag_val
 
 jobs_fn = "temp_{}_{}.jobs".format(data_source_dir, data_name)
 job_file = open(jobs_fn, 'w')
+job_file.write('module load groovy\n')
+
 for parameters in all_parameters:
     project_path, classifier, fold, bag = parameters
     # job_file.write('groovy -cp %s %s/base_model.groovy %s %s %s %s %s\n' % (classpath, working_dir,data_path, project_path, fold, bag,classifier))
@@ -196,7 +198,7 @@ if args.hpc:
         data_name, args.queue, args.node, args.time, data_name, data_name))
     # fn.write('module load python/2.7.14\n')
     # fn.write('module load py_packages\n')
-    fn.write('module purge')
+    # fn.write('module purge')
     # fn.write('conda activate ei')
     fn.write('module load java\nmodule load python\nmodule load groovy\nmodule load selfsched\nmodule load weka\n')
     fn.write('export _JAVA_OPTIONS="-XX:ParallelGCThreads=10"\nexport JAVA_OPTS="-Xmx15g"\nexport CLASSPATH=%s\n' % (
