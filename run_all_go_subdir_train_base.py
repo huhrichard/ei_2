@@ -107,7 +107,7 @@ if __name__ == "__main__":
     # dir_list = find_dir('GO0071704', sys.argv[-1])
     jobs_prefix = args.path.split('/')[-1]
     jobs_n = 'train_base_{}.jobs'.format(jobs_prefix)
-    jobs_txt = open(jobs_n, 'w')
+
     jobs_list = ['module load groovy']
     system('module load groovy')
     for go_dir in dir_list:
