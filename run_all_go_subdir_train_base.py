@@ -106,24 +106,24 @@ if __name__ == "__main__":
     dir_list = find_dir('{}*'.format(args.term_prefix), args.path)
     # dir_list = find_dir('GO0071704', sys.argv[-1])
     jobs_prefix = args.path.split('/')[-1]
-    jobs_n = 'train_base_{}.jobs'.format(jobs_prefix)
 
-    jobs_list = ['module load groovy']
-    system('module load groovy')
+
+    # jobs_list = ['module load groovy']
+    # system('module load groovy')
     for go_dir in dir_list:
 
         python_cmd_train = 'python train_base.py --path {}'.format(go_dir)
-        write_submit_del_job(go_dir, python_cmd=python_cmd_train)
+        # write_submit_del_job(go_dir, python_cmd=python_cmd_train)
         # jobs_list.append(python_cmd_train)
-        # print(python_cmd_train)
-        # # system(python_cmd)
+        print(python_cmd_train)
+        system(python_cmd_train)
         # go_dir_splitted = go_dir.split('/')
 
     # jobs_txt.write('\n'.join(jobs_list))
     # jobs_txt.close()
     # write_submit_del_job(args.path, jobs_fn=jobs_n)
 
-
+    # jobs_n = 'train_base_{}.jobs'.format(jobs_prefix)
     # jobs_txt = open(jobs_n, 'w')
     # jobs_list = ['module load groovy']
     # system('module load groovy')
