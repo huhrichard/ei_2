@@ -34,9 +34,9 @@ def str2bool(v):
 parser = argparse.ArgumentParser(description='Feed some bsub parameters')
 parser.add_argument('--path', '-P', type=str, required=True, help='data path')
 parser.add_argument('--queue', '-Q', type=str, default='express', help='LSF queue to submit the job')
-parser.add_argument('--node', '-N', type=str, default='4', help='number of node requested')
+parser.add_argument('--node', '-N', type=str, default='16', help='number of node requested')
 parser.add_argument('--time', '-T', type=str, default='12:00', help='number of hours requested')
-parser.add_argument('--memory', '-M', type=str, default='12000', help='memory requsted in MB')
+parser.add_argument('--memory', '-M', type=str, default='20000', help='memory requsted in MB')
 parser.add_argument('--classpath', '-CP', type=str, default='./weka.jar', help='default weka path')
 parser.add_argument('--hpc', type=str2bool, default='true', help='use HPC cluster or not')
 parser.add_argument('--fold', '-F', type=int, default=5, help='number of cross-validation fold')
@@ -196,7 +196,7 @@ if args.hpc:
     fn = open(lsf_fn, 'w')
     fn.write(
         '#!/bin/bash\n#BSUB -J EI-%s\n#BSUB -P acc_pandeg01a\n#BSUB -q %s\n#BSUB -n %s\n#BSUB -sp 100\n#BSUB -W %s\n#BSUB -o %s.stdout\n#BSUB -eo %s.stderr\n#BSUB -R rusage[mem=20000]\n' % (
-        data_name, args.queue, args.node, args.time, data_name, data_name))
+        data_name, args.queue, args.node, args.time, data_source_dir, data_source_dir))
     # fn.write('module load python/2.7.14\n')
     # fn.write('module load py_packages\n')
     # fn.write('module purge')
