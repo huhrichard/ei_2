@@ -87,11 +87,11 @@ def write_submit_del_job(scratch_path, python_cmd):
     script.write('#BSUB -o train_base_%s.stdout\n#BSUB -eo train_base_%s.stderr\n#BSUB -L /bin/bash\n' % (first_sub, first_sub))
     # script.write('module purge')
     # script.write('conda activate largegopred')
-    # script.write(
+    script.write(
         #     # 'module load python\n'+
         #     # 'module load py_packages\n'
-        # 'module load java\nmodule load groovy\nmodule load selfsched\nmodule load weka\n')
-    # script.write('export _JAVA_OPTIONS=\"-XX:ParallelGCThreads=10\"\nexport JAVA_OPTS=\"-Xmx10g\"\n')
+        'module load java\nmodule load groovy\nmodule load selfsched\nmodule load weka\n')
+    script.write('export _JAVA_OPTIONS=\"-XX:ParallelGCThreads=10\"\nexport JAVA_OPTS=\"-Xmx10g\"\n')
     # script.write('mpirun selfsched < {}'.format(jobs_fn))
     script.write(python_cmd)
     # script.write('rm %s.jobs' % second_sub)
