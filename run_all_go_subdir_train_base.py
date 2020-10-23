@@ -28,10 +28,10 @@ def find_dir(pattern, path):
 
 parser = argparse.ArgumentParser(description='Feed some bsub parameters')
 parser.add_argument('--path', '-P', type=str, required=True, help='data path')
-parser.add_argument('--queue', '-Q', type=str, default='premium', help='LSF queue to submit the job')
-parser.add_argument('--node', '-N', type=str, default='16', help='number of node requested')
-parser.add_argument('--time', '-T', type=str, default='48:00', help='number of hours requested')
-parser.add_argument('--memory', '-M', type=str,default='64000', help='memory requsted in MB')
+parser.add_argument('--queue', '-Q', type=str, default='express', help='LSF queue to submit the job')
+parser.add_argument('--node', '-N', type=str, default='4', help='number of node requested')
+parser.add_argument('--time', '-T', type=str, default='12:00', help='number of hours requested')
+parser.add_argument('--memory', '-M', type=str,default='10000', help='memory requsted in MB')
 parser.add_argument('--classpath', '-CP', type=str,default='./weka.jar', help='path to weka.jar')
 parser.add_argument('--hpc', '-MIN', type=str2bool,default='true', help='use hpc cluster or not')
 parser.add_argument('--term_prefix', type=str, default='GO', help='term_prefix')
@@ -81,7 +81,7 @@ if __name__ == "__main__":
     system('module load groovy')
     for go_dir in dir_list:
 
-        python_cmd_train = 'python train_base.py --path {} --hpc=False'.format(go_dir)
+        python_cmd_train = 'python train_base.py --path {}'.format(go_dir)
         # write_submit_del_job(go_dir, python_cmd=python_cmd_train)
         jobs_list.append(python_cmd_train)
         # print(python_cmd_train)

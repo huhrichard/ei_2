@@ -33,14 +33,14 @@ def str2bool(v):
 ### parse arguments
 parser = argparse.ArgumentParser(description='Feed some bsub parameters')
 parser.add_argument('--path', '-P', type=str, required=True, help='data path')
-parser.add_argument('--queue', '-Q', type=str, default='premium', help='LSF queue to submit the job')
+parser.add_argument('--queue', '-Q', type=str, default='express', help='LSF queue to submit the job')
 parser.add_argument('--node', '-N', type=str, default='4', help='number of node requested')
 parser.add_argument('--time', '-T', type=str, default='12:00', help='number of hours requested')
 parser.add_argument('--memory', '-M', type=str, default='12000', help='memory requsted in MB')
 parser.add_argument('--classpath', '-CP', type=str, default='./weka.jar', help='default weka path')
 parser.add_argument('--hpc', type=str2bool, default='true', help='use HPC cluster or not')
 parser.add_argument('--fold', '-F', type=int, default=5, help='number of cross-validation fold')
-parser.add_argument('--pca', type=str2bool, default='false', help='train base classifier by PCA projected features)')
+parser.add_argument('--pca', type=str2bool, default='True', help='train base classifier by PCA projected features)')
 args = parser.parse_args()
 ### record starting time
 start = time()
@@ -89,8 +89,8 @@ label_col = p['classAttribute']
 arff_list = [read_arff_to_pandas_df(f_path + '/data.arff') for f_path in feature_folders]
 data_path_list = [f_path + '/data_{}.arff' for f_path in feature_folders]
 
-print(arff_list[0].shape)
-print(arff_list[0]['fold'])
+# print(arff_list[0].shape)
+# print(arff_list[0]['fold'])
 import torch
 import tensorly as tl
 
