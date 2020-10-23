@@ -86,104 +86,103 @@ else:
 # fold_values = np.array(range(args.fold))+10000
 id_col = p['idAttribute']
 label_col = p['classAttribute']
-arff_list = [read_arff_to_pandas_df(f_path + '/data.arff') for f_path in feature_folders]
-data_path_list = [f_path + '/data_{}.arff' for f_path in feature_folders]
-
-# print(arff_list[0].shape)
-# print(arff_list[0]['fold'])
-import torch
-import tensorly as tl
-
-context_dict = {}
-# if torch.cuda.is_available():
-#     # print('using pytorch as TL backend')
-#     # tl.set_backend('pytorch')
-#     # tl_pytorch = True
-#     # context_dict['device'] = torch.device('cuda')
-# else:
-tl_pytorch = False
-
-rdim = 10
-
-
-
-### write the individual tasks
-classpath = args.classpath
-all_parameters = list(product(feature_folders, classifiers, fold_values, bag_values))
-
-
-jobs_fn = "temp_{}_{}.jobs".format(data_source_dir, data_name)
+jobs_fn = "temp_train_base_{}_{}.jobs".format(data_source_dir, data_name)
 job_file = open(jobs_fn, 'w')
 job_file.write('module load groovy\n')
+def preprocessing():
+    arff_list = [read_arff_to_pandas_df(f_path + '/data.arff') for f_path in feature_folders]
+    data_path_list = [f_path + '/data_{}.arff' for f_path in feature_folders]
 
-for parameters in all_parameters:
-    project_path, classifier, fold, bag = parameters
-    # job_file.write('groovy -cp %s %s/base_model.groovy %s %s %s %s %s\n' % (classpath, working_dir,data_path, project_path, fold, bag,classifier))
-    job_file.write('groovy -cp %s %s/base_predictors_pca_added.groovy %s %s %s %s %s %s\n' % (
-        classpath, working_dir, data_path, project_path, fold, bag, False, classifier))
+    # print(arff_list[0].shape)
+    # print(arff_list[0]['fold'])
+    import torch
+    import tensorly as tl
 
+    context_dict = {}
+    # if torch.cuda.is_available():
+    #     # print('using pytorch as TL backend')
+    #     # tl.set_backend('pytorch')
+    #     # tl_pytorch = True
+    #     # context_dict['device'] = torch.device('cuda')
+    # else:
+    tl_pytorch = False
 
-if args.pca:
-    pca_fold_values = ['pca_{}'.format(fv) for fv in fold_values]
-    fold_col = p['foldAttribute']
-    column_non_feature = [fold_col, label_col, id_col]
-    for outer_fold in fold_values:
-        test_split_list = [df[df[fold_col] == outer_fold] for df in arff_list]
-        train_split_list = [df[df[fold_col] != outer_fold] for df in arff_list]
-        test_nf = test_split_list[0][column_non_feature]
-        train_nf = train_split_list[0][column_non_feature]
-        test_X_raw = [tl.tensor(t.drop(columns=column_non_feature).values,
-                                **context_dict) for t in test_split_list]
-        train_X_raw = [tl.tensor(t.drop(columns=column_non_feature).values,
-                                 **context_dict) for t in train_split_list]
-        pca_list = [PCA(n_components=min([10, df.shape[0]]),
-                        svd_solver='arpack', random_state=64) for df in arff_list]
-        Z_train = []
-        Z_test = []
-
-        for idx, pca_obj in enumerate(pca_list):
-            Z_train_n = pca_obj.fit_transform(train_X_raw[idx])
-            Z_test_n = pca_obj.transform(test_X_raw[idx])
-            Z_train.append(Z_train_n)
-            Z_test.append(Z_test_n)
-
-        feat_col = ['ProjectedFeature{}'.format(i) for i in range(rdim)]
-        projected_train_df_list = [pd.DataFrame(data=z_t,
-                                                columns=feat_col) for z_t in Z_train]
-        projected_train_df_list = [pd.concat([df.reset_index(drop=True), train_nf.reset_index(drop=True)],
-                                             axis=1) for df in projected_train_df_list]
-
-        projected_test_df_list = [pd.DataFrame(data=z_t,
-                                               columns=feat_col) for z_t in Z_test]
-        projected_test_df_list = [pd.concat([df.reset_index(drop=True), test_nf.reset_index(drop=True)],
-                                            axis=1) for df in projected_test_df_list]
-
-        projected_df_with_nf = [pd.concat([test_df,
-                                           train_df], ignore_index=True) for test_df, train_df in
-                                zip(projected_test_df_list, projected_train_df_list)]
+    rdim = 10
 
 
-        arff_fn_list = [f_path + '/data_pca_{}.arff'.format(outer_fold) for f_path in feature_folders]
 
+    ### write the individual tasks
+    classpath = args.classpath
+    all_parameters = list(product(feature_folders, classifiers, fold_values, bag_values))
 
-        for v_fn, projected_df in zip(arff_fn_list, projected_df_with_nf):
-            print(projected_df.columns)
-            projected_df['fold'] = 'pca_' + projected_df['fold'].astype(str)
-            generate_data.convert_to_arff(projected_df, v_fn)
-
-
-    pca_all_parameters = list(product(feature_folders, classifiers, pca_fold_values, bag_values))
-    for parameters in pca_all_parameters:
+    for parameters in all_parameters:
         project_path, classifier, fold, bag = parameters
-        pca_bool = True
         # job_file.write('groovy -cp %s %s/base_model.groovy %s %s %s %s %s\n' % (classpath, working_dir,data_path, project_path, fold, bag,classifier))
         job_file.write('groovy -cp %s %s/base_predictors_pca_added.groovy %s %s %s %s %s %s\n' % (
-            classpath, working_dir, data_path, project_path, fold, bag, pca_bool, classifier))
+            classpath, working_dir, data_path, project_path, fold, bag, False, classifier))
 
 
-if not args.hpc:
-    job_file.write('python combine_individual_feature_preds.py %s\npython combine_feature_predicts.py %s\n' % (
-        data_path, data_path))
+    if args.pca:
+        pca_fold_values = ['pca_{}'.format(fv) for fv in fold_values]
+        fold_col = p['foldAttribute']
+        column_non_feature = [fold_col, label_col, id_col]
+        for outer_fold in fold_values:
+            test_split_list = [df[df[fold_col] == outer_fold] for df in arff_list]
+            train_split_list = [df[df[fold_col] != outer_fold] for df in arff_list]
+            test_nf = test_split_list[0][column_non_feature]
+            train_nf = train_split_list[0][column_non_feature]
+            test_X_raw = [tl.tensor(t.drop(columns=column_non_feature).values,
+                                    **context_dict) for t in test_split_list]
+            train_X_raw = [tl.tensor(t.drop(columns=column_non_feature).values,
+                                     **context_dict) for t in train_split_list]
+            pca_list = [PCA(n_components=min([10, df.shape[0]]),
+                            svd_solver='arpack', random_state=64) for df in arff_list]
+            Z_train = []
+            Z_test = []
+
+            for idx, pca_obj in enumerate(pca_list):
+                Z_train_n = pca_obj.fit_transform(train_X_raw[idx])
+                Z_test_n = pca_obj.transform(test_X_raw[idx])
+                Z_train.append(Z_train_n)
+                Z_test.append(Z_test_n)
+
+            feat_col = ['ProjectedFeature{}'.format(i) for i in range(rdim)]
+            projected_train_df_list = [pd.DataFrame(data=z_t,
+                                                    columns=feat_col) for z_t in Z_train]
+            projected_train_df_list = [pd.concat([df.reset_index(drop=True), train_nf.reset_index(drop=True)],
+                                                 axis=1) for df in projected_train_df_list]
+
+            projected_test_df_list = [pd.DataFrame(data=z_t,
+                                                   columns=feat_col) for z_t in Z_test]
+            projected_test_df_list = [pd.concat([df.reset_index(drop=True), test_nf.reset_index(drop=True)],
+                                                axis=1) for df in projected_test_df_list]
+
+            projected_df_with_nf = [pd.concat([test_df,
+                                               train_df], ignore_index=True) for test_df, train_df in
+                                    zip(projected_test_df_list, projected_train_df_list)]
+
+
+            arff_fn_list = [f_path + '/data_pca_{}.arff'.format(outer_fold) for f_path in feature_folders]
+
+
+            for v_fn, projected_df in zip(arff_fn_list, projected_df_with_nf):
+                print(projected_df.columns)
+                projected_df['fold'] = 'pca_' + projected_df['fold'].astype(str)
+                generate_data.convert_to_arff(projected_df, v_fn)
+
+
+        pca_all_parameters = list(product(feature_folders, classifiers, pca_fold_values, bag_values))
+        for parameters in pca_all_parameters:
+            project_path, classifier, fold, bag = parameters
+            pca_bool = True
+            # job_file.write('groovy -cp %s %s/base_model.groovy %s %s %s %s %s\n' % (classpath, working_dir,data_path, project_path, fold, bag,classifier))
+            job_file.write('groovy -cp %s %s/base_predictors_pca_added.groovy %s %s %s %s %s %s\n' % (
+                classpath, working_dir, data_path, project_path, fold, bag, pca_bool, classifier))
+
+
+    if not args.hpc:
+        job_file.write('python combine_individual_feature_preds.py %s\npython combine_feature_predicts.py %s\n' % (
+            data_path, data_path))
 
 job_file.close()
 
