@@ -113,10 +113,10 @@ if __name__ == "__main__":
     for go_dir in dir_list:
 
         python_cmd_train = 'python train_base.py --path {}'.format(go_dir)
-        # write_submit_del_job(go_dir, python_cmd=python_cmd_train)
+        write_submit_del_job(go_dir, python_cmd=python_cmd_train)
         # jobs_list.append(python_cmd_train)
-        print(python_cmd_train)
-        system(python_cmd_train)
+        # print(python_cmd_train)
+        # system(python_cmd_train)
         # go_dir_splitted = go_dir.split('/')
 
     # jobs_txt.write('\n'.join(jobs_list))
