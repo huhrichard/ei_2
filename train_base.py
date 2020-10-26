@@ -34,7 +34,7 @@ def str2bool(v):
 parser = argparse.ArgumentParser(description='Feed some bsub parameters')
 parser.add_argument('--path', '-P', type=str, required=True, help='data path')
 parser.add_argument('--queue', '-Q', type=str, default='premium', help='LSF queue to submit the job')
-parser.add_argument('--node', '-N', type=str, default='32', help='number of node requested')
+parser.add_argument('--node', '-N', type=str, default='20', help='number of node requested')
 parser.add_argument('--time', '-T', type=str, default='20:00', help='number of hours requested')
 parser.add_argument('--memory', '-M', type=str, default='20000', help='memory requsted in MB')
 parser.add_argument('--classpath', '-CP', type=str, default='./weka.jar', help='default weka path')
