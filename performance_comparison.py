@@ -136,7 +136,7 @@ if __name__ == "__main__":
         for term_dir in term_dirs:
 
             file_name = term_dir + '/' +sub_data_folder + 'analysis/' + 'performance.csv'
-            print(file_name)
+            # print(file_name)
             term_name = term_dir.split('/')[-1]
 
             if exists(file_name):
@@ -155,7 +155,7 @@ if __name__ == "__main__":
         for term_name, performance_file in performance_file_list.items():
             df = pd.read_csv(performance_file)
             df['data_name'] = term_name
-            print(df)
+            # print(df)
             performance_df_list.append(df)
 
         performance_df = pd.concat(performance_df_list)
@@ -222,7 +222,7 @@ if __name__ == "__main__":
 
     median_fmax_list = np.median(cd_input_df.values, axis=0)
     fmax_list = cd_input_df.values
-    data_list = list(cd_input_df.index)
+    data_list = cd_input_df.columns.tolist()
 
     sorted_list = sorted(zip(median_fmax_list, fmax_list, data_list, cp), reverse=True, key=lambda x: x[0])
     sorted_dataname_list = [s[2] for s in sorted_list]
