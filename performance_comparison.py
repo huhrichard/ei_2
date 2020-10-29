@@ -112,6 +112,7 @@ if __name__ == "__main__":
     data_list = []
     ensemble_df_list = []
     is_go = False
+    ensemble_df
     for key, val in dict_suffix.items():
         # if len(key) > 0:
         #     go_dir = sys.argv[-1] + '_' + key
@@ -184,18 +185,15 @@ if __name__ == "__main__":
         # performance_df['delta_fmax_LR.S'] = performance_df['fmax_LR.S'] - performance_df['fmax_best base']
         # best_base_df = extract_df_by_method(performance_df, method='best base')
         # performance_df_dict[val] = performance_df
-        print(val, group, ensemble_df.shape)
-        fmax_list.append(ensemble_df['best_fmax'].values)
-        median_fmax_list.append(np.nanmedian(ensemble_df['best_fmax'].values))
-        data_list.append(val)
+        # print(val, group, ensemble_df.shape)
+        # fmax_list.append(ensemble_df['best_fmax'].values)
+        # median_fmax_list.append(np.nanmedian(ensemble_df['best_fmax'].values))
+        # data_list.append(val)
         ensemble_df_list.append(ensemble_df)
 
     # print(median_fmax_list)
     # print(len(fmax_list), len(median_fmax_list))
-    sorted_list =  sorted(zip(median_fmax_list, fmax_list, data_list, cp), reverse=True, key=lambda x: x[0])
-    sorted_dataname_list = [s[2] for s in sorted_list]
-    print(sorted_dataname_list)
-    sorted_cp = [s[3] for s in sorted_list]
+
     # sorted_fmax_list = [f for m, f in sorted(zip(median_fmax_list, fmax_list), reverse=True, key=lambda x: x[0])]
     # sorted_dataname_list = [f for m, f in sorted(zip(median_fmax_list, data_list), reverse=True, key=lambda x: x[0])]
     # sorted_cp = [f for m, f in sorted(zip(median_fmax_list, cp), reverse=True, key=lambda x: x[0])]
@@ -209,16 +207,29 @@ if __name__ == "__main__":
 
 
     ensemble_df_cat = pd.concat(ensemble_df_list)
-    print('shape before drop', ensemble_df_cat.shape)
-    ensemble_df_cat.dropna(inplace=True)
-    print('shape after drop', ensemble_df_cat.shape)
+    # print('shape before drop', ensemble_df_cat.shape)
+    # ensemble_df_cat.dropna(inplace=True)
+    # print('shape after drop', ensemble_df_cat.shape)
+
+    cd_input = ensemble_df_cat[['data_name', 'best_fmax', 'input']]
+
+    cd_input_df = cd_input.pivot_table('best_fmax', ['data_name'], 'input').reset_index()
+    cd_input_df.set_index('data_name', inplace=True)
+    cd_csv_fn = '{}cd_input_{}_{}.csv'.format(plot_dir + 'cd_csv/', file_prefix, sys.argv[-2])
+
+    cd_input_df.dropna(inplace=True)
+
+    median_fmax_list = np.median(cd_input_df.values, axis=0)
+    fmax_list = cd_input_df.values
+    data_list = list(cd_input_df.index)
+    
+    sorted_list = sorted(zip(median_fmax_list, fmax_list, data_list, cp), reverse=True, key=lambda x: x[0])
+    sorted_dataname_list = [s[2] for s in sorted_list]
+    print(sorted_dataname_list)
+    sorted_cp = [s[3] for s in sorted_list]
 
     # make input for cd plot
-    cd_input = ensemble_df_cat[['data_name','best_fmax','input']]
 
-    cd_input_df = cd_input.pivot_table('best_fmax', ['data_name'],'input').reset_index()
-    cd_input_df.set_index('data_name', inplace=True)
-    cd_csv_fn = '{}cd_input_{}_{}.csv'.format(plot_dir+'cd_csv/', file_prefix, sys.argv[-2])
     cd_input_df.to_csv(cd_csv_fn, index_label=False)
     cmd = "R CMD BATCH --no-save --no-restore '--args cd_fn=\"{}\"' R/plotCDdiagram.R".format(cd_csv_fn)
     os.system(cmd)
