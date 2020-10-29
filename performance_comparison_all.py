@@ -13,9 +13,9 @@ dict_to_compare = {
                     }
 #
 list_ontology = [
-                 # 'go',
+                 'go',
                  # 'go_rwrImpute',
-                 'hpo'
+                 # 'hpo'
                 ]
 python_cmd = 'python performance_comparison.py {} {} {}'
 system('module load R')
