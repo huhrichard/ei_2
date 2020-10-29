@@ -109,9 +109,10 @@ if __name__ == "__main__":
     jobs_prefix = args.path.split('/')[-1]
     scratch_path = '/sc/arion/scratch/liy42/'
     jobs_file = find_dir('{}.jobs'.format(jobs_prefix), './jobs')
+    print(jobs_file)
     # jobs_list = ['module load groovy']
     # system('module load groovy')
-    jobs_fstream = open(jobs_file[0], "r").readlines()
+    jobs_fstream = open(jobs_file[0], "r").read().split('\n')
 
     for go_job in jobs_fstream:
         term_name = go_job.split(' ')[2].replace(':', '')
