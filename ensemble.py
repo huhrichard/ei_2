@@ -88,7 +88,7 @@ def selection(fold, seedval, path, agg):
     accuracy_weight = 0.5
     max_clusters = 20
     train_df, train_labels, test_df, test_labels = common.read_fold(path, fold)
-    print(train_df)
+    # print(train_df)
     train_df = common.unbag(train_df, agg)
     test_df = common.unbag(test_df, agg)
     best_classifiers = train_df.apply(lambda x: common.fmeasure_score(train_labels, x)['F']).sort_values(
@@ -139,12 +139,12 @@ def CES_fmax(path, fold_count=range(5), agg=1):
         # for fold in range(fold_count):
         for fold in fold_count:
             # if '67890' in fold:
-            if testing_bool or (not 'foldAttribute' in p):
-                pred_df, perf_df, train_pred_df = method_function(fold, seedval, path, agg)
-                predictions_dfs.append(pred_df)
-                train_predictions_dfs.append(train_pred_df)
-                performance_dfs.append(perf_df)
-                thres = thres_fmax(train_pred_df.label, train_pred_df.prediction)
+            # if testing_bool or (not 'foldAttribute' in p):
+            pred_df, perf_df, train_pred_df = method_function(fold, seedval, path, agg)
+            predictions_dfs.append(pred_df)
+            train_predictions_dfs.append(train_pred_df)
+            performance_dfs.append(perf_df)
+            thres = thres_fmax(train_pred_df.label, train_pred_df.prediction)
     performance_df = pd.concat(performance_dfs)
     performance_df.to_csv('%s/analysis/selection-%s-%s-iterations.csv' % (path, method, 'fmax'), index=False)
     predictions_df = pd.concat(predictions_dfs)
@@ -175,12 +175,12 @@ def mean_fmax(path, fold_count=range(5), agg=1):
     # for fold in range(fold_count):
     for fold in fold_count:
 
-        if testing_bool or (not 'foldAttribute' in p):
-            train_df, train_label, test_df, test_label = common.read_fold(path, fold)
-            predict = _unbag_mean(test_df, agg)
-            predictions = append(predictions, predict)
-            labels = append(labels, test_label)
-            thres = thres_fmax(train_label, _unbag_mean(train_df))
+        # if testing_bool or (not 'foldAttribute' in p):
+        train_df, train_label, test_df, test_label = common.read_fold(path, fold)
+        predict = _unbag_mean(test_df, agg)
+        predictions = append(predictions, predict)
+        labels = append(labels, test_label)
+        thres = thres_fmax(train_label, _unbag_mean(train_df))
 
     fmax = common.fmeasure_score(labels, predictions, thres)
     auc = '%.3f' % (sklearn.metrics.roc_auc_score(labels, predictions))
@@ -198,11 +198,11 @@ def bestbase_fmax(path, fold_count=range(5), agg=1):
     # for fold in range(fold_count):
     for fold in fold_count:
         # if '67890' in fold:
-        if testing_bool or (not 'foldAttribute' in p):
-            train_df, train_label, test_df, label = common.read_fold(path, fold)
-            test_df = common.unbag(test_df, agg)
-            predictions.append(test_df)
-            labels = append(labels, label)
+        # if testing_bool or (not 'foldAttribute' in p):
+        train_df, train_label, test_df, label = common.read_fold(path, fold)
+        test_df = common.unbag(test_df, agg)
+        predictions.append(test_df)
+        labels = append(labels, label)
             # thres = thres_fmax(train_label, common.unbag(train_df, agg))
     predictions = pd.concat(predictions)
 
