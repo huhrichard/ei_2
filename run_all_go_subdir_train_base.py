@@ -117,7 +117,7 @@ if __name__ == "__main__":
     for go_job in jobs_fstream:
         term_name = go_job.split(' ')[2].replace(':', '')
 
-        go_scratch_dir = scratch_path+jobs_prefix+term_name
+        go_scratch_dir = scratch_path+jobs_prefix+'/'+term_name
         print(go_scratch_dir)
         python_cmd_train = 'python train_base.py --path {}'.format(go_scratch_dir)
         write_submit_del_job(go_scratch_dir, python_cmd=python_cmd_train)
