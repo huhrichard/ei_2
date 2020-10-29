@@ -207,6 +207,9 @@ if __name__ == "__main__":
 
 
     ensemble_df_cat = pd.concat(ensemble_df_list)
+    print('shape before drop', ensemble_df_cat.shape)
+    ensemble_df_cat.dropna(inplace=True)
+    print('shape after drop', ensemble_df_cat.shape)
 
     # make input for cd plot
     cd_input = ensemble_df_cat[['data_name','best_fmax','input']]
