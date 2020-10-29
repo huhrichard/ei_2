@@ -88,6 +88,7 @@ def selection(fold, seedval, path, agg):
     accuracy_weight = 0.5
     max_clusters = 20
     train_df, train_labels, test_df, test_labels = common.read_fold(path, fold)
+    print(train_df)
     train_df = common.unbag(train_df, agg)
     test_df = common.unbag(test_df, agg)
     best_classifiers = train_df.apply(lambda x: common.fmeasure_score(train_labels, x)['F']).sort_values(
