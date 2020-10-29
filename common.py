@@ -43,8 +43,12 @@ def fmeasure_score(labels, predictions, thres=None, beta = 1.0, pos_label = 1):
     if thres is None:
         precision, recall, threshold = sklearn.metrics.precision_recall_curve(labels, predictions, pos_label)
         f1 = (1 + beta**2) * (precision * recall) / ((beta**2 * precision) + recall)
-        print(threshold)
-        return {'F':nanmax(f1), 'thres':threshold[where(f1==nanmax(f1))][0]}
+        # print(threshold)
+        if len(threshold[where(f1==nanmax(f1))]) > 1:
+            threshold = threshold[where(f1==nanmax(f1))][0]
+        else:
+            threshold = threshold[where(f1 == nanmax(f1))]
+        return {'F':nanmax(f1), 'thres':threshold[where(f1==nanmax(f1))]}
 
     else:
         predictions[predictions > thres] = 1
