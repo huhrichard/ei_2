@@ -153,6 +153,7 @@ if __name__ == "__main__":
         for term_name, performance_file in performance_file_list.items():
             df = pd.read_csv(performance_file)
             df['data_name'] = term_name
+            print(df)
             performance_df_list.append(df)
 
         performance_df = pd.concat(performance_df_list)
