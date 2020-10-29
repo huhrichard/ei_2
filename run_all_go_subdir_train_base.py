@@ -3,6 +3,7 @@ import sys
 from os import remove, system
 from os.path import abspath
 import argparse
+
 def str2bool(v):
     if v.lower() in ('yes', 'true', 't', 'y', '1'):
         return True
@@ -103,17 +104,21 @@ def write_submit_del_job(scratch_path, python_cmd):
 
 if __name__ == "__main__":
 
-    dir_list = find_dir('{}*'.format(args.term_prefix), args.path)
+    # dir_list = find_dir('{}*'.format(args.term_prefix), args.path)
     # dir_list = find_dir('GO0071704', sys.argv[-1])
     jobs_prefix = args.path.split('/')[-1]
-
-
+    scratch_path = '/sc/arion/scratch/liy42/'
+    jobs_file = find_dir('{}.jobs'.format(jobs_prefix), './jobs')
     # jobs_list = ['module load groovy']
     # system('module load groovy')
-    for go_dir in dir_list:
+    jobs_fstream = open(jobs_file[0], "r").readlines()
+    
+    for go_job in jobs_fstream:
+        term_name = go_job.split(' ')[2].replace(':', '')
 
-        python_cmd_train = 'python train_base.py --path {}'.format(go_dir)
-        write_submit_del_job(go_dir, python_cmd=python_cmd_train)
+        go_scratch_dir = scratch_path+jobs_prefix+term_name
+        python_cmd_train = 'python train_base.py --path {}'.format(go_scratch_dir)
+        write_submit_del_job(go_scratch_dir, python_cmd=python_cmd_train)
         # jobs_list.append(python_cmd_train)
         # print(python_cmd_train)
         # system(python_cmd_train)

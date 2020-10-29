@@ -215,11 +215,9 @@ if __name__ == "__main__":
 
     cd_input_df = cd_input.pivot_table('best_fmax', ['data_name'], 'input').reset_index()
     cd_input_df.set_index('data_name', inplace=True)
-    cd_input_df.dropna(inplace=True)
+
     cd_csv_fn = '{}cd_input_{}_{}.csv'.format(plot_dir + 'cd_csv/', file_prefix, sys.argv[-2])
-
-
-
+    cd_input_df.dropna(inplace=True)
     median_fmax_list = np.median(cd_input_df.values, axis=0)
     fmax_list = cd_input_df.values
     data_list = cd_input_df.columns.tolist()
