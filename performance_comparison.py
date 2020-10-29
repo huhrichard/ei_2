@@ -135,8 +135,9 @@ if __name__ == "__main__":
         for term_dir in term_dirs:
 
             file_name = term_dir + '/' +sub_data_folder + 'analysis/' + 'performance.csv'
-            # print(file_name)
+            print(file_name)
             term_name = term_dir.split('/')[-1]
+
             if exists(file_name):
                 performance_file_list[term_name] = file_name
             # if not '/' in key:
