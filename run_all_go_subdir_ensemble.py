@@ -91,25 +91,25 @@ if __name__ == "__main__":
     python_cmd_list = []
     for go_job in g_jobs_fstream:
         print(go_job)
+        if len(go_job.split(' ')) > 1:
+            term_name = go_job.split(' ')[2].replace(':', '')
 
-        term_name = go_job.split(' ')[2].replace(':', '')
+            go_scratch_dir = scratch_path+jobs_prefix+'/'+term_name
 
-        go_scratch_dir = scratch_path+jobs_prefix+'/'+term_name
+            data = go_scratch_dir.split('/')[-1]
+            data_dir = go_scratch_dir.split('/')[-2]
+            if data_dir.split('_')[-1] == 'EI':
+                # p = subprocess.Popen('python tcca_projection.py --path {}'.format(go_dir))
+                # p.wait()
+                # python_cmd_list.append('python tcca_projection.py --path {}'.format(go_dir))
+                fns = listdir(go_scratch_dir)
+                fns = [fn for fn in fns if not fn in excluding_folder]
+                fns = [os.path.join(go_scratch_dir, fn) for fn in fns]
+                feature_folders = [fn for fn in fns if isdir(fn)]
+                for f_dir in feature_folders:
+                    jobs_list.append('python ensemble.py --path {}\n'.format(f_dir))
 
-        data = go_scratch_dir.split('/')[-1]
-        data_dir = go_scratch_dir.split('/')[-2]
-        if data_dir.split('_')[-1] == 'EI':
-            # p = subprocess.Popen('python tcca_projection.py --path {}'.format(go_dir))
-            # p.wait()
-            # python_cmd_list.append('python tcca_projection.py --path {}'.format(go_dir))
-            fns = listdir(go_scratch_dir)
-            fns = [fn for fn in fns if not fn in excluding_folder]
-            fns = [os.path.join(go_scratch_dir, fn) for fn in fns]
-            feature_folders = [fn for fn in fns if isdir(fn)]
-            for f_dir in feature_folders:
-                jobs_list.append('python ensemble.py --path {}\n'.format(f_dir))
-
-        jobs_list.append('python ensemble.py --path {}\n'.format(go_scratch_dir))
+            jobs_list.append('python ensemble.py --path {}\n'.format(go_scratch_dir))
     jobs_txt.write('\n'.join(jobs_list))
     jobs_txt.close()
     write_submit_del_job(args.path, jobs_n)
