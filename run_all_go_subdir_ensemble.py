@@ -90,6 +90,7 @@ if __name__ == "__main__":
     jobs_list = []
     python_cmd_list = []
     for go_job in g_jobs_fstream:
+        print(go_job)
 
         term_name = go_job.split(' ')[2].replace(':', '')
 
