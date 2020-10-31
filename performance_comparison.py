@@ -213,6 +213,7 @@ if __name__ == "__main__":
 
     cd_input = ensemble_df_cat[['data_name', 'best_fmax', 'input']]
 
+
     cd_input_df = cd_input.pivot_table('best_fmax', ['data_name'], 'input').reset_index()
     cd_input_df.set_index('data_name', inplace=True)
 
@@ -224,7 +225,7 @@ if __name__ == "__main__":
     cd_input_df.dropna(inplace=True)
     median_fmax_list = np.median(cd_input_df.values, axis=0)
     fmax_list = cd_input_df.values
-    data_list = cd_input_df.columns.tolist()
+    data_list = [k for v, k in dict_suffix.items()]
 
     sorted_list = sorted(zip(median_fmax_list, fmax_list, data_list, cp), reverse=True, key=lambda x: x[0])
     sorted_dataname_list = [s[2] for s in sorted_list]
