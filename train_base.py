@@ -90,8 +90,7 @@ jobs_fn = "temp_train_base_{}_{}.jobs".format(data_source_dir, data_name)
 job_file = open(jobs_fn, 'w')
 job_file.write('module load groovy\n')
 def preprocessing():
-    arff_list = [read_arff_to_pandas_df(f_path + '/data.arff') for f_path in feature_folders]
-    data_path_list = [f_path + '/data_{}.arff' for f_path in feature_folders]
+
 
     # print(arff_list[0].shape)
     # print(arff_list[0]['fold'])
@@ -123,6 +122,8 @@ def preprocessing():
 
 
     if args.pca:
+        arff_list = [read_arff_to_pandas_df(f_path + '/data.arff') for f_path in feature_folders]
+        data_path_list = [f_path + '/data_{}.arff' for f_path in feature_folders]
         pca_fold_values = ['pca_{}'.format(fv) for fv in fold_values]
         fold_col = p['foldAttribute']
         column_non_feature = [fold_col, label_col, id_col]

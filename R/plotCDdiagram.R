@@ -1,6 +1,7 @@
 library("scmamp")
 library("ggplot2")
 library("Rgraphviz")
+library("dplyr")
 
 args=(commandArgs(TRUE))
 
@@ -15,7 +16,7 @@ if(length(args)==0){
 }
 
 cd_input <- read.csv(file = cd_fn)
-# cd_input <- drop_na(cd_input)
+cd_input %>% drop_na()
 fn <- gsub("csv", "pdf", cd_fn)
 
 # fn <- gsub("cd_input", "./plot/cd_input", fn)
