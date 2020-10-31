@@ -217,6 +217,10 @@ if __name__ == "__main__":
     cd_input_df.set_index('data_name', inplace=True)
 
     cd_csv_fn = '{}cd_input_{}_{}.csv'.format(plot_dir + 'cd_csv/', file_prefix, sys.argv[-2])
+    cd_input_df.to_csv(cd_csv_fn, index_label=False)
+    cmd = "R CMD BATCH --no-save --no-restore '--args cd_fn=\"{}\"' R/plotCDdiagram.R".format(cd_csv_fn)
+    os.system(cmd)
+
     cd_input_df.dropna(inplace=True)
     median_fmax_list = np.median(cd_input_df.values, axis=0)
     fmax_list = cd_input_df.values
@@ -229,9 +233,7 @@ if __name__ == "__main__":
 
     # make input for cd plot
 
-    cd_input_df.to_csv(cd_csv_fn, index_label=False)
-    cmd = "R CMD BATCH --no-save --no-restore '--args cd_fn=\"{}\"' R/plotCDdiagram.R".format(cd_csv_fn)
-    os.system(cmd)
+
 
     # print(cd_input_df)
     # average_rank_df = cd_input_df.rank(axis=1)
