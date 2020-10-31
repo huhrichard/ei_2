@@ -107,9 +107,9 @@ if __name__ == "__main__":
                 fns = [os.path.join(go_scratch_dir, fn) for fn in fns]
                 feature_folders = [fn for fn in fns if isdir(fn)]
                 for f_dir in feature_folders:
-                    jobs_list.append('python ensemble.py --path {}\n'.format(f_dir))
+                    jobs_list.append('python ensemble.py --path {}'.format(f_dir))
 
-            jobs_list.append('python ensemble.py --path {}\n'.format(go_scratch_dir))
+            jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir))
     jobs_txt.write('\n'.join(jobs_list))
     jobs_txt.close()
     write_submit_del_job(args.path, jobs_n)
