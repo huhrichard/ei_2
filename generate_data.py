@@ -12,7 +12,7 @@ import arff
 # from soft_impute import SoftImpute
 from scipy.sparse import coo_matrix, csr_matrix, eye, load_npz, save_npz
 # from rwr_from_jeff import *
-from sklearn.model_selection import KFold
+from sklearn.model_selection import KFold, StratifiedKFold
 import networkx as nx
 
 def convert_to_arff(df, path):
@@ -94,8 +94,8 @@ def processTermFeature_3(param, impute, fold=5):
     merged_df['seqID'] = merged_df.index
     print('before', merged_df.shape)
     merged_df.dropna(inplace=True)
-    kf_split = KFold(n_splits=fold, shuffle=True, random_state=64)
-    kf_idx_list = kf_split.split(merged_df)
+    kf_split = StratifiedKFold(n_splits=fold, shuffle=True, random_state=64)
+    kf_idx_list = kf_split.split(merged_df, y=merged_df['cls'])
     merged_df.reset_index(inplace=True, drop=True)
     merged_df['fold'] = 0
     for fold_attr, (kf_train_idx, kf_test_idx) in enumerate(kf_idx_list):
