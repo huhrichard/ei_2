@@ -13,7 +13,7 @@ import arff
 from scipy.sparse import coo_matrix, csr_matrix, eye, load_npz, save_npz
 # from rwr_from_jeff import *
 from sklearn.model_selection import KFold, StratifiedKFold
-import networkx as nx
+# import networkx as nx
 
 def convert_to_arff(df, path):
     fn = open(path, 'w')
