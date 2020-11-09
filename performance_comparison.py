@@ -44,7 +44,7 @@ def extract_df_by_method(df, method='', drop_columns=['method']):
 def best_ensemble_score(df, input, ensemble_suffix='.S'):
     list_best_base = ['deepNF', 'mashup']
     # return_df = pd.DataFrame([])
-    col_wo_method = df.columns.values.tolist()
+    col_wo_method = df.columns.tolist()
     col_wo_method.remove('method')
     col_wo_method.remove('fmax')
     # # col_wo_method.remove('')
@@ -113,6 +113,7 @@ if __name__ == "__main__":
     data_list = []
     ensemble_df_list = []
     is_go = 'go' in sys.argv[-1]
+
     # ensemble_df
     for key, val in dict_suffix.items():
         # if len(key) > 0:
@@ -199,9 +200,9 @@ if __name__ == "__main__":
     # sorted_dataname_list = [f for m, f in sorted(zip(median_fmax_list, data_list), reverse=True, key=lambda x: x[0])]
     # sorted_cp = [f for m, f in sorted(zip(median_fmax_list, cp), reverse=True, key=lambda x: x[0])]
 
-    # img_str = 'hpo'
-    # if is_go:
-    #     img_str = 'go'
+    img_str = 'hpo'
+    if is_go:
+        img_str = 'go'
     ylabel = r'$F_{max}$'
     # print(sorted_dataname_list)
     # print(sorted_fmax_list)
