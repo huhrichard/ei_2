@@ -261,7 +261,9 @@ if __name__ == "__main__":
     fig1.savefig('{}f_max_{}_comparison_{}.pdf'.format(plot_dir, file_prefix, sys.argv[-2]), bbox_inches="tight")
 
     if is_go:
-        fig2_plot_only = ['Mashup', 'DeepNF', 'EI']
+
+        # fig2_plot_only = ['Mashup', 'DeepNF', 'EI']
+        fig2_plot_only = ['Mashup', 'DeepNF', 'Ensemble\nIntegration']
         # idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
         # cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
         fig2 = plt.figure()
