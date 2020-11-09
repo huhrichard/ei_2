@@ -45,13 +45,13 @@ def best_ensemble_score(df, input, ensemble_suffix='.S'):
     list_best_base = ['deepNF', 'mashup']
     # return_df = pd.DataFrame([])
     col_wo_method = df.columns.tolist()
-    col_wo_method.remove('method')
-    col_wo_method.remove('fmax')
+    # col_wo_method.remove('method')
+    # col_wo_method.remove('fmax')
     # # col_wo_method.remove('')
     # print(col_wo_method, df.columns)
 
-    # pivoted_df = df.pivot_table('fmax', ['data_name'], 'method')
-    pivoted_df = df.pivot_table('fmax', col_wo_method, 'method')
+    pivoted_df = df.pivot_table('fmax', ['data_name'], 'method')
+    # pivoted_df = df.pivot_table('fmax', col_wo_method, 'method')
     # pivoted_df = pivoted_df.reindex(['data_name']+df['method'].unique())
     # print(pivoted_df.columns)
     # print(pivoted_df)
@@ -165,11 +165,14 @@ if __name__ == "__main__":
         performance_df['data_name'] = performance_df['data_name'].apply(add_colon)
         go_terms_set = set(list(performance_df['data_name']))
         # print(performance_df['data_name'].values[0])
-        if 'GO' in performance_df['data_name'].values[0]:
+
+        # ensemble_df = extract_df_by_method(performance_df, method='LR.S', drop_columns=['method'])
+        ensemble_df = best_ensemble_score(performance_df, input=key)
+        if 'GO' in ensemble_df['data_name'].values[0]:
             is_go = True
             gosubdag = GoSubDag(go_terms_set, godag)
-            performance_df['go_depth'] = 0
-            performance_df['go_ic'] = 0
+            ensemble_df['go_depth'] = 0
+            ensemble_df['go_ic'] = 0
             for go_term in go_terms_set:
                 try:
                     depth = gosubdag.go2obj[go_term].depth
@@ -177,10 +180,8 @@ if __name__ == "__main__":
                 except:
                     depth = 0
                     ic = 0
-                performance_df.loc[performance_df['data_name']==go_term, 'go_depth'] = depth
-                performance_df.loc[performance_df['data_name']==go_term, 'go_ic'] = ic
-        # ensemble_df = extract_df_by_method(performance_df, method='LR.S', drop_columns=['method'])
-        ensemble_df = best_ensemble_score(performance_df, input=key)
+                ensemble_df.loc[ensemble_df['data_name']==go_term, 'go_depth'] = depth
+                ensemble_df.loc[ensemble_df['data_name']==go_term, 'go_ic'] = ic
 
         ensemble_df['input'] = val
 
