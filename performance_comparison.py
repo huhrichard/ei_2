@@ -111,7 +111,7 @@ if __name__ == "__main__":
     median_fmax_list = []
     data_list = []
     ensemble_df_list = []
-    is_go = False
+    is_go = 'go' in sys.argv[-1]
     # ensemble_df
     for key, val in dict_suffix.items():
         # if len(key) > 0:
@@ -258,51 +258,51 @@ if __name__ == "__main__":
     ax1.set_title(title_name)
     fig1.savefig('{}f_max_{}_comparison_{}.pdf'.format(plot_dir, file_prefix, sys.argv[-2]), bbox_inches="tight")
 
-    # if is_go:
-    #     fig2_plot_only = ['Mashup', 'DeepNF', 'EI']
-    #     # idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
-    #     # cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
-    #     fig2 = plt.figure()
-    #     ax2 = fig2.add_subplot(111)
-    #     ax2 = sns.boxplot(ax=ax2, y='best_fmax', x='go_depth',
-    #                       data=ensemble_df_cat[ensemble_df_cat['input'].isin(fig2_plot_only)],
-    #                       # palette=c,
-    #                       hue='input', hue_order=fig2_plot_only,
-    #                       order=sorted(set(ensemble_df_cat['go_depth'].values)))
-    #     ax2.get_legend().remove()
-    #     ax2.legend(loc='upper right')
-    #     ax2.set_ylabel(ylabel)
-    #     ax2.set_xlabel('Depth in GO Hierarchy')
-    #     ax2.set_title(title_name)
-    #     fig2.savefig('{}f_max_{}_by_depth_{}.png'.format(plot_dir, img_str, sys.argv[-2]), bbox_inches="tight")
-    #
-    #     # fig2_plot_only = ['Mashup', 'DeepNF', 'EI']
-    #     # idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
-    #     # cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
-    #
-    #     ic_of_terms = ensemble_df_cat['go_ic'].values
-    #     # _, bin_edges = np.histogram(ic_of_terms, bins=5)
-    #     bin_edges = np.percentile(ic_of_terms, np.linspace(0, 100, 6))
-    #     ic_group_list = []
-    #     ensemble_df_cat['ic_group'] = 'temp'
-    #     for idx, edge in enumerate(bin_edges[:-1]):
-    #         next_edge = bin_edges[(idx+1)]
-    #         group_name = '{:.2f}-{:.2f}'.format(edge, next_edge)
-    #         ensemble_df_cat.loc[(ensemble_df_cat['go_ic'] <= next_edge) & (ensemble_df_cat['go_ic'] >= edge), 'ic_group'] = group_name
-    #         ic_group_list.append(group_name)
-    #     fig3 = plt.figure()
-    #     ax3 = fig3.add_subplot(111)
-    #     ax3 = sns.boxplot(ax=ax3, y='best_fmax', x='ic_group',
-    #                       data=ensemble_df_cat[ensemble_df_cat['input'].isin(fig2_plot_only)],
-    #                       # palette=c,
-    #                       hue='input', hue_order=fig2_plot_only,
-    #                       order=ic_group_list)
-    #     ax3.get_legend().remove()
-    #     ax3.legend(loc='upper right')
-    #     ax3.set_ylabel(ylabel)
-    #     ax3.set_xlabel('Information Content')
-    #     ax3.set_title(title_name)
-    #     fig3.savefig('{}f_max_{}_by_ic_{}.png'.format(plot_dir, img_str, sys.argv[-2]), bbox_inches="tight")
+    if is_go:
+        fig2_plot_only = ['Mashup', 'DeepNF', 'EI']
+        # idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
+        # cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
+        fig2 = plt.figure()
+        ax2 = fig2.add_subplot(111)
+        ax2 = sns.boxplot(ax=ax2, y='best_fmax', x='go_depth',
+                          data=ensemble_df_cat[ensemble_df_cat['input'].isin(fig2_plot_only)],
+                          # palette=c,
+                          hue='input', hue_order=fig2_plot_only,
+                          order=sorted(set(ensemble_df_cat['go_depth'].values)))
+        ax2.get_legend().remove()
+        ax2.legend(loc='upper right')
+        ax2.set_ylabel(ylabel)
+        ax2.set_xlabel('Depth in GO Hierarchy')
+        ax2.set_title(title_name)
+        fig2.savefig('{}f_max_{}_by_depth_{}.png'.format(plot_dir, img_str, sys.argv[-2]), bbox_inches="tight")
+
+        # fig2_plot_only = ['Mashup', 'DeepNF', 'EI']
+        # idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
+        # cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
+
+        ic_of_terms = ensemble_df_cat['go_ic'].values
+        # _, bin_edges = np.histogram(ic_of_terms, bins=5)
+        bin_edges = np.percentile(ic_of_terms, np.linspace(0, 100, 6))
+        ic_group_list = []
+        ensemble_df_cat['ic_group'] = 'temp'
+        for idx, edge in enumerate(bin_edges[:-1]):
+            next_edge = bin_edges[(idx+1)]
+            group_name = '{:.2f}-{:.2f}'.format(edge, next_edge)
+            ensemble_df_cat.loc[(ensemble_df_cat['go_ic'] <= next_edge) & (ensemble_df_cat['go_ic'] >= edge), 'ic_group'] = group_name
+            ic_group_list.append(group_name)
+        fig3 = plt.figure()
+        ax3 = fig3.add_subplot(111)
+        ax3 = sns.boxplot(ax=ax3, y='best_fmax', x='ic_group',
+                          data=ensemble_df_cat[ensemble_df_cat['input'].isin(fig2_plot_only)],
+                          # palette=c,
+                          hue='input', hue_order=fig2_plot_only,
+                          order=ic_group_list)
+        ax3.get_legend().remove()
+        ax3.legend(loc='upper right')
+        ax3.set_ylabel(ylabel)
+        ax3.set_xlabel('Information Content')
+        ax3.set_title(title_name)
+        fig3.savefig('{}f_max_{}_by_ic_{}.png'.format(plot_dir, img_str, sys.argv[-2]), bbox_inches="tight")
 
     #
     # ax1.boxplot(sorted_fmax_list)
