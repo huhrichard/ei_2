@@ -44,13 +44,14 @@ def extract_df_by_method(df, method='', drop_columns=['method']):
 def best_ensemble_score(df, input, ensemble_suffix='.S'):
     list_best_base = ['deepNF', 'mashup']
     # return_df = pd.DataFrame([])
-    # col_wo_method = df.columns.values.tolist()
-    # col_wo_method.remove('method')
-    # col_wo_method.remove('fmax')
+    col_wo_method = df.columns.values.tolist()
+    col_wo_method.remove('method')
+    col_wo_method.remove('fmax')
     # # col_wo_method.remove('')
     # print(col_wo_method, df.columns)
 
-    pivoted_df = df.pivot_table('fmax', ['data_name'], 'method')
+    # pivoted_df = df.pivot_table('fmax', ['data_name'], 'method')
+    pivoted_df = df.pivot_table('fmax', col_wo_method, 'method')
     # pivoted_df = pivoted_df.reindex(['data_name']+df['method'].unique())
     # print(pivoted_df.columns)
     # print(pivoted_df)
