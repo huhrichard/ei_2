@@ -62,7 +62,7 @@ def best_ensemble_score(df, input, ensemble_suffix='.S'):
     #         ensemble_cols.append(col)
     ensemble_cols = df['method'].unique().tolist()
     ensemble_cols.remove('best base')
-    ensemble_cols.remove('XGB.S')
+    # ensemble_cols.remove('XGB.S')
 
     # pivoted_df['best_fmax'] = 0
     if input in list_best_base:
