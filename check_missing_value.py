@@ -21,5 +21,5 @@ features = ['coexpression', 'cooccurence', 'database', 'experimental', 'fusion',
 
 for f in features:
     df = pd.read_csv('{}{}.csv'.format(csv_path, f))
-    print('{} missing count: {}%'.format(f, sum(df.isnull().values())))
+    print('{} missing count: {}%'.format(f, sum(df.isnull().values)))
 
