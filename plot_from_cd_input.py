@@ -128,7 +128,7 @@ for ontology in list_ontology:
     cd_df_melted.rename(columns={'variable': 'algo'}, inplace=True)
     print(cd_df_melted)
     # title_name = "#annotated proteins: {}".format(group)
-    fig1 = plt.figure(figsize=(15,10))
+    fig1 = plt.figure(figsize=(10,6))
     ax1 = fig1.add_subplot(111)
     ax1 = sns.boxplot(ax=ax1, y='fmax', x='algo',
                       data=cd_df_melted, palette=sorted_cp, order=sorted_algo_names,
@@ -152,13 +152,14 @@ for ontology in list_ontology:
         fig2_plot_only = ['Mashup', 'DeepNF', 'Ensemble\nIntegration']
         # idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
         # cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
-        fig2 = plt.figure(figsize=(15,10))
+        fig2 = plt.figure(figsize=(10,6))
         ax2 = fig2.add_subplot(111)
         ax2 = sns.boxplot(ax=ax2, y='fmax', x='go_depth',
                           data=cd_df_melted[cd_df_melted['algo'].isin(fig2_plot_only)],
                           # palette=c,
                           hue='algo', hue_order=fig2_plot_only,
-                          order=sorted(set(cd_df_melted['go_depth'].values)))
+                          order=sorted(set(cd_df_melted['go_depth'].values)),
+                          linewidth=2.5)
         ax2.get_legend().remove()
         ax2.legend(loc='upper right')
         ax2.set_ylabel(ylabel)
@@ -182,13 +183,14 @@ for ontology in list_ontology:
             cd_df_melted.loc[(cd_df_melted['go_ic'] <= next_edge) & (
                         cd_df_melted['go_ic'] >= edge), 'ic_group'] = group_name
             ic_group_list.append(group_name)
-        fig3 = plt.figure(figsize=(15,10))
+        fig3 = plt.figure(figsize=(10,6))
         ax3 = fig3.add_subplot(111)
         ax3 = sns.boxplot(ax=ax3, y='fmax', x='ic_group',
                           data=cd_df_melted[cd_df_melted['algo'].isin(fig2_plot_only)],
                           # palette=c,
                           hue='algo', hue_order=fig2_plot_only,
-                          order=ic_group_list)
+                          order=ic_group_list,
+                          linewidth=2.5)
         ax3.get_legend().remove()
         ax3.legend(loc='upper right')
         ax3.set_ylabel(ylabel)
