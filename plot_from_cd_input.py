@@ -148,6 +148,8 @@ for ontology in list_ontology:
     # fig1.savefig('{}f_max_{}_comparison_{}.pdf'.format(plot_dir, ontology, group_fn_suffix), bbox_inches="tight")
     fig1.savefig('{}f_max_{}_comparison.pdf'.format(plot_dir, ontology), bbox_inches="tight")
     #
+    value_count_depth = cd_df['go_depth'].value_counts().to_dict()
+    # value_count_depth = {}
     if ontology == 'go':
         # cd_df_melted.replace({'Ensemble\nIntegration':'EI'}, inplace=True)
         # fig2_plot_only = ['Mashup', 'DeepNF', 'EI']
@@ -166,12 +168,19 @@ for ontology in list_ontology:
         ax2.legend(loc='upper right')
         ax2.set_ylabel(ylabel)
         ax2.set_xlabel('Depth in GO Hierarchy', fontsize=22)
+
+        for tick in ax2.get_xticklabels():
+            original_tick = tick.get_text()
+
+            new_tick = "{}\n({})".format(original_tick, int(value_count_depth[int(original_tick)]))
+            tick.set_fontsize(22)
+
         # ax2.set_title(title_name)
         # fig2.savefig('{}f_max_{}_by_depth_{}.png'.format(plot_dir, ontology, group_fn_suffix), bbox_inches="tight")
         fig2.savefig('{}f_max_{}_by_depth.pdf'.format(plot_dir, ontology), bbox_inches="tight")
 
-        for tick in ax2.get_xticklabels():
-            tick.set_fontsize(22)
+
+
         # fig2_plot_only = ['Mashup', 'DeepNF', 'EI']
         # idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
         # cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
@@ -199,6 +208,7 @@ for ontology in list_ontology:
         ax3.legend(loc='upper right')
         ax3.set_ylabel(ylabel)
         for tick in ax3.get_xticklabels():
+
             tick.set_fontsize(22)
         ax3.set_xlabel('Information Content', fontsize=22)
         # ax3.set_title(title_name)
