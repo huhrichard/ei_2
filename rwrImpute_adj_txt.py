@@ -55,15 +55,15 @@ def main_v2(net_file, out_file, node_file=node_fn, **kwargs):
     print(W.shape)
     W_keep = ~(np.all((W == 0), axis=1))
 
-    print(W_keep.shape)
-    print(np.sum(W_keep))
+    # print(W_keep.shape)
+    # print(np.sum(W_keep))
     W_filtered_0 = W[W_keep, :]
     W_0_bool_filtered = W_0_bool[W_keep, :]
     zero_count = np.sum(W_filtered_0 == 0)
     # net_df.drop(how='all', inplace=True)
     # net_df.drop(how='all', inplace=True)
-    print('missing value count', net_file, zero_count)
-    print('missing value %', net_file, zero_count/(W_filtered_0.shape[0]*W_filtered_0.shape[1]))
+    # print('missing value count', net_file, zero_count)
+    # print('missing value %', net_file, zero_count/(W_filtered_0.shape[0]*W_filtered_0.shape[1]))
 
     return W, W_keep
 
@@ -116,5 +116,6 @@ for idx, sub_net in enumerate(sub_network_list):
     W_0_filtered = W_list[idx][W_keep_bool,:]
     zero_count = np.sum(W_0_filtered == 0)
     print('missing value count', sub_net, zero_count)
-    print('missing value %', sub_net, zero_count / (W_0_filtered.shape[0] * W_0_filtered.shape[1]))
+    print('missing value of {} = {} %'.format(sub_net,
+                                              100*zero_count / (W_0_filtered.shape[0] * W_0_filtered.shape[1])))
 
