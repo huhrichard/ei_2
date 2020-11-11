@@ -13,7 +13,7 @@ from goatools.base import download_go_basic_obo
 import seaborn as sns
 
 plt.rcParams.update({
-    # 'font.size': 20,
+    'font.size': 20,
     'figure.figsize':(11, 6)})
 plt.rcParams["font.weight"] = "bold"
 plt.rcParams["axes.labelweight"] = "bold"
