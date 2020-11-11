@@ -39,19 +39,25 @@ def setup_sparse_net_v2(network_file, node2idx_file=node_fn):
 
     # save_npz(sparse_net_file, W)
 
-    return W, nodes, np.sum(w == 0)
+    return W, nodes, (w == 0)
 
 def main_v2(net_file, out_file, node_file=node_fn, **kwargs):
     W, prots, original_0 = setup_sparse_net_v2(net_file, node2idx_file=node_file)
     print(prots)
     # net_df = pd.DataFrame(data=W, index=list(prots), columns=list(prots))
-    net_df = pd.DataFrame(data=W)
-    print((net_df==0).all(axis=1))
-    net_df = net_df.loc[~((net_df==0).all(axis=1))]
+    # net_df = pd.DataFrame(data=W)
+    print(np.sum(original_0))
+    print((W==0).all(axis=1))
+    W_0_bool = (W == 0)
+    # net_df = net_df.loc[~((net_df==0).all(axis=1))]
+    W_keep = ~(np.all((W==0), axis=1))
+    W_filtered_0 = W[W_keep]
+    W_0_bool_filtered = W_0_bool[W_keep]
+    zero_count = np.sum(W_filtered_0 == 0)
     # net_df.drop(how='all', inplace=True)
     # net_df.drop(how='all', inplace=True)
-    print('missing value count', net_file, np.sum(net_df.isnull().values))
-    print('missing value %', net_file, np.sum(net_df.isnull().values)/(net_df.shape[0]*net_df.shape[1]))
+    print('missing value count', net_file, zero_count)
+    print('missing value %', net_file, zero_count/(W_filtered_0.shape[0]*W_filtered_0.shape[1]))
 
 
 
