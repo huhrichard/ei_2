@@ -26,6 +26,7 @@ for f in features:
     print(f, 'original shape:', df.shape)
 
     np_a = df.values
+    print(np_a)
     zero_rows = (np.all(np_a == 0, axis=0))
     zero_cols = (np.all(np_a == 0, axis=1))
     print(np.sum(zero_rows))
