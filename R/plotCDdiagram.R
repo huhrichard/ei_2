@@ -19,6 +19,9 @@ cd_input <- read.csv(file = cd_fn)
 cd_input <- na.omit(cd_input)
 fn <- gsub("csv", "pdf", cd_fn)
 print(cd_input)
+pv_mat <- posthoc.friedman.nemenyi.test(cd_input)
+p_value_csv_fn <- gsub("cd_input_", "cd_pval_", cd_fn)
+write.csv(pv_mat, p_value_csv_fn)
 
 # fn <- gsub("cd_input", "./plot/cd_input", fn)
 prefix = './plot/'
@@ -34,6 +37,4 @@ cdplot <- plotCD(cd_input, alpha=0.05, cex=0.9)  +
 # ggsave(filename=gsub("csv", "png", cd_fn), plot=cdplot)
 dev.off()
 
-pv_mat <- posthoc.friedman.nemenyi.test(cd_input)
-p_value_csv_fn <- gsub("cd_input_", "cd_pval_", cd_fn)
-write.csv(pv_mat, p_value_csv_fn)
+
