@@ -149,7 +149,7 @@ for ontology in list_ontology:
     fig1.savefig('{}f_max_{}_comparison.pdf'.format(plot_dir, ontology), bbox_inches="tight")
     #
     value_count_depth = cd_df['go_depth'].value_counts().to_dict()
-    value_count_ic_bin = cd_df['go_depth'].value_counts(bin=5).to_dict()
+    value_count_ic_bin = cd_df['go_depth'].value_counts(bins=5).to_dict()
     print(value_count_ic_bin)
     # value_count_depth = {}
     if ontology == 'go':
