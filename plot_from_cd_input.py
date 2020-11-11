@@ -149,8 +149,8 @@ for ontology in list_ontology:
     fig1.savefig('{}f_max_{}_comparison.pdf'.format(plot_dir, ontology), bbox_inches="tight")
     #
     value_count_depth = cd_df['go_depth'].value_counts().to_dict()
-    value_count_ic_bin = cd_df['go_depth'].value_counts(bins=5).to_dict()
-    print(value_count_ic_bin)
+    value_count_ic_bin = cd_df['go_ic'].value_counts(bins=5).to_dict()
+    # print(value_count_ic_bin)
     # value_count_depth = {}
     if ontology == 'go':
         # cd_df_melted.replace({'Ensemble\nIntegration':'EI'}, inplace=True)
@@ -198,6 +198,7 @@ for ontology in list_ontology:
             cd_df_melted.loc[(cd_df_melted['go_ic'] <= next_edge) & (
                         cd_df_melted['go_ic'] >= edge), 'ic_group'] = group_name
             ic_group_list.append(group_name)
+        print(cd_df_melted['ic_group'].value_counts())
         fig3 = plt.figure()
         ax3 = fig3.add_subplot(111)
         ax3 = sns.boxplot(ax=ax3, y='fmax', x='ic_group',
