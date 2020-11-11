@@ -108,7 +108,7 @@ for sub_net in sub_network_list:
     W_list.append(W)
     W_keep_list.append(W_keep)
 
-W_keep_bool = np.ones_like(W_keep_list[0], dtype=bool)
+W_keep_bool = np.zeros_like(W_keep_list[0], dtype=bool)
 for idx, sub_net in enumerate(sub_network_list):
     W_keep_bool = np.logical_or(W_keep_bool, W_keep_list[idx])
 
