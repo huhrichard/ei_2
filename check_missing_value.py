@@ -22,7 +22,7 @@ csv_path = 'not_on_github/csv/'
 features = ['coexpression', 'cooccurence', 'database', 'experimental', 'fusion', 'neighborhood']
 
 for f in features:
-    df = pd.read_csv('{}{}.csv'.format(csv_path, f))
+    df = pd.read_csv('{}{}.csv'.format(csv_path, f), index_col=0)
     print(f, 'original shape:', df.shape)
 
     np_a = df.values
