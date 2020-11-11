@@ -42,7 +42,8 @@ def setup_sparse_net_v2(network_file, node2idx_file=node_fn):
 def main_v2(net_file, out_file, node_file=node_fn, **kwargs):
     W, prots = setup_sparse_net_v2(net_file, node2idx_file=node_file)
     print(prots)
-    net_df = pd.DataFrame(data=W, index=list(prots), columns=list(prots))
+    # net_df = pd.DataFrame(data=W, index=list(prots), columns=list(prots))
+    net_df = pd.DataFrame(data=W)
     net_df.dropna(how='all', inplace=True)
     print('missing value count', net_file, np.sum(net_df.isnull().values))
     print('missing value %', net_file, np.sum(net_df.isnull().values)/(net_df.shape[0]*net_df.shape[1]))
