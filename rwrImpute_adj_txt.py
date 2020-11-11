@@ -7,6 +7,9 @@ sub_network_list = ['coexpression', 'cooccurence', 'database', 'experimental', '
 txt_dir = 'not_on_github/edge_list/'
 node_fn = txt_dir + 'human_string_genes.txt'
 csv_dir = 'not_on_github/csv/'
+term_dir = 'not_on_github/tsv/'
+term_fn = 'GO2HPO_binary.tsv'
+
 
 def setup_sparse_net_v2(network_file, node2idx_file=node_fn):
     sparse_net_file = network_file.replace('.' + network_file.split('.')[-1], '.npz')
@@ -38,24 +41,34 @@ def setup_sparse_net_v2(network_file, node2idx_file=node_fn):
 def main_v2(net_file, out_file, node_file=node_fn, **kwargs):
     W, prots = setup_sparse_net_v2(net_file, node2idx_file=node_file)
 
+    net_df = pd.DataFrame(data=W, index=prots, columns=prots)
+    net_df.dropna(how='all', inplace=True)
+    print('missing value count', net_file, sum(net_df.isnull().values))
+    print('missing value %', net_file, sum(net_df.isnull().values)/(net_df.shape[0]*net_df.shape[1]))
+
+
+
+    # go_term_df = pd.read_csv(term_dir+term_fn, sep='\t', index_col=0)
+
+
     # column-normalize the network
-    P = normalizeGraphEdgeWeights(W)
+    # P = normalizeGraphEdgeWeights(W)
     # run RWR
-    X = run_rwr(P, verbose=True)
+    # X = run_rwr(P, verbose=True)
 
-    A=X.toarray()
+    # A=X.toarray()
 
-    imputed_network_edge_fn = net_file.replace('.'+net_file.split('.')[-1], '_rwrImputed.txt')
-    with open(imputed_network_edge_fn, 'w') as f:
-        writer = csv.writer(f)
-        for (n, m), val in np.ndenumerate(A):
-            if val != 0:
-                writer.writerow([int(n+1), int(m+1), val])
+    # imputed_network_edge_fn = net_file.replace('.'+net_file.split('.')[-1], '_rwrImputed.txt')
+    # with open(imputed_network_edge_fn, 'w') as f:
+    #     writer = csv.writer(f)
+    #     for (n, m), val in np.ndenumerate(A):
+    #         if val != 0:
+    #             writer.writerow([int(n+1), int(m+1), val])
 
-    filled_df = pd.DataFrame(A, index=prots, columns=prots)
-    print(A.shape, filled_df.shape)
+    # filled_df = pd.DataFrame(A, index=prots, columns=prots)
+    # print(A.shape, filled_df.shape)
 
-    filled_df.to_csv(out_file, index_label=False)
+    # filled_df.to_csv(out_file, index_label=False)
 
     # edge_list
 
