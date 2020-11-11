@@ -57,15 +57,16 @@ def main_v2(net_file, out_file, node_file=node_fn, **kwargs):
 
     # print(W_keep.shape)
     # print(np.sum(W_keep))
-    W_filtered_0 = W[W_keep, :]
-    W_0_bool_filtered = W_0_bool[W_keep, :]
+    W_filtered_0 = W[:, W_keep]
+    print(net_file, W_filtered_0.shape)
+    W_0_bool_filtered = W_0_bool[:, W_keep]
     zero_count = np.sum(W_filtered_0 == 0)
     # net_df.drop(how='all', inplace=True)
     # net_df.drop(how='all', inplace=True)
     # print('missing value count', net_file, zero_count)
     # print('missing value %', net_file, zero_count/(W_filtered_0.shape[0]*W_filtered_0.shape[1]))
 
-    return W, W_keep
+    return W_filtered_0, W_keep
 
     # go_term_df = pd.read_csv(term_dir+term_fn, sep='\t', index_col=0)
 
@@ -108,15 +109,15 @@ for sub_net in sub_network_list:
     W_list.append(W)
     W_keep_list.append(W_keep)
 
-W_keep_bool = np.zeros_like(W_keep_list[0], dtype=bool)
-for idx, sub_net in enumerate(sub_network_list):
-    W_keep_bool = np.logical_or(W_keep_bool, W_keep_list[idx])
-
-print(np.sum(W_keep_bool))
-for idx, sub_net in enumerate(sub_network_list):
-    W_0_filtered = W_list[idx][W_keep_bool,:]
-    zero_count = np.sum(W_0_filtered == 0)
-    print('missing value count', sub_net, zero_count)
-    print('missing value of {} = {} %'.format(sub_net,
-                                              100*zero_count / (W_0_filtered.shape[0] * W_0_filtered.shape[1])))
-
+# W_keep_bool = np.zeros_like(W_keep_list[0], dtype=bool)
+# for idx, sub_net in enumerate(sub_network_list):
+#     W_keep_bool = np.logical_or(W_keep_bool, W_keep_list[idx])
+#
+# print(np.sum(W_keep_bool))
+# for idx, sub_net in enumerate(sub_network_list):
+#     W_0_filtered = W_list[idx][W_keep_bool,:]
+#     zero_count = np.sum(W_0_filtered == 0)
+#     print('missing value count', sub_net, zero_count)
+#     print('missing value of {} = {} %'.format(sub_net,
+#                                               100*zero_count / (W_0_filtered.shape[0] * W_0_filtered.shape[1])))
+#
