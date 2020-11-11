@@ -122,7 +122,13 @@ for ontology in list_ontology:
                 ic = 0
             cd_df.loc[cd_df[ontology]==go_term, 'go_depth'] = depth
             cd_df.loc[cd_df[ontology]==go_term, 'go_ic'] = ic
+
+        ic_of_terms = cd_df['go_ic'].values
+        # _, bin_edges = np.histogram(ic_of_terms, bins=5)
+        bin_edges = np.percentile(ic_of_terms, np.linspace(0, 100, 6))
         list_id_vars = [ontology, 'go_depth', 'go_ic']
+
+
     else:
         list_id_vars = [ontology]
 
@@ -187,9 +193,9 @@ for ontology in list_ontology:
         # idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
         # cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
 
-        ic_of_terms = cd_df_melted['go_ic'].values
+        # ic_of_terms = cd_df_melted['go_ic'].values
         # _, bin_edges = np.histogram(ic_of_terms, bins=5)
-        bin_edges = np.percentile(ic_of_terms, np.linspace(0, 100, 6))
+        # bin_edges = np.percentile(ic_of_terms, np.linspace(0, 100, 6))
         ic_group_list = []
         cd_df_melted['ic_group'] = 'temp'
         for idx, edge in enumerate(bin_edges[:-1]):
