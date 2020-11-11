@@ -24,9 +24,16 @@ features = ['coexpression', 'cooccurence', 'database', 'experimental', 'fusion',
 for f in features:
     df = pd.read_csv('{}{}.csv'.format(csv_path, f))
     print(f, 'original shape:', df.shape)
+
     np_a = df.values
     zero_rows = (np.all(np_a == 0, axis=0))
+    zero_cols = (np.all(np_a == 0, axis=1))
     print(np.sum(zero_rows))
+    print(np.sum(zero_cols))
+    zero_rows_df = (df == 0).all(axis=0)
+    zero_cols_df = (df == 0).all(axis=1)
+    print(np.sum(zero_rows_df))
+    print(np.sum(zero_cols_df))
     # print(np_a == 0)
     # print('{} missing count: {}%'.format(f, sum(df.isnull().values)))
 
