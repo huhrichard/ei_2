@@ -66,7 +66,10 @@ for ontology in list_ontology:
     cd_csv_list = []
     for file in file_list:
         cd_df_temp = pd.read_csv(file)
+        print(file)
+        print(cd_df_temp.isna().sum())
         cd_csv_list.append(cd_df_temp)
+
 
 
         # group_fn_suffix = file.split('.csv')[0].split('cd_input_{}_'.format(ontology))[-1]
@@ -76,6 +79,7 @@ for ontology in list_ontology:
         # else:
         #     group = group_fn_suffix
     cd_df = pd.concat(cd_csv_list)
+    print(cd_df.isna().sum())
     csv_fp = cd_csv_path+'cd_input_{}.csv'.format(ontology)
     cd_df.to_csv(csv_fp, index_label=False)
     # cd_df = pd.read_csv('')
