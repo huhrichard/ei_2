@@ -139,7 +139,7 @@ for ontology in list_ontology:
     for tick in ax1.get_xticklabels():
         tick.set_fontsize(16)
         tick.set_rotation(45)
-        tick
+        # tick
         tick.set_horizontalalignment("right")
     # ax1.
     ax1.set_ylabel(ylabel, fontsize=22)
