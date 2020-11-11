@@ -194,15 +194,21 @@ for ontology in list_ontology:
         # cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
 
         # ic_of_terms = cd_df_melted['go_ic'].values
-        # _, bin_edges = np.histogram(ic_of_terms, bins=5)
+        # # _, bin_edges = np.histogram(ic_of_terms, bins=5)
         # bin_edges = np.percentile(ic_of_terms, np.linspace(0, 100, 6))
         ic_group_list = []
         cd_df_melted['ic_group'] = 'temp'
         for idx, edge in enumerate(bin_edges[:-1]):
             next_edge = bin_edges[(idx + 1)]
             group_name = '{:.2f}-{:.2f}'.format(edge, next_edge)
-            cd_df_melted.loc[(cd_df_melted['go_ic'] <= next_edge) & (
-                        cd_df_melted['go_ic'] >= edge), 'ic_group'] = group_name
+            if idx == 0:
+                cd_ic_bool = (cd_df_melted['go_ic'] <= next_edge) & (
+                        cd_df_melted['go_ic'] >= edge)
+            else:
+                cd_ic_bool = (cd_df_melted['go_ic'] <= next_edge) & (
+                        cd_df_melted['go_ic'] > edge)
+            cd_df_melted.loc[cd_ic_bool, 'ic_group'] = group_name
+
             ic_group_list.append(group_name)
         print(cd_df_melted['ic_group'].value_counts())
         fig3 = plt.figure()
