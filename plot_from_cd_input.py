@@ -130,7 +130,7 @@ for ontology in list_ontology:
     cd_df_melted.rename(columns={'variable': 'algo'}, inplace=True)
     print(cd_df_melted)
     # title_name = "#annotated proteins: {}".format(group)
-    fig1 = plt.figure()
+    fig1 = plt.figure(figsize=(12,6))
     ax1 = fig1.add_subplot(111)
     ax1 = sns.boxplot(ax=ax1, y='fmax', x='algo',
                       data=cd_df_melted, palette=sorted_cp, order=sorted_algo_names,
