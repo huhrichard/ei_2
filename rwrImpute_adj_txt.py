@@ -46,6 +46,7 @@ def main_v2(net_file, out_file, node_file=node_fn, **kwargs):
     print(prots)
     # net_df = pd.DataFrame(data=W, index=list(prots), columns=list(prots))
     net_df = pd.DataFrame(data=W)
+    print((net_df==0).all(axis=1))
     net_df = net_df.loc[~((net_df==0).all(axis=1))]
     # net_df.drop(how='all', inplace=True)
     # net_df.drop(how='all', inplace=True)
