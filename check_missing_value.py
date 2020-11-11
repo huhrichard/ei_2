@@ -20,6 +20,6 @@ csv_path = 'not_on_github/csv/'
 features = ['coexpression', 'cooccurence', 'database', 'experimental', 'fusion', 'neighborhood']
 
 for f in features:
-    df = pd.read_csv('{}{}.csv'.format(csv_path, features))
+    df = pd.read_csv('{}{}.csv'.format(csv_path, f))
     print('{} missing count: {}%'.format(f, df.isnull().sum()))
 
