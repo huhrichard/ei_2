@@ -137,7 +137,7 @@ for ontology in list_ontology:
                       linewidth=2.5)
 
     for tick in ax1.get_xticklabels():
-        tick.set_fontsize(16)
+        # tick.set_fontsize(20)
         tick.set_rotation(45)
         # tick
         tick.set_horizontalalignment("right")
@@ -165,11 +165,13 @@ for ontology in list_ontology:
         ax2.get_legend().remove()
         ax2.legend(loc='upper right')
         ax2.set_ylabel(ylabel)
-        ax2.set_xlabel('Depth in GO Hierarchy')
+        ax2.set_xlabel('Depth in GO Hierarchy', fontsize=22)
         # ax2.set_title(title_name)
         # fig2.savefig('{}f_max_{}_by_depth_{}.png'.format(plot_dir, ontology, group_fn_suffix), bbox_inches="tight")
         fig2.savefig('{}f_max_{}_by_depth.pdf'.format(plot_dir, ontology), bbox_inches="tight")
 
+        for tick in ax2.get_xticklabels():
+            tick.set_fontsize(22)
         # fig2_plot_only = ['Mashup', 'DeepNF', 'EI']
         # idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
         # cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
@@ -196,7 +198,9 @@ for ontology in list_ontology:
         ax3.get_legend().remove()
         ax3.legend(loc='upper right')
         ax3.set_ylabel(ylabel)
-        ax3.set_xlabel('Information Content')
+        for tick in ax3.get_xticklabels():
+            tick.set_fontsize(22)
+        ax3.set_xlabel('Information Content', fontsize=22)
         # ax3.set_title(title_name)
         # fig3.savefig('{}f_max_{}_by_ic_{}.png'.format(plot_dir, ontology, group_fn_suffix), bbox_inches="tight")
         fig3.savefig('{}f_max_{}_by_ic.pdf'.format(plot_dir, ontology), bbox_inches="tight")
