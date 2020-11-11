@@ -229,7 +229,7 @@ for ontology in list_ontology:
         for tick in ax3.get_xticklabels():
 
             tick.set_fontsize(22)
-        ax3.set_xlabel('Information Content', fontsize=22)
+        ax3.set_xlabel('Information Content', fontsize=24)
         # ax3.set_title(title_name)
         # fig3.savefig('{}f_max_{}_by_ic_{}.png'.format(plot_dir, ontology, group_fn_suffix), bbox_inches="tight")
         fig3.savefig('{}f_max_{}_by_ic.pdf'.format(plot_dir, ontology), bbox_inches="tight")
