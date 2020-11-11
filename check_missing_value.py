@@ -22,6 +22,11 @@ csv_path = 'not_on_github/csv/'
 features = ['coexpression', 'cooccurence', 'database', 'experimental', 'fusion', 'neighborhood']
 
 for f in features:
-    df = pd.read_csv('{}{}.csv'.format(txt_dir, f))
-    print('{} missing count: {}%'.format(f, sum(df.isnull().values)))
+    df = pd.read_csv('{}{}.csv'.format(csv_path, f))
+    print('original shape:', df.shape)
+    np_a = df.values
+    zero_rows = (np.all(W==0 , axis=1))
+    print(np.sum(zero_rows))
+    # print(np_a == 0)
+    # print('{} missing count: {}%'.format(f, sum(df.isnull().values)))
 
