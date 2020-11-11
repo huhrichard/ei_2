@@ -53,9 +53,10 @@ def main_v2(net_file, out_file, node_file=node_fn, **kwargs):
     W_0_bool = ~(W != 0)
     # net_df = net_df.loc[~((net_df==0).all(axis=1))]
     print(W.shape)
-    W_keep = np.all((W != 0), axis=1)
+    W_keep = ~(np.all((W == 0), axis=1))
+
     print(W_keep.shape)
-    W_filtered_0 = W[W_keep, ]
+    W_filtered_0 = W[W_keep, :]
     W_0_bool_filtered = W_0_bool[W_keep, :]
     zero_count = np.sum(W_filtered_0 == 0)
     # net_df.drop(how='all', inplace=True)
