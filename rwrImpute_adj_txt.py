@@ -43,8 +43,8 @@ def main_v2(net_file, out_file, node_file=node_fn, **kwargs):
 
     net_df = pd.DataFrame(data=W, index=prots, columns=prots)
     net_df.dropna(how='all', inplace=True)
-    print('missing value count', net_file, sum(net_df.isnull().values))
-    print('missing value %', net_file, sum(net_df.isnull().values)/(net_df.shape[0]*net_df.shape[1]))
+    print('missing value count', net_file, np.sum(net_df.isnull().values))
+    print('missing value %', net_file, np.sum(net_df.isnull().values)/(net_df.shape[0]*net_df.shape[1]))
 
 
 
