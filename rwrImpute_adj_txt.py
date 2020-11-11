@@ -110,8 +110,9 @@ for sub_net in sub_network_list:
 
 W_keep_bool = np.ones_like(W_keep_list[0], dtype=bool)
 for idx, sub_net in enumerate(sub_network_list):
-    W_keep_bool = W_keep_bool * W_keep_list[idx]
+    W_keep_bool = np.logical_or(W_keep_bool, W_keep_list[idx])
 
+print(np.sum(W_keep_bool))
 for idx, sub_net in enumerate(sub_network_list):
     W_0_filtered = W_list[idx][W_keep_bool,:]
     zero_count = np.sum(W_0_filtered == 0)
