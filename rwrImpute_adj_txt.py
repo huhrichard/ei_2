@@ -46,7 +46,7 @@ def main_v2(net_file, out_file, node_file=node_fn, **kwargs):
     print(prots)
     # net_df = pd.DataFrame(data=W, index=list(prots), columns=list(prots))
     net_df = pd.DataFrame(data=W)
-    net_df = net_df[(net_df.T != 0).any()]
+    net_df = net_df.loc[~(net_df==0).all(axis=1)]
     # net_df.drop(how='all', inplace=True)
     # net_df.drop(how='all', inplace=True)
     print('missing value count', net_file, np.sum(net_df.isnull().values))
