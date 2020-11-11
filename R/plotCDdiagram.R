@@ -33,3 +33,7 @@ cdplot <- plotCD(cd_input, alpha=0.05, cex=0.9)  +
     coord_flip(clip = "off")
 # ggsave(filename=gsub("csv", "png", cd_fn), plot=cdplot)
 dev.off()
+
+pv_mat <- posthoc.friedman.nemenyi.test(cd_input)
+p_value_csv_fn <- gsub("cd_input_", "cd_pval_", cd_fn)
+write.csv(pv_mat, p_value_csv_fn)
