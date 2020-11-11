@@ -48,7 +48,7 @@ def main_v2(net_file, out_file, node_file=node_fn, **kwargs):
     # net_df = pd.DataFrame(data=W)
 
     print(np.sum(original_0))
-    W = W.to_array()
+    W = W.toarray()
     # print((W==0).all(axis=1))
     W_0_bool = ~(W != 0)
     # net_df = net_df.loc[~((net_df==0).all(axis=1))]
