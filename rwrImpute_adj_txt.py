@@ -25,6 +25,7 @@ def setup_sparse_net_v2(network_file, node2idx_file=node_fn):
     # j = [node2idx[n] for n in v]
     W = coo_matrix((w, (u, v)), shape=(len(nodes), len(nodes))).tocsr()
     # make sure it is symmetric
+    print(W.shape)
     if (W.T != W).nnz == 0:
         pass
     else:
@@ -40,8 +41,8 @@ def setup_sparse_net_v2(network_file, node2idx_file=node_fn):
 
 def main_v2(net_file, out_file, node_file=node_fn, **kwargs):
     W, prots = setup_sparse_net_v2(net_file, node2idx_file=node_file)
-
-    net_df = pd.DataFrame(data=W, index=prots, columns=prots)
+    print(prots)
+    net_df = pd.DataFrame(data=W, index=prots.values, columns=prots.values)
     net_df.dropna(how='all', inplace=True)
     print('missing value count', net_file, np.sum(net_df.isnull().values))
     print('missing value %', net_file, np.sum(net_df.isnull().values)/(net_df.shape[0]*net_df.shape[1]))
