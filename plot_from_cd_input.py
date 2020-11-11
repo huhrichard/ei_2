@@ -13,6 +13,8 @@ from goatools.base import download_go_basic_obo
 import seaborn as sns
 
 plt.rcParams.update({'font.size': 20, 'figure.figsize':(10, 6)})
+plt.rcParams["font.weight"] = "bold"
+plt.rcParams["axes.labelweight"] = "bold"
 
 obo_fname = download_go_basic_obo()
 from os.path import abspath
@@ -129,11 +131,13 @@ for ontology in list_ontology:
     fig1 = plt.figure(figsize=(15,10))
     ax1 = fig1.add_subplot(111)
     ax1 = sns.boxplot(ax=ax1, y='fmax', x='algo',
-                      data=cd_df_melted, palette=sorted_cp, order=sorted_algo_names)
+                      data=cd_df_melted, palette=sorted_cp, order=sorted_algo_names,
+                      linewidth=2.5)
 
     for tick in ax1.get_xticklabels():
         tick.set_fontsize(16)
         tick.set_rotation(45)
+        tick
         tick.set_horizontalalignment("right")
     # ax1.
     ax1.set_ylabel(ylabel, fontsize=22)
