@@ -185,6 +185,7 @@ for ontology in list_ontology:
             original_tick = tick.get_text()
 
             new_tick = "{}\n({})".format(original_tick, int(value_count_depth[int(original_tick)]))
+            tick.set_text(new_tick)
             tick.set_fontsize(22)
 
         # ax2.set_title(title_name)
