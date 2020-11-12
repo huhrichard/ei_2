@@ -31,7 +31,7 @@ fn <- gsub("^.*/", "", fn)
 fn <- paste(prefix, fn, sep="")
 print(fn)
 pdf(file=fn, width=15, bg="white")
-par(mar=c(1,5,1,5))
+# par(mar=c(1,5,1,5))
 cdplot <- plotCD(cd_input, alpha=0.05, cex=0.9)  +
   geom_point() +
   coord_fixed(ratio = 0.5) + coord_flip(clip = "off")
