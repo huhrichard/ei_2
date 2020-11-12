@@ -205,7 +205,7 @@ for ontology in list_ontology:
             print(new_tick)
             tick.set_text(new_tick)
             ax2_new_xticks.append(new_tick)
-            tick.set_fontsize(22)
+            tick.set_fontsize(21)
 
         ax2.set_xticklabels(ax2_new_xticks)
 
@@ -250,7 +250,7 @@ for ontology in list_ontology:
         ax3.set_ylabel(ylabel)
         for tick in ax3.get_xticklabels():
 
-            tick.set_fontsize(22)
+            tick.set_fontsize(21)
         ax3.set_xlabel('Information Content', fontsize=23)
         # ax3.set_title(title_name)
         # fig3.savefig('{}f_max_{}_by_ic_{}.png'.format(plot_dir, ontology, group_fn_suffix), bbox_inches="tight")
