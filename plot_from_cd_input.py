@@ -180,7 +180,7 @@ for ontology in list_ontology:
         ax2.legend(loc='upper right')
         ax2.set_ylabel(ylabel)
         ax2.set_xlabel('Depth in GO Hierarchy', fontsize=22)
-
+        ax2_new_xticks = []
 
         for tick in ax2.get_xticklabels():
             original_tick = tick.get_text()
@@ -188,7 +188,10 @@ for ontology in list_ontology:
             new_tick = "{}\n({})".format(original_tick, int(value_count_depth[int(original_tick)]))
             print(new_tick)
             tick.set_text(new_tick)
+            ax2_new_xticks.append(new_tick)
             tick.set_fontsize(22)
+
+        ax2.set_xticklabels(ax2_new_xticks)
 
         # ax2.set_title(title_name)
         # fig2.savefig('{}f_max_{}_by_depth_{}.png'.format(plot_dir, ontology, group_fn_suffix), bbox_inches="tight")
