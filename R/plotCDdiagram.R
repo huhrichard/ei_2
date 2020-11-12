@@ -22,7 +22,7 @@ fn <- gsub("csv", "pdf", cd_fn)
 # print(cd_input)
 pv_mat <- posthoc.friedman.nemenyi.test(as.matrix(cd_input))
 p_value_csv_fn <- gsub("cd_input_", "cd_pval_", cd_fn)
-write.csv(pv_mat, p_value_csv_fn)
+write.csv(pv_mat$p.value, p_value_csv_fn)
 
 # fn <- gsub("cd_input", "./plot/cd_input", fn)
 prefix = './plot/'
