@@ -14,7 +14,7 @@ import seaborn as sns
 
 plt.rcParams.update({
     'font.size': 20,
-    'figure.figsize':(15, 7)})
+    'figure.figsize':(12, 6)})
 plt.rcParams["font.weight"] = "bold"
 plt.rcParams["axes.labelweight"] = "bold"
 
@@ -194,7 +194,7 @@ for ontology in list_ontology:
                           linewidth=2.5)
         ax2.get_legend().remove()
         ax2.legend(loc='upper right')
-        ax2.set_ylabel(ylabel, fontsize=22)
+        ax2.set_ylabel(ylabel)
         ax2.set_xlabel('Depth in GO Hierarchy', fontsize=22)
         ax2_new_xticks = []
 
@@ -247,11 +247,11 @@ for ontology in list_ontology:
                           linewidth=2.5)
         ax3.get_legend().remove()
         ax3.legend(loc='upper right')
-        ax3.set_ylabel(ylabel, fontsize=22)
+        ax3.set_ylabel(ylabel)
         for tick in ax3.get_xticklabels():
 
             tick.set_fontsize(21)
-        ax3.set_xlabel('Information Content', fontsize=23)
+        ax3.set_xlabel('Information Content', fontsize=21)
         # ax3.set_title(title_name)
         # fig3.savefig('{}f_max_{}_by_ic_{}.png'.format(plot_dir, ontology, group_fn_suffix), bbox_inches="tight")
         fig3.savefig('{}f_max_{}_by_ic.pdf'.format(plot_dir, ontology), bbox_inches="tight")
