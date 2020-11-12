@@ -14,7 +14,7 @@ import seaborn as sns
 
 plt.rcParams.update({
     'font.size': 20,
-    'figure.figsize':(12, 6)})
+    'figure.figsize':(13, 6)})
 plt.rcParams["font.weight"] = "bold"
 plt.rcParams["axes.labelweight"] = "bold"
 
