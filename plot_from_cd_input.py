@@ -116,7 +116,7 @@ for ontology in list_ontology:
         gosubdag = GoSubDag(go_terms_set, godag)
         cd_df['go_depth'] = 0
         cd_df['go_ic'] = 0
-        cd_df['ic_group'] = temp
+        cd_df['ic_group'] = 'temp'
         for go_term in go_terms_set:
             try:
                 depth = gosubdag.go2obj[go_term].depth
