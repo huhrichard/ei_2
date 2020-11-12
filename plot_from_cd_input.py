@@ -166,10 +166,10 @@ for ontology in list_ontology:
                       data=cd_df_melted, palette=sorted_cp, order=sorted_algo_names,
                       linewidth=2.5)
 
-    pval_mat = sp.posthoc_nemenyi_friedman(cd_df_melted,
-                                           y_col='fmax', block_col='go', group_col='algo', melted=True)
-    pval_mat.to_csv(cd_csv_path + 'cd_pval_go.csv')
-    print(pval_mat)
+    # pval_mat = sp.posthoc_nemenyi_friedman(cd_df_melted,
+    #                                        y_col='fmax', block_col='go', group_col='algo', melted=True)
+    # pval_mat.to_csv(cd_csv_path + 'cd_pval_go.csv')
+    # print(pval_mat)
 
     for tick in ax1.get_xticklabels():
         # tick.set_fontsize(20)
