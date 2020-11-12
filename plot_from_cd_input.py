@@ -14,7 +14,7 @@ import seaborn as sns
 
 plt.rcParams.update({
     'font.size': 20,
-    'figure.figsize':(11, 6)})
+    'figure.figsize':(12, 6)})
 plt.rcParams["font.weight"] = "bold"
 plt.rcParams["axes.labelweight"] = "bold"
 
@@ -116,6 +116,7 @@ for ontology in list_ontology:
         gosubdag = GoSubDag(go_terms_set, godag)
         cd_df['go_depth'] = 0
         cd_df['go_ic'] = 0
+        cd_df['ic_group'] = temp
         for go_term in go_terms_set:
             try:
                 depth = gosubdag.go2obj[go_term].depth
@@ -127,10 +128,25 @@ for ontology in list_ontology:
             cd_df.loc[cd_df[ontology]==go_term, 'go_depth'] = depth
             cd_df.loc[cd_df[ontology]==go_term, 'go_ic'] = ic
 
+
+
         ic_of_terms = cd_df['go_ic'].values
         # _, bin_edges = np.histogram(ic_of_terms, bins=5)
         bin_edges = np.percentile(ic_of_terms, np.linspace(0, 100, 6))
-        list_id_vars = [ontology, 'go_depth', 'go_ic']
+        ic_group_list = []
+        for idx, edge in enumerate(bin_edges[:-1]):
+            next_edge = bin_edges[(idx + 1)]
+            group_name = '{:.2f}-{:.2f}'.format(edge, next_edge)
+            if idx == 0:
+                cd_ic_bool = (cd_df['go_ic'] <= next_edge) & (
+                        cd_df['go_ic'] >= edge)
+            else:
+                cd_ic_bool = (cd_df['go_ic'] <= next_edge) & (
+                        cd_df['go_ic'] > edge)
+            cd_df.loc[cd_ic_bool, 'ic_group'] = group_name
+            ic_group_list.append(group_name)
+        list_id_vars = [ontology, 'go_depth', 'go_ic', 'ic_group']
+        print(cd_df['ic_group'].value_counts())
 
 
     else:
@@ -206,20 +222,20 @@ for ontology in list_ontology:
         # ic_of_terms = cd_df_melted['go_ic'].values
         # # _, bin_edges = np.histogram(ic_of_terms, bins=5)
         # bin_edges = np.percentile(ic_of_terms, np.linspace(0, 100, 6))
-        ic_group_list = []
-        cd_df_melted['ic_group'] = 'temp'
-        for idx, edge in enumerate(bin_edges[:-1]):
-            next_edge = bin_edges[(idx + 1)]
-            group_name = '{:.2f}-{:.2f}'.format(edge, next_edge)
-            if idx == 0:
-                cd_ic_bool = (cd_df_melted['go_ic'] <= next_edge) & (
-                        cd_df_melted['go_ic'] >= edge)
-            else:
-                cd_ic_bool = (cd_df_melted['go_ic'] <= next_edge) & (
-                        cd_df_melted['go_ic'] > edge)
-            cd_df_melted.loc[cd_ic_bool, 'ic_group'] = group_name
-
-            ic_group_list.append(group_name)
+        # ic_group_list = []
+        # cd_df_melted['ic_group'] = 'temp'
+        # for idx, edge in enumerate(bin_edges[:-1]):
+        #     next_edge = bin_edges[(idx + 1)]
+        #     group_name = '{:.2f}-{:.2f}'.format(edge, next_edge)
+        #     if idx == 0:
+        #         cd_ic_bool = (cd_df_melted['go_ic'] <= next_edge) & (
+        #                 cd_df_melted['go_ic'] >= edge)
+        #     else:
+        #         cd_ic_bool = (cd_df_melted['go_ic'] <= next_edge) & (
+        #                 cd_df_melted['go_ic'] > edge)
+        #     cd_df_melted.loc[cd_ic_bool, 'ic_group'] = group_name
+        #
+        #     ic_group_list.append(group_name)
         print(cd_df_melted['ic_group'].value_counts())
         fig3 = plt.figure()
         ax3 = fig3.add_subplot(111)
@@ -235,7 +251,7 @@ for ontology in list_ontology:
         for tick in ax3.get_xticklabels():
 
             tick.set_fontsize(22)
-        ax3.set_xlabel('Information Content', fontsize=24)
+        ax3.set_xlabel('Information Content', fontsize=23)
         # ax3.set_title(title_name)
         # fig3.savefig('{}f_max_{}_by_ic_{}.png'.format(plot_dir, ontology, group_fn_suffix), bbox_inches="tight")
         fig3.savefig('{}f_max_{}_by_ic.pdf'.format(plot_dir, ontology), bbox_inches="tight")
