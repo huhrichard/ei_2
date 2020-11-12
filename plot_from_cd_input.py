@@ -11,10 +11,11 @@ from goatools.semantic import TermCounts
 
 from goatools.base import download_go_basic_obo
 import seaborn as sns
+import scikit_posthocs as sp
 
 plt.rcParams.update({
     'font.size': 20,
-    'figure.figsize':(12, 6)})
+    'figure.figsize':(14, 6)})
 plt.rcParams["font.weight"] = "bold"
 plt.rcParams["axes.labelweight"] = "bold"
 
@@ -85,6 +86,7 @@ for ontology in list_ontology:
     # cd_df = pd.read_csv('')
     # print(cd_df)
 
+
     algo_names = cd_df.columns
     if 'Coocuurence' in algo_names:
         cd_df.rename(columns={'Coocuurence': 'Co-occurrence'}, inplace=True)
@@ -102,6 +104,8 @@ for ontology in list_ontology:
     # cd_df.rename(columns={'EI':'Ensemble\nIntegration', })
     algo_names = cd_df.columns.values.tolist()
     cd_df_median = cd_df[dict_suffix].median()
+
+
     # algo_names =
     print(cd_df_median)
     sorted_tuple = sorted(zip(cd_df_median, dict_suffix, cp), reverse=True, key=lambda x: x[0])
@@ -162,6 +166,11 @@ for ontology in list_ontology:
                       data=cd_df_melted, palette=sorted_cp, order=sorted_algo_names,
                       linewidth=2.5)
 
+    pval_mat = sp.posthoc_nemenyi_friedman(cd_df_melted,
+                                           y_col='fmax', block_col='go', group_col='algo', melted=True)
+    pval_mat.to_csv(cd_csv_path + 'cd_pval_go.csv')
+    print(pval_mat)
+
     for tick in ax1.get_xticklabels():
         # tick.set_fontsize(20)
         tick.set_rotation(45)
@@ -201,11 +210,12 @@ for ontology in list_ontology:
         for tick in ax2.get_xticklabels():
             original_tick = tick.get_text()
             print(original_tick)
+
             new_tick = '{}\n({})'.format(original_tick, int(value_count_depth[int(original_tick)]))
             print(new_tick)
             tick.set_text(new_tick)
             ax2_new_xticks.append(new_tick)
-            tick.set_fontsize(20.5)
+            tick.set_fontsize(22)
 
         ax2.set_xticklabels(ax2_new_xticks, fontweight='semibold')
 
@@ -250,8 +260,8 @@ for ontology in list_ontology:
         ax3.set_ylabel(ylabel)
         for tick in ax3.get_xticklabels():
 
-            tick.set_fontsize(20.5)
-        ax3.set_xlabel('Information Content', fontsize=21)
+            tick.set_fontsize(22)
+        ax3.set_xlabel('Information Content', fontsize=22)
         # ax3.set_title(title_name)
         # fig3.savefig('{}f_max_{}_by_ic_{}.png'.format(plot_dir, ontology, group_fn_suffix), bbox_inches="tight")
         fig3.savefig('{}f_max_{}_by_ic.pdf'.format(plot_dir, ontology), bbox_inches="tight")

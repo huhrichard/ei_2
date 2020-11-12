@@ -20,9 +20,9 @@ cd_input <- read.csv(file = cd_fn)
 cd_input <- na.omit(cd_input)
 fn <- gsub("csv", "pdf", cd_fn)
 # print(cd_input)
-pv_mat <- posthoc.friedman.nemenyi.test(as.matrix(cd_input))
-p_value_csv_fn <- gsub("cd_input_", "cd_pval_", cd_fn)
-write.csv(pv_mat$p.value, p_value_csv_fn)
+# pv_mat <- posthoc.friedman.nemenyi.test(as.matrix(cd_input))
+# p_value_csv_fn <- gsub("cd_input_", "cd_pval_", cd_fn)
+# write.csv(pv_mat$p.value, p_value_csv_fn)
 
 # fn <- gsub("cd_input", "./plot/cd_input", fn)
 prefix = './plot/'
