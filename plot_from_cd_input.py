@@ -181,10 +181,12 @@ for ontology in list_ontology:
         ax2.set_ylabel(ylabel)
         ax2.set_xlabel('Depth in GO Hierarchy', fontsize=22)
 
+
         for tick in ax2.get_xticklabels():
             original_tick = tick.get_text()
-
+            print(original_tick)
             new_tick = "{}\n({})".format(original_tick, int(value_count_depth[int(original_tick)]))
+            print(new_tick)
             tick.set_text(new_tick)
             tick.set_fontsize(22)
 
