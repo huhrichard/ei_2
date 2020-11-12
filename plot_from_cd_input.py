@@ -11,7 +11,7 @@ from goatools.semantic import TermCounts
 
 from goatools.base import download_go_basic_obo
 import seaborn as sns
-import scikit_posthocs as sp
+# import scikit_posthocs as sp
 
 plt.rcParams.update({
     'font.size': 20,
