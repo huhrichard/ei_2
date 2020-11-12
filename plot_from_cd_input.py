@@ -201,13 +201,13 @@ for ontology in list_ontology:
         for tick in ax2.get_xticklabels():
             original_tick = tick.get_text()
             print(original_tick)
-            new_tick = "{}\n({})".format(original_tick, int(value_count_depth[int(original_tick)]))
+            new_tick = "$\mathbf{{}}\n({})".format(original_tick, int(value_count_depth[int(original_tick)]))
             print(new_tick)
             tick.set_text(new_tick)
             ax2_new_xticks.append(new_tick)
             tick.set_fontsize(20.5)
 
-        ax2.set_xticklabels(ax2_new_xticks)
+        ax2.set_xticklabels(ax2_new_xticks, fontweight='normal')
 
         # ax2.set_title(title_name)
         # fig2.savefig('{}f_max_{}_by_depth_{}.png'.format(plot_dir, ontology, group_fn_suffix), bbox_inches="tight")
