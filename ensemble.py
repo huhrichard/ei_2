@@ -76,12 +76,14 @@ def get_predictions(df, ensemble, fold, seedval):
          'ensemble_size': len(ensemble)})
 
 
-def select_candidate_enhanced(train_df, train_labels, best_classifiers, ensemble, i):
+def select_candidate_enhanced(train_df, train_labels, best_classifiers, ensemble, i, scoring_func):
     initial_ensemble_size = 2
     max_candidates = 50
     if len(ensemble) >= initial_ensemble_size:
         candidates = choice(best_classifiers.index.values, min(max_candidates, len(best_classifiers)), replace=False)
-        candidate_scores = [common.score(train_labels, train_df[ensemble + [candidate]].mean(axis=1)) for candidate in
+        # candidate_scores = [common.score(train_labels, train_df[ensemble + [candidate]].mean(axis=1)) for candidate in
+        #                     candidates]
+        candidate_scores = [scoring_func(train_labels, train_df[ensemble + [candidate]].mean(axis=1)) for candidate in
                             candidates]
         best_candidate = candidates[common.argbest(candidate_scores)]
     else:
@@ -109,7 +111,7 @@ def selection(fold, seedval, path, agg):
     test_performance = []
     ensemble = []
     for i in range(min(max_ensemble_size, len(best_classifiers))):
-        best_candidate = select_candidate_enhanced(train_df, train_labels, best_classifiers, ensemble, i)
+        best_candidate = select_candidate_enhanced(train_df, train_labels, best_classifiers, ensemble, i, scoring_func=common.f_max)
         ensemble.append(best_candidate)
         train_performance.append(get_performance(train_df, ensemble, fold, seedval))
         test_performance.append(get_performance(test_df, ensemble, fold, seedval))
@@ -139,7 +141,7 @@ def selection_weighted_mse(fold, seedval, path, agg):
     test_performance = []
     ensemble = []
     for i in range(min(max_ensemble_size, len(best_classifiers))):
-        best_candidate = select_candidate_enhanced(train_df, train_labels, best_classifiers, ensemble, i)
+        best_candidate = select_candidate_enhanced(train_df, train_labels, best_classifiers, ensemble, i, scoring_func=weighted_mse)
         ensemble.append(best_candidate)
         train_performance.append(get_performance(train_df, ensemble, fold, seedval))
         test_performance.append(get_performance(test_df, ensemble, fold, seedval))
@@ -663,9 +665,10 @@ assert len(feature_folders) > 0
 #     fold_values = range(int(p['foldCount']))
 # print(fold_values)
 # pca_fold_values = ['pca_{}'.format(fv) for fv in fold_values]
-# testing_bool = ('67890' in fold_values and 'foldAttribute' in p)
-
 fold_values = ['validation']
+testing_bool = ('67890' in fold_values and 'foldAttribute' in p)
+
+
 if args.regression:
     main_regression(args.path, fold_values, args.aggregate)
 else:
