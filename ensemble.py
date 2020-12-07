@@ -233,7 +233,7 @@ def CES_weighted_mse(path, fold_count=range(5), agg=1):
             predictions_dfs.append(pred_df)
             train_predictions_dfs.append(train_pred_df)
             performance_dfs.append(perf_df)
-            thres = thres_fmax(train_pred_df.label, train_pred_df.prediction)
+            # thres = thres_fmax(train_pred_df.label, train_pred_df.prediction)
     performance_df = pd.concat(performance_dfs)
     performance_df.to_csv('%s/analysis/selection-%s-%s-iterations.csv' % (path, method, 'weighted_mse'), index=False)
     predictions_df = pd.concat(predictions_dfs)
@@ -248,6 +248,8 @@ def CES_weighted_mse(path, fold_count=range(5), agg=1):
     #
     # else:
     # print(thres)
+    print(predictions_df.label)
+    print(predictions_df.prediction)
     weighted_mse_score = weighted_mse(predictions_df.label, predictions_df.prediction)
     return {'weighted_mse': weighted_mse_score}
 
