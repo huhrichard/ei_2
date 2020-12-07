@@ -279,7 +279,7 @@ def mean_fmax(path, fold_count=range(5), agg=1):
 def mean_weighted_mse(path, fold_count=range(5), agg=1):
     def _unbag_mean(df, agg=agg):
         df = common.unbag(df, agg)
-        return df.mean(axis=1).values
+        return df.mean(axis=1)
     assert exists(path)
     if not exists('%s/analysis' % path):
         mkdir('%s/analysis' % path)
@@ -291,8 +291,11 @@ def mean_weighted_mse(path, fold_count=range(5), agg=1):
         # if testing_bool or (not 'foldAttribute' in p):
         train_df, train_label, test_df, test_label = common.read_fold(path, fold)
         predict = _unbag_mean(test_df, agg)
-        predictions = append(predictions, predict)
-        labels = append(labels, test_label)
+        # predictions = append(predictions, predict)
+        # labels = append(labels, test_label)
+        predictions = pd.concat(predictions, predict)
+        labels = pd.concat(labels, test_label)
+
         # thres = thres_fmax(train_label, _unbag_mean(train_df))
 
     weighted_mse_score = weighted_mse(labels, predictions)
