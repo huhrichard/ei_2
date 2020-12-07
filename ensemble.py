@@ -248,9 +248,9 @@ def CES_weighted_mse(path, fold_count=range(5), agg=1):
     #
     # else:
     # print(thres)
-    print(predictions_df.label)
-    print(predictions_df.prediction)
-    weighted_mse_score = weighted_mse(predictions_df.label, predictions_df.prediction)
+    print(predictions_df.index.loc[:, 'label'])
+    print(predictions_df.loc[:, 'prediction'])
+    weighted_mse_score = weighted_mse(predictions_df.index.loc[:, 'label'], predictions_df.loc[:, 'prediction'])
     return {'weighted_mse': weighted_mse_score}
 
 
