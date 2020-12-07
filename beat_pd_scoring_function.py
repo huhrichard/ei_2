@@ -13,7 +13,8 @@ subject_id_col = 'subject_id'
 """
 Change the path if needed
 """
-measurement_subject_path = 'processed_data/measurement_subject_table.csv'
+# measurement_subject_path = 'processed_data/measurement_subject_table.csv'
+measurement_subject_path = 'not_on_github/beat_pd_challenge/processed_data_for_EI/measurement_subject_table.csv'
 measurement_subject_df = pd.read_csv(measurement_subject_path)
 # print(measurement_subject_df)
 
