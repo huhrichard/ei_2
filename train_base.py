@@ -126,7 +126,7 @@ def preprocessing():
     if args.pca:
         arff_list = [read_arff_to_pandas_df(f_path + '/data.arff') for f_path in feature_folders]
         data_path_list = [f_path + '/data_{}.arff' for f_path in feature_folders]
-        pca_fold_values = ['pca_{}'.format(fv) for fv in fold_values]
+        pca_fold_values = ['dr_{}'.format(fv) for fv in fold_values]
         fold_col = p['foldAttribute']
         column_non_feature = [fold_col, label_col, id_col]
         for outer_fold in fold_values:
@@ -155,7 +155,7 @@ def preprocessing():
             random_seed = 64
             for df in arff_list:
                 n_neighbors = 10
-                n_components = min([5, min(df.shape)])
+                n_components = min([2, min(df.shape)])
                 LLE = partial(manifold.LocallyLinearEmbedding,
                                      n_neighbors, n_components, eigen_solver='auto')
                 dr_list = {'PCA': decomposition.PCA(n_components=n_components, random_state=random_seed),
