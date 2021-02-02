@@ -18,7 +18,8 @@ import pandas as pd
 import tcca_projection
 import numpy as np
 import generate_data
-from sklearn.decomposition import PCA
+# from sklearn.decomposition
+from sklearn import manifold, decomposition
 
 
 def str2bool(v):
@@ -71,6 +72,9 @@ fns = [fn for fn in fns if not fn in excluding_folder]
 fns = [fn for fn in fns if not 'tcca' in fn]
 fns = [data_path + '/' + fn for fn in fns]
 feature_folders = [fn for fn in fns if isdir(fn)]
+from functools import partial
+
+
 assert len(feature_folders) > 0
 
 if 'foldAttribute' in p:
@@ -90,8 +94,6 @@ jobs_fn = "temp_train_base_{}_{}.jobs".format(data_source_dir, data_name)
 job_file = open(jobs_fn, 'w')
 job_file.write('module load groovy\n')
 def preprocessing():
-
-
     # print(arff_list[0].shape)
     # print(arff_list[0]['fold'])
     import torch
@@ -106,7 +108,7 @@ def preprocessing():
     # else:
     tl_pytorch = False
 
-    rdim = 10
+    # rdim = 10
 
 
 
@@ -136,18 +138,52 @@ def preprocessing():
                                     **context_dict) for t in test_split_list]
             train_X_raw = [tl.tensor(t.drop(columns=column_non_feature).values,
                                      **context_dict) for t in train_split_list]
-            pca_list = [PCA(n_components=min([10, df.shape[0]]),
-                            svd_solver='arpack', random_state=64) for df in arff_list]
+            # pca_list = [PCA(n_components=min([10, df.shape[0]]),
+            #                 svd_solver='arpack', random_state=64) for df in arff_list]
+            # Z_train = []
+            # Z_test = []
+            #
+            # for idx, pca_obj in enumerate(pca_list):
+            #     Z_train_n = pca_obj.fit_transform(train_X_raw[idx])
+            #     Z_test_n = pca_obj.transform(test_X_raw[idx])
+            #     Z_train.append(Z_train_n)
+            #     Z_test.append(Z_test_n)
+
+            manifold_learning_list = []
             Z_train = []
             Z_test = []
+            random_seed = 64
+            for df in arff_list:
+                n_neighbors = 10
+                n_components = min([5, min(df.shape)])
+                LLE = partial(manifold.LocallyLinearEmbedding,
+                                     n_neighbors, n_components, eigen_solver='auto')
+                dr_list = {'PCA': decomposition.PCA(n_components=n_components, random_state=random_seed),
+                            'ICA': decomposition.FastICA(n_components=n_components, random_state=random_seed),
+                             'LLE': LLE(method='standard'),
+                             'Isomap': manifold.Isomap(n_neighbors, n_components),
+                             'SE': manifold.SpectralEmbedding(n_components=n_components,
+                                                              n_neighbors=n_neighbors),
+                             'TSNE': manifold.TSNE(n_components, init='pca', random_state=random_seed),
+                             # 'MDS': manifold.MDS(n_components, random_state=random_seed)
+                             }
+                Z_train_n = []
+                Z_test_n = []
+                feat_cols = []
 
-            for idx, pca_obj in enumerate(pca_list):
-                Z_train_n = pca_obj.fit_transform(train_X_raw[idx])
-                Z_test_n = pca_obj.transform(test_X_raw[idx])
-                Z_train.append(Z_train_n)
-                Z_test.append(Z_test_n)
+                for idx, (dr_key, dr_obj) in enumerate(dr_list.items()):
+                    feat_col = ['{}_{}'.format(dr_key, i) for i in range(n_components)]
+                    feat_cols = feat_cols + feat_col
 
-            feat_col = ['ProjectedFeature{}'.format(i) for i in range(rdim)]
+                    Z_train_dr = dr_obj.fit_transform(train_X_raw[idx])
+                    Z_test_dr = dr_obj.transform(test_X_raw[idx])
+                    Z_train_n.append(Z_train_dr)
+                    Z_test_n.append(Z_test_dr)
+
+                Z_train.append(np.hstack(Z_train_n))
+                Z_test.append(np.hstack(Z_test_n))
+
+
             projected_train_df_list = [pd.DataFrame(data=z_t,
                                                     columns=feat_col) for z_t in Z_train]
             projected_train_df_list = [pd.concat([df.reset_index(drop=True), train_nf.reset_index(drop=True)],
@@ -163,12 +199,12 @@ def preprocessing():
                                     zip(projected_test_df_list, projected_train_df_list)]
 
 
-            arff_fn_list = [f_path + '/data_pca_{}.arff'.format(outer_fold) for f_path in feature_folders]
+            arff_fn_list = [f_path + '/data_dr_{}.arff'.format(outer_fold) for f_path in feature_folders]
 
 
             for v_fn, projected_df in zip(arff_fn_list, projected_df_with_nf):
                 print(projected_df.columns)
-                projected_df['fold'] = 'pca_' + projected_df['fold'].astype(str)
+                projected_df['fold'] = 'dr_' + projected_df['fold'].astype(str)
                 generate_data.convert_to_arff(projected_df, v_fn)
 
 

@@ -20,11 +20,11 @@ def average_pearson_score(x):
     return mean(abs(rho[triu_indices_from(rho, 1)]))
 
 
-def get_best_performer(df, one_se = False):
+def get_best_performer(df, one_se = False, _greater_is_better=True):
     if not one_se:
         return df[df.score == best(df.score)].head(1)
     se = df.score.std() / sqrt(df.shape[0] - 1)
-    if greater_is_better:
+    if _greater_is_better:
         return df[df.score >= best(df.score) - se].head(1)
     return df[df.score <= best(df.score) + se].head(1)
 
@@ -103,6 +103,9 @@ def read_fold(path, fold):
     test_df         = read_csv('%s/predictions-%s.csv.gz' % (path, fold), index_col = [0, 1], compression = 'gzip')
     train_labels    = train_df.index.get_level_values('label').values
     test_labels     = test_df.index.get_level_values('label').values
+    # train_labels = train_df.index.get_level_values('label')
+    # test_labels = test_df.index.get_level_values('label')
+
     return train_df, train_labels, test_df, test_labels
 
 
@@ -110,7 +113,7 @@ def rmse_score(a, b):
     return sqrt(mean((a - b)**2))
 
 
-def unbag(df, bag_count):
+def unbag(df, bag_count, remove_label=False):
     cols = []
     bag_start_indices = range(0, df.shape[1], bag_count)
     names = [_.split('.')[0] for _ in df.columns.values[bag_start_indices]]
@@ -118,6 +121,9 @@ def unbag(df, bag_count):
         cols.append(df.iloc[:, i:i+bag_count].mean(axis = 1))
     df = concat(cols, axis = 1)
     df.columns = names
+    if remove_label:
+        df.reset_index(inplace=True)
+        df.set_index('id', inplace=True)
     return df
 
 def check_dir_n_mkdir(path):
