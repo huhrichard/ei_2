@@ -162,9 +162,7 @@ def preprocessing():
                             'ICA': decomposition.FastICA(n_components=n_components, random_state=random_seed),
                              'LLE': LLE(method='standard'),
                              'Isomap': manifold.Isomap(n_neighbors, n_components),
-                             'SE': manifold.SpectralEmbedding(n_components=n_components,
-                                                              n_neighbors=n_neighbors),
-                             'TSNE': manifold.TSNE(n_components, init='pca', random_state=random_seed),
+                             # 'TSNE': manifold.TSNE(n_components, init='pca', random_state=random_seed),
                              # 'MDS': manifold.MDS(n_components, random_state=random_seed)
                              }
                 Z_train_n = []
