@@ -41,7 +41,7 @@ parser.add_argument('--memory', '-M', type=str, default='20000', help='memory re
 parser.add_argument('--classpath', '-CP', type=str, default='./weka.jar', help='default weka path')
 parser.add_argument('--hpc', type=str2bool, default='true', help='use HPC cluster or not')
 parser.add_argument('--fold', '-F', type=int, default=5, help='number of cross-validation fold')
-parser.add_argument('--pca', type=str2bool, default='False', help='train base classifier by PCA projected features)')
+parser.add_argument('--dr', type=str2bool, default='False', help='train base classifier by PCA projected features)')
 args = parser.parse_args()
 ### record starting time
 start = time()
@@ -123,7 +123,7 @@ def preprocessing():
             classpath, working_dir, data_path, project_path, fold, bag, False, classifier))
 
 
-    if args.pca:
+    if args.dr:
         arff_list = [read_arff_to_pandas_df(f_path + '/data.arff') for f_path in feature_folders]
         data_path_list = [f_path + '/data_{}.arff' for f_path in feature_folders]
         pca_fold_values = ['dr_{}'.format(fv) for fv in fold_values]
