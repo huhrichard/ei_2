@@ -183,12 +183,12 @@ def preprocessing():
 
 
             projected_train_df_list = [pd.DataFrame(data=z_t,
-                                                    columns=feat_col) for z_t in Z_train]
+                                                    columns=feat_cols) for z_t in Z_train]
             projected_train_df_list = [pd.concat([df.reset_index(drop=True), train_nf.reset_index(drop=True)],
                                                  axis=1) for df in projected_train_df_list]
 
             projected_test_df_list = [pd.DataFrame(data=z_t,
-                                                   columns=feat_col) for z_t in Z_test]
+                                                   columns=feat_cols) for z_t in Z_test]
             projected_test_df_list = [pd.concat([df.reset_index(drop=True), test_nf.reset_index(drop=True)],
                                                 axis=1) for df in projected_test_df_list]
 
