@@ -112,15 +112,25 @@ if __name__ == "__main__":
     print(jobs_file)
     # jobs_list = ['module load groovy']
     # system('module load groovy')
-    jobs_fstream = open(jobs_file[0], "r").read().split('\n')
+    # jobs_fstream = open(jobs_file[0], "r").read().split('\n')
+    cat_dir = os.path.join(scratch_path, jobs_prefix)
+    jobs_fstream = os.listdir(cat_dir)
 
-    for go_job in jobs_fstream:
-        term_name = go_job.split(' ')[2].replace(':', '')
+    # for go_job in jobs_fstream:
+    #     term_name = go_job.split(' ')[2].replace(':', '')
+    for go_job in os.walk(cat_dir, topdown=True):
 
-        go_scratch_dir = scratch_path+jobs_prefix+'/'+term_name
-        print(go_scratch_dir)
-        python_cmd_train = 'python train_base.py --path {}'.format(go_scratch_dir)
-        write_submit_del_job(go_scratch_dir, python_cmd=python_cmd_train)
+        root, dirs, files = go_job
+        num_sep = cat_dir.count(os.path.sep)
+        num_sep_this = root.count(os.path.sep)
+        if root == cat_dir:
+            for go_scratch_dir in dirs:
+                # go_scratch_dir = scratch_path+jobs_prefix+'/'+term_name
+                print(go_scratch_dir)
+                python_cmd_train = 'python train_base.py --path {}'.format(go_scratch_dir)
+                write_submit_del_job(go_scratch_dir, python_cmd=python_cmd_train)
+        else:
+            break
         # jobs_list.append(python_cmd_train)
         # print(python_cmd_train)
         # system(python_cmd_train)
