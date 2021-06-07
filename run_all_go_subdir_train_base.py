@@ -126,8 +126,9 @@ if __name__ == "__main__":
         print(root)
         print(cat_dir)
         if root == cat_dir:
-            for go_scratch_dir in dirs:
-                # go_scratch_dir = scratch_path+jobs_prefix+'/'+term_name
+            print(dirs)
+            for dir in dirs:
+                go_scratch_dir = os.path.join(root, dir)
                 print(go_scratch_dir)
                 python_cmd_train = 'python train_base.py --path {}'.format(go_scratch_dir)
                 write_submit_del_job(go_scratch_dir, python_cmd=python_cmd_train)
