@@ -123,6 +123,8 @@ if __name__ == "__main__":
         root, dirs, files = go_job
         num_sep = cat_dir.count(os.path.sep)
         num_sep_this = root.count(os.path.sep)
+        print(root)
+        print(cat_dir)
         if root == cat_dir:
             for go_scratch_dir in dirs:
                 # go_scratch_dir = scratch_path+jobs_prefix+'/'+term_name
