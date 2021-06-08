@@ -1187,22 +1187,22 @@ if len(feature_folders) == 0:
     feature_folders = common.data_dir_list(os.path.join(data_path, '../'))
 assert len(feature_folders) > 0
 ### get weka properties from weka.properties
-# p = load_properties(data_path)
+p = load_properties(data_path)
 # # fold_values = range(int(p['foldCount']))
-# assert ('foldAttribute' in p) or ('foldCount' in p)
-# if 'foldAttribute' in p:
-#     # input_fn = '%s/%s' % (feature_folders[0], 'data.arff')
-#     # assert exists(input_fn)
-#     # headers = load_arff_headers(input_fn)
-#     # fold_values = headers[p['foldAttribute']]
-#     df = common.read_arff_to_pandas_df(os.path.join(feature_folders[0],'data.arff'))
-#     fold_values = df[p['foldAttribute']].unique()
-# else:
-#     fold_values = range(int(p['foldCount']))
+assert ('foldAttribute' in p) or ('foldCount' in p)
+if 'foldAttribute' in p:
+    # input_fn = '%s/%s' % (feature_folders[0], 'data.arff')
+    # assert exists(input_fn)
+    # headers = load_arff_headers(input_fn)
+    # fold_values = headers[p['foldAttribute']]
+    df = common.read_arff_to_pandas_df(os.path.join(feature_folders[0],'data.arff'))
+    fold_values = df[p['foldAttribute']].unique()
+else:
+    fold_values = range(int(p['foldCount']))
 # print(fold_values)
 # pca_fold_values = ['pca_{}'.format(fv) for fv in fold_values]
 # fold_values = ['validation']
-fold_values = ['test']
+# fold_values = ['test']
 testing_bool = ('67890' in fold_values and 'foldAttribute' in p)
 
 
