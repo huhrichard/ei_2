@@ -703,7 +703,7 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df,
                 test_predictions = test_predictions[:, 1]
                 train_predictions = train_predictions[:, 1]
     print(train_df.columns)
-    print(stacker.coef_)
+    # print(stacker.coef_)
 
     df = pd.DataFrame(
         {'fold': fold, 'id': test_df.index.get_level_values('id'), 'label': test_labels, 'prediction': test_predictions,
