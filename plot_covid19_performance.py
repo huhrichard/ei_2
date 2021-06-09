@@ -217,43 +217,43 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
 
     print(list_of_method)
     for outcome in outcome_list:
-        # performance_df_list = []
-        # for m in list_of_method:
-        #     # if m == 'concatenated' or m == 'EI':
-        #     #     dir_name = base_path+outcome+'_'+m
-        #     # else:
-        #     #     dir_name = base_path+outcome+'_EI/'+m
-        #     if m == 'concatenated' or m == 'EI':
-        #         dir_name = base_path+outcome
-        #     else:
-        #         dir_name = base_path+outcome+'/'+m
-        #     df = pd.read_csv(dir_name+path_of_performance)
-        #     df = df[~(df['method']=='CES')]
-        #     df = df[~(df['method']=='Mean')]
-        #     df = df[~(df['method']=='best base')]
-        #     # df = df[~(df['method']=='DT.S')]
-        #     df['data_name'] = df['data_name'].str.replace("DECEASED_INDICATOR_", "")
-        #     # print(dict_of_method[m])
-        #     if m == 'EI':
-        #         # df['data_name'] = df['data_name'].str.replace(m, dict_of_method[m], regex=False)
-        #         df['data_name'] = df['data_name'].str.replace(outcome, dict_of_method[m], regex=False)
-        #     rows_with_plus =  df['data_name'].str.contains('\+')
-        #     count =  df.loc[rows_with_plus, 'data_name'].str.count('\+',).add(1).astype(str)
-        #     # print(count)
-        #     df.loc[rows_with_plus, 'data_name'] = '#dataset\nincluded=' + count
-        #     # print(df['data_name'])
-        #     # df.rename(columns='')
-        #     performance_df_list.append(df)
+        performance_df_list = []
+        for m in list_of_method:
+            # if m == 'concatenated' or m == 'EI':
+            #     dir_name = base_path+outcome+'_'+m
+            # else:
+            #     dir_name = base_path+outcome+'_EI/'+m
+            # if m == 'concatenated' or m == 'EI':
+            #     dir_name = base_path+outcome
+            # else:
+            dir_name = base_path+outcome+'_'+m
+            df = pd.read_csv(dir_name+path_of_performance)
+            # df = df[~(df['method']=='CES')]
+            # df = df[~(df['method']=='Mean')]
+            # df = df[~(df['method']=='best base')]
+            # df = df[~(df['method']=='DT.S')]
+            df['data_name'] = df['data_name'].str.replace("DECEASED_INDICATOR_", "")
+            # print(dict_of_method[m])
+            if m == 'EI':
+                df['data_name'] = df['data_name'].str.replace(m, dict_of_method[m], regex=False)
+                # df['data_name'] = df['data_name'].str.replace(outcome, dict_of_method[m], regex=False)
+            rows_with_plus =  df['data_name'].str.contains('\+')
+            count =  df.loc[rows_with_plus, 'data_name'].str.count('\+',).add(1).astype(str)
+            # print(count)
+            df.loc[rows_with_plus, 'data_name'] = '#dataset\nincluded=' + count
+            # print(df['data_name'])
+            # df.rename(columns='')
+            performance_df_list.append(df)
             # fmax_median_list.append(df['fmax'].median())
             # auc_median_list.append(df['auc'].median())
 
 
-        # performance_cat_df = pd.concat(performance_df_list)
-        performance_df = pd.read_csv('not_on_github/covid19/plot/cd_csv/covid19_cd_input_fmax_weka_impute.csv')
-        algo_names = performance_df.columns.values.tolist()
-        performance_df['method'] = ''
-        performance_df['method'] = performance_df.index
-        performance_cat_df = pd.melt(performance_df, id_vars=['method'], value_vars=algo_names, value_name='fmax')
+        performance_cat_df = pd.concat(performance_df_list)
+        # performance_df = pd.read_csv('not_on_github/covid19/plot/cd_csv/covid19_cd_input_fmax_weka_impute.csv')
+        # algo_names = performance_df.columns.values.tolist()
+        # performance_df['method'] = ''
+        # performance_df['method'] = performance_df.index
+        # performance_cat_df = pd.melt(performance_df, id_vars=['method'], value_vars=algo_names, value_name='fmax')
         performance_cat_df.rename(columns={'variable': 'data_name'}, inplace=True)
         dict_suffix = [v for k, v in dict_of_method.items()]
         fmax_median_list = [performance_cat_df.loc[performance_cat_df['data_name']==k, 'fmax'].median() for k in dict_suffix]
