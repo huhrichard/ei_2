@@ -5,7 +5,7 @@ from matplotlib import rc
 import numpy as np
 # import scikit_posthocs as sp
 from itertools import chain, combinations
-from statannot import add_stat_annotation
+# from statannot import add_stat_annotation
 
 # rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
 rc('axes', linewidth=2)
