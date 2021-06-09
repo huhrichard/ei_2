@@ -259,7 +259,7 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
         fmax_median_list = [performance_cat_df.loc[performance_cat_df['data_name']==k, 'fmax'].median() for k in dict_suffix]
         auc_median_list = [performance_cat_df.loc[performance_cat_df['data_name']==k, 'auc'].median() for k in dict_suffix]
         cp = sns.color_palette(n_colors=len(dict_suffix))
-        print(performance_cat_df[['data_name']].unique())
+        print(performance_cat_df['data_name'].unique)
         fmax_label = r'$F_{max}$'
         custom_boxplot('fmax', fmax_label, fmax_median_list, dict_suffix, cp,
                    performance_cat_df, exp_name, outcome, fig_fn_suffix)
