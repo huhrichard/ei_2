@@ -49,7 +49,7 @@ dict_of_method = {
                   'medications': 'Medica-\ntions\n(26)',
                   'comorbidities': 'Co-morbi-\ndities\n(19)',
                   'vitals': 'Vital\nsigns\n(6)',
-                  # 'concatenated': 'Concat-\nenated\nAll',
+                  'concatenated': 'Concat-\nenated\nAll',
                   # 'tcca': 'EI_TensorCCA()',
                   # 'medications_binary': 'Medica-\ntions\n(binary)\n(26)',
                   # 'EI_med_binary':'Ensemble\nIntegration\n(binary\nmed)',
