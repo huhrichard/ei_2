@@ -117,7 +117,7 @@ def custom_boxplot(boxplot_y_metric, boxplot_ylabel, metric_median_list, dict_su
 
 
     sep_space = 1.5
-    fig1, ax1 = plt.subplots(1, 1, figsize=(8, 6))
+    fig1, ax1 = plt.subplots(1, 1, figsize=(9, 6))
     ax1 = sns.boxplot(ax=ax1, y=boxplot_y_metric, x='data_name',
                       data=performance_cat_df,
                       palette=sorted_cp, order=sorted_algo_names,
@@ -234,8 +234,8 @@ def plot_boxplot_fmax_auc(list_of_method, fig_fn_suffix, base_path_tuple):
             # df = df[~(df['method']=='DT.S')]
             df['data_name'] = df['data_name'].str.replace("DECEASED_INDICATOR_", "")
             # print(dict_of_method[m])
-            if m == 'EI':
-                df['data_name'] = df['data_name'].str.replace(m, dict_of_method[m], regex=False)
+            # if m == 'EI':
+            df['data_name'] = df['data_name'].str.replace(m, dict_of_method[m], regex=False)
                 # df['data_name'] = df['data_name'].str.replace(outcome, dict_of_method[m], regex=False)
             rows_with_plus =  df['data_name'].str.contains('\+')
             count =  df.loc[rows_with_plus, 'data_name'].str.count('\+',).add(1).astype(str)
