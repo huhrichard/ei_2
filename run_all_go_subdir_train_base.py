@@ -113,7 +113,7 @@ if __name__ == "__main__":
     # jobs_list = ['module load groovy']
     # system('module load groovy')
     # jobs_fstream = open(jobs_file[0], "r").read().split('\n')
-    cat_dir = os.path.join(scratch_path, jobs_prefix)
+    cat_dir = args.path
     jobs_fstream = os.listdir(cat_dir)
 
     # for go_job in jobs_fstream:

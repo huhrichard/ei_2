@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
     scratch_path = '/sc/arion/scratch/liy42/'
     g_jobs_file = find_dir('{}.jobs'.format(jobs_prefix), './jobs')
-    cat_dir = os.path.join(scratch_path, jobs_prefix)
+    cat_dir = args.path
     jobs_fstream = os.listdir(cat_dir)
     # g_jobs_fstream = open(g_jobs_file[0], "r").read().split('\n')
 
