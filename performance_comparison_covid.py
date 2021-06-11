@@ -160,7 +160,7 @@ if __name__ == "__main__":
             # print(performance_df.columns)
             performance_df['data_name'] = performance_df['data_name'].apply(add_colon)
             go_terms_set = performance_df['data_name'].unique()
-            print(go_terms_set)
+            # print(go_terms_set)
             # print(performance_df['data_name'].values[0])
 
             # ensemble_df = extract_df_by_method(performance_df, method='LR.S', drop_columns=['method'])
@@ -176,6 +176,7 @@ if __name__ == "__main__":
             # median_fmax_list.append(np.nanmedian(ensemble_df['best_fmax'].values))
             # data_list.append(val)
             ensemble_df_list.append(ensemble_df)
+
 
         # print(median_fmax_list)
         # print(len(fmax_list), len(median_fmax_list))
@@ -194,6 +195,7 @@ if __name__ == "__main__":
 
 
         ensemble_df_cat = pd.concat(ensemble_df_list)
+        print(ensemble_df_cat['input'].unique())
         # print('shape before drop', ensemble_df_cat.shape)
         # ensemble_df_cat.dropna(inplace=True)
         # print('shape after drop', ensemble_df_cat.shape)
