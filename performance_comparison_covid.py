@@ -84,12 +84,12 @@ if __name__ == "__main__":
     # Load all performance csv
     metrics = {'fmax': r'$F_{max}$',
                 'auc': 'AUC'}
-    group = sys.argv[-2]
-    if '-' not in group:
-        group = '>' + group
+    # group = sys.argv[-2]
+    # if '-' not in group:
+    #     group = '>' + group
     # title_name = "#annotated proteins: {}".format(group)
     title_name = "COVID-19 death predictors"
-    file_prefix = sys.argv[-3]
+    file_prefix = 'covid-19'
 
     dict_suffix = {'EI':'Ensemble\nIntegration',
                   # 'EI_PowerSet':'Ensemble Integration\nPower Set',
@@ -121,7 +121,7 @@ if __name__ == "__main__":
             # else:
             #     go_dir = sys.argv[-1] + '_EI'
             #     sub_data_folder = key+'/'
-            go_dir = sys.argv[-1] + '_' + 'key'
+            go_dir = sys.argv[-1] + '_' + key
             sub_data_folder = ''
             fns = listdir(go_dir)
             # fns = [fn for fn in fns if fn != 'analysis']
