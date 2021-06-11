@@ -121,7 +121,7 @@ if __name__ == "__main__":
             # else:
             #     go_dir = sys.argv[-1] + '_EI'
             #     sub_data_folder = key+'/'
-            go_dir = sys.argv[-1] + '_' + key
+            go_dir = sys.argv[-1] + '/' + key
             sub_data_folder = ''
             fns = listdir(go_dir)
             # fns = [fn for fn in fns if fn != 'analysis']
