@@ -219,10 +219,10 @@ if __name__ == "__main__":
         # dict_value_list = [k for v, k in dict_suffix.items()]
         index_data_list = [data_list.index(k) for v, k in dict_suffix.items()]
         cp_new = [cp[idx] for idx in index_data_list]
-        print(median_fmax_list)
-        print(fmax_list)
-        print(data_list)
-        print(cp_new)
+        print(len(median_fmax_list))
+        print(fmax_list.shape)
+        print(len(data_list))
+        print(len(cp_new))
 
         sorted_list = sorted(zip(median_fmax_list, fmax_list, data_list, cp_new), reverse=True, key=lambda x: x[0])
         sorted_dataname_list = [s[2] for s in sorted_list]
