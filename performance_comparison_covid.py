@@ -224,10 +224,10 @@ if __name__ == "__main__":
         print(len(data_list))
         print(len(cp_new))
 
-        sorted_list = sorted(zip(median_fmax_list, fmax_list, data_list, cp_new), reverse=True, key=lambda x: x[0])
-        sorted_dataname_list = [s[2] for s in sorted_list]
+        sorted_list = sorted(zip(median_fmax_list, data_list, cp_new), reverse=True, key=lambda x: x[0])
+        sorted_dataname_list = [s[1] for s in sorted_list]
         print(sorted_dataname_list)
-        sorted_cp = [s[3] for s in sorted_list]
+        sorted_cp = [s[2] for s in sorted_list]
 
         # make input for cd plot
 
