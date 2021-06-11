@@ -219,6 +219,7 @@ if __name__ == "__main__":
         # dict_value_list = [k for v, k in dict_suffix.items()]
         index_data_list = [data_list.index(k) for v, k in dict_suffix.items()]
         cp_new = [cp[idx] for idx in index_data_list]
+        print(median_fmax_list)
 
         sorted_list = sorted(zip(median_fmax_list, fmax_list, data_list, cp_new), reverse=True, key=lambda x: x[0])
         sorted_dataname_list = [s[2] for s in sorted_list]
@@ -245,7 +246,7 @@ if __name__ == "__main__":
         ax1.set_ylabel(ylabel)
         ax1.set_xlabel('')
         ax1.set_title(title_name)
-        fig1.savefig('{}{}_{}_comparison_{}.pdf'.format(plot_dir,mk, file_prefix, sys.argv[-2]), bbox_inches="tight")
+        fig1.savefig('{}{}{}_{}_comparison.pdf'.format(plot_dir,'covid/',mk, file_prefix), bbox_inches="tight")
 
 
 
