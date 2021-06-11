@@ -159,7 +159,8 @@ if __name__ == "__main__":
             performance_df = pd.concat(performance_df_list)
             # print(performance_df.columns)
             performance_df['data_name'] = performance_df['data_name'].apply(add_colon)
-            go_terms_set = set(list(performance_df['data_name']))
+            go_terms_set = performance_df['data_name'].unique()
+            print(go_terms_set)
             # print(performance_df['data_name'].values[0])
 
             # ensemble_df = extract_df_by_method(performance_df, method='LR.S', drop_columns=['method'])
@@ -200,7 +201,7 @@ if __name__ == "__main__":
         cd_input = ensemble_df_cat[['data_name', best_metric_str, 'input']]
 
 
-        cd_input_df = cd_input.pivot_table('best_fmax', ['data_name'], 'input').reset_index()
+        cd_input_df = cd_input.pivot_table(best_metric_str, ['data_name'], 'input').reset_index()
         cd_input_df.set_index('data_name', inplace=True)
 
         cd_csv_fn = '{}cd_input_{}_{}_{}.csv'.format(plot_dir + 'cd_csv/', mk, file_prefix, sys.argv[-2])
