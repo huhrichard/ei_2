@@ -206,7 +206,7 @@ if __name__ == "__main__":
         cd_input_df = cd_input.pivot_table(best_metric_str, ['data_name'], 'input').reset_index()
         cd_input_df.set_index('data_name', inplace=True)
 
-        cd_csv_fn = '{}cd_input_{}_{}_{}.csv'.format(plot_dir + 'cd_csv/', mk, file_prefix, sys.argv[-2])
+        cd_csv_fn = '{}cd_input_{}_{}_{}.csv'.format(plot_dir + 'cd_csv/', mk, file_prefix, 'covid19')
         cd_input_df.to_csv(cd_csv_fn, index_label=False)
         cmd = "R CMD BATCH --no-save --no-restore '--args cd_fn=\"{}\"' R/plotCDdiagram.R".format(cd_csv_fn)
         os.system(cmd)
