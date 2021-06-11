@@ -121,7 +121,7 @@ if __name__ == "__main__":
             # else:
             #     go_dir = sys.argv[-1] + '_EI'
             #     sub_data_folder = key+'/'
-            go_dir = sys.argv[-1] + '/' + key
+            go_dir = os.path.join(sys.argv[-1], key)
             sub_data_folder = ''
             fns = listdir(go_dir)
             # fns = [fn for fn in fns if fn != 'analysis']
@@ -196,7 +196,7 @@ if __name__ == "__main__":
         # print('shape before drop', ensemble_df_cat.shape)
         # ensemble_df_cat.dropna(inplace=True)
         # print('shape after drop', ensemble_df_cat.shape)
-        best_metric_str = 'best_' + mv
+        best_metric_str = 'best_' + mk
         cd_input = ensemble_df_cat[['data_name', best_metric_str, 'input']]
 
 
