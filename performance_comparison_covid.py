@@ -246,7 +246,7 @@ if __name__ == "__main__":
         ax1.set_ylabel(ylabel)
         ax1.set_xlabel('')
         ax1.set_title(title_name)
-        fig1.savefig('{}{}{}_{}_comparison.pdf'.format(plot_dir,'covid/',mk, file_prefix), bbox_inches="tight")
+        fig1.savefig('{}{}{}_{}_comparison.pdf'.format(plot_dir,'covid19/',mk, file_prefix), bbox_inches="tight")
 
 
 
