@@ -255,7 +255,7 @@ if __name__ == "__main__":
         fig2, ax2 = plt.subplots(1, 1, figsize=(11, 6))
         ax2 = sns.barplot(ax=ax2, y=best_metric_str, x='input', hue='data_name',
                           data=ensemble_df_cat, palette=sorted_cp, order=sorted_dataname_list,
-                          linewidth=2, width=0.5)
+                          )
         # for tick in ax1.get_xticklabels():
         #     tick.set_rotation(45)
         #     tick.set_horizontalalignment("right")
