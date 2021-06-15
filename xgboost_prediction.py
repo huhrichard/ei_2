@@ -100,11 +100,12 @@ for outcome in os.walk(data_path, topdown=True):
     num_sep_this = root.count(os.path.sep)
     print(root)
     # print(cat_dir)
-    if (root == data_path) & (dirs == ''):
-        print(dirs)
+    if (root == data_path):
+        # print(dirs)
         for dir in dirs:
             go_scratch_dir = os.path.join(root, dir)
             if go_scratch_dir != data_path:
+                print(go_scratch_dir)
                 xgboost_predictions_result(go_scratch_dir)
     else:
         break
