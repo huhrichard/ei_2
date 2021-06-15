@@ -99,7 +99,8 @@ if __name__ == "__main__":
                   'medications': 'Medica-\ntions\n(26)',
                   'comorbidities': 'Co-morbi-\ndities\n(19)',
                   'vitals': 'Vital\nsigns\n(6)',
-                  'concatenated': 'Concat-\nenated\nAll',}
+                  'concatenated': 'Concat-\nenated\nAll',
+                   'xgboost': 'XGBoost'}
 
     cp = sns.color_palette(n_colors=len(dict_suffix))
     for mk, mv in metrics.items():
@@ -219,38 +220,57 @@ if __name__ == "__main__":
         # dict_value_list = [k for v, k in dict_suffix.items()]
         index_data_list = [data_list.index(k) for v, k in dict_suffix.items()]
         cp_new = [cp[idx] for idx in index_data_list]
-        print(len(median_fmax_list))
-        print(fmax_list.shape)
-        print(len(data_list))
-        print(len(cp_new))
+        # print(len(median_fmax_list))
+        # print(fmax_list.shape)
+        # print(len(data_list))
+        # print(len(cp_new))
 
         sorted_list = sorted(zip(median_fmax_list, data_list, cp_new), reverse=True, key=lambda x: x[0])
         sorted_dataname_list = [s[1] for s in sorted_list]
         print(sorted_dataname_list)
         sorted_cp = [s[2] for s in sorted_list]
 
-        # make input for cd plot
-
-
-
-        # print(cd_input_df)
-        # average_rank_df = cd_input_df.rank(axis=1)
-        # print(average_rank_df)
-        # for row in cd_input_df.index:
-        #     average_rank_df.loc[row] = df.loc[row].rank
-        # print(ensemble_df_cat, ensemble_df_cat.columns)
-        fig1 = plt.figure()
-        ax1 = fig1.add_subplot(111)
+        fig1, ax1 = plt.subplots(1, 1, figsize=(9, 6))
         ax1 = sns.boxplot(ax=ax1, y=best_metric_str, x='input',
-                          data=ensemble_df_cat, palette=sorted_cp, order=sorted_dataname_list)
-        for tick in ax1.get_xticklabels():
-            tick.set_rotation(45)
-            tick.set_horizontalalignment("right")
-        ax1.set_ylabel(ylabel)
+                          data=ensemble_df_cat, palette=sorted_cp, order=sorted_dataname_list,
+                          linewidth=2, width=0.5)
+        # for tick in ax1.get_xticklabels():
+        #     tick.set_rotation(45)
+        #     tick.set_horizontalalignment("right")
+        ax1.set_ylabel(ylabel, fontsize=22, fontweight='semibold')
         ax1.set_xlabel('')
-        ax1.set_title(title_name)
+        ax1.set_title(title_name, fontweight='semibold')
+        for tick in ax1.get_xticklabels():
+            tick.set_fontsize(14)
+            # tick.set_rotation(45)
+            tick.set_fontweight('semibold')
+            # tick.set_horizontalalignment("right")
+
+        for tick in ax1.get_yticklabels():
+            tick.set_fontsize(16)
+            tick.set_fontweight('semibold')
         fig1.savefig('{}{}{}_{}_comparison.pdf'.format(plot_dir,'covid19/',mk, file_prefix), bbox_inches="tight")
 
+        fig2, ax2 = plt.subplots(1, 1, figsize=(11, 6))
+        ax2 = sns.barplot(ax=ax2, y=best_metric_str, x='input', hue='data_name',
+                          data=ensemble_df_cat, palette=sorted_cp, order=sorted_dataname_list,
+                          linewidth=2, width=0.5)
+        # for tick in ax1.get_xticklabels():
+        #     tick.set_rotation(45)
+        #     tick.set_horizontalalignment("right")
+        ax2.set_ylabel(ylabel, fontsize=22, fontweight='semibold')
+        ax2.set_xlabel('')
+        ax2.set_title(title_name, fontweight='semibold')
+        for tick in ax2.get_xticklabels():
+            tick.set_fontsize(14)
+            # tick.set_rotation(45)
+            tick.set_fontweight('semibold')
+            # tick.set_horizontalalignment("right")
+
+        for tick in ax2.get_yticklabels():
+            tick.set_fontsize(16)
+            tick.set_fontweight('semibold')
+        fig2.savefig('{}{}{}_{}_bar_comparison.pdf'.format(plot_dir, 'covid19/', mk, file_prefix), bbox_inches="tight")
 
 
 
