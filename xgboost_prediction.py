@@ -82,10 +82,12 @@ def xgboost_predictions_result(outcome_path):
 
         train_label = train_nf[label_col]
 
-        xgb_clf = XGBClassifier(n_jobs=-1, gpu_id=0, n_estimators=80,
+        xgb_clf = XGBClassifier(n_jobs=-1,
+                                # gpu_id=0,
+                                n_estimators=80,
                         max_delta_step=1)
         xgb_clf.fit(train_feat, train_label)
-        test_prediction = xgb_clf.predict(test_feat)
+        test_prediction = xgb_clf.predict_proba(test_feat)
         # test_predictions.append(test_prediction)
         test_df = pd.DataFrame(
             {'label': test_label, 'prediction': test_prediction})
@@ -99,7 +101,7 @@ def xgboost_predictions_result(outcome_path):
     analysis_folder = os.path.join(outcome_path, 'analysis')
     if not exists(analysis_folder):
         mkdir(analysis_folder)
-    performance_df.to_csv(os.path.join(outcome_path, "performance.csv"), index=False)
+    performance_df.to_csv(os.path.join(analysis_folder, "performance.csv"), index=False)
 
 data_path = '/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR/xgboost'
 for outcome in os.walk(data_path, topdown=True):
