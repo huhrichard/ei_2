@@ -54,6 +54,7 @@ def xgboost_predictions_result(outcome_path):
     feature_columns = df.columns.tolist()
     for nf in column_non_feature:
         feature_columns.remove(nf)
+    print(feature_columns)
 
     df.replace(to_replace="pos", value="1", inplace=True)
     df.replace(to_replace="neg", value="0", inplace=True)
