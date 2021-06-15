@@ -160,7 +160,7 @@ if __name__ == "__main__":
 
             performance_df = pd.concat(performance_df_list)
             # print(performance_df.columns)
-            performance_df['data_name'] = performance_df['data_name'].apply(add_colon)
+            # performance_df['data_name'] = performance_df['data_name'].apply(add_colon)
             go_terms_set = performance_df['data_name'].unique()
             # print(go_terms_set)
             # print(performance_df['data_name'].values[0])
@@ -231,7 +231,7 @@ if __name__ == "__main__":
         print(sorted_dataname_list)
         sorted_cp = [s[2] for s in sorted_list]
 
-        fig1, ax1 = plt.subplots(1, 1, figsize=(9, 6))
+        fig1, ax1 = plt.subplots(1, 1, figsize=(11, 6))
         ax1 = sns.boxplot(ax=ax1, y=best_metric_str, x='input',
                           data=ensemble_df_cat, palette=sorted_cp, order=sorted_dataname_list,
                           linewidth=2, width=0.5)
