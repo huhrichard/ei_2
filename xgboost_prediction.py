@@ -49,7 +49,7 @@ def xgboost_predictions_result(outcome_path):
     id_col = p['idAttribute']
     label_col = p['classAttribute']
     column_non_feature = [fold_col, label_col, id_col]
-    feature_columns = df.columns
+    feature_columns = df.columns.tolist()
     for nf in column_non_feature:
         feature_columns.remove(nf)
 
