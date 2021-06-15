@@ -94,6 +94,7 @@ def xgboost_predictions_result(outcome_path):
         test_dfs.append(test_df)
 
     test_df_cat = pd.concat(test_dfs)
+    print(test_df_cat)
     fmax = common.fmeasure_score(test_df_cat.label, test_df_cat.prediction, None)
     auc = sklearn.metrics.roc_auc_score(test_df_cat.label, test_df_cat.prediction)
     cols = ['data_name', 'fmax', 'method', 'auc']
