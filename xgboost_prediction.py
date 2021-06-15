@@ -64,12 +64,13 @@ def xgboost_predictions_result(outcome_path):
     test_labels = []
     test_predictions = []
     test_dfs = []
+    print(fold_values)
 
     for outer_fold in fold_values:
         test_bool = df[fold_col] == outer_fold
         train_bool = df[fold_col] != outer_fold
         test_split_list = df.loc[test_bool]
-        train_split_list = df.loc[test_bool]
+        train_split_list = df.loc[train_bool]
         test_nf = test_split_list[column_non_feature]
         train_nf = train_split_list[column_non_feature]
 
