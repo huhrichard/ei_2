@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib
+
 # import Orange
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -25,6 +26,7 @@ from os import system
 system('module load R')
 plot_dir = './plot/'
 
+
 def find(pattern, path):
     result = []
     print(path)
@@ -35,11 +37,13 @@ def find(pattern, path):
                 result.append(os.path.join(root, name))
     return result
 
+
 def extract_df_by_method(df, method='', drop_columns=['method']):
-    return_df = df[df['method']==method]
-    return_df.rename(columns={'fmax':'fmax_{}'.format(method)}, inplace=True)
+    return_df = df[df['method'] == method]
+    return_df.rename(columns={'fmax': 'fmax_{}'.format(method)}, inplace=True)
     return_df.drop(drop_columns, axis=1, inplace=True)
     return return_df
+
 
 def best_ensemble_score(df, input, ensemble_suffix='.S', metric='fmax'):
     list_best_base = ['deepNF', 'mashup']
@@ -75,16 +79,16 @@ def best_ensemble_score(df, input, ensemble_suffix='.S', metric='fmax'):
     pivoted_df['best_ensemble_method'] = (pivoted_df[ensemble_cols]).idxmax(axis=1).values
     return pivoted_df.reset_index()
 
-def add_colon(str):
-    return str[:2]+':'+str[2:]
 
+def add_colon(str):
+    return str[:2] + ':' + str[2:]
 
 
 if __name__ == "__main__":
 
     # Load all performance csv
     metrics = {'fmax': r'$F_{max}$',
-                'auc': 'AUC'}
+               'auc': 'AUC'}
     # group = sys.argv[-2]
     # if '-' not in group:
     #     group = '>' + group
@@ -92,15 +96,15 @@ if __name__ == "__main__":
     title_name = "COVID-19 death predictors"
     file_prefix = 'covid-19'
 
-    dict_suffix = {'EI':'Ensemble\nIntegration',
-                  # 'EI_PowerSet':'Ensemble Integration\nPower Set',
-                  'demographics':'Demo-\ngraphics\n(11)',
-                  # 'labs':'Laboratory\ntests',
-                  'labs':'Lab\ntests\n(49)',
-                  'medications': 'Medica-\ntions\n(26)',
-                  'comorbidities': 'Co-morbi-\ndities\n(19)',
-                  'vitals': 'Vital\nsigns\n(6)',
-                  'concatenated': 'Concat-\nenated\nAll',
+    dict_suffix = {'EI': 'Ensemble\nIntegration',
+                   # 'EI_PowerSet':'Ensemble Integration\nPower Set',
+                   'demographics': 'Demo-\ngraphics\n(11)',
+                   # 'labs':'Laboratory\ntests',
+                   'labs': 'Lab\ntests\n(49)',
+                   'medications': 'Medica-\ntions\n(26)',
+                   'comorbidities': 'Co-morbi-\ndities\n(19)',
+                   'vitals': 'Vital\nsigns\n(6)',
+                   'concatenated': 'Concat-\nenated\nAll',
                    'xgboost': 'XGBoost'}
 
     cp = sns.color_palette(n_colors=len(dict_suffix))
@@ -135,7 +139,7 @@ if __name__ == "__main__":
             performance_file_list = {}
             for term_dir in term_dirs:
 
-                file_name = term_dir + '/' +sub_data_folder + 'analysis/' + 'performance.csv'
+                file_name = term_dir + '/' + sub_data_folder + 'analysis/' + 'performance.csv'
                 # print(file_name)
                 term_name = term_dir.split('/')[-1]
 
@@ -179,7 +183,6 @@ if __name__ == "__main__":
             # data_list.append(val)
             ensemble_df_list.append(ensemble_df)
 
-
         # print(median_fmax_list)
         # print(len(fmax_list), len(median_fmax_list))
 
@@ -195,15 +198,14 @@ if __name__ == "__main__":
         # print(sorted_dataname_list)
         # print(sorted_fmax_list)
 
-
         ensemble_df_cat = pd.concat(ensemble_df_list)
+
         print(ensemble_df_cat['input'].unique())
         # print('shape before drop', ensemble_df_cat.shape)
         # ensemble_df_cat.dropna(inplace=True)
         # print('shape after drop', ensemble_df_cat.shape)
         best_metric_str = 'best_' + mk
         cd_input = ensemble_df_cat[['data_name', best_metric_str, 'input']]
-
 
         cd_input_df = cd_input.pivot_table(best_metric_str, ['data_name'], 'input').reset_index()
         cd_input_df.set_index('data_name', inplace=True)
@@ -225,6 +227,7 @@ if __name__ == "__main__":
         # print(fmax_list.shape)
         # print(len(data_list))
         # print(len(cp_new))
+        ensemble_df_cat.rename(columns={'data_name': 'Outcome'}, inplace=True)
 
         sorted_list = sorted(zip(median_fmax_list, data_list, cp_new), reverse=True, key=lambda x: x[0])
         sorted_dataname_list = [s[1] for s in sorted_list]
@@ -250,7 +253,7 @@ if __name__ == "__main__":
         for tick in ax1.get_yticklabels():
             tick.set_fontsize(16)
             tick.set_fontweight('semibold')
-        fig1.savefig('{}{}{}_{}_comparison.pdf'.format(plot_dir,'covid19/',mk, file_prefix), bbox_inches="tight")
+        fig1.savefig('{}{}{}_{}_comparison.pdf'.format(plot_dir, 'covid19/', mk, file_prefix), bbox_inches="tight")
 
         deceased_outcome_since_prefix = 'DECEASED_AT_{}DAYS'
         outcomes = ['DECEASED_INDICATOR']
@@ -259,7 +262,7 @@ if __name__ == "__main__":
             outcomes.append(deceased_outcome_since_prefix.format(dday))
 
         fig2, ax2 = plt.subplots(1, 1, figsize=(11, 6))
-        ax2 = sns.barplot(ax=ax2, y=best_metric_str, x='input', hue='data_name', hue_order=outcomes,
+        ax2 = sns.barplot(ax=ax2, y=best_metric_str, x='input', hue='Outcome', hue_order=outcomes,
                           data=ensemble_df_cat, palette=sorted_cp, order=sorted_dataname_list,
                           )
         # for tick in ax1.get_xticklabels():
@@ -278,20 +281,3 @@ if __name__ == "__main__":
             tick.set_fontsize(16)
             tick.set_fontweight('semibold')
         fig2.savefig('{}{}{}_{}_bar_comparison.pdf'.format(plot_dir, 'covid19/', mk, file_prefix), bbox_inches="tight")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

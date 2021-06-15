@@ -803,7 +803,7 @@ def main_classification(path, f_list, agg=1):
                      #                    'n_neighbors': [2,3,5,10,15],
                      #                    },
                      #                    scoring=fmax_sklearn),
-                     # "XGB.S": XGBClassifier(),
+                     "XGB.S": XGBClassifier(),
                      # "XGB_CV.S": GridSearchCV(XGBClassifier(),
                      #                          param_grid={"objective": ['reg:squarederror',
                      #                                                'reg:squaredlogerror',
