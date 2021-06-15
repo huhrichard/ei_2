@@ -252,8 +252,14 @@ if __name__ == "__main__":
             tick.set_fontweight('semibold')
         fig1.savefig('{}{}{}_{}_comparison.pdf'.format(plot_dir,'covid19/',mk, file_prefix), bbox_inches="tight")
 
+        deceased_outcome_since_prefix = 'DECEASED_AT_{}DAYS'
+        outcomes = ['DECEASED_INDICATOR']
+        deceased_days_timeframe = [3, 5, 7, 10]
+        for dday in deceased_days_timeframe:
+            outcomes.append(deceased_outcome_since_prefix.format(dday))
+
         fig2, ax2 = plt.subplots(1, 1, figsize=(11, 6))
-        ax2 = sns.barplot(ax=ax2, y=best_metric_str, x='input', hue='data_name',
+        ax2 = sns.barplot(ax=ax2, y=best_metric_str, x='input', hue='data_name', hue_order=outcomes,
                           data=ensemble_df_cat, palette=sorted_cp, order=sorted_dataname_list,
                           )
         # for tick in ax1.get_xticklabels():
