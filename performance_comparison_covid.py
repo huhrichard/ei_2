@@ -61,7 +61,8 @@ def best_ensemble_score(df, input, ensemble_suffix='.S', metric='fmax'):
     #     if ensemble_suffix in col:
     #         ensemble_cols.append(col)
     ensemble_cols = df['method'].unique().tolist()
-    ensemble_cols.remove('best base')
+    if 'best base' in ensemble_cols:
+        ensemble_cols.remove('best base')
     # ensemble_cols.remove('XGB.S')
     best_metric_str = 'best_' + metric
     # pivoted_df['best_fmax'] = 0
