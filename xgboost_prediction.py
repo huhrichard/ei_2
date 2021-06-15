@@ -87,7 +87,7 @@ def xgboost_predictions_result(outcome_path):
                                 n_estimators=80,
                         max_delta_step=1)
         xgb_clf.fit(train_feat, train_label)
-        test_prediction = xgb_clf.predict_proba(test_feat)
+        test_prediction = xgb_clf.predict_proba(test_feat)[:, 1]
         # test_predictions.append(test_prediction)
         test_df = pd.DataFrame(
             {'label': test_label, 'prediction': test_prediction})
