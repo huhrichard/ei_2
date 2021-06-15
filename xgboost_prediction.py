@@ -44,6 +44,8 @@ def xgboost_predictions_result(outcome_path):
     df = read_arff_to_pandas_df(os.path.join(outcome_path,
                                              'concatenated/data.arff'))
 
+
+
     fold_values = list(df[p['foldAttribute']].unique())
     fold_col = p['foldAttribute']
     id_col = p['idAttribute']
@@ -53,7 +55,11 @@ def xgboost_predictions_result(outcome_path):
     for nf in column_non_feature:
         feature_columns.remove(nf)
 
-    print(feature_columns)
+    df.replace(to_replace="pos", value="1", inplace=True)
+    df.replace(to_replace="neg", value="0", inplace=True)
+    df[label_col] = pd.to_numeric(df[label_col])
+
+    # print(feature_columns)
     test_labels = []
     test_predictions = []
     test_dfs = []
@@ -70,6 +76,8 @@ def xgboost_predictions_result(outcome_path):
         train_feat = train_split_list[feature_columns]
 
         test_label = test_nf[label_col]
+        # test_label.replace(to_replace="pos",value="1")
+        # test_label.replace(to_replace="neg",value="1")
         # test_labels.append(test_label)
 
         train_label = train_nf[label_col]
