@@ -101,7 +101,7 @@ if __name__ == "__main__":
                    'demographics': 'Demo-\ngraphics\n(11)',
                    # 'labs':'Laboratory\ntests',
                    'labs': 'Lab\ntests\n(49)',
-                   'medications': 'Medica-\ntions\n(26)',
+                   # 'medications': 'Medica-\ntions\n(26)',
                    'comorbidities': 'Co-morbi-\ndities\n(19)',
                    'vitals': 'Vital\nsigns\n(6)',
                    'concatenated': 'Concat-\nenated\nAll',
