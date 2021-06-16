@@ -222,7 +222,7 @@ if __name__ == "__main__":
         # data_list = [k for v, k in dict_suffix.items()]
         data_list = cd_input_df.columns.tolist()
         # dict_value_list = [k for v, k in dict_suffix.items()]
-        index_data_list = [data_list.index(k) for v, k in dict_suffix.items()]
+        index_data_list = [data_list.index(v) for v, k in dict_suffix.items()]
         cp_new = [cp[idx] for idx in index_data_list]
         # print(len(median_fmax_list))
         # print(fmax_list.shape)
