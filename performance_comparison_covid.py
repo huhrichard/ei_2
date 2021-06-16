@@ -241,7 +241,7 @@ if __name__ == "__main__":
         print(sorted_dataname_list)
         sorted_cp = [s[2] for s in sorted_list]
 
-        fig1, ax1 = plt.subplots(1, 1, figsize=(11, 6))
+        fig1, ax1 = plt.subplots(1, 1, figsize=(12, 6))
         ax1 = sns.boxplot(ax=ax1, y=best_metric_str, x='Method',
                           data=ensemble_df_cat, palette=sorted_cp, order=sorted_dataname_list,
                           linewidth=2, width=0.5)
@@ -263,17 +263,26 @@ if __name__ == "__main__":
         fig1.savefig('{}{}{}_{}_comparison.pdf'.format(plot_dir, 'covid19/', mk, file_prefix), bbox_inches="tight")
 
         deceased_outcome_since_prefix = 'DECEASED_AT_{}DAYS'
-        outcomes = ['DECEASED_INDICATOR']
+        deceased_outcome_since_prefix_plot = 'DECEASED\nAT_{}DAYS'
+        outcomes = {'DECEASED_INDICATOR': 'DECEASED\nINDICATOR'}
+        # outcomes = {'DECEASED_INDICATOR': 'DECEASED\nINDICATOR'}
         # deceased_days_timeframe = [3, 5, 7, 10]
         deceased_days_timeframe = [10, 7, 5, 3]
         for dday in deceased_days_timeframe:
-            outcomes.append(deceased_outcome_since_prefix.format(dday))
+            # outcomes.append(deceased_outcome_since_prefix.format(dday))
+            outcomes[deceased_outcome_since_prefix.format(dday)] = deceased_outcome_since_prefix_plot.format(dday)
+            #
+
+        ensemble_df_cat.replace(outcomes)
+        outcomes_order = [k for k, v in outcomes.items()]
+
+        sorted_dataname_list = [s.remove('-\n').remove('\n') for s in sorted_dataname_list]
 
         fig2, ax2 = plt.subplots(1, 1, figsize=(11, 6))
         ax2 = sns.barplot(ax=ax2, y=best_metric_str, x='Outcome', hue='Method',
                           hue_order=sorted_dataname_list,
                           data=ensemble_df_cat, palette=sorted_cp,
-                          order=outcomes,
+                          order=outcomes_order,
                           )
         # for tick in ax1.get_xticklabels():
         #     tick.set_rotation(45)
