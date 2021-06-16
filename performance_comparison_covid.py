@@ -276,7 +276,7 @@ if __name__ == "__main__":
         ensemble_df_cat.replace(outcomes)
         outcomes_order = [k for k, v in outcomes.items()]
 
-        sorted_dataname_list = [s.remove('-\n').remove('\n') for s in sorted_dataname_list]
+        sorted_dataname_list = [s.replace('-\n', '').replace('\n',' ') for s in sorted_dataname_list]
 
         fig2, ax2 = plt.subplots(1, 1, figsize=(11, 6))
         ax2 = sns.barplot(ax=ax2, y=best_metric_str, x='Outcome', hue='Method',
