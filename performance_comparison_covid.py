@@ -173,7 +173,7 @@ if __name__ == "__main__":
             ensemble_df = best_ensemble_score(performance_df, input=key, metric=mk)
 
             ensemble_df['input'] = val
-            ensemble_df['key'] = key.capitalize()
+            ensemble_df['key'] = key
 
             # performance_df['delta_fmax_LR.S'] = performance_df['fmax_LR.S'] - performance_df['fmax_best base']
             # best_base_df = extract_df_by_method(performance_df, method='best base')
@@ -211,12 +211,6 @@ if __name__ == "__main__":
         cd_input_df = cd_input.pivot_table(best_metric_str, ['data_name'], 'key').reset_index()
         cd_input_df.set_index('data_name', inplace=True)
 
-        cd_csv_fn = '{}cd_input_{}_{}_{}.csv'.format(plot_dir + 'cd_csv/', mk, file_prefix, 'covid19')
-        cd_input_df.to_csv(cd_csv_fn, index_label=False)
-        cmd = "R CMD BATCH --no-save --no-restore '--args cd_fn=\"{}\"' R/plotCDdiagram.R".format(cd_csv_fn)
-        os.system(cmd)
-
-        cd_input_df.dropna(inplace=True)
         median_fmax_list = np.median(cd_input_df.values, axis=0)
         fmax_list = cd_input_df.values
         # data_list = [k for v, k in dict_suffix.items()]
@@ -225,6 +219,17 @@ if __name__ == "__main__":
         # dict_value_list = [k for v, k in dict_suffix.items()]
         index_data_list = [data_list.index(v) for v, k in dict_suffix.items()]
         cp_new = [cp[idx] for idx in index_data_list]
+
+        cd_indices = cd_input_df.index.tolist()
+        cd_input_df.index = [i.capitalize() for i in cd_indices]
+
+        cd_csv_fn = '{}cd_input_{}_{}_{}.csv'.format(plot_dir + 'cd_csv/', mk, file_prefix, 'covid19')
+        cd_input_df.to_csv(cd_csv_fn, index_label=False)
+        cmd = "R CMD BATCH --no-save --no-restore '--args cd_fn=\"{}\"' R/plotCDdiagram.R".format(cd_csv_fn)
+        os.system(cmd)
+
+        cd_input_df.dropna(inplace=True)
+
         # print(len(median_fmax_list))
         # print(fmax_list.shape)
         # print(len(data_list))
