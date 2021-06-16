@@ -217,7 +217,7 @@ if __name__ == "__main__":
         cd_list = cd_input_df.columns.tolist()
         data_list = [dict_suffix[c] for c in cd_list]
         # dict_value_list = [k for v, k in dict_suffix.items()]
-        index_data_list = [data_list.index(v) for v, k in dict_suffix.items()]
+        index_data_list = [data_list.index(k) for v, k in dict_suffix.items()]
         cp_new = [cp[idx] for idx in index_data_list]
 
         cd_indices = cd_input_df.index.tolist()
