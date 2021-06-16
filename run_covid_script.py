@@ -7,8 +7,11 @@ from sys import argv
 
 
 list_of_method = ['EI', 'demographics',
-                  'labs', 'medications',
-                  'vitals', 'concatenated','comorbidities',
+                  'labs',
+                  # 'medications',
+                  'vitals', 'concatenated',
+                  'comorbidities',
+                  'xgboost'
                     # 'medications_binary', 'EI_med_binary', 'concatenated_med_binary'
                   # 'EI_svdImpute', 'EI_svdImpute_rank_5', 'EI_svdImpute_rank_20',
                   # 'concatenated_svdImpute', 'concatenated_svdImpute_rank_5', 'concatenated_svdImpute_rank_20',
