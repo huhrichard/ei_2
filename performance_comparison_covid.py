@@ -173,6 +173,7 @@ if __name__ == "__main__":
             ensemble_df = best_ensemble_score(performance_df, input=key, metric=mk)
 
             ensemble_df['input'] = val
+            ensemble_df['key'] = key
 
             # performance_df['delta_fmax_LR.S'] = performance_df['fmax_LR.S'] - performance_df['fmax_best base']
             # best_base_df = extract_df_by_method(performance_df, method='best base')
@@ -205,9 +206,9 @@ if __name__ == "__main__":
         # ensemble_df_cat.dropna(inplace=True)
         # print('shape after drop', ensemble_df_cat.shape)
         best_metric_str = 'best_' + mk
-        cd_input = ensemble_df_cat[['data_name', best_metric_str, 'input']]
+        cd_input = ensemble_df_cat[['data_name', best_metric_str, 'key']]
 
-        cd_input_df = cd_input.pivot_table(best_metric_str, ['data_name'], 'input').reset_index()
+        cd_input_df = cd_input.pivot_table(best_metric_str, ['data_name'], 'key').reset_index()
         cd_input_df.set_index('data_name', inplace=True)
 
         cd_csv_fn = '{}cd_input_{}_{}_{}.csv'.format(plot_dir + 'cd_csv/', mk, file_prefix, 'covid19')
@@ -257,7 +258,8 @@ if __name__ == "__main__":
 
         deceased_outcome_since_prefix = 'DECEASED_AT_{}DAYS'
         outcomes = ['DECEASED_INDICATOR']
-        deceased_days_timeframe = [3, 5, 7, 10]
+        # deceased_days_timeframe = [3, 5, 7, 10]
+        deceased_days_timeframe = [10, 7, 5, 3]
         for dday in deceased_days_timeframe:
             outcomes.append(deceased_outcome_since_prefix.format(dday))
 
