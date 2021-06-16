@@ -42,7 +42,7 @@ def xgboost_predictions_result(outcome_path):
     ### get weka properties from weka.properties
     p = load_properties(outcome_path)
     df = read_arff_to_pandas_df(os.path.join(outcome_path,
-                                             'concatenated/data.arff'))
+                                             'xgboost/data.arff'))
 
 
 
