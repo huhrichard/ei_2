@@ -172,7 +172,7 @@ if __name__ == "__main__":
             # ensemble_df = extract_df_by_method(performance_df, method='LR.S', drop_columns=['method'])
             ensemble_df = best_ensemble_score(performance_df, input=key, metric=mk)
 
-            ensemble_df['input'] = val
+            ensemble_df['Method'] = val
             ensemble_df['key'] = key
 
             # performance_df['delta_fmax_LR.S'] = performance_df['fmax_LR.S'] - performance_df['fmax_best base']
@@ -201,7 +201,7 @@ if __name__ == "__main__":
 
         ensemble_df_cat = pd.concat(ensemble_df_list)
 
-        print(ensemble_df_cat['input'].unique())
+        print(ensemble_df_cat['Method'].unique())
         # print('shape before drop', ensemble_df_cat.shape)
         # ensemble_df_cat.dropna(inplace=True)
         # print('shape after drop', ensemble_df_cat.shape)
@@ -270,8 +270,10 @@ if __name__ == "__main__":
             outcomes.append(deceased_outcome_since_prefix.format(dday))
 
         fig2, ax2 = plt.subplots(1, 1, figsize=(11, 6))
-        ax2 = sns.barplot(ax=ax2, y=best_metric_str, x='input', hue='Outcome', hue_order=outcomes,
-                          data=ensemble_df_cat, palette=sorted_cp, order=sorted_dataname_list,
+        ax2 = sns.barplot(ax=ax2, y=best_metric_str, x='Outcome', hue='input',
+                          hue_order=sorted_dataname_list,
+                          data=ensemble_df_cat, palette=sorted_cp,
+                          order=outcomes,
                           )
         # for tick in ax1.get_xticklabels():
         #     tick.set_rotation(45)
