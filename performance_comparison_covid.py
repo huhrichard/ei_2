@@ -173,7 +173,7 @@ if __name__ == "__main__":
             ensemble_df = best_ensemble_score(performance_df, input=key, metric=mk)
 
             ensemble_df['input'] = val
-            ensemble_df['key'] = key
+            ensemble_df['key'] = key.capitalize()
 
             # performance_df['delta_fmax_LR.S'] = performance_df['fmax_LR.S'] - performance_df['fmax_best base']
             # best_base_df = extract_df_by_method(performance_df, method='best base')
@@ -220,7 +220,8 @@ if __name__ == "__main__":
         median_fmax_list = np.median(cd_input_df.values, axis=0)
         fmax_list = cd_input_df.values
         # data_list = [k for v, k in dict_suffix.items()]
-        data_list = cd_input_df.columns.tolist()
+        cd_list = cd_input_df.columns.tolist()
+        data_list = [dict_suffix[c] for c in cd_list]
         # dict_value_list = [k for v, k in dict_suffix.items()]
         index_data_list = [data_list.index(v) for v, k in dict_suffix.items()]
         cp_new = [cp[idx] for idx in index_data_list]
