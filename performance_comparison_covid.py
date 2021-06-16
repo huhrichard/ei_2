@@ -242,7 +242,7 @@ if __name__ == "__main__":
         sorted_cp = [s[2] for s in sorted_list]
 
         fig1, ax1 = plt.subplots(1, 1, figsize=(11, 6))
-        ax1 = sns.boxplot(ax=ax1, y=best_metric_str, x='input',
+        ax1 = sns.boxplot(ax=ax1, y=best_metric_str, x='Method',
                           data=ensemble_df_cat, palette=sorted_cp, order=sorted_dataname_list,
                           linewidth=2, width=0.5)
         # for tick in ax1.get_xticklabels():
@@ -270,7 +270,7 @@ if __name__ == "__main__":
             outcomes.append(deceased_outcome_since_prefix.format(dday))
 
         fig2, ax2 = plt.subplots(1, 1, figsize=(11, 6))
-        ax2 = sns.barplot(ax=ax2, y=best_metric_str, x='Outcome', hue='input',
+        ax2 = sns.barplot(ax=ax2, y=best_metric_str, x='Outcome', hue='Method',
                           hue_order=sorted_dataname_list,
                           data=ensemble_df_cat, palette=sorted_cp,
                           order=outcomes,
