@@ -702,9 +702,11 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df,
             if regression is False:
                 test_predictions = test_predictions[:, 1]
                 train_predictions = train_predictions[:, 1]
-    print(train_df.columns)
+
     # print(stacker.coef_)
     if stacker_name == "LR.S":
+        print(train_df.columns)
+        print(stacker.coef_)
         coefs = pd.DataFrame(data=[list(stacker.coef_)], columns=train_df.columns, index=[0])
         coefs['fold'] = fold
     else:
