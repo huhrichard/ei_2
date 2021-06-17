@@ -704,11 +704,17 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df,
                 train_predictions = train_predictions[:, 1]
     print(train_df.columns)
     # print(stacker.coef_)
+    if stacker_name == "LR.S":
+        coefs = pd.DataFrame(data=[stacker.coef_], columns=train_df.columns, index=[0])
+        coefs['fold'] = fold
+    else:
+        coefs = None
 
     df = pd.DataFrame(
         {'fold': fold, 'id': test_df.index.get_level_values('id'), 'label': test_labels, 'prediction': test_predictions,
          'diversity': common.diversity_score(test_df.values)})
-    return {'testing_df':df, "training": [train_labels, train_predictions], 'stacked_df':stacked_df}
+    return {'testing_df':df, "training": [train_labels, train_predictions],
+            'stacked_df':stacked_df, 'coefs':coefs}
 
 def plot_scatter(df, path, x_col, y_col, hue_col, fn, title):
     fig, ax = plt.subplots(1,1)
@@ -742,6 +748,10 @@ def main_classification(path, f_list, agg=1):
     dfs.append(pd.DataFrame(data=[[dn, ces['f-measure']['F'], 'CES', ces['auc']]], columns=cols, index=[0]))
     dfs.append(pd.DataFrame(data=[[dn, mean['f-measure']['F'], 'Mean', mean['auc']]], columns=cols, index=[0]))
     dfs.append(pd.DataFrame(data=[[dn, bestbase['f-measure'], 'best base', bestbase['auc']]], columns=cols, index=[0]))
+    print('Saving results #############################################')
+    analysis_path = '%s/analysis' % path
+    if not exists(analysis_path):
+        mkdir(analysis_path)
     # Get Stacking Fmax scores
     # stackers = [RandomForestClassifier(n_estimators=200, max_depth=2, bootstrap=False, random_state=0),
     #             SVC(C=1.0, cache_size=10000, class_weight=None, coef0=0.0,
@@ -838,6 +848,12 @@ def main_classification(path, f_list, agg=1):
             stacking_output = [stacked_generalization(path, stacker_name, stacker, '67890', agg, stacked_df)]
             stacked_df = stacking_output[0].pop('stacked_df')
         predictions_dfs = [s['testing_df'] for s in stacking_output]
+        if stacker_name == 'LR.S':
+            coef_dfs = [s['coefs'] for s in stacking_output]
+            coef_cat_df = pd.concat(coef_dfs)
+            coef_cat_df.to_csv(os.path.join(analysis_path, 'coefs_lr.csv'))
+
+        _dfs = [s['testing_df'] for s in stacking_output]
         _training = stacking_output[0]['training']
         thres = thres_fmax(_training[0], _training[1])
 
@@ -876,10 +892,8 @@ def main_classification(path, f_list, agg=1):
     #     plot_scatter(df=stacked_df, x_col=x, y_col=y, hue_col=hue, fn=fn, path=plot_path, title=title)
 
     # Save results
-    print('Saving results #############################################')
-    if not exists('%s/analysis' % path):
-        mkdir('%s/analysis' % path)
-    dfs.to_csv("%s/analysis/performance.csv" % path, index=False)
+
+    dfs.to_csv(os.path.join(analysis_path, "performance.csv"), index=False)
 
 def main_regression(path, f_list, agg=1, inference_only=False):
     #
