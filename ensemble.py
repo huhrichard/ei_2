@@ -705,7 +705,7 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df,
     print(train_df.columns)
     # print(stacker.coef_)
     if stacker_name == "LR.S":
-        coefs = pd.DataFrame(data=[stacker.coef_], columns=train_df.columns, index=[0])
+        coefs = pd.DataFrame(data=[list(stacker.coef_)], columns=train_df.columns, index=[0])
         coefs['fold'] = fold
     else:
         coefs = None
