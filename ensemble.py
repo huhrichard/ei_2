@@ -608,8 +608,8 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df,
                            z_scoring=False, subject_model=False,
                            regression=False):
     train_df, train_labels, test_df, test_labels = common.read_fold(path, fold)
-    print('number of complex: {} out of {}'.format(np.sum(np.iscomplex(train_df.values)),
-                                                              train_df.values.size))
+    # print('number of complex: {} out of {}'.format(np.sum(np.iscomplex(train_df.values)),
+    #                                                           train_df.values.size))
     # train_df_cols = train_df.columns
     # f_train_base = [common.fmeasure_score(train_labels, train_df[c].values) for c in train_df_cols]
     # thres_train_base = [f['thres'] for f in f_train_base]
@@ -707,7 +707,7 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df,
     if stacker_name == "LR.S":
         print(train_df.columns)
         print(stacker.coef_)
-        coefs = pd.DataFrame(data=[list(stacker.coef_)], columns=train_df.columns, index=[0])
+        coefs = pd.DataFrame(data=list(stacker.coef_), columns=train_df.columns, index=[0])
         coefs['fold'] = fold
     else:
         coefs = None
