@@ -54,7 +54,7 @@ for outcome_key, outcome_val in outcomes.items():
 
     melted_df = pd.concat([melted_lr_coefs_df, coefs_cat], axis=1)
     melted_df.rename(columns={0: 'Modality', 1: 'Base Predictor', 'value': 'Coefficient'})
-    median_coef_dict_by_modal = [np.median(coefs_cat.loc[coefs_cat['Modality'] == k,
+    median_coef_dict_by_modal = [np.median(melted_cat.loc[coefs_cat['Modality'] == k,
                                                          'Coefficient']) for k in dict_suffix]
     print(median_coef_dict_by_modal)
     sorted_list = sorted(zip(median_coef_dict_by_modal, dict_suffix), reverse=True, key=lambda x: x[0])
