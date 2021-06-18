@@ -41,7 +41,7 @@ for dday in deceased_days_timeframe:
 
 for outcome_key, outcome_val in outcomes.items():
     csv_path = os.path.join(*[sys.argv[-1], outcome_key, 'analysis', 'coefs_lr.csv'])
-    lr_coefs_df = pd.read_csv(csv_path, index=0)
+    lr_coefs_df = pd.read_csv(csv_path, index_col=0)
     lr_coefs_cols = lr_coefs_df.columns.tolist()
     lr_coefs_cols.remove('fold')
     melted_lr_coefs_df = pd.melt(lr_coefs_df,
@@ -51,6 +51,5 @@ for outcome_key, outcome_val in outcomes.items():
     coefs_cat = melted_lr_coefs_df['variable'].str.rsplit('.')
     coefs_cat.rename(columns={0:'Modality', 1:'Base Predictor'})
 
-    melted_df = pd.concat(melted_lr_coefs_df, coefs_cat, axis=1, ignore_index=True)
-    print(melted_df)
+    melted_df = pd.concat(melted_lr_coefs_df, coefs_cat, axis=1
     fig2, ax2 = plt.subplots(1, 1, figsize=(11, 6))
