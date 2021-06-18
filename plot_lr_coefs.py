@@ -51,5 +51,5 @@ for outcome_key, outcome_val in outcomes.items():
     coefs_cat = melted_lr_coefs_df['variable'].str.rsplit('.')
     coefs_cat.rename(columns={0:'Modality', 1:'Base Predictor'})
 
-    melted_df = pd.concat(melted_lr_coefs_df, coefs_cat, axis=1)
+    melted_df = pd.concat([melted_lr_coefs_df, coefs_cat], axis=1)
     fig2, ax2 = plt.subplots(1, 1, figsize=(11, 6))
