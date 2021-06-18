@@ -41,6 +41,7 @@ deceased_days_timeframe = [10, 7, 5, 3]
 for dday in deceased_days_timeframe:
     outcomes[deceased_outcome_since_prefix.format(dday)] = deceased_outcome_since_prefix_plot.format(dday)
 
+cp = sns.color_palette(n_colors=len(dict_suffix))
 for outcome_key, outcome_val in outcomes.items():
     csv_path = os.path.join(*[sys.argv[-1], outcome_key, 'analysis', 'coefs_lr.csv'])
     lr_coefs_df = pd.read_csv(csv_path, index_col=0)
@@ -53,18 +54,21 @@ for outcome_key, outcome_val in outcomes.items():
     coefs_cat = melted_lr_coefs_df['variable'].str.split('.', expand=True)
     coefs_cat.columns = ['Modality', 'Base Predictor', 'Bag']
     melted_df = pd.concat([melted_lr_coefs_df, coefs_cat], axis=1)
-    print(melted_df)
+    # print(melted_df)
     melted_df.rename(columns={'value': 'Coefficient'},
                      inplace=True)
     median_coef_dict_by_modal = [np.median(melted_df.loc[coefs_cat['Modality'] == k,
                                                          'Coefficient']) for k in dict_suffix]
     print(median_coef_dict_by_modal)
-    sorted_list = sorted(zip(median_coef_dict_by_modal, dict_suffix), reverse=True, key=lambda x: x[0])
+    sorted_list = sorted(zip(median_coef_dict_by_modal, dict_suffix, cp), reverse=True, key=lambda x: x[0])
     modal_list = [m[1] for m in sorted_list]
+    sorted_cp = [m[2] for m in sorted_list]
 
     fig1, ax1 = plt.subplots(1, 1, figsize=(11, 6))
     ax1 = sns.boxplot(ax=ax1, y='Coefficient', x='Modality',
-                      data=melted_df, order=modal_list,
+                      data=melted_df, order=modal_list, palette=sorted_cp,
                       linewidth=2, width=0.5)
+
+    ax1.set_title(outcome_key)
 
     fig1.savefig('{}{}{}_LR_coefs.pdf'.format(plot_dir, 'covid19/', outcome_key), bbox_inches="tight")
