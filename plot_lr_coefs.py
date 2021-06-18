@@ -30,6 +30,8 @@ dict_suffix = ['demographics',
                'comorbidities',
                'vitals']
 
+plot_dir = './plot/'
+
 deceased_outcome_since_prefix = 'DECEASED_AT_{}DAYS'
 deceased_outcome_since_prefix_plot = 'DECEASED\nAT_{}DAYS'
 outcomes = {'DECEASED_INDICATOR': 'DECEASED\nINDICATOR'}
@@ -49,7 +51,18 @@ for outcome_key, outcome_val in outcomes.items():
                                  value_vars=lr_coefs_cols)
     print(melted_lr_coefs_df)
     coefs_cat = melted_lr_coefs_df['variable'].str.rsplit('.')
-    coefs_cat.rename(columns={0:'Modality', 1:'Base Predictor'})
 
     melted_df = pd.concat([melted_lr_coefs_df, coefs_cat], axis=1)
-    fig2, ax2 = plt.subplots(1, 1, figsize=(11, 6))
+    melted_df.rename(columns={0: 'Modality', 1: 'Base Predictor', 'value': 'Coefficient'})
+    median_coef_dict_by_modal = [np.median(coefs_cat.loc[coefs_cat['Modality'] == k,
+                                                         'Coefficient']) for k in dict_suffix]
+    print(median_coef_dict_by_modal)
+    sorted_list = sorted(zip(median_coef_dict_by_modal, dict_suffix), reverse=True, key=lambda x: x[0])
+    modal_list = [m[1] for m in sorted_list]
+
+    fig1, ax1 = plt.subplots(1, 1, figsize=(11, 6))
+    ax1 = sns.boxplot(ax=ax1, y='Coefficient', x='Modality',
+                      data=melted_df, order=modal_list,
+                      linewidth=2, width=0.5)
+
+    fig1.savefig('{}{}{}_LR_coefs.pdf'.format(plot_dir, 'covid19/', outcome_key), bbox_inches="tight")
