@@ -50,7 +50,7 @@ for outcome_key, outcome_val in outcomes.items():
                                  id_vars=['fold'],
                                  value_vars=lr_coefs_cols)
     print(melted_lr_coefs_df)
-    coefs_cat = melted_lr_coefs_df['variable'].str.rsplit('.')
+    coefs_cat = melted_lr_coefs_df['variable'].str.split('.', expand=True)
 
     melted_df = pd.concat([melted_lr_coefs_df, coefs_cat], axis=1)
     print(melted_df)
