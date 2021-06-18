@@ -54,7 +54,7 @@ for outcome_key, outcome_val in outcomes.items():
 
     melted_df = pd.concat([melted_lr_coefs_df, coefs_cat], axis=1)
     print(melted_df)
-    melted_df.rename(columns={0: 'Modality', 1: 'Base Predictor', 'value': 'Coefficient'},
+    melted_df.rename(columns={'0': 'Modality', '1': 'Base Predictor', 'value': 'Coefficient'},
                      inplace=True)
     median_coef_dict_by_modal = [np.median(melted_df.loc[coefs_cat['Modality'] == k,
                                                          'Coefficient']) for k in dict_suffix]
