@@ -48,7 +48,7 @@ for outcome_key, outcome_val in outcomes.items():
                                  id_vars=['fold'],
                                  value_vars=lr_coefs_cols)
 
-    coefs_cat = melted_lr_coefs_df['values'].str.rsplit('.')
+    coefs_cat = melted_lr_coefs_df['value'].str.rsplit('.')
     coefs_cat.rename(columns={0:'Modality', 1:'Base Predictor'})
 
     melted_df = pd.concat(melted_lr_coefs_df, coefs_cat, axis=1, ignore_index=True)
