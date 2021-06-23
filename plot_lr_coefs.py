@@ -57,6 +57,7 @@ for outcome_key, outcome_val in outcomes.items():
     # print(melted_df)
     melted_df.rename(columns={'value': 'Coefficient'},
                      inplace=True)
+    melted_df['value'] = abs(melted_df['value'])
     median_coef_dict_by_modal = [np.median(melted_df.loc[coefs_cat['Modality'] == k,
                                                          'Coefficient']) for k in dict_suffix]
     print(median_coef_dict_by_modal)
