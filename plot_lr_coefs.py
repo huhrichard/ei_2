@@ -46,7 +46,8 @@ for outcome_key, outcome_val in outcomes.items():
     csv_path = os.path.join(*[sys.argv[-1], outcome_key, 'analysis', 'coefs_lr.csv'])
     lr_coefs_df = pd.read_csv(csv_path, index_col=0)
     lr_coefs_cols = lr_coefs_df.columns.tolist()
-    lr_coefs_cols.remove('fold')
+    lr_coefs_cols['fold'] = 0
+    # lr_coefs_cols.remove('fold')
     melted_lr_coefs_df = pd.melt(lr_coefs_df,
                                  id_vars=['fold'],
                                  value_vars=lr_coefs_cols)
