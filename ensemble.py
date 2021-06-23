@@ -715,7 +715,7 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df,
     df = pd.DataFrame(
         {'fold': fold, 'id': test_df.index.get_level_values('id'), 'label': test_labels, 'prediction': test_predictions,
          'diversity': common.diversity_score(test_df.values)})
-    return {'testing_df':df, "training": [train_labels, train_predictions],
+    return {'testing_df':df, "training": [train_labels, train_predictions], 'train_dfs': [train_df, train_labels],
             'stacked_df':stacked_df, 'coefs':coefs}
 
 def plot_scatter(df, path, x_col, y_col, hue_col, fn, title):
@@ -851,9 +851,19 @@ def main_classification(path, f_list, agg=1):
             stacked_df = stacking_output[0].pop('stacked_df')
         predictions_dfs = [s['testing_df'] for s in stacking_output]
         if stacker_name == 'LR.S':
-            coef_dfs = [s['coefs'] for s in stacking_output]
-            coef_cat_df = pd.concat(coef_dfs)
-            coef_cat_df.to_csv(os.path.join(analysis_path, 'coefs_lr.csv'))
+            # coef_dfs = [s['coefs'] for s in stacking_output]
+            # coef_cat_df = pd.concat(coef_dfs)
+            # coef_cat_df.to_csv(os.path.join(analysis_path, 'coefs_lr.csv'))
+            training_dfs = pd.concat([s['train_dfs'][0] for s in stacking_output])
+            training_labels = pd.concat([s['train_dfs'][1] for s in stacking_output])
+            print(training_dfs)
+            stacker.fit(training_dfs, training_labels)
+
+            coefs = pd.DataFrame(data=list(stacker.coef_), columns=training_dfs.columns, index=[0])
+            # coef_cat_df = pd.concat(coef_dfs)
+            coefs.to_csv(os.path.join(analysis_path, 'coefs_lr.csv'))
+
+
 
         _dfs = [s['testing_df'] for s in stacking_output]
         _training = stacking_output[0]['training']
