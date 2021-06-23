@@ -58,22 +58,22 @@ for outcome_key, outcome_val in outcomes.items():
     coefs_cat.columns = ['Modality', 'Base Predictor', 'Bag']
     melted_df = pd.concat([melted_lr_coefs_df, coefs_cat], axis=1)
     # print(melted_df)
-    melted_df['value'] = abs(melted_df['value'])
+    melted_df['Absolute Coefficient'] = abs(melted_df['value'])
     melted_df.rename(columns={'value': 'Coefficient'},
                      inplace=True)
+    plots = ['Absolute Coefficient', 'Coefficient']
+    for p in plots:
+        median_coef_dict_by_modal = [np.median(melted_df.loc[coefs_cat['Modality'] == k,
+                                                             p]) for k in dict_suffix]
+        print(median_coef_dict_by_modal)
+        sorted_list = sorted(zip(median_coef_dict_by_modal, dict_suffix, cp), reverse=True, key=lambda x: x[0])
+        modal_list = [m[1] for m in sorted_list]
+        sorted_cp = [m[2] for m in sorted_list]
 
-    median_coef_dict_by_modal = [np.median(melted_df.loc[coefs_cat['Modality'] == k,
-                                                         'Coefficient']) for k in dict_suffix]
-    print(median_coef_dict_by_modal)
-    sorted_list = sorted(zip(median_coef_dict_by_modal, dict_suffix, cp), reverse=True, key=lambda x: x[0])
-    modal_list = [m[1] for m in sorted_list]
-    sorted_cp = [m[2] for m in sorted_list]
+        fig1, ax1 = plt.subplots(1, 1, figsize=(11, 6))
+        ax1 = sns.boxplot(ax=ax1, y=p, x='Modality',
+                          data=melted_df, order=modal_list, palette=sorted_cp,
+                          linewidth=2, width=0.5)
 
-    fig1, ax1 = plt.subplots(1, 1, figsize=(11, 6))
-    ax1 = sns.boxplot(ax=ax1, y='Coefficient', x='Modality',
-                      data=melted_df, order=modal_list, palette=sorted_cp,
-                      linewidth=2, width=0.5)
-
-    ax1.set_title(outcome_key)
-
-    fig1.savefig('{}{}{}_LR_coefs.pdf'.format(plot_dir, 'covid19/', outcome_key), bbox_inches="tight")
+        ax1.set_title(outcome_key)
+        fig1.savefig('{}{}{}_LR_{}.pdf'.format(plot_dir, 'covid19/', outcome_key, p), bbox_inches="tight")
