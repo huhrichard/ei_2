@@ -48,10 +48,10 @@ for outcome_key, outcome_val in outcomes.items():
     lr_coefs_cols = lr_coefs_df.columns.tolist()
     print(lr_coefs_cols)
     print(lr_coefs_df)
-    lr_coefs_cols['fold'] = 0
+    # lr_coefs_cols['fold'] = 0
     # lr_coefs_cols.remove('fold')
     melted_lr_coefs_df = pd.melt(lr_coefs_df,
-                                 id_vars=['fold'],
+                                 # id_vars=[],
                                  value_vars=lr_coefs_cols)
     print(melted_lr_coefs_df)
     coefs_cat = melted_lr_coefs_df['variable'].str.split('.', expand=True)
