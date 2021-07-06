@@ -867,9 +867,9 @@ def main_classification(path, f_list, agg=1):
 
             stacker.fit(training_dfs, training_labels)
             n_repeats = 100
-            stacker_pi = sklearn.inspection.permutation_importance(stacker, training_dfs, training_labels,
-                                                               n_repeats=n_repeats,
-                                                                random_state=0)
+            # stacker_pi = sklearn.inspection.permutation_importance(stacker, training_dfs, training_labels,
+            #                                                    n_repeats=n_repeats,
+            #                                                     random_state=0)
 
             # coefs = pd.DataFrame(data=stacker_pi.importances, columns=training_dfs.columns, index=range(n_repeats))
             coefs = pd.DataFrame(data=stacker._coef, columns=training_dfs.columns, index=[0])
