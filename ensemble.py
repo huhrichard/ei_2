@@ -858,8 +858,8 @@ def main_classification(path, f_list, agg=1):
             training_labels = pd.concat([pd.DataFrame({'label':s['train_dfs'][1]}) for s in stacking_output])
             print(training_dfs)
 
-            training_dfs_diff_to_label = training_dfs
-            training_dfs_diff_to_label[:] = abs(training_dfs_diff_to_label.values - training_labels)
+            # training_dfs_diff_to_label = training_dfs
+            # training_dfs_diff_to_label[:] = abs(training_dfs_diff_to_label.values - training_labels)
 
 
             stacker.fit(training_dfs, training_labels)
@@ -868,7 +868,8 @@ def main_classification(path, f_list, agg=1):
                                                                n_repeats=n_repeats,
                                                                 random_state=0)
 
-            coefs = pd.DataFrame(data=stacker_pi.importances, columns=training_dfs.columns, index=range(n_repeats))
+            # coefs = pd.DataFrame(data=stacker_pi.importances, columns=training_dfs.columns, index=range(n_repeats))
+            coefs = pd.DataFrame(data=stacker._coef, columns=training_dfs.columns, index=[0])
             # coef_cat_df = pd.concat(coef_dfs)
             coefs.to_csv(os.path.join(analysis_path, 'coefs_lr.csv'))
 
