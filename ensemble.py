@@ -857,9 +857,18 @@ def main_classification(path, f_list, agg=1):
             training_dfs = pd.concat([s['train_dfs'][0] for s in stacking_output])
             training_labels = pd.concat([pd.DataFrame({'label':s['train_dfs'][1]}) for s in stacking_output])
             print(training_dfs)
-            stacker.fit(training_dfs, training_labels)
 
-            coefs = pd.DataFrame(data=list(stacker.coef_), columns=training_dfs.columns, index=[0])
+            training_dfs_diff_to_label = training_dfs
+            training_dfs_diff_to_label[:] = abs(training_dfs_diff_to_label.value - training_labels)
+
+
+            stacker.fit(training_dfs, training_labels)
+            n_repeats = 100
+            stacker_pi = sklearn.inspection.permutation_importance(stacker, training_dfs, training_labels,
+                                                               n_repeats=n_repeats,
+                                                                random_state=0)
+
+            coefs = pd.DataFrame(data=stacker_pi.importances, columns=training_dfs.columns, index=range(n_repeats))
             # coef_cat_df = pd.concat(coef_dfs)
             coefs.to_csv(os.path.join(analysis_path, 'coefs_lr.csv'))
 
