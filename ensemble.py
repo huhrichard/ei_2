@@ -843,9 +843,11 @@ def main_classification(path, f_list, agg=1):
         if (not testing_bool):
             stacking_output = []
             for fold in f_list:
+                print(fold)
                 stack = stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df)
                 stacked_df = stack.pop('stacked_df')
-                stacking_output.append(stack)
+                if fold == 0:
+                    stacking_output.append(stack)
         else:
             stacking_output = [stacked_generalization(path, stacker_name, stacker, '67890', agg, stacked_df)]
             stacked_df = stacking_output[0].pop('stacked_df')
@@ -856,8 +858,8 @@ def main_classification(path, f_list, agg=1):
             # coef_cat_df.to_csv(os.path.join(analysis_path, 'coefs_lr.csv'))
             # training_dfs = pd.concat([s['train_dfs'][0] for s in stacking_output])
             # training_labels = pd.concat([pd.DataFrame({'label':s['train_dfs'][1]}) for s in stacking_output])
-            training_dfs = stacking_output['train_dfs'][0]
-            training_labels = pd.DataFrame({'label': s['train_dfs'][1]})
+            training_dfs = stacking_output[0]['train_dfs'][0]
+            training_labels = pd.DataFrame({'label': stacking_output['train_dfs'][1]})
 
             # training_dfs_diff_to_label = training_dfs
             # training_dfs_diff_to_label[:] = abs(training_dfs_diff_to_label.values - training_labels)
