@@ -859,7 +859,7 @@ def main_classification(path, f_list, agg=1):
             print(training_dfs)
 
             training_dfs_diff_to_label = training_dfs
-            training_dfs_diff_to_label[:] = abs(training_dfs_diff_to_label.value - training_labels)
+            training_dfs_diff_to_label[:] = abs(training_dfs_diff_to_label.values - training_labels)
 
 
             stacker.fit(training_dfs, training_labels)
