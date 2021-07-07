@@ -846,7 +846,7 @@ def main_classification(path, f_list, agg=1):
             for fold in f_list:
                 stack = stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df)
                 stacked_df = stack.pop('stacked_df')
-                if fold == 0:
+                if fold == 1:
                     print(fold)
                     stacking_output.append(stack)
         else:
@@ -876,11 +876,11 @@ def main_classification(path, f_list, agg=1):
                                                scoring = fmax_sklearn
                                                 )
             print(stacker_pi.importances.shape)
-            coefs = pd.DataFrame(data=stacker_pi.importances.T, columns=training_dfs.columns, index=range(n_repeats))
-            # coefs = pd.DataFrame(data=stacker.coef_, columns=training_dfs.columns, index=[0])
+            pi_df = pd.DataFrame(data=stacker_pi.importances.T, columns=training_dfs.columns, index=range(n_repeats))
+            coefs = pd.DataFrame(data=stacker.coef_, columns=training_dfs.columns, index=[0])
             # coef_cat_df = pd.concat(coef_dfs)
-            # coefs.to_csv(os.path.join(analysis_path, 'coefs_lr.csv'))
-            coefs.to_csv(os.path.join(analysis_path, 'coefs_lr_pi.csv'))
+            coefs.to_csv(os.path.join(analysis_path, 'coefs_lr.csv'))
+            pi_df.to_csv(os.path.join(analysis_path, 'coefs_lr_pi.csv'))
 
 
 
