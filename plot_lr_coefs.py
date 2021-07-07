@@ -79,3 +79,40 @@ for outcome_key, outcome_val in outcomes.items():
         ax1.set_title(outcome_key)
         # fig1.savefig('{}{}{}_LR_{}_pi.pdf'.format(plot_dir, 'covid19/', outcome_key, p), bbox_inches="tight")
         fig1.savefig('{}{}{}_LR_{}.pdf'.format(plot_dir, 'covid19/', outcome_key, p), bbox_inches="tight")
+
+
+for outcome_key, outcome_val in outcomes.items():
+    csv_path = os.path.join(*[sys.argv[-1], outcome_key, 'analysis', 'coefs_lr_pi.csv'])
+    lr_coefs_df = pd.read_csv(csv_path, index_col=0)
+    lr_coefs_cols = lr_coefs_df.columns.tolist()
+    print(lr_coefs_cols)
+    print(lr_coefs_df)
+    # lr_coefs_cols['fold'] = 0
+    # lr_coefs_cols.remove('fold')
+    melted_lr_coefs_df = pd.melt(lr_coefs_df,
+                                 # id_vars=[],
+                                 value_vars=lr_coefs_cols)
+    print(melted_lr_coefs_df)
+    coefs_cat = melted_lr_coefs_df['variable'].str.split('.', expand=True)
+    coefs_cat.columns = ['Modality', 'Base Predictor', 'Bag']
+    melted_df = pd.concat([melted_lr_coefs_df, coefs_cat], axis=1)
+    # print(melted_df)
+    # melted_df['Absolute Coefficient'] = abs(melted_df['value'])
+    melted_df.rename(columns={'value': 'Permutation Importances'},
+                     inplace=True)
+    plots = ['Permutation Importances']
+    for p in plots:
+        median_coef_dict_by_modal = [np.median(melted_df.loc[coefs_cat['Modality'] == k,
+                                                             p]) for k in dict_suffix]
+        print(median_coef_dict_by_modal)
+        sorted_list = sorted(zip(median_coef_dict_by_modal, dict_suffix, cp), reverse=True, key=lambda x: x[0])
+        modal_list = [m[1] for m in sorted_list]
+        sorted_cp = [m[2] for m in sorted_list]
+
+        fig1, ax1 = plt.subplots(1, 1, figsize=(11, 6))
+        ax1 = sns.boxplot(ax=ax1, y=p, x='Modality',
+                          data=melted_df, order=modal_list, palette=sorted_cp,
+                          linewidth=2, width=0.5)
+
+        ax1.set_title(outcome_key)
+        fig1.savefig('{}{}{}_LR_{}.pdf'.format(plot_dir, 'covid19/', outcome_key, p), bbox_inches="tight")
