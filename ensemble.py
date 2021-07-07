@@ -872,7 +872,7 @@ def main_classification(path, f_list, agg=1):
             #                                                     random_state=0)
 
             # coefs = pd.DataFrame(data=stacker_pi.importances, columns=training_dfs.columns, index=range(n_repeats))
-            coefs = pd.DataFrame(data=stacker._coef, columns=training_dfs.columns, index=[0])
+            coefs = pd.DataFrame(data=stacker.coef_, columns=training_dfs.columns, index=[0])
             # coef_cat_df = pd.concat(coef_dfs)
             coefs.to_csv(os.path.join(analysis_path, 'coefs_lr.csv'))
 
