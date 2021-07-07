@@ -843,10 +843,10 @@ def main_classification(path, f_list, agg=1):
         if (not testing_bool):
             stacking_output = []
             for fold in f_list:
-                print(fold)
                 stack = stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df)
                 stacked_df = stack.pop('stacked_df')
                 if fold == 0:
+                    print(fold)
                     stacking_output.append(stack)
         else:
             stacking_output = [stacked_generalization(path, stacker_name, stacker, '67890', agg, stacked_df)]
