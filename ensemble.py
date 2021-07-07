@@ -54,6 +54,7 @@ from os import remove, system, listdir
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+from sklearn.inspection import permutation_importance
 from itertools import product
 
 warnings.filterwarnings("ignore")
@@ -867,7 +868,7 @@ def main_classification(path, f_list, agg=1):
 
             stacker.fit(training_dfs, training_labels)
             n_repeats = 100
-            stacker_pi = sklearn.inspection.permutation_importance(estimator=stacker,
+            stacker_pi = permutation_importance(estimator=stacker,
                                                                    X=training_dfs,
                                                                    y=training_labels,
                                                                n_repeats=n_repeats,
