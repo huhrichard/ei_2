@@ -43,7 +43,7 @@ for dday in deceased_days_timeframe:
 
 cp = sns.color_palette(n_colors=len(dict_suffix))
 for outcome_key, outcome_val in outcomes.items():
-    csv_path = os.path.join(*[sys.argv[-1], outcome_key, 'analysis', 'coefs_lr.csv'])
+    csv_path = os.path.join(*[sys.argv[-1], outcome_key, 'analysis', 'coefs_lr_pi.csv'])
     lr_coefs_df = pd.read_csv(csv_path, index_col=0)
     lr_coefs_cols = lr_coefs_df.columns.tolist()
     print(lr_coefs_cols)
@@ -76,4 +76,4 @@ for outcome_key, outcome_val in outcomes.items():
                           linewidth=2, width=0.5)
 
         ax1.set_title(outcome_key)
-        fig1.savefig('{}{}{}_LR_{}.pdf'.format(plot_dir, 'covid19/', outcome_key, p), bbox_inches="tight")
+        fig1.savefig('{}{}{}_LR_{}_pi.pdf'.format(plot_dir, 'covid19/', outcome_key, p), bbox_inches="tight")
