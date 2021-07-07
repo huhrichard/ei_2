@@ -864,16 +864,17 @@ def main_classification(path, f_list, agg=1):
 
             # training_dfs_diff_to_label = training_dfs
             # training_dfs_diff_to_label[:] = abs(training_dfs_diff_to_label.values - training_labels)
-
+            print(training_dfs.shape)
 
             stacker.fit(training_dfs, training_labels)
             n_repeats = 100
             stacker_pi = permutation_importance(estimator=stacker,
-                                                                   X=training_dfs,
-                                                                   y=training_labels,
-                                                               n_repeats=n_repeats,
-                                                                random_state=0,
-                                                                   scoring = fmax_sklearn)
+                                               X=training_dfs,
+                                               y=training_labels,
+                                           n_repeats=n_repeats,
+                                            random_state=0,
+                                               scoring = fmax_sklearn
+                                                )
             print(stacker_pi.importances.shape)
             coefs = pd.DataFrame(data=stacker_pi.importances.T, columns=training_dfs.columns, index=range(n_repeats))
             # coefs = pd.DataFrame(data=stacker.coef_, columns=training_dfs.columns, index=[0])
