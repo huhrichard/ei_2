@@ -874,11 +874,12 @@ def main_classification(path, f_list, agg=1):
                                                                n_repeats=n_repeats,
                                                                 random_state=0,
                                                                    scoring = fmax_sklearn)
-
-            coefs = pd.DataFrame(data=stacker_pi.importances, columns=training_dfs.columns, index=range(n_repeats))
+            print(stacker_pi.importances.shape)
+            coefs = pd.DataFrame(data=stacker_pi.importances.T, columns=training_dfs.columns, index=range(n_repeats))
             # coefs = pd.DataFrame(data=stacker.coef_, columns=training_dfs.columns, index=[0])
             # coef_cat_df = pd.concat(coef_dfs)
-            coefs.to_csv(os.path.join(analysis_path, 'coefs_lr.csv'))
+            # coefs.to_csv(os.path.join(analysis_path, 'coefs_lr.csv'))
+            coefs.to_csv(os.path.join(analysis_path, 'coefs_lr_pi.csv'))
 
 
 
