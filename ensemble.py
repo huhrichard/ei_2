@@ -870,7 +870,9 @@ def main_classification(path, f_list, agg=1):
             stacker.fit(training_dfs, training_labels)
             predict_scores = stacker.predict_proba(training_dfs)[:,1]
             fmax_train = common.fmeasure_score(training_labels.values, predict_scores, thres=None)
+            auc_train = sklearn.metrics.roc_auc_score(training_labels.values, predict_scores)
             print('fmax of the whole training set:', fmax_train)
+            print('auc of the whole training set:', auc_train)
             n_repeats = 100
             stacker_pi = permutation_importance(estimator=stacker,
                                                X=training_dfs,
