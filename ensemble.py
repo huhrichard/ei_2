@@ -869,7 +869,7 @@ def main_classification(path, f_list, agg=1):
             # stacker.fit(training_dfs, training_labels)
             stacker.fit(training_dfs, training_labels)
             predict_label = stacker.predict_proba(training_dfs)[:,1]
-            fmax_train = fmax(y_true = training_labels.values, y_pred=predict_label)
+            fmax_train = common.fmeasure_score(y_true = training_labels.values, y_pred=predict_label, thres=None)
             print('fmax of the whole training set:', fmax_train)
             n_repeats = 100
             stacker_pi = permutation_importance(estimator=stacker,
