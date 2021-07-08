@@ -60,7 +60,7 @@ from itertools import product
 warnings.filterwarnings("ignore")
 
 wmse_sklearn = make_scorer(weighted_mse, greater_is_better=False)
-fmax_sklearn = make_scorer(common.f_max, greater_is_better=True)
+fmax_sklearn = make_scorer(common.f_max, greater_is_better=True, needs_proba=True)
 
 def str2bool(v):
     if v.lower() in ('yes', 'true', 't', 'y', '1'):
@@ -885,7 +885,7 @@ def main_classification(path, f_list, agg=1):
                                                 )
             print(stacker_pi.importances)
             # pi_df = pd.DataFrame(data=stacker_pi.importances.T, columns=training_dfs.columns, index=range(n_repeats))
-            pi_df = pd.DataFrame(data=stacker_pi.importances_mean.T, columns=training_dfs.columns, index=[0])
+            pi_df = pd.DataFrame(data=np.array([stacker_pi.importances_mean]).T, columns=training_dfs.columns, index=[0])
             coefs = pd.DataFrame(data=stacker.coef_, columns=training_dfs.columns, index=[0])
             # coef_cat_df = pd.concat(coef_dfs)
             coefs.to_csv(os.path.join(analysis_path, 'coefs_lr.csv'))
