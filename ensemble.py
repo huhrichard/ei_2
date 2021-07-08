@@ -883,7 +883,8 @@ def main_classification(path, f_list, agg=1):
                                             random_state=0,
                                                scoring = fmax_sklearn
                                                 )
-            print(stacker_pi.importances)
+            print(stacker_pi.importances_mean)
+            print(stacker_pi.importances_mean.shape)
             # pi_df = pd.DataFrame(data=stacker_pi.importances.T, columns=training_dfs.columns, index=range(n_repeats))
             pi_df = pd.DataFrame(data=np.array([stacker_pi.importances_mean]).T, columns=training_dfs.columns, index=[0])
             coefs = pd.DataFrame(data=stacker.coef_, columns=training_dfs.columns, index=[0])
