@@ -867,7 +867,8 @@ def main_classification(path, f_list, agg=1):
             print(training_dfs.shape)
 
             # stacker.fit(training_dfs, training_labels)
-            predict_label = stacker.fit_transform(training_dfs, training_labels)
+            stacker.fit(training_dfs, training_labels)
+            predict_label = stacker.predict_proba(training_dfs)[:,1]
             fmax_train = fmax_sklearn(training_labels.values, predict_label)
             print('fmax of the whole training set:', fmax_train)
             n_repeats = 100
