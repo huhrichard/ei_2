@@ -869,7 +869,8 @@ def main_classification(path, f_list, agg=1):
             # stacker.fit(training_dfs, training_labels)
             stacker.fit(training_dfs, training_labels)
             predict_scores = stacker.predict_proba(training_dfs)[:,1]
-            fmax_train = common.fmeasure_score(training_labels.values, predict_scores, thres=None)
+            # fmax_train = common.fmeasure_score(training_labels.values, predict_scores, thres=None)
+            fmax_train = fmax_sklearn(stacker, training_dfs, training_labels)
             auc_train = sklearn.metrics.roc_auc_score(training_labels.values, predict_scores)
             print('fmax of the whole training set:', fmax_train)
             print('auc of the whole training set:', auc_train)
@@ -882,7 +883,8 @@ def main_classification(path, f_list, agg=1):
                                                scoring = fmax_sklearn
                                                 )
             print(stacker_pi.importances)
-            pi_df = pd.DataFrame(data=stacker_pi.importances.T, columns=training_dfs.columns, index=range(n_repeats))
+            # pi_df = pd.DataFrame(data=stacker_pi.importances.T, columns=training_dfs.columns, index=range(n_repeats))
+            pi_df = pd.DataFrame(data=stacker_pi.importances_mean, columns=training_dfs.columns, index=[0])
             coefs = pd.DataFrame(data=stacker.coef_, columns=training_dfs.columns, index=[0])
             # coef_cat_df = pd.concat(coef_dfs)
             coefs.to_csv(os.path.join(analysis_path, 'coefs_lr.csv'))
