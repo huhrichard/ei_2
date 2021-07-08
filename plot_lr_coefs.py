@@ -62,7 +62,9 @@ for outcome_key, outcome_val in outcomes.items():
     melted_df['Absolute Coefficient'] = abs(melted_df['value'])
     melted_df.rename(columns={'value': 'Coefficient'},
                      inplace=True)
-    plots = ['Absolute Coefficient', 'Coefficient']
+    plots = ['Absolute Coefficient',
+             # 'Coefficient'
+             ]
     for p in plots:
         median_coef_dict_by_modal = [np.median(melted_df.loc[coefs_cat['Modality'] == k,
                                                              p]) for k in dict_suffix]
