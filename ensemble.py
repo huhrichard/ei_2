@@ -866,7 +866,10 @@ def main_classification(path, f_list, agg=1):
             # training_dfs_diff_to_label[:] = abs(training_dfs_diff_to_label.values - training_labels)
             print(training_dfs.shape)
 
-            stacker.fit(training_dfs, training_labels)
+            # stacker.fit(training_dfs, training_labels)
+            predict_label = stacker.fit_transform(training_dfs, training_labels)
+            fmax_train = fmax_sklearn(training_labels.values, predict_label)
+            print('fmax of the whole training set:', fmax_train)
             n_repeats = 100
             stacker_pi = permutation_importance(estimator=stacker,
                                                X=training_dfs,
@@ -875,7 +878,7 @@ def main_classification(path, f_list, agg=1):
                                             random_state=0,
                                                scoring = fmax_sklearn
                                                 )
-            print(stacker_pi.importances.shape)
+            print(stacker_pi.importances)
             pi_df = pd.DataFrame(data=stacker_pi.importances.T, columns=training_dfs.columns, index=range(n_repeats))
             coefs = pd.DataFrame(data=stacker.coef_, columns=training_dfs.columns, index=[0])
             # coef_cat_df = pd.concat(coef_dfs)
