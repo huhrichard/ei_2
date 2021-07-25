@@ -56,6 +56,12 @@ import numpy as np
 import seaborn as sns
 from sklearn.inspection import permutation_importance
 from itertools import product
+from joblib import Parallel
+
+from sklearn.metrics import check_scoring
+from sklearn.utils import Bunch
+from sklearn.utils import check_random_state
+from sklearn.utils import
 
 warnings.filterwarnings("ignore")
 
@@ -100,7 +106,6 @@ def get_predictions(df, ensemble, fold, seedval):
     return pd.DataFrame(
         {'fold': fold, 'seed': seedval, 'id': ids, 'label': labels, 'prediction': predictions, 'diversity': diversity,
          'ensemble_size': len(ensemble)})
-
 
 def select_candidate_enhanced(train_df, train_labels, best_classifiers, ensemble, i, scoring_func):
     initial_ensemble_size = 2
@@ -895,7 +900,7 @@ def main_classification(path, f_list, agg=1):
 
 
 
-        _dfs = [s['testing_df'] for s in stacking_output]
+        # _dfs = [s['testing_df'] for s in stacking_output]
         _training = stacking_output[0]['training']
         thres = thres_fmax(_training[0], _training[1])
 
