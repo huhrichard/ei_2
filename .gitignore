@@ -1,2 +1,9 @@
 
 .DS_Store
+.ipynb_checkpoints
+deepNF
+__pycache__
+plot_old
+mashup
+not_on_github
+plot

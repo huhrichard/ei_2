@@ -40,13 +40,13 @@ list_of_data = [
 #         for sub in s:
 #             feat = feat + '+' + sub
 #         list_of_method.append(feat[1:])
-rdim = np.array(range(10))+1
-tcca_list = []
-for r in rdim:
-    k = 'tcca{}'.format(r)
-    tcca_list.append(k)
+# rdim = np.array(range(10))+1
+# tcca_list = []
+# for r in rdim:
+#     k = 'tcca{}'.format(r)
+#     tcca_list.append(k)
     # dict_of_method['tcca{}'.format(r)] = 'EI_TensorCCA({})'.format(r)
-list_of_data = list_of_data + tcca_list
+# list_of_data = list_of_data + tcca_list
 
 for outcome in outcome_list:
     for m in list_of_data:

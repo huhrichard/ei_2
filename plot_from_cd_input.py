@@ -8,13 +8,14 @@ from goatools.semantic import get_info_content
 from goatools.gosubdag.gosubdag import GoSubDag
 from goatools.anno.factory import get_objanno
 from goatools.semantic import TermCounts
+from statannot import add_stat_annotation
 
 from goatools.base import download_go_basic_obo
 import seaborn as sns
 # import scikit_posthocs as sp
 
 plt.rcParams.update({
-    'font.size': 20,
+    # 'font.size': 20,
     'figure.figsize':(14, 6)})
 plt.rcParams["font.weight"] = "bold"
 plt.rcParams["axes.labelweight"] = "bold"
@@ -60,29 +61,30 @@ list_ontology = ['go']
 ylabel = r'$F_{max}$'
 for ontology in list_ontology:
     # for group in list_of_groups:
-    fn = 'cd_input_{}_*.csv'.format(ontology)
-
-    file_list = find(fn, cd_csv_path)
-    print(file_list)
-    cd_csv_list = []
-    for file in file_list:
-        cd_df_temp = pd.read_csv(file)
-        print(file)
-        print(cd_df_temp.isna().sum())
-        cd_csv_list.append(cd_df_temp)
-
-
-
-        # group_fn_suffix = file.split('.csv')[0].split('cd_input_{}_'.format(ontology))[-1]
-
-        # if '-' not in group_fn_suffix:
-        #     group = '>' + group_fn_suffix
-        # else:
-        #     group = group_fn_suffix
-    cd_df = pd.concat(cd_csv_list)
-    print(cd_df.isna().sum())
+    # fn = 'cd_input_{}_*.csv'.format(ontology)
+    #
+    # file_list = find(fn, cd_csv_path)
+    # print(file_list)
+    # cd_csv_list = []
+    # for file in file_list:
+    #     cd_df_temp = pd.read_csv(file)
+    #     print(file)
+    #     print(cd_df_temp.isna().sum())
+    #     cd_csv_list.append(cd_df_temp)
+    #
+    #
+    #
+    #     # group_fn_suffix = file.split('.csv')[0].split('cd_input_{}_'.format(ontology))[-1]
+    #
+    #     # if '-' not in group_fn_suffix:
+    #     #     group = '>' + group_fn_suffix
+    #     # else:
+    #     #     group = group_fn_suffix
+    # cd_df = pd.concat(cd_csv_list)
+    # print(cd_df.isna().sum())
     csv_fp = cd_csv_path+'cd_input_{}.csv'.format(ontology)
-    cd_df.to_csv(csv_fp, index_label=False)
+    cd_df = pd.read_csv(csv_fp)
+    # cd_df.to_csv(csv_fp, index_label=False)
     # cd_df = pd.read_csv('')
     # print(cd_df)
 
@@ -166,18 +168,42 @@ for ontology in list_ontology:
                       data=cd_df_melted, palette=sorted_cp, order=sorted_algo_names,
                       linewidth=2.5)
 
+    pv_list = [2e-16, 2e-16, 1.03e-12]
+    pair_list = [('Ensemble\nIntegration', 'DeepNF'),
+                 ('Ensemble\nIntegration', 'Mashup'),
+                 ('Ensemble\nIntegration', 'Coexpression')]
+    # pair_list = [(0, 1),
+    #              (0, 5)]
+    print(cd_df_melted)
+    for tick in ax1.get_xticklabels():
+        tick.set_fontsize(20)
+        tick.set_rotation(45)
+        # tick
+        tick.set_fontweight('semibold')
+        tick.set_horizontalalignment("right")
+
+    for tick in ax1.get_yticklabels():
+        tick.set_fontsize(20)
+        tick.set_fontweight('semibold')
+    # ax1.set_xlabel
+    # add_stat_annotation(ax1, data=cd_df_melted, y='fmax', x='algo',
+    #                     order=sorted_algo_names,
+    #                     perform_stat_test=False,
+    #                     pvalues=pv_list, box_pairs=pair_list,
+    #                     loc='outside',
+    #                     text_format='full'
+    #                     )
+
     # pval_mat = sp.posthoc_nemenyi_friedman(cd_df_melted,
     #                                        y_col='fmax', block_col='go', group_col='algo', melted=True)
     # pval_mat.to_csv(cd_csv_path + 'cd_pval_go.csv')
     # print(pval_mat)
 
-    for tick in ax1.get_xticklabels():
-        # tick.set_fontsize(20)
-        tick.set_rotation(45)
-        # tick
-        tick.set_horizontalalignment("right")
+
     # ax1.
-    ax1.set_ylabel(ylabel, fontsize=22)
+    params = {'mathtext.default': 'regular'}
+    plt.rcParams.update(params)
+    ax1.set_ylabel(ylabel, fontsize=22, fontweight='semibold')
     ax1.set_xlabel('')
     # ax1.set_title(title_name)
     # fig1.savefig('{}f_max_{}_comparison_{}.pdf'.format(plot_dir, ontology, group_fn_suffix), bbox_inches="tight")

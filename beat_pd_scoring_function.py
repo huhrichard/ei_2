@@ -25,6 +25,11 @@ def weighted_mse(groundtruth_df, pred_df):
     :param groundtruth_df: dataframe of groundtruth
     :return: weighted_mse_score
     """
+    if isinstance(pred_df.index, pd.MultiIndex):
+        pred_df = pred_df.reset_index()
+        # print(pred_df)
+        pred_df = pred_df.drop(columns=['label'])
+        pred_df = pred_df.set_index('id')
 
     m_index = pred_df.index
     """
@@ -44,7 +49,7 @@ def weighted_mse(groundtruth_df, pred_df):
         """
         MSE
         """
-        subject_score = mean_squared_error(pred_df.loc[measurements_bool_of_subject], groundtruth_df.loc[measurements_bool_of_subject])
+        subject_score = mean_squared_error(pred_df.loc[measurements_bool_of_subject], groundtruth_df[measurements_bool_of_subject])
         subject_scores.append(subject_score)
         """
         Weight by patients

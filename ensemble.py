@@ -851,9 +851,9 @@ def main_classification(path, f_list, agg=1):
             for fold in f_list:
                 stack = stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df)
                 stacked_df = stack.pop('stacked_df')
-                if fold == 1:
-                    print(fold)
-                    stacking_output.append(stack)
+                # if fold == 1:
+                #     print(fold)
+                stacking_output.append(stack)
         else:
             stacking_output = [stacked_generalization(path, stacker_name, stacker, '67890', agg, stacked_df)]
             stacked_df = stacking_output[0].pop('stacked_df')

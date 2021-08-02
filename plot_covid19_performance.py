@@ -117,7 +117,7 @@ def custom_boxplot(boxplot_y_metric, boxplot_ylabel, metric_median_list, dict_su
 
 
     sep_space = 1.5
-    fig1, ax1 = plt.subplots(1, 1, figsize=(9, 6))
+
     ax1 = sns.boxplot(ax=ax1, y=boxplot_y_metric, x='data_name',
                       data=performance_cat_df,
                       palette=sorted_cp, order=sorted_algo_names,
