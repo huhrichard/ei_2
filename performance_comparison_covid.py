@@ -133,6 +133,7 @@ if __name__ == "__main__":
             # fns = [fn for fn in fns if fn != 'analysis']
             fns = [go_dir + '/' + fn for fn in fns]
             term_dirs = [fn for fn in fns if isdir(fn)]
+            print(term_dirs)
             # if len(feature_folders) == 0:
             #     feature_folders.append('./')
             # assert len(feature_folders) > 0
