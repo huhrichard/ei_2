@@ -273,7 +273,7 @@ if __name__ == "__main__":
         """
         performance_df_cat_di_only = performance_df_cat.loc[performance_df_cat['data_name'] == 'DECEASED_INDICATOR']
 
-        xgb_series = performance_df_cat_di_only['Method'] == 'XGBoost'
+        xgb_series = performance_df_cat_di_only.loc[performance_df_cat_di_only['Method'] == 'XGBoost']
         performance_df_cat_di_only = performance_df_cat_di_only.loc[performance_df_cat_di_only['key'] != 'XGBoost']
 
         print(performance_df_cat_di_only.columns)
