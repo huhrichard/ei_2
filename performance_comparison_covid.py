@@ -287,7 +287,7 @@ if __name__ == "__main__":
                           data=performance_df_cat_di_only, palette=sorted_cp_no_xgb, order=sorted_dataname_list_no_xgb,
                           linewidth=2, width=0.5)
 
-        ax3.axhline(y=xgb_series[best_metric_str].values)
+        ax3.axhline(y=xgb_series[mk].values)
         # for tick in ax3.get_xticklabels():
         #     tick.set_rotation(45)
         #     tick.set_horizontalalignment("right")
