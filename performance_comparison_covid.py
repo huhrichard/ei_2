@@ -283,7 +283,7 @@ if __name__ == "__main__":
         sorted_dataname_list_no_xgb.pop(xgb_idx)
 
         fig3, ax3 = plt.subplots(1, 1, figsize=(12, 6))
-        ax3 = sns.boxplot(ax=ax3, y=best_metric_str, x='Method',
+        ax3 = sns.boxplot(ax=ax3, y=mk, x='Method',
                           data=performance_df_cat_di_only, palette=sorted_cp_no_xgb, order=sorted_dataname_list_no_xgb,
                           linewidth=2, width=0.5)
 
