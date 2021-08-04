@@ -293,7 +293,7 @@ if __name__ == "__main__":
         #     tick.set_horizontalalignment("right")
         ax3.set_ylabel(ylabel, fontsize=22, fontweight='semibold')
         ax3.set_xlabel('')
-        ax3.set_title(title_name, fontweight='semibold')
+        ax3.set_title('Deceased Indicator', fontweight='semibold')
         for tick in ax3.get_xticklabels():
             tick.set_fontsize(14)
             # tick.set_rotation(45)
