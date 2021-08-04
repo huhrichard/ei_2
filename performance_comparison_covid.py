@@ -113,6 +113,7 @@ if __name__ == "__main__":
         median_fmax_list = []
         data_list = []
         ensemble_df_list = []
+        performance_plot_df = []
         # is_go = 'go' in sys.argv[-1]
 
         # ensemble_df
@@ -175,6 +176,8 @@ if __name__ == "__main__":
 
             ensemble_df['Method'] = val
             ensemble_df['key'] = key
+            performance_df['Method'] = val
+            performance_df['key'] = key
 
             # performance_df['delta_fmax_LR.S'] = performance_df['fmax_LR.S'] - performance_df['fmax_best base']
             # best_base_df = extract_df_by_method(performance_df, method='best base')
@@ -184,6 +187,7 @@ if __name__ == "__main__":
             # median_fmax_list.append(np.nanmedian(ensemble_df['best_fmax'].values))
             # data_list.append(val)
             ensemble_df_list.append(ensemble_df)
+            performance_plot_df.append(performance_df)
 
         # print(median_fmax_list)
         # print(len(fmax_list), len(median_fmax_list))
@@ -201,6 +205,7 @@ if __name__ == "__main__":
         # print(sorted_fmax_list)
 
         ensemble_df_cat = pd.concat(ensemble_df_list)
+        performance_df_cat = pd.concat(performance_plot_df)
 
         print(ensemble_df_cat['Method'].unique())
         # print('shape before drop', ensemble_df_cat.shape)
@@ -263,6 +268,43 @@ if __name__ == "__main__":
             tick.set_fontweight('semibold')
         fig1.savefig('{}{}{}_{}_comparison.pdf'.format(plot_dir, 'covid19/', mk, file_prefix), bbox_inches="tight")
 
+        """
+        boxplot with only deceased indicator
+        """
+        performance_df_cat_di_only = performance_df_cat.loc[performance_df_cat['data_name'] == 'DECEASED_INDICATOR']
+        xgb_series = performance_df_cat_di_only['Method'] == 'XGBoost'
+        performance_df_cat_di_only = performance_df_cat_di_only.loc[performance_df_cat_di_only['key'] != 'XGBoost']
+
+        xgb_idx = sorted_dataname_list.index('XGBoost')
+        sorted_cp_no_xgb = sorted_cp.copy()
+        sorted_cp_no_xgb.pop(xgb_idx)
+
+        sorted_dataname_list_no_xgb = sorted_dataname_list.copy()
+        sorted_dataname_list_no_xgb.pop(xgb_idx)
+
+        fig3, ax3 = plt.subplots(1, 1, figsize=(12, 6))
+        ax3 = sns.boxplot(ax=ax3, y=best_metric_str, x='Method',
+                          data=performance_df_cat_di_only, palette=sorted_cp_no_xgb, order=sorted_dataname_list_no_xgb,
+                          linewidth=2, width=0.5)
+
+        ax3.axhline(y=xgb_series[best_metric_str].values)
+        # for tick in ax3.get_xticklabels():
+        #     tick.set_rotation(45)
+        #     tick.set_horizontalalignment("right")
+        ax3.set_ylabel(ylabel, fontsize=22, fontweight='semibold')
+        ax3.set_xlabel('')
+        ax3.set_title(title_name, fontweight='semibold')
+        for tick in ax3.get_xticklabels():
+            tick.set_fontsize(14)
+            # tick.set_rotation(45)
+            tick.set_fontweight('semibold')
+            # tick.set_horizontalalignment("right")
+
+        for tick in ax3.get_yticklabels():
+            tick.set_fontsize(16)
+            tick.set_fontweight('semibold')
+        fig3.savefig('{}{}{}_{}_comparison_di_only.pdf'.format(plot_dir, 'covid19/', mk, file_prefix), bbox_inches="tight")
+
         deceased_outcome_since_prefix = 'DECEASED_AT_{}DAYS'
         deceased_outcome_since_prefix_plot = 'DECEASED\nAT_{}DAYS'
         outcomes = {'DECEASED_INDICATOR': 'DECEASED\nINDICATOR'}
@@ -286,7 +328,7 @@ if __name__ == "__main__":
                           data=ensemble_df_cat, palette=sorted_cp,
                           order=outcomes_order,
                           )
-        # for tick in ax1.get_xticklabels():
+        # for tick in ax3.get_xticklabels():
         #     tick.set_rotation(45)
         #     tick.set_horizontalalignment("right")
         ax2.set_ylabel(ylabel, fontsize=22, fontweight='semibold')
