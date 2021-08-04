@@ -272,8 +272,12 @@ if __name__ == "__main__":
         boxplot with only deceased indicator
         """
         performance_df_cat_di_only = performance_df_cat.loc[performance_df_cat['data_name'] == 'DECEASED_INDICATOR']
+
         xgb_series = performance_df_cat_di_only['Method'] == 'XGBoost'
         performance_df_cat_di_only = performance_df_cat_di_only.loc[performance_df_cat_di_only['key'] != 'XGBoost']
+
+        print(performance_df_cat_di_only.columns)
+        print(xgb_series)
 
         xgb_idx = sorted_dataname_list.index('XGBoost')
         sorted_cp_no_xgb = sorted_cp.copy()
