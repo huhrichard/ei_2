@@ -349,4 +349,4 @@ if __name__ == "__main__":
             tick.set_fontsize(16)
             tick.set_fontweight('semibold')
         fig2.savefig('{}{}{}_{}_bar_comparison.pdf'.format(plot_dir, 'covid19/', mk, file_prefix), bbox_inches="tight")
-        ensemble_df_cat.to_csv(os.path.join(plot_dir, 'performance_cat_covid.csv'))
+        ensemble_df_cat.to_csv(os.path.join(plot_dir, 'performance_cat_covid_{}.csv'.format(mk)))
