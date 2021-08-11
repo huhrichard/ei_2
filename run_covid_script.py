@@ -8,7 +8,7 @@ from sys import argv
 
 list_of_method = ['EI', 'demographics',
                   'labs',
-                  'medications',
+                  # 'medications',
                   'vitals', 'concatenated',
                   'comorbidities',
                   # 'xgboost'
