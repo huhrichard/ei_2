@@ -308,7 +308,7 @@ filteredClassifier.buildClassifier(train)
 
 cAE = new ClassifierAttributeEval()
 cAE.setClassifier(filteredClassifier)
-cAE.setEvalUsingTrainingData(false)
+// cAE.setEvalUsingTrainingData(false)
 cAE.setFolds(5)
 
 cAE.buildEvaluator()
