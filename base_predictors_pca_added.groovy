@@ -26,6 +26,8 @@ import weka.filters.*
 import weka.filters.supervised.instance.*
 import weka.filters.unsupervised.attribute.*
 import weka.filters.unsupervised.instance.*
+import weka.attributeSelection.*
+// import weka.attributeSelection.Ranker
 
 void dump(instances, filename) {
     w = new BufferedWriter(new FileWriter(filename))
@@ -89,6 +91,8 @@ regression          = data.attribute(classAttribute).isNumeric()
 if (!regression) {
 predictClassValue = p.getProperty("predictClassValue").trim()
 }
+
+
 
 // shuffle data, set class variable
 data.randomize(new Random(1))
@@ -296,3 +300,19 @@ for (currentNestedFold in 0..nestedFoldCount - 1) {
     writer.flush()
     writer.close()
 }
+
+
+//build classifier with full training set
+filteredClassifier.buildClassifier(train)
+
+cAE = new ClassifierAttributeEval()
+cAE.setClassifier(filteredClassifier)
+cAE.setEvalUsingTrainingData(false)
+cAE.setFolds(5)
+
+cAE.buildEvaluator()
+
+
+// cAE.setSeed(1)
+
+
