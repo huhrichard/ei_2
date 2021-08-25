@@ -27,6 +27,7 @@ import weka.filters.supervised.instance.*
 import weka.filters.unsupervised.attribute.*
 import weka.filters.unsupervised.instance.*
 import weka.attributeSelection.*
+import weka.attributeSelection.ClassifierAttributeEval
 // import weka.attributeSelection.Ranker
 
 void dump(instances, filename) {
