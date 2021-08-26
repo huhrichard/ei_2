@@ -303,14 +303,27 @@ for (currentNestedFold in 0..nestedFoldCount - 1) {
 }
 
 
+classifier = AbstractClassifier.forName(classifierName, classifierOptions)
+removeFilter = new Remove()
+if (foldAttribute != "") {
+    removeIndices = new int[2]
+    removeIndices[0] = data.attribute(foldAttribute).index()
+    removeIndices[1] = data.attribute(idAttribute).index()
+} else {
+    removeIndices = new int[1]
+    removeIndices[0] = data.attribute(idAttribute).index()
+}
+removeFilter.setAttributeIndicesArray(removeIndices)
+filteredClassifier = new FilteredClassifier()
+filteredClassifier.setClassifier(classifier)
+filteredClassifier.setFilter(removeFilter)
 
-
-filteredClassifier.buildClassifier(train)
+// filteredClassifier.buildClassifier(train)
 
 cAE = new ClassifierAttributeEval()
 cAE.setClassifier(filteredClassifier)
 // cAE.setEvalUsingTrainingData(false)
-// cAE.setFolds(5)
+cAE.setFolds(5)
 //
 // //build classifier with full training set
 // if (foldAttribute != "") {
