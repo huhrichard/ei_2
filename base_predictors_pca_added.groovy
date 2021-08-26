@@ -305,42 +305,42 @@ for (currentNestedFold in 0..nestedFoldCount - 1) {
 
 
 
-filteredClassifier.buildClassifier(train)
-
-cAE = new ClassifierAttributeEval()
-cAE.setClassifier(filteredClassifier)
-// cAE.setEvalUsingTrainingData(false)
-cAE.setFolds(5)
-
-//build classifier with full training set
-if (foldAttribute != "") {
-    foldCount = data.attribute(foldAttribute).numValues()
-    foldAttributeIndex = String.valueOf(data.attribute(foldAttribute).index() + 1) // 1-indexed
-    foldAttributeValueIndex = String.valueOf(data.attribute(foldAttribute).indexOfValue(currentFold) + 1) // 1-indexed
-    printf "[%s] generating %s folds for leave-one-value-out CV\n", shortClassifierName, foldCount
-
-    testFoldFilter = new RemoveWithValues()
-    testFoldFilter.setModifyHeader(false)
-    testFoldFilter.setAttributeIndex(foldAttributeIndex)
-    testFoldFilter.setNominalIndices(foldAttributeValueIndex)
-    testFoldFilter.setInvertSelection(true)
-    testFoldFilter.setInputFormat(data)
-    test = Filter.useFilter(data, testFoldFilter)
-
-    trainingFoldFilter = new RemoveWithValues()
-    trainingFoldFilter.setModifyHeader(false)
-    trainingFoldFilter.setAttributeIndex(foldAttributeIndex)
-    trainingFoldFilter.setNominalIndices(foldAttributeValueIndex)
-    trainingFoldFilter.setInvertSelection(false)
-    trainingFoldFilter.setInputFormat(data)
-    train = Filter.useFilter(data, trainingFoldFilter)
-} else {
-    printf "[%s] generating folds for %s-fold CV\n", shortClassifierName, foldCount
-    test = data.testCV(foldCount, Integer.valueOf(currentFold))
-    train = data.trainCV(foldCount, Integer.valueOf(currentFold), new Random(1))
-}
-
-cAE.buildEvaluator(train)
+// filteredClassifier.buildClassifier(train)
+//
+// cAE = new ClassifierAttributeEval()
+// cAE.setClassifier(filteredClassifier)
+// // cAE.setEvalUsingTrainingData(false)
+// cAE.setFolds(5)
+//
+// //build classifier with full training set
+// if (foldAttribute != "") {
+//     foldCount = data.attribute(foldAttribute).numValues()
+//     foldAttributeIndex = String.valueOf(data.attribute(foldAttribute).index() + 1) // 1-indexed
+//     foldAttributeValueIndex = String.valueOf(data.attribute(foldAttribute).indexOfValue(currentFold) + 1) // 1-indexed
+//     printf "[%s] generating %s folds for leave-one-value-out CV\n", shortClassifierName, foldCount
+//
+//     testFoldFilter = new RemoveWithValues()
+//     testFoldFilter.setModifyHeader(false)
+//     testFoldFilter.setAttributeIndex(foldAttributeIndex)
+//     testFoldFilter.setNominalIndices(foldAttributeValueIndex)
+//     testFoldFilter.setInvertSelection(true)
+//     testFoldFilter.setInputFormat(data)
+//     test = Filter.useFilter(data, testFoldFilter)
+//
+//     trainingFoldFilter = new RemoveWithValues()
+//     trainingFoldFilter.setModifyHeader(false)
+//     trainingFoldFilter.setAttributeIndex(foldAttributeIndex)
+//     trainingFoldFilter.setNominalIndices(foldAttributeValueIndex)
+//     trainingFoldFilter.setInvertSelection(false)
+//     trainingFoldFilter.setInputFormat(data)
+//     train = Filter.useFilter(data, trainingFoldFilter)
+// } else {
+//     printf "[%s] generating folds for %s-fold CV\n", shortClassifierName, foldCount
+//     test = data.testCV(foldCount, Integer.valueOf(currentFold))
+//     train = data.trainCV(foldCount, Integer.valueOf(currentFold), new Random(1))
+// }
+//
+// cAE.buildEvaluator(train)
 
 
 // cAE.setSeed(1)
