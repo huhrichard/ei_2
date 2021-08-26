@@ -27,7 +27,7 @@ import weka.filters.supervised.instance.*
 import weka.filters.unsupervised.attribute.*
 import weka.filters.unsupervised.instance.*
 import weka.attributeSelection.*
-import weka.attributeSelection.ClassifierAttributeEval
+// import weka.attributeSelection.ClassifierAttributeEval
 // import weka.attributeSelection.Ranker
 
 void dump(instances, filename) {
@@ -322,8 +322,8 @@ filteredClassifier.buildClassifier(train)
 
 cAE = new ClassifierAttributeEval()
 cAE.setClassifier(filteredClassifier)
-cAE.setEvaluationMeasure("f-meas")
-cAE.setIRClassValue("pos")
+// cAE.setEvaluationMeasure("f-meas")
+// cAE.setIRClassValue("pos")
 // cAE.setEvalUsingTrainingData(false)
 cAE.setFolds(5)
 
