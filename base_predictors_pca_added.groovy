@@ -322,12 +322,13 @@ filteredClassifier.buildClassifier(train)
 
 cAE = new ClassifierAttributeEval()
 cAE.setClassifier(filteredClassifier)
-// cAE.setEvaluationMeasure()
+cAE.setEvaluationMeasure("f-meas")
+cAE.setIRClassValue("pos")
 // cAE.setEvalUsingTrainingData(false)
 cAE.setFolds(5)
 
 printf "metric = %s" cAE.getEvaluationMeasure()
-printf "IRClass = %s" cAE.getIRClassValue()
+// printf "IRClass = %s" cAE.getIRClassValue()
 
 //build classifier with full training set
 if (foldAttribute != "") {
