@@ -305,11 +305,11 @@ for (currentNestedFold in 0..nestedFoldCount - 1) {
 
 
 
-// filteredClassifier.buildClassifier(train)
-//
-// cAE = new ClassifierAttributeEval()
-// cAE.setClassifier(filteredClassifier)
-// // cAE.setEvalUsingTrainingData(false)
+filteredClassifier.buildClassifier(train)
+
+cAE = new ClassifierAttributeEval()
+cAE.setClassifier(filteredClassifier)
+// cAE.setEvalUsingTrainingData(false)
 // cAE.setFolds(5)
 //
 // //build classifier with full training set
@@ -340,7 +340,10 @@ for (currentNestedFold in 0..nestedFoldCount - 1) {
 //     train = data.trainCV(foldCount, Integer.valueOf(currentFold), new Random(1))
 // }
 //
-// cAE.buildEvaluator(train)
+cAE.buildEvaluator(train)
+
+printf "test1 %2.f", 	cAE.evaluateAttribute(1)
+printf "test2 %2.f", 	cAE.evaluateAttribute(2)
 
 
 // cAE.setSeed(1)
