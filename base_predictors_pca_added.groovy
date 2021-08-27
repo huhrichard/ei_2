@@ -304,6 +304,10 @@ for (currentNestedFold in 0..nestedFoldCount - 1) {
 
 
 classifier = AbstractClassifier.forName(classifierName, classifierOptions)
+
+// aSClassifier = new AttributeSelectedClassifier();
+
+
 removeFilter = new Remove()
 if (foldAttribute != "") {
     removeIndices = new int[2]
@@ -316,15 +320,15 @@ if (foldAttribute != "") {
 
 printf "id index: %i\n", data.attribute(idAttribute).index()
 removeFilter.setAttributeIndicesArray(removeIndices)
-filteredClassifier = new FilteredClassifier()
-filteredClassifier.setClassifier(classifier)
-filteredClassifier.setFilter(removeFilter)
+// filteredClassifier = new FilteredClassifier()
+// filteredClassifier.setClassifier(classifier)
+// filteredClassifier.setFilter(removeFilter)
 
-filteredClassifier.buildClassifier(train)
+// filteredClassifier.buildClassifier(train)
 
 cAE = new ClassifierAttributeEval()
-cAE.setClassifier(filteredClassifier)
-// cAE.setClassifier(classifier)
+// cAE.setClassifier(filteredClassifier)
+cAE.setClassifier(classifier)
 // cAE.setEvaluationMeasure("f-meas")
 // cAE.setIRClassValue("pos")
 // cAE.setEvalUsingTrainingData(false)
@@ -360,9 +364,9 @@ cAE.setClassifier(filteredClassifier)
 //     test = data.testCV(foldCount, Integer.valueOf(currentFold))
 //     train = data.trainCV(foldCount, Integer.valueOf(currentFold), new Random(1))
 // }
-// removeFilter.setInvertSelection(false);
-// removeFilter.setInputFormat(train);
-// trainNew = Filter.useFilter(train, removeFilter);
+removeFilter.setInvertSelection(false);
+removeFilter.setInputFormat(train);
+train = Filter.useFilter(train, removeFilter);
 
 
 cAE.buildEvaluator(train)
