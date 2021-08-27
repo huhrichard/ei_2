@@ -358,6 +358,7 @@ if (foldAttribute != "") {
     test = data.testCV(foldCount, Integer.valueOf(currentFold))
     train = data.trainCV(foldCount, Integer.valueOf(currentFold), new Random(1))
 }
+removeFilter.setInvertSelection(false);
 removeFilter.setInputFormat(train);
 trainNew = Filter.useFilter(train, removeFilter);
 
