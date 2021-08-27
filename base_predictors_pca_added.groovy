@@ -318,7 +318,7 @@ if (foldAttribute != "") {
     removeIndices[0] = data.attribute(idAttribute).index()
 }
 
-printf "id index: %i\n", data.attribute(idAttribute).index()
+// printf "id index: %i\n", data.attribute(idAttribute).index()
 removeFilter.setAttributeIndicesArray(removeIndices)
 // filteredClassifier = new FilteredClassifier()
 // filteredClassifier.setClassifier(classifier)
