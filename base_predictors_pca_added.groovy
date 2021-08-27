@@ -368,11 +368,14 @@ removeFilter.setInvertSelection(false);
 removeFilter.setInputFormat(train);
 train = Filter.useFilter(train, removeFilter);
 
+printf "num of attributes = %i ", train.numAttributes()
 
 cAE.buildEvaluator(train)
 
 printf "test1 %2.f", cAE.evaluateAttribute(1)
 printf "test2 %2.f", cAE.evaluateAttribute(2)
+
+
 
 
 // cAE.setSeed(1)
