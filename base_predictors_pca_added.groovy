@@ -314,14 +314,15 @@ if (foldAttribute != "") {
     removeIndices[0] = data.attribute(idAttribute).index()
 }
 removeFilter.setAttributeIndicesArray(removeIndices)
-filteredClassifier = new FilteredClassifier()
-filteredClassifier.setClassifier(classifier)
-filteredClassifier.setFilter(removeFilter)
+// filteredClassifier = new FilteredClassifier()
+// filteredClassifier.setClassifier(classifier)
+// filteredClassifier.setFilter(removeFilter)
 
-filteredClassifier.buildClassifier(train)
+// classifier.buildClassifier(train)
 
 cAE = new ClassifierAttributeEval()
-cAE.setClassifier(filteredClassifier)
+// cAE.setClassifier(filteredClassifier)
+cAE.setClassifier(classifier)
 // cAE.setEvaluationMeasure("f-meas")
 // cAE.setIRClassValue("pos")
 // cAE.setEvalUsingTrainingData(false)
@@ -357,6 +358,9 @@ if (foldAttribute != "") {
     test = data.testCV(foldCount, Integer.valueOf(currentFold))
     train = data.trainCV(foldCount, Integer.valueOf(currentFold), new Random(1))
 }
+removeFilter.setInputFormat(train);
+trainNew = Filter.useFilter(train, removeFilter);
+
 
 cAE.buildEvaluator(train)
 
