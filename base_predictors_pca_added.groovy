@@ -328,7 +328,7 @@ cAE.setClassifier(classifier)
 // cAE.setEvalUsingTrainingData(false)
 cAE.setFolds(5)
 
-printf "metric = %s" cAE.getEvaluationMeasure()
+// printf "metric = %s" cAE.getEvaluationMeasure()
 // printf "IRClass = %s" cAE.getIRClassValue()
 
 //build classifier with full training set
