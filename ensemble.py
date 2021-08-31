@@ -762,7 +762,7 @@ def main_classification(path, f_list, agg=1):
         print('[{}] F-max score is {}.'.format(key, fmax_perf))
         print('[{}] AUC score is {}.'.format(key, auc_perf) )
         print('[{}] AUPRC score is {}.'.format(key, auprc_perf))
-        dfs.append(pd.DataFrame(data=[[dn, fmax_perf, key, auc_perf, auprc]], columns=cols, index=[0]))
+        dfs.append(pd.DataFrame(data=[[dn, fmax_perf, key, auc_perf, auprc_perf]], columns=cols, index=[0]))
 
 
     # print('[CES] Start building model #################################')
