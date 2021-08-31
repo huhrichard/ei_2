@@ -88,7 +88,8 @@ if __name__ == "__main__":
 
     # Load all performance csv
     metrics = {'fmax': r'$F_{max}$',
-               'auc': 'AUC'}
+               'auc': 'AUC',
+               'auprc': 'AUPRC'}
     # group = sys.argv[-2]
     # if '-' not in group:
     #     group = '>' + group

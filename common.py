@@ -57,6 +57,10 @@ def fmeasure_score(labels, predictions, thres=None, beta = 1.0, pos_label = 1):
                                                                                       predictions, average='binary')
         return {'P':precision, 'R':recall, 'F':fmeasure}
 
+def auprc(y_true, y_scores):
+    precision, recall, thresholds = sklearn.metrics.precision_recall_curve(y_true, y_scores)
+    return sklearn.metrics.auc(recall, precision)
+
 def f_max(labels, predictions, thres=None, beta = 1.0, pos_label = 1):
     """
         Radivojac, P. et al. (2013). A Large-Scale Evaluation of Computational Protein Function Prediction. Nature Methods, 10(3), 221-227.

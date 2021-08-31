@@ -107,6 +107,9 @@ def get_predictions(df, ensemble, fold, seedval):
         {'fold': fold, 'seed': seedval, 'id': ids, 'label': labels, 'prediction': predictions, 'diversity': diversity,
          'ensemble_size': len(ensemble)})
 
+
+
+
 def select_candidate_enhanced(train_df, train_labels, best_classifiers, ensemble, i, scoring_func):
     initial_ensemble_size = 2
     max_candidates = 50
@@ -301,7 +304,9 @@ def CES_fmax(path, fold_count=range(5), agg=1):
     predictions_df['method'] = method
     predictions_df['metric'] = 'fmax'
     predictions_df.to_csv('%s/analysis/selection-%s-%s.csv' % (path, method, 'fmax'), index=False)
-    auc = '%.3f' % (sklearn.metrics.roc_auc_score(predictions_df.label, predictions_df.prediction))
+    auc = sklearn.metrics.roc_auc_score(predictions_df.label, predictions_df.prediction)
+    auprc = common.auprc(predictions_df.label, predictions_df.prediction)
+    # auprc = sklearn.metrics.pre(predictions_df.label, predictions_df.prediction)
 
     # if ('67890' in fold_count and 'foldAttribute' in p):
     #     train_predictions_df = pd.concat(train_predictions_dfs)
@@ -310,7 +315,7 @@ def CES_fmax(path, fold_count=range(5), agg=1):
     # else:
     print(thres)
     fmax = (common.fmeasure_score(predictions_df.label, predictions_df.prediction, thres=thres))
-    return {'f-measure':fmax, 'auc':float(auc)}
+    return {'f-measure':fmax, 'auc':float(auc), 'auprc':auprc}
 
 def CES(path, fold_count=range(5), agg=1,
                      subject_model=False, inference_only=False,
@@ -516,9 +521,10 @@ def aggregating_ensemble(path, fold_count=range(5), agg=1, median=False,
             thres = thres_fmax(train_labels, train_dfs)
 
             fmax = common.fmeasure_score(labels, predictions, thres)
-            auc = '%.3f' % (sklearn.metrics.roc_auc_score(labels, predictions))
+            auc = sklearn.metrics.roc_auc_score(labels, predictions)
+            auprc = common.auprc(labels, predictions)
 
-            return {'f-measure': fmax, 'auc': float(auc)}
+            return {'f-measure': fmax, 'auc': auc, 'auprc': auprc}
 
 
 
@@ -543,8 +549,9 @@ def bestbase_fmax(path, fold_count=range(5), agg=1):
     # need to be changed
     fmax_list = [common.fmeasure_score(labels, predictions.iloc[:, i])['F'] for i in range(len(predictions.columns))]
     auc_list = [sklearn.metrics.roc_auc_score(labels, predictions.iloc[:, i]) for i in range(len(predictions.columns))]
+    auprc_list = [common.auprc(labels, predictions.iloc[:, i]) for i in range(len(predictions.columns))]
 
-    return {'f-measure':max(fmax_list), 'auc':max(auc_list)}
+    return {'f-measure':max(fmax_list), 'auc':max(auc_list), 'auprc':max(auprc_list)}
 
 def best_base_predictors(path, fold_count=range(5), agg=1, regression=False):
     assert exists(path)
@@ -735,27 +742,47 @@ def main_classification(path, f_list, agg=1):
     #
     dn = abspath(path).split('/')[-1]
     # cols = ['data_name', 'fmax', 'method']
-    cols = ['data_name', 'fmax', 'method', 'auc']
+    cols = ['data_name', 'fmax', 'method', 'auc', 'auprc']
 
     dfs = []
-    print('[CES] Start building model #################################')
-    ces = CES_fmax(path, fold_values, agg)
-    print('[CES] Finished evaluating model ############################')
-    print('[CES] F-max score is %s.' % ces['f-measure']['F'])
-    print('[CES] AUC score is %s.' % ces['auc'])
-    print('[Mean] Start building model ################################')
-    mean = aggregating_ensemble(path, fold_values, agg)
-    print('[Mean] Finished evaluating model ###########################')
-    print('[Mean] F-max score is %s.' % mean['f-measure']['F'])
-    print('[Mean] AUC score is %s.' % mean['auc'])
-    print('[Best Base] Start building model ###########################')
-    bestbase = bestbase_fmax(path, fold_values, agg)
-    print('[Best Base] Finished evaluating model ######################')
-    print('[Best Base] F-max score is %s.' % bestbase['f-measure'])
-    print('[Best Base] AUC score is %s.' % bestbase['auc'])
-    dfs.append(pd.DataFrame(data=[[dn, ces['f-measure']['F'], 'CES', ces['auc']]], columns=cols, index=[0]))
-    dfs.append(pd.DataFrame(data=[[dn, mean['f-measure']['F'], 'Mean', mean['auc']]], columns=cols, index=[0]))
-    dfs.append(pd.DataFrame(data=[[dn, bestbase['f-measure'], 'best base', bestbase['auc']]], columns=cols, index=[0]))
+    aggregated_dict = {'CES': CES_fmax,
+                       'Mean': aggregating_ensemble,
+                       'best base': bestbase_fmax}
+
+    for key, val in aggregated_dict.items():
+        print('[{}] Start building model #################################'.format(key))
+        perf = val(path, fold_values, agg)
+        if key != 'best base':
+            fmax_perf = perf['f-measure']['F']
+        else:
+            fmax_perf = perf['f-measure']
+        auc_perf = perf['auc']
+        auprc_perf = perf['auprc']
+        print('[{}] Finished evaluating model ############################'.format(key))
+        print('[{}] F-max score is {}.'.format(key, fmax_perf))
+        print('[{}] AUC score is {}.'.format(key, auc_perf) )
+        print('[{}] AUPRC score is {}.'.format(key, auprc_perf))
+        dfs.append(pd.DataFrame(data=[[dn, fmax_perf, key, auc_perf, auprc]], columns=cols, index=[0]))
+
+
+    # print('[CES] Start building model #################################')
+    # ces = CES_fmax(path, fold_values, agg)
+    # print('[CES] Finished evaluating model ############################')
+    # print('[CES] F-max score is %s.' % ces['f-measure']['F'])
+    # print('[CES] AUC score is %s.' % ces['auc'])
+    # print('[Mean] Start building model ################################')
+    # mean = aggregating_ensemble(path, fold_values, agg)
+    # print('[Mean] Finished evaluating model ###########################')
+    # print('[Mean] F-max score is %s.' % mean['f-measure']['F'])
+    # print('[Mean] AUC score is %s.' % mean['auc'])
+    # print('[Best Base] Start building model ###########################')
+    # bestbase = bestbase_fmax(path, fold_values, agg)
+    # print('[Best Base] Finished evaluating model ######################')
+    # print('[Best Base] F-max score is %s.' % bestbase['f-measure'])
+    # print('[Best Base] AUC score is %s.' % bestbase['auc'])
+    # dfs.append(pd.DataFrame(data=[[dn, ces['f-measure']['F'], 'CES', ces['auc']]], columns=cols, index=[0]))
+    # dfs.append(pd.DataFrame(data=[[dn, mean['f-measure']['F'], 'Mean', mean['auc']]], columns=cols, index=[0]))
+    # dfs.append(pd.DataFrame(data=[[dn, bestbase['f-measure'], 'best base', bestbase['auc']]], columns=cols, index=[0]))
     print('Saving results #############################################')
     analysis_path = '%s/analysis' % path
     if not exists(analysis_path):
@@ -909,13 +936,15 @@ def main_classification(path, f_list, agg=1):
         fmax = common.fmeasure_score(predictions_df.label, predictions_df.prediction, thres)
         print(fmax)
         auc = sklearn.metrics.roc_auc_score(predictions_df.label, predictions_df.prediction)
+        auprc = common.auprc(predictions_df.label, predictions_df.prediction)
         print('[%s] Finished evaluating model ###########################' % (stacker_name))
         print('[%s] F-measure score is %s.' % (stacker_name, fmax['F']))
         if 'P' in fmax:
             print('[%s] Precision score is %s.' % (stacker_name, fmax['P']))
             print('[%s] Recall score is %s.' % (stacker_name, fmax['R']))
         print('[%s] AUC score is %s.' % (stacker_name, auc))
-        df = pd.DataFrame(data=[[dn, fmax['F'], stacker_name, auc]], columns=cols, index=[0])
+        print('[%s] AUPRC score is %s.' % (stacker_name, auprc))
+        df = pd.DataFrame(data=[[dn, fmax['F'], stacker_name, auc, auprc]], columns=cols, index=[0])
         dfs.append(df)
     dfs = pd.concat(dfs)
 
