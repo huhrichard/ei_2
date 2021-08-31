@@ -96,9 +96,10 @@ def xgboost_predictions_result(outcome_path):
     print(test_df_cat)
     fmax = common.fmeasure_score(test_df_cat.label, test_df_cat.prediction, None)
     auc = sklearn.metrics.roc_auc_score(test_df_cat.label, test_df_cat.prediction)
-    cols = ['data_name', 'fmax', 'method', 'auc']
+    auprc = common.auprc(test_df_cat.label, test_df_cat.prediction)
+    cols = ['data_name', 'fmax', 'method', 'auc', 'auprc']
     dn = abspath(outcome_path).split('/')[-1]
-    performance_df = pd.DataFrame(data=[[dn, fmax['F'], 'XGB_base', auc]], columns=cols, index=[0])
+    performance_df = pd.DataFrame(data=[[dn, fmax['F'], 'XGB_base', auc, auprc]], columns=cols, index=[0])
     analysis_folder = os.path.join(outcome_path, 'analysis')
     if not exists(analysis_folder):
         mkdir(analysis_folder)
