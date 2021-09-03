@@ -375,8 +375,8 @@ train = Filter.useFilter(train, removeFilter);
 //
 cAE.buildEvaluator(train)
 //
-printf "test1 %2.f", cAE.evaluateAttribute(1)
-printf "test2 %2.f", cAE.evaluateAttribute(2)
+printf "test1 %f", cAE.evaluateAttribute(1)
+printf "test2 %f", cAE.evaluateAttribute(2)
 //
 //
 //
