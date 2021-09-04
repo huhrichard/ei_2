@@ -384,7 +384,7 @@ for (op_idx in 0..options.length-1){
 }
 
 for (attribute_index in 0..(train.numAttributes()-1)){
-    printf "test1 %f", cAE.evaluateAttribute(1)
+    printf "test1 %f", cAE.evaluateAttribute(attribute_index)
 }
 //
 //
