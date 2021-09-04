@@ -372,7 +372,7 @@ removeFilter.setInvertSelection(false);
 removeFilter.setInputFormat(train);
 train = Filter.useFilter(train, removeFilter);
 //
-printf "num of attributes = %i ", train.numAttributes()
+// printf "num of attributes = %i ", train.numAttributes()
 //
 cAE.buildEvaluator(train)
 //
