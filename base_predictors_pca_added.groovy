@@ -330,14 +330,14 @@ cAE = new ClassifierAttributeEval()
 // // cAE.setClassifier(filteredClassifier)
 cAE.setClassifier(classifier)
 // cAE.setOptions(new String[] {"-E", "AUPRC"})
-cAE.setOptions(Utils.splitOptions("-E AUPRC"))
+cAE.setOptions(Utils.splitOptions("-E AUPRC -IRClass pos --"))
 // cAE.setEvaluationMeasure("AUPRC")
 // cAE.setEvaluationMeasure(new SelectedTag())
-cAE.setIRClassValue("pos")
+// cAE.setIRClassValue("pos")
 // // cAE.setEvalUsingTrainingData(false)
 // // cAE.setFolds(5)
 //
-// // printf "metric = %s" cAE.getEvaluationMeasure()
+printf "metric = %s" cAE.getEvaluationMeasure()
 // // printf "IRClass = %s" cAE.getIRClassValue()
 //
 //build classifier with full training set
