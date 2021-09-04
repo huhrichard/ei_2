@@ -337,7 +337,8 @@ cAE.setOptions(Utils.splitOptions("-E AUPRC -IRClass pos --"))
 // // cAE.setEvalUsingTrainingData(false)
 // // cAE.setFolds(5)
 //
-printf "metric = %s" cAE.getEvaluationMeasure()
+echo "metric:"
+echo cAE.getEvaluationMeasure()
 // // printf "IRClass = %s" cAE.getIRClassValue()
 //
 //build classifier with full training set
