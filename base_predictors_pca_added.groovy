@@ -337,8 +337,8 @@ cAE.setOptions(Utils.splitOptions("-E AUPRC -IRClass pos --"))
 // // cAE.setEvalUsingTrainingData(false)
 // // cAE.setFolds(5)
 //
-echo "metric:"
-echo cAE.getEvaluationMeasure()
+// echo "metric:"
+// echo cAE.getEvaluationMeasure()
 // // printf "IRClass = %s" cAE.getIRClassValue()
 //
 //build classifier with full training set
@@ -376,8 +376,10 @@ train = Filter.useFilter(train, removeFilter);
 //
 cAE.buildEvaluator(train)
 //
-printf "test1 %f", cAE.evaluateAttribute(1)
-printf "test2 %f", cAE.evaluateAttribute(2)
+
+for (attribute_index in 0..(train.numAttributes()-1)){
+    printf "test1 %f", cAE.evaluateAttribute(1)
+}
 //
 //
 //
