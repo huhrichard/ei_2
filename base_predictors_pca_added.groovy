@@ -328,9 +328,10 @@ removeFilter.setAttributeIndicesArray(removeIndices)
 //
 cAE = new ClassifierAttributeEval()
 // // cAE.setClassifier(filteredClassifier)
+cAE.setOptions(Utils.splitOptions("-E AUPRC -IRClass pos --"))
 cAE.setClassifier(classifier)
 // cAE.setOptions(new String[] {"-E", "AUPRC"})
-cAE.setOptions(Utils.splitOptions("-E AUPRC -IRClass pos --"))
+
 // cAE.setEvaluationMeasure("AUPRC")
 // cAE.setEvaluationMeasure(new SelectedTag())
 // cAE.setIRClassValue("pos")
