@@ -372,10 +372,15 @@ removeFilter.setInvertSelection(false);
 removeFilter.setInputFormat(train);
 train = Filter.useFilter(train, removeFilter);
 //
-// printf "num of attributes = %i ", train.numAttributes()
+printf "num of attributes = %i ", train.numAttributes()
 //
 cAE.buildEvaluator(train)
 //
+
+options = cAE.getOptions()
+for (op_idx in 0..options.length-1){
+    echo options[op_idx]
+}
 
 for (attribute_index in 0..(train.numAttributes()-1)){
     printf "test1 %f", cAE.evaluateAttribute(1)
