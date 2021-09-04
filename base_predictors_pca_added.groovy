@@ -379,7 +379,7 @@ cAE.buildEvaluator(train)
 
 options = cAE.getOptions()
 for (op_idx in 0..options.length-1){
-    echo options[op_idx]
+    printf "%s", options[op_idx]
 }
 
 for (attribute_index in 0..(train.numAttributes()-1)){
