@@ -380,12 +380,21 @@ cAE.buildEvaluator(train)
 
 options = cAE.getOptions()
 for (op_idx in 0..options.length-1){
-    printf "%s", options[op_idx]
+    printf "%s\n", options[op_idx]
 }
 
+
+outputPrefix = sprintf "attribute_imp-%s-%02d", currentFold, currentBag
+writer = new PrintWriter(new GZIPOutputStream(new FileOutputStream(new File(classifierDir, outputPrefix + ".csv.gz"))))
+writer.write("attribute,attribute_importance,fold,bag,classifier\n")
 for (attribute_index in 0..(train.numAttributes()-1)){
-    printf "test1 %f", cAE.evaluateAttribute(attribute_index)
+    attribute_importance = cAE.evaluateAttribute(attribute_index)
+    printf "Attribute Importance of %s: %f\n", attribute_importance
+    attribute_row = sprintf "$s,%s,%02d,%s", .attribute(attribute_index).name(), attribute_importance, currentFold, currentBag, classifierName
+    writer.write(attribute_row)
 }
+writer.flush()
+writer.close()
 //
 //
 //

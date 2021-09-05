@@ -46,6 +46,8 @@ def merge_base_feat_preds_by_fold(f_list):
 	for value in f_list:
 		prediction_dfs = []
 		validation_dfs = []
+		attribute_imp_dfs = []
+		# Combine
 		for folder in feature_folders:
 			feature_name = folder.split('/')[-1]
 			prediction_df = pd.read_csv(folder + '/predictions-%s.csv.gz' %value,compression='gzip')
@@ -56,14 +58,20 @@ def merge_base_feat_preds_by_fold(f_list):
 			validation_df.set_index(['id','label'],inplace=True)
 			validation_df.columns = ['%s.%s' %(feature_name,col) for col in validation_df.columns]
 
+			attribute_imp_df = pd.read_csv(folder + '/attribute_imp-%s.csv.gz' % value, compression='gzip')
+			attribute_imp_df['modality'] = feature_name
+
 			prediction_dfs.append(prediction_df)
 			validation_dfs.append(validation_df)
+			attribute_imp_dfs.append(attribute_imp_df)
 
 		prediction_dfs = pd.concat(prediction_dfs,axis=1)
 		validation_dfs = pd.concat(validation_dfs,axis=1)
+		attribute_imp_dfs = pd.concat(attribute_imp_dfs)
 
 		prediction_dfs.to_csv(data_folder + '/predictions-%s.csv.gz' %value,compression='gzip')
 		validation_dfs.to_csv(data_folder + '/validation-%s.csv.gz' %value,compression='gzip')
+		attribute_imp_dfs.to_csv(data_folder + '/attribute_imp-%s.csv.gz' %value,compression='gzip')
 
 
 merge_base_feat_preds_by_fold(fold_values)

@@ -37,20 +37,28 @@ def merged_base_innerCV_by_outerfold(f_list, path):
     # for fold in range(fold_count):
     for fold in f_list:
         dirname_dfs = []
+        dirname_attribute_imp_dfs = []
         for dirname in dirnames:
             classifier = dirname.split('.')[-1]
             bag_dfs = []
+            attribute_imp_dfs = []
             for bag in range(bag_count):
                 filename = '%s/predictions-%s-%02i.csv.gz' % (dirname, fold, bag)
+                attribute_imp_filename = '%s/attribute_imp-%s-%02i.csv.gz' % (dirname, fold, bag)
                 try:
                     df = read_csv(filename, skiprows=1, index_col=[0, 1], compression='gzip', engine='python')
                     df = df[['prediction']]
                     df.rename(columns={'prediction': '%s.%s' % (classifier, bag)}, inplace=True)
                     bag_dfs.append(df)
+                    attribute_imp_df = read_csv(attribute_imp_filename, compression='gzip', engine='python')
+                    attribute_imp_dfs.append(attribute_imp_df)
                 except:
                     print('file not existed or crashed %s' % filename)
             dirname_dfs.append(concat(bag_dfs, axis=1))
+            dirname_attribute_imp_dfs.append(concat(attribute_imp_dfs))
+
         concat(dirname_dfs, axis=1).sort_index().to_csv('%s/predictions-%s.csv.gz' % (path, fold), compression='gzip')
+        concat(dirname_attribute_imp_dfs).to_csv('%s/attribute_imp-%s.csv.gz' % (path, fold), compression='gzip')
 
 def combine_individual(path):
     merged_base_innerCV_by_outerfold(fold_values, path)
