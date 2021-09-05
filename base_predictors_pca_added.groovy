@@ -389,8 +389,9 @@ writer = new PrintWriter(new GZIPOutputStream(new FileOutputStream(new File(clas
 writer.write("attribute,attribute_importance,fold,bag,classifier\n")
 for (attribute_index in 0..(train.numAttributes()-1)){
     attribute_importance = cAE.evaluateAttribute(attribute_index)
-    printf "Attribute Importance of %s: %f\n", attribute_importance
-    attribute_row = sprintf "$s,%f,%02d,%s,%s\n", train.attribute(attribute_index).name(), attribute_importance, currentFold, currentBag, classifierName
+    attribute_name = train.attribute(attribute_index).name()
+    printf "Attribute Importance of %s: %f\n", attribute_name, attribute_importance
+    attribute_row = sprintf "$s,%f,%02d,%s,%s\n", attribute_name, attribute_importance, currentFold, currentBag, classifierName
     writer.write(attribute_row)
 }
 writer.flush()
