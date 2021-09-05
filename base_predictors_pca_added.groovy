@@ -378,10 +378,10 @@ train = Filter.useFilter(train, removeFilter);
 cAE.buildEvaluator(train)
 //
 
-options = cAE.getOptions()
-for (op_idx in 0..options.length-1){
-    printf "%s\n", options[op_idx]
-}
+// options = cAE.getOptions()
+// for (op_idx in 0..options.length-1){
+//     printf "%s\n", options[op_idx]
+// }
 
 
 outputPrefix = sprintf "attribute_imp-%s-%02d", currentFold, currentBag
@@ -391,7 +391,8 @@ for (attribute_index in 0..(train.numAttributes()-1)){
     attribute_importance = cAE.evaluateAttribute(attribute_index)
     attribute_name = train.attribute(attribute_index).name()
     printf "Attribute Importance of %s: %f\n", attribute_name, attribute_importance
-    attribute_row = sprintf "$s,%f,%02d,%s,%s\n", attribute_name, attribute_importance, currentFold, currentBag, classifierName
+    attribute_row = sprintf "$s,%f,%02d,%s,%s\n", attribute_name, attribute_importance, currentFold, currentBag, shortClassifierName
+    printf "%s", attribute_row
     writer.write(attribute_row)
 }
 writer.flush()
