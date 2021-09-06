@@ -314,7 +314,7 @@ if (foldAttribute != "") {
     removeIndices[0] = data.attribute(foldAttribute).index()
     removeIndices[1] = data.attribute(idAttribute).index()
     removeIndices[2] = data.attribute(classAttribute).index()
-    printf "class index: %i", data.attribute(classAttribute).index()
+    printf "class index: %s", data.attribute(classAttribute).index()
 } else {
     removeIndices = new int[2]
     removeIndices[0] = data.attribute(idAttribute).index()
