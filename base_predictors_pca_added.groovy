@@ -310,16 +310,15 @@ classifier = AbstractClassifier.forName(classifierName, classifierOptions)
 //
 removeFilter = new Remove()
 if (foldAttribute != "") {
-    removeIndices = new int[3]
+    removeIndices = new int[2]
     removeIndices[0] = data.attribute(foldAttribute).index()
     removeIndices[1] = data.attribute(idAttribute).index()
-    removeIndices[2] = data.attribute(classAttribute).index()
-    printf "class index: %s", data.attribute(classAttribute).index()
+
 } else {
-    removeIndices = new int[2]
+    removeIndices = new int[1]
     removeIndices[0] = data.attribute(idAttribute).index()
-    removeIndices[1] = data.attribute(classAttribute).index()
 }
+
 //
 // // printf "id index: %i\n", data.attribute(idAttribute).index()
 removeFilter.setAttributeIndicesArray(removeIndices)
@@ -390,7 +389,7 @@ cAE.buildEvaluator(train)
 outputPrefix = sprintf "attribute_imp-%s-%02d", currentFold, currentBag
 writer = new PrintWriter(new GZIPOutputStream(new FileOutputStream(new File(classifierDir, outputPrefix + ".csv.gz"))))
 writer.write("attribute,attribute_importance,fold,bag,classifier\n")
-for (attribute_index in 0..(train.numAttributes()-1)){
+for (attribute_index in 0..(train.numAttributes()-2)){
     attribute_importance = cAE.evaluateAttribute(attribute_index)
     attribute_name = train.attribute(attribute_index).name()
 //     printf "Attribute Importance of %s by %s: %f\n", attribute_name,shortClassifierName, attribute_importance
