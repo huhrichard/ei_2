@@ -310,12 +310,14 @@ classifier = AbstractClassifier.forName(classifierName, classifierOptions)
 //
 removeFilter = new Remove()
 if (foldAttribute != "") {
-    removeIndices = new int[2]
+    removeIndices = new int[3]
     removeIndices[0] = data.attribute(foldAttribute).index()
     removeIndices[1] = data.attribute(idAttribute).index()
+    removeIndices[2] = data.attribute(classAttribute).index()
 } else {
-    removeIndices = new int[1]
+    removeIndices = new int[2]
     removeIndices[0] = data.attribute(idAttribute).index()
+    removeIndices[1] = data.attribute(classAttribute).index()
 }
 //
 // // printf "id index: %i\n", data.attribute(idAttribute).index()
