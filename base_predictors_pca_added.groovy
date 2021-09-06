@@ -390,11 +390,12 @@ writer.write("attribute,attribute_importance,fold,bag,classifier\n")
 for (attribute_index in 0..(train.numAttributes()-1)){
     attribute_importance = cAE.evaluateAttribute(attribute_index)
     attribute_name = train.attribute(attribute_index).name()
-    printf "Attribute Importance of %s by %s: %f\n", attribute_name,shortClassifierName, attribute_importance
-    printf "%s", currentFold
-    printf "%02d", currentBag
-    attribute_row = sprintf "$s,%f,%s,%s,%s\n", attribute_name, attribute_importance, currentFold, currentBag, shortClassifierName
-    printf "%s", attribute_row
+//     printf "Attribute Importance of %s by %s: %f\n", attribute_name,shortClassifierName, attribute_importance
+//     printf "%s", currentFold
+//     printf "%s", currentBag
+    String row_format = "$s,%f,%s,%s,%s\n"
+    attribute_row = String.format(row_format, attribute_name, attribute_importance, currentFold, currentBag, shortClassifierName)
+//     printf "%s", attribute_row
     writer.write(attribute_row)
 }
 writer.flush()
