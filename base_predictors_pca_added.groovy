@@ -393,8 +393,8 @@ for (attribute_index in 0..(train.numAttributes()-1)){
 //     printf "Attribute Importance of %s by %s: %f\n", attribute_name,shortClassifierName, attribute_importance
 //     printf "%s", currentFold
 //     printf "%s", currentBag
-    String row_format = "$s,%f,%s,%s,%s\n"
-    attribute_row = String.format(row_format, attribute_name, attribute_importance, currentFold, currentBag, shortClassifierName)
+    String row_format = "%s,%f,%s,%s,%s\n"
+    attribute_row = sprintf(row_format, attribute_name, attribute_importance, currentFold, currentBag, shortClassifierName)
 //     printf "%s", attribute_row
     writer.write(attribute_row)
 }
