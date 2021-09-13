@@ -67,6 +67,7 @@ warnings.filterwarnings("ignore")
 
 wmse_sklearn = make_scorer(weighted_mse, greater_is_better=False)
 fmax_sklearn = make_scorer(common.f_max, greater_is_better=True, needs_proba=True)
+auprc_sklearn = make_scorer(common.auprc, greater_is_better=True, needs_proba=True)
 
 def str2bool(v):
     if v.lower() in ('yes', 'true', 't', 'y', '1'):
@@ -738,7 +739,7 @@ def plot_scatter(df, path, x_col, y_col, hue_col, fn, title):
     fig.savefig(path+'/'+fn, bbox_inches="tight")
 
 
-def main_classification(path, f_list, agg=1):
+def main_classification(path, f_list, agg=1, inference_only=False, attr_imp=False):
     #
     dn = abspath(path).split('/')[-1]
     # cols = ['data_name', 'fmax', 'method']
@@ -787,7 +788,7 @@ def main_classification(path, f_list, agg=1):
     analysis_path = '%s/analysis' % path
     if not exists(analysis_path):
         mkdir(analysis_path)
-    # Get Stacking Fmax scores
+    """ Staking Ensemble """
     # stackers = [RandomForestClassifier(n_estimators=200, max_depth=2, bootstrap=False, random_state=0),
     #             SVC(C=1.0, cache_size=10000, class_weight=None, coef0=0.0,
     #                 decision_function_shape='ovr', degree=3, gamma='auto', kernel='linear', probability=True,
@@ -868,24 +869,27 @@ def main_classification(path, f_list, agg=1):
     df_cols = ['f_train_base','f_test_base', 'fold', 'stacker',
                'feat_imp', 'base_data', 'base_cls', 'base_bag']
     stacked_df = pd.DataFrame(columns= df_cols)
+    permute_imp_dfs = []
     # for i, (stacker_name, stacker) in enumerate(zip(stacker_names, stackers)):
     for i, (stacker_name, stacker) in enumerate(stackers_dict.items()):
         print('[%s] Start building model ################################' % (stacker_name))
-
 
         if (not testing_bool):
             stacking_output = []
             for fold in f_list:
                 stack = stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df)
                 stacked_df = stack.pop('stacked_df')
-                # if fold == 1:
+                if attr_imp:
+                    if fold == 1:
                 #     print(fold)
-                stacking_output.append(stack)
+                        stacking_output.append(stack)
+                else:
+                    stacking_output.append(stack)
         else:
             stacking_output = [stacked_generalization(path, stacker_name, stacker, '67890', agg, stacked_df)]
             stacked_df = stacking_output[0].pop('stacked_df')
         predictions_dfs = [s['testing_df'] for s in stacking_output]
-        if stacker_name == 'LR.S':
+        if attr_imp is True:
             # coef_dfs = [s['coefs'] for s in stacking_output]
             # coef_cat_df = pd.concat(coef_dfs)
             # coef_cat_df.to_csv(os.path.join(analysis_path, 'coefs_lr.csv'))
@@ -913,17 +917,19 @@ def main_classification(path, f_list, agg=1):
                                                y=training_labels,
                                            n_repeats=n_repeats,
                                             random_state=0,
-                                               scoring = fmax_sklearn
+                                               scoring = auprc_sklearn
                                                 )
             print(stacker_pi.importances_mean)
             print(stacker_pi.importances_mean.shape)
             print(stacker.coef_.shape)
             # pi_df = pd.DataFrame(data=stacker_pi.importances.T, columns=training_dfs.columns, index=range(n_repeats))
             pi_df = pd.DataFrame(data=[stacker_pi.importances_mean], columns=training_dfs.columns, index=[0])
+            pi_df['stacker'] = stacker_name
             coefs = pd.DataFrame(data=stacker.coef_, columns=training_dfs.columns, index=[0])
+            permute_imp_dfs.append(pi_df)
             # coef_cat_df = pd.concat(coef_dfs)
-            coefs.to_csv(os.path.join(analysis_path, 'coefs_lr.csv'))
-            pi_df.to_csv(os.path.join(analysis_path, 'coefs_lr_pi.csv'))
+            # coefs.to_csv(os.path.join(analysis_path, 'coefs_lr.csv'))
+            # pi_df.to_csv(os.path.join(analysis_path, 'coefs_lr_pi.csv'))
 
 
 
@@ -947,27 +953,12 @@ def main_classification(path, f_list, agg=1):
         df = pd.DataFrame(data=[[dn, fmax['F'], stacker_name, auc, auprc]], columns=cols, index=[0])
         dfs.append(df)
     dfs = pd.concat(dfs)
+    if attr_imp is True:
+        permute_imp_df = pd.concat(permute_imp_dfs)
+        permute_imp_df.to_csv(os.path.join(analysis_path, 'pi_stackers.csv'))
 
-    # hue_list = ['stacker','base_data', 'base_cls']
-    # y_list = ['f_train_base','f_test_base']
-    # x_list = ['feat_imp']
-    # plot_path = './plot/feat_imp_'+path.split('/')[-1]
-    # common.check_dir_n_mkdir(plot_path)
-    # params_list = list(product(x_list, y_list, hue_list))
-    # # print(stacked_df)
-    # for params in params_list:
-    #     x, y, hue = params
-    #     fn = 'scatter_{}_by_{}'
-    #     title = 'F measure of {} base classifier VS Feature Importance of stackers (by {})'
-    #     if 'train' in y:
-    #         fn = fn.format('train', hue)
-    #         title = title.format('train', hue)
-    #     else:
-    #         fn = fn.format('test', hue)
-    #         title = title.format('test', hue)
-    #     plot_scatter(df=stacked_df, x_col=x, y_col=y, hue_col=hue, fn=fn, path=plot_path, title=title)
 
-    # Save results
+    """ Save results """
 
     dfs.to_csv(os.path.join(analysis_path, "performance.csv"), index=False)
 
@@ -1261,7 +1252,8 @@ parser.add_argument('--path', '-P', type=str, required=True, help='data path')
 parser.add_argument('--fold', '-F', type=int, default=5, help='cross-validation fold')
 parser.add_argument('--aggregate', '-A', type=int, default=1, help='if aggregate is needed, feed bagcount, else 1')
 parser.add_argument('--regression', '-reg', type=str2bool, default='False', help='Regression or Classification')
-parser.add_argument('--inference_only', '-infer', type=str2bool, default='False', help='Regression or Classification')
+parser.add_argument('--inference_only', '-infer', type=str2bool, default='False', help='Inference to test set')
+parser.add_argument('--attr_imp', '-infer', type=str2bool, default='False', help='get the attribute importance from stacker')
 args = parser.parse_args()
 data_path = abspath(args.path)
 # fns = listdir(data_path)
@@ -1299,5 +1291,5 @@ testing_bool = ('67890' in fold_values and 'foldAttribute' in p)
 if args.regression:
     main_regression(args.path, fold_values, args.aggregate, args.inference_only)
 else:
-    main_classification(args.path, fold_values, args.aggregate)
+    main_classification(args.path, fold_values, args.aggregate, args.inference_only, args.attr_imp)
     # main(os.path.join(args.path, 'pca_EI'), pca_fold_values, args.aggregate)
