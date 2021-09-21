@@ -22,5 +22,7 @@ base_path = argv[-1]
 script_name = argv[-2]
 cmd_str = 'python {} --path {}'
 for m in list_of_method:
+    if 'ensemble' in script_name:
+        cmd_str = cmd_str + ' --attr_imp True'
     m_path = os.path.join(base_path, m)
     os.system(cmd_str.format(script_name, m_path))
