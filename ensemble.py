@@ -925,7 +925,7 @@ def main_classification(path, f_list, agg=1, inference_only=False, attr_imp=Fals
             # pi_df = pd.DataFrame(data=stacker_pi.importances.T, columns=training_dfs.columns, index=range(n_repeats))
             pi_df = pd.DataFrame(data=[stacker_pi.importances_mean], columns=training_dfs.columns, index=[0])
             pi_df['stacker'] = stacker_name
-            coefs = pd.DataFrame(data=stacker.coef_, columns=training_dfs.columns, index=[0])
+            # coefs = pd.DataFrame(data=stacker.coef_, columns=training_dfs.columns, index=[0])
             permute_imp_dfs.append(pi_df)
             # coef_cat_df = pd.concat(coef_dfs)
             # coefs.to_csv(os.path.join(analysis_path, 'coefs_lr.csv'))
