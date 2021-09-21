@@ -720,7 +720,7 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df,
     # print(stacker.coef_)
     if stacker_name == "LR.S":
         print(train_df.columns)
-        print(stacker.coef_)
+        # print(stacker.coef_)
         coefs = pd.DataFrame(data=list(stacker.coef_), columns=train_df.columns, index=[0])
         coefs['fold'] = fold
     else:
@@ -921,7 +921,7 @@ def main_classification(path, f_list, agg=1, inference_only=False, attr_imp=Fals
                                                 )
             print(stacker_pi.importances_mean)
             print(stacker_pi.importances_mean.shape)
-            print(stacker.coef_.shape)
+            # print(stacker.coef_.shape)
             # pi_df = pd.DataFrame(data=stacker_pi.importances.T, columns=training_dfs.columns, index=range(n_repeats))
             pi_df = pd.DataFrame(data=[stacker_pi.importances_mean], columns=training_dfs.columns, index=[0])
             pi_df['stacker'] = stacker_name
