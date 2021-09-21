@@ -1253,7 +1253,7 @@ parser.add_argument('--fold', '-F', type=int, default=5, help='cross-validation 
 parser.add_argument('--aggregate', '-A', type=int, default=1, help='if aggregate is needed, feed bagcount, else 1')
 parser.add_argument('--regression', '-reg', type=str2bool, default='False', help='Regression or Classification')
 parser.add_argument('--inference_only', '-infer', type=str2bool, default='False', help='Inference to test set')
-parser.add_argument('--attr_imp', '-infer', type=str2bool, default='False', help='get the attribute importance from stacker')
+parser.add_argument('--attr_imp', type=str2bool, default='False', help='get the attribute importance from stacker')
 args = parser.parse_args()
 data_path = abspath(args.path)
 # fns = listdir(data_path)
