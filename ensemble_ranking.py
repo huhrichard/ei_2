@@ -60,14 +60,17 @@ for bp_idx, bp in imp_base_predictors.iterrows():
     bp_rank = bp['bp_rank']
     bf_df_matched_bool = imp_base_features[bp_name_col_bfdf] == bp_name
     bf_ranks = imp_base_features.loc[bf_df_matched_bool, 'bf_rank']
+    print(bf_ranks*bp_rank)
     imp_base_features.loc[bf_df_matched_bool, multiplied_rank_col] = bf_ranks*bp_rank
+
+
 
 base_features_list = imp_base_features[bfdf_feature_col].unique().tolist()
 base_feature_rank_agg = {}
 
 for base_feature in base_features_list:
     ranks = imp_base_features.loc[imp_base_features[bfdf_feature_col] == base_feature, multiplied_rank_col]
-    print(ranks)
+    # print(ranks)
     avg_ranks = np.mean(list(ranks))
     base_feature_rank_agg[base_feature] = [avg_ranks]
 
