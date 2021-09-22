@@ -67,14 +67,32 @@ for bp_idx, bp in imp_base_predictors.iterrows():
 
 base_features_list = imp_base_features[bfdf_feature_col].unique().tolist()
 base_feature_rank_agg = {}
+base_feature_rank_min = []
+base_feature_rank_mean = []
+base_feature_rank_median = []
 
 for base_feature in base_features_list:
     ranks = imp_base_features.loc[imp_base_features[bfdf_feature_col] == base_feature, multiplied_rank_col]
     # print(ranks)
-    avg_ranks = np.mean(list(ranks))
-    base_feature_rank_agg[base_feature] = [avg_ranks]
+    min_rank = np.min(list(ranks))
+    mean_rank = np.mean(list(ranks))
+    median_rank = np.median(list(ranks))
+    base_feature_rank_min.append(min_rank)
+    base_feature_rank_mean.append(mean_rank)
+    base_feature_rank_median.append(median_rank)
+    # base_feature_rank_agg['min_agg'] = [avg_ranks]
 
-base_feature_rank_df = pd.DataFrame(base_feature_rank_agg).T
+base_feature_rank_agg['min'] = base_feature_rank_min
+base_feature_rank_agg['mean'] = base_feature_rank_mean
+base_feature_rank_agg['median'] = base_feature_rank_median
+
+
+base_feature_rank_df = pd.DataFrame(base_feature_rank_agg, index=base_features_list)
+base_feature_rank_df['min_rank'] = base_feature_rank_df['min'].rank()
+base_feature_rank_df['mean_rank'] = base_feature_rank_df['mean'].rank()
+base_feature_rank_df['median_rank'] = base_feature_rank_df['median'].rank()
+# base_feature_rank_df['min_rank'] = base_feature_rank_df[].rank()
+# base_feature_rank_df.rename(columns={imp_base_predictors.columns[0]: 'bf_rank'}, inplace=True)
 base_feature_rank_df.to_csv('base_feature_rank.csv')
 
 
