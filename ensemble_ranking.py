@@ -32,7 +32,7 @@ imp_base_predictors = pd.read_csv(bppath)
 imp_base_predictors = imp_base_predictors.loc[imp_base_predictors['stacker'] == stacker]
 imp_base_predictors.drop(columns=['stacker'], inplace=True)
 imp_base_predictors = imp_base_predictors.T
-imp_base_predictors['colname'] = 'bp_imp'
+imp_base_predictors.rename(columns={imp_base_predictors.columns[0]: 'bp_imp'}, inplace=True)
 imp_base_predictors = imp_base_predictors.iloc[1:]
 imp_base_predictors['bp_name'] = imp_base_predictors.index
 print(imp_base_predictors)
