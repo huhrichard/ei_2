@@ -68,7 +68,7 @@ base_feature_rank_agg = {}
 for base_feature in base_features_list:
     ranks = imp_base_features.loc[imp_base_features[bfdf_feature_col] == base_feature, multiplied_rank_col]
     avg_ranks = np.mean(list(ranks))
-    base_feature_rank_agg[base_feature] = avg_ranks
+    base_feature_rank_agg[base_feature] = [avg_ranks]
 
 base_feature_rank_df = pd.DataFrame(base_feature_rank_agg).T
 base_feature_rank_df.to_csv('base_feature_rank.csv')
