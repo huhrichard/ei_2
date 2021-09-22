@@ -32,15 +32,18 @@ imp_base_predictors = pd.read_csv(bppath)
 imp_base_predictors = imp_base_predictors.loc[imp_base_predictors['stacker'] == stacker]
 imp_base_predictors.drop(columns=['stacker'], inplace=True)
 imp_base_predictors = imp_base_predictors.T
+imp_base_predictors['colname'] = 'bp_imp'
+imp_base_predictors = imp_base_predictors.iloc[1:]
+imp_base_predictors['bp_name'] = imp_base_predictors.index
 print(imp_base_predictors)
 imp_base_features = pd.read_csv(bfpath, compression = 'gzip')
 
 
 
-bpdf_imp_col = ''
-bfdf_imp_col = ''
-bfdf_feature_col = ''
-bp_name_col_bpdf = ''
+bpdf_imp_col = 'bp_imp'
+bfdf_imp_col = 'attribute_importance'
+bfdf_feature_col = 'attribute'
+bp_name_col_bpdf = 'bp_name'
 bp_name_col_bfdf = 'base_predictor'
 # classifier,modality
 imp_base_features['bag'] = '0'
