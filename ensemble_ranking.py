@@ -46,7 +46,7 @@ imp_base_features = pd.read_csv(bfpath, compression = 'gzip')
 
 # classifier,modality
 imp_base_features['bag'] = '0'
-imp_base_features[bp_name_col_bfdf] = imp_base_features[['modality','classifier','bag']].agg('-'.join, axis=1)
+imp_base_features[bp_name_col_bfdf] = imp_base_features[['modality','classifier','bag']].agg('.'.join, axis=1)
 print(imp_base_features)
 
 multiplied_rank_col = 'bfxbp_rank'
