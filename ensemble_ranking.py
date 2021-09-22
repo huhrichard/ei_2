@@ -89,9 +89,9 @@ base_feature_rank_agg['median_agg'] = base_feature_rank_median
 
 
 base_feature_rank_df = pd.DataFrame(base_feature_rank_agg, index=base_features_list)
-base_feature_rank_df['min_accending_rank'] = base_feature_rank_df['min_agg'].rank()
-base_feature_rank_df['mean_accending_rank'] = base_feature_rank_df['mean_agg'].rank()
-base_feature_rank_df['median_accending_rank'] = base_feature_rank_df['median_agg'].rank()
+base_feature_rank_df['min_ascending_rank'] = base_feature_rank_df['min_agg'].rank()
+base_feature_rank_df['mean_ascending_rank'] = base_feature_rank_df['mean_agg'].rank()
+base_feature_rank_df['median_ascending_rank'] = base_feature_rank_df['median_agg'].rank()
 # base_feature_rank_df['min_rank'] = base_feature_rank_df[].rank()
 # base_feature_rank_df.rename(columns={imp_base_predictors.columns[0]: 'bf_rank'}, inplace=True)
 base_feature_rank_df.to_csv('base_feature_agg_rank.csv')
