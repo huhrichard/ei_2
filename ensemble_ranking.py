@@ -29,7 +29,7 @@ stacker = args.stacker
 #         print('There is no specified stacker/outcome')
 
 imp_base_predictors = pd.read_csv(bppath)
-imp_base_predictors = imp_base_predictors[[imp_base_predictors['stacker'] == stacker]]
+imp_base_predictors = imp_base_predictors.loc[[imp_base_predictors['stacker'] == stacker]]
 imp_base_predictors.drop(columns=['stacker'], inplace=True)
 imp_base_predictors = imp_base_predictors.T
 print(imp_base_predictors)
