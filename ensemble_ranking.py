@@ -63,7 +63,8 @@ for bp_idx, bp in imp_base_predictors.iterrows():
     print(bf_ranks*bp_rank)
     imp_base_features.loc[bf_df_matched_bool, multiplied_rank_col] = bf_ranks*bp_rank
 
-
+imp_base_predictors.to_csv('base_predictors_rank.csv')
+imp_base_features.to_csv('base_features_rank.csv')
 
 base_features_list = imp_base_features[bfdf_feature_col].unique().tolist()
 base_feature_rank_agg = {}
@@ -93,7 +94,7 @@ base_feature_rank_df['mean_rank'] = base_feature_rank_df['mean'].rank()
 base_feature_rank_df['median_rank'] = base_feature_rank_df['median'].rank()
 # base_feature_rank_df['min_rank'] = base_feature_rank_df[].rank()
 # base_feature_rank_df.rename(columns={imp_base_predictors.columns[0]: 'bf_rank'}, inplace=True)
-base_feature_rank_df.to_csv('base_feature_rank.csv')
+base_feature_rank_df.to_csv('base_feature_agg_rank.csv')
 
 
 
