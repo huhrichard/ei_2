@@ -304,49 +304,49 @@ for (currentNestedFold in 0..nestedFoldCount - 1) {
 }
 
 if (attr_imp_bool){
-classifier = AbstractClassifier.forName(classifierName, classifierOptions)
-//
-// // aSClassifier = new AttributeSelectedClassifier();
-//
-//
-removeFilter = new Remove()
-if (foldAttribute != "") {
-    removeIndices = new int[2]
-    removeIndices[0] = data.attribute(foldAttribute).index()
-    removeIndices[1] = data.attribute(idAttribute).index()
+    classifier = AbstractClassifier.forName(classifierName, classifierOptions)
+    //
+    // // aSClassifier = new AttributeSelectedClassifier();
+    //
+    //
+    removeFilter = new Remove()
+    if (foldAttribute != "") {
+        removeIndices = new int[2]
+        removeIndices[0] = data.attribute(foldAttribute).index()
+        removeIndices[1] = data.attribute(idAttribute).index()
 
-} else {
-    removeIndices = new int[1]
-    removeIndices[0] = data.attribute(idAttribute).index()
-}
+    } else {
+        removeIndices = new int[1]
+        removeIndices[0] = data.attribute(idAttribute).index()
+    }
 
-//
-// // printf "id index: %i\n", data.attribute(idAttribute).index()
-removeFilter.setAttributeIndicesArray(removeIndices)
-// // filteredClassifier = new FilteredClassifier()
-// // filteredClassifier.setClassifier(classifier)
-// // filteredClassifier.setFilter(removeFilter)
-//
-// // filteredClassifier.buildClassifier(train)
-//
-cAE = new ClassifierAttributeEval()
-// // cAE.setClassifier(filteredClassifier)
-cAE.setOptions(Utils.splitOptions("-E AUPRC -IRClass pos --"))
-cAE.setClassifier(classifier)
-// cAE.setOptions(new String[] {"-E", "AUPRC"})
+    //
+    // // printf "id index: %i\n", data.attribute(idAttribute).index()
+    removeFilter.setAttributeIndicesArray(removeIndices)
+    // // filteredClassifier = new FilteredClassifier()
+    // // filteredClassifier.setClassifier(classifier)
+    // // filteredClassifier.setFilter(removeFilter)
+    //
+    // // filteredClassifier.buildClassifier(train)
+    //
+    cAE = new ClassifierAttributeEval()
+    // // cAE.setClassifier(filteredClassifier)
+    cAE.setOptions(Utils.splitOptions("-E AUPRC -IRClass pos --"))
+    cAE.setClassifier(classifier)
+    // cAE.setOptions(new String[] {"-E", "AUPRC"})
 
-// cAE.setEvaluationMeasure("AUPRC")
-// cAE.setEvaluationMeasure(new SelectedTag())
-// cAE.setIRClassValue("pos")
-// // cAE.setEvalUsingTrainingData(false)
-// // cAE.setFolds(5)
-//
-// echo "metric:"
-// echo cAE.getEvaluationMeasure()
-// // printf "IRClass = %s" cAE.getIRClassValue()
-//
-//build classifier with full training set
-if (foldAttribute != "") {
+    // cAE.setEvaluationMeasure("AUPRC")
+    // cAE.setEvaluationMeasure(new SelectedTag())
+    // cAE.setIRClassValue("pos")
+    // // cAE.setEvalUsingTrainingData(false)
+    // // cAE.setFolds(5)
+    //
+    // echo "metric:"
+    // echo cAE.getEvaluationMeasure()
+    // // printf "IRClass = %s" cAE.getIRClassValue()
+    //
+    //build classifier with full training set
+    if (foldAttribute != "") {
         foldCount = data.attribute(foldAttribute).numValues()
         foldAttributeIndex = String.valueOf(data.attribute(foldAttribute).index() + 1) // 1-indexed
         foldAttributeValueIndex = String.valueOf(data.attribute(foldAttribute).indexOfValue(currentFold) + 1) // 1-indexed
@@ -386,7 +386,7 @@ if (foldAttribute != "") {
     //     printf "%s\n", options[op_idx]
     // }
 
-    
+
     outputPrefix = sprintf "attribute_imp-%s-%02d", currentFold, currentBag
     writer = new PrintWriter(new GZIPOutputStream(new FileOutputStream(new File(classifierDir, outputPrefix + ".csv.gz"))))
     writer.write("attribute,attribute_importance,fold,bag,classifier\n")
