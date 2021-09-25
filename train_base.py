@@ -42,6 +42,7 @@ parser.add_argument('--classpath', '-CP', type=str, default='./weka.jar', help='
 parser.add_argument('--hpc', type=str2bool, default='true', help='use HPC cluster or not')
 parser.add_argument('--fold', '-F', type=int, default=5, help='number of cross-validation fold')
 parser.add_argument('--dr', type=str2bool, default='False', help='train base classifier by PCA projected features)')
+parser.add_argument('--attr_imp', type=str2bool, default='False', help='train base classifier by PCA projected features)')
 args = parser.parse_args()
 ### record starting time
 start = time()
@@ -120,7 +121,7 @@ def preprocessing():
         project_path, classifier, fold, bag = parameters
         # job_file.write('groovy -cp %s %s/base_model.groovy %s %s %s %s %s\n' % (classpath, working_dir,data_path, project_path, fold, bag,classifier))
         job_file.write('groovy -cp %s %s/base_predictors_pca_added.groovy %s %s %s %s %s %s\n' % (
-            classpath, working_dir, data_path, project_path, fold, bag, False, classifier))
+            classpath, working_dir, data_path, project_path, fold, bag, args.attr_imp, classifier))
 
 
     if args.dr:
@@ -242,8 +243,8 @@ if args.hpc:
 
     fn.write('mpirun selfsched < {}\n'.format(jobs_fn))
     fn.write('rm {}\n'.format(jobs_fn))
-    fn.write('python combine_individual_feature_preds.py %s\npython combine_feature_predicts.py %s\n' % (
-    data_path, data_path))
+    fn.write('python combine_individual_feature_preds.py %s %s\npython combine_feature_predicts.py %s %s\n' % (
+    data_path, args.attr_imp, data_path, args.attr_imp))
     fn.close()
     system('bsub < %s' % lsf_fn)
     system('rm %s' % lsf_fn)

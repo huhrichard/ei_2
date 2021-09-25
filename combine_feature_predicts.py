@@ -11,6 +11,7 @@ import pandas as pd
 import numpy as np
 
 data_folder = abspath(argv[1])
+attr_imp_bool = argv[2]
 #
 # fns = listdir(data_folder)
 # fns = [fn for fn in fns if fn != 'analysis']
@@ -58,8 +59,9 @@ def merge_base_feat_preds_by_fold(f_list):
 			validation_df.set_index(['id','label'],inplace=True)
 			validation_df.columns = ['%s.%s' %(feature_name,col) for col in validation_df.columns]
 
-			attribute_imp_df = pd.read_csv(folder + '/attribute_imp-%s.csv.gz' % value, compression='gzip')
-			attribute_imp_df['modality'] = feature_name
+			if attr_imp_bool.lower == 'true':
+				attribute_imp_df = pd.read_csv(folder + '/attribute_imp-%s.csv.gz' % value, compression='gzip')
+				attribute_imp_df['modality'] = feature_name
 
 			prediction_dfs.append(prediction_df)
 			validation_dfs.append(validation_df)
@@ -71,7 +73,8 @@ def merge_base_feat_preds_by_fold(f_list):
 
 		prediction_dfs.to_csv(data_folder + '/predictions-%s.csv.gz' %value,compression='gzip')
 		validation_dfs.to_csv(data_folder + '/validation-%s.csv.gz' %value,compression='gzip')
-		attribute_imp_dfs.to_csv(data_folder + '/attribute_imp-%s.csv.gz' %value,compression='gzip')
+		if attr_imp_bool.lower == 'true':
+			attribute_imp_dfs.to_csv(data_folder + '/attribute_imp-%s.csv.gz' %value,compression='gzip')
 
 
 merge_base_feat_preds_by_fold(fold_values)
