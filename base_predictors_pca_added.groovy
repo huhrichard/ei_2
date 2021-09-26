@@ -305,6 +305,7 @@ for (currentNestedFold in 0..nestedFoldCount - 1) {
 
 if (attr_imp_bool){
     classifier = AbstractClassifier.forName(classifierName, classifierOptions)
+    printf "%s", classifierName
     //
     // // aSClassifier = new AttributeSelectedClassifier();
     //
