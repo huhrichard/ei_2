@@ -58,14 +58,15 @@ def merge_base_feat_preds_by_fold(f_list):
 			validation_df = pd.read_csv(folder + '/validation-%s.csv.gz' %value,compression='gzip')
 			validation_df.set_index(['id','label'],inplace=True)
 			validation_df.columns = ['%s.%s' %(feature_name,col) for col in validation_df.columns]
+			prediction_dfs.append(prediction_df)
+			validation_dfs.append(validation_df)
 
 			if attr_imp_bool.lower == 'true':
 				attribute_imp_df = pd.read_csv(folder + '/attribute_imp-%s.csv.gz' % value, compression='gzip')
 				attribute_imp_df['modality'] = feature_name
 				attribute_imp_dfs.append(attribute_imp_df)
 
-			prediction_dfs.append(prediction_df)
-			validation_dfs.append(validation_df)
+
 
 
 		prediction_dfs = pd.concat(prediction_dfs,axis=1)
@@ -75,6 +76,7 @@ def merge_base_feat_preds_by_fold(f_list):
 		prediction_dfs.to_csv(data_folder + '/predictions-%s.csv.gz' %value,compression='gzip')
 		validation_dfs.to_csv(data_folder + '/validation-%s.csv.gz' %value,compression='gzip')
 		if attr_imp_bool.lower == 'true':
+			print('running attribute imp2')
 			attribute_imp_dfs = pd.concat(attribute_imp_dfs)
 			attribute_imp_dfs.to_csv(data_folder + '/attribute_imp-%s.csv.gz' %value,compression='gzip')
 
