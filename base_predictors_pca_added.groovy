@@ -303,108 +303,108 @@ for (currentNestedFold in 0..nestedFoldCount - 1) {
     writer.close()
 }
 
-if (attr_imp_bool){
-    classifier = AbstractClassifier.forName(classifierName, classifierOptions)
-    printf "%s", classifierName
-    //
-    // // aSClassifier = new AttributeSelectedClassifier();
-    //
-    //
-    removeFilter = new Remove()
-    if (foldAttribute != "") {
-        removeIndices = new int[2]
-        removeIndices[0] = data.attribute(foldAttribute).index()
-        removeIndices[1] = data.attribute(idAttribute).index()
+// if (attr_imp_bool){
+classifier = AbstractClassifier.forName(classifierName, classifierOptions)
+printf "%s", classifierName
+//
+// // aSClassifier = new AttributeSelectedClassifier();
+//
+//
+removeFilter = new Remove()
+if (foldAttribute != "") {
+    removeIndices = new int[2]
+    removeIndices[0] = data.attribute(foldAttribute).index()
+    removeIndices[1] = data.attribute(idAttribute).index()
 
-    } else {
-        removeIndices = new int[1]
-        removeIndices[0] = data.attribute(idAttribute).index()
-    }
-
-    //
-    // // printf "id index: %i\n", data.attribute(idAttribute).index()
-    removeFilter.setAttributeIndicesArray(removeIndices)
-    // // filteredClassifier = new FilteredClassifier()
-    // // filteredClassifier.setClassifier(classifier)
-    // // filteredClassifier.setFilter(removeFilter)
-    //
-    // // filteredClassifier.buildClassifier(train)
-    //
-    cAE = new ClassifierAttributeEval()
-    // // cAE.setClassifier(filteredClassifier)
-    cAE.setOptions(Utils.splitOptions("-E AUPRC -IRClass pos --"))
-    cAE.setClassifier(classifier)
-    // cAE.setOptions(new String[] {"-E", "AUPRC"})
-
-    // cAE.setEvaluationMeasure("AUPRC")
-    // cAE.setEvaluationMeasure(new SelectedTag())
-    // cAE.setIRClassValue("pos")
-    // // cAE.setEvalUsingTrainingData(false)
-    // // cAE.setFolds(5)
-    //
-    // echo "metric:"
-    // echo cAE.getEvaluationMeasure()
-    // // printf "IRClass = %s" cAE.getIRClassValue()
-    //
-    //build classifier with full training set
-    if (foldAttribute != "") {
-        foldCount = data.attribute(foldAttribute).numValues()
-        foldAttributeIndex = String.valueOf(data.attribute(foldAttribute).index() + 1) // 1-indexed
-        foldAttributeValueIndex = String.valueOf(data.attribute(foldAttribute).indexOfValue(currentFold) + 1) // 1-indexed
-        printf "[%s] generating %s folds for leave-one-value-out CV\n", shortClassifierName, foldCount
-
-        testFoldFilter = new RemoveWithValues()
-        testFoldFilter.setModifyHeader(false)
-        testFoldFilter.setAttributeIndex(foldAttributeIndex)
-        testFoldFilter.setNominalIndices(foldAttributeValueIndex)
-        testFoldFilter.setInvertSelection(true)
-        testFoldFilter.setInputFormat(data)
-        test = Filter.useFilter(data, testFoldFilter)
-
-        trainingFoldFilter = new RemoveWithValues()
-        trainingFoldFilter.setModifyHeader(false)
-        trainingFoldFilter.setAttributeIndex(foldAttributeIndex)
-        trainingFoldFilter.setNominalIndices(foldAttributeValueIndex)
-        trainingFoldFilter.setInvertSelection(false)
-        trainingFoldFilter.setInputFormat(data)
-        train = Filter.useFilter(data, trainingFoldFilter)
-    } else {
-        printf "[%s] generating folds for %s-fold CV\n", shortClassifierName, foldCount
-        test = data.testCV(foldCount, Integer.valueOf(currentFold))
-        train = data.trainCV(foldCount, Integer.valueOf(currentFold), new Random(1))
-    }
-    removeFilter.setInvertSelection(false);
-    removeFilter.setInputFormat(train);
-    train = Filter.useFilter(train, removeFilter);
-    //
-    // printf "num of attributes = %i ", train.numAttributes()
-    //
-    cAE.buildEvaluator(train)
-    //
-
-    // options = cAE.getOptions()
-    // for (op_idx in 0..options.length-1){
-    //     printf "%s\n", options[op_idx]
-    // }
-
-
-    outputPrefix = sprintf "attribute_imp-%s-%02d", currentFold, currentBag
-    writer = new PrintWriter(new GZIPOutputStream(new FileOutputStream(new File(classifierDir, outputPrefix + ".csv.gz"))))
-    writer.write("attribute,attribute_importance,fold,bag,classifier\n")
-    for (attribute_index in 0..(train.numAttributes()-2)){
-        attribute_importance = cAE.evaluateAttribute(attribute_index)
-        attribute_name = train.attribute(attribute_index).name()
-    //     printf "Attribute Importance of %s by %s: %f\n", attribute_name,shortClassifierName, attribute_importance
-    //     printf "%s", currentFold
-    //     printf "%s", currentBag
-        String row_format = "%s,%f,%s,%s,%s\n"
-        attribute_row = sprintf(row_format, attribute_name, attribute_importance, currentFold, currentBag, shortClassifierName)
-    //     printf "%s", attribute_row
-        writer.write(attribute_row)
-    }
-    writer.flush()
-    writer.close()
+} else {
+    removeIndices = new int[1]
+    removeIndices[0] = data.attribute(idAttribute).index()
 }
+
+//
+// // printf "id index: %i\n", data.attribute(idAttribute).index()
+removeFilter.setAttributeIndicesArray(removeIndices)
+// // filteredClassifier = new FilteredClassifier()
+// // filteredClassifier.setClassifier(classifier)
+// // filteredClassifier.setFilter(removeFilter)
+//
+// // filteredClassifier.buildClassifier(train)
+//
+cAE = new ClassifierAttributeEval()
+// // cAE.setClassifier(filteredClassifier)
+cAE.setOptions(Utils.splitOptions("-E AUPRC -IRClass pos --"))
+cAE.setClassifier(classifier)
+// cAE.setOptions(new String[] {"-E", "AUPRC"})
+
+// cAE.setEvaluationMeasure("AUPRC")
+// cAE.setEvaluationMeasure(new SelectedTag())
+// cAE.setIRClassValue("pos")
+// // cAE.setEvalUsingTrainingData(false)
+// // cAE.setFolds(5)
+//
+// echo "metric:"
+// echo cAE.getEvaluationMeasure()
+// // printf "IRClass = %s" cAE.getIRClassValue()
+//
+//build classifier with full training set
+if (foldAttribute != "") {
+    foldCount = data.attribute(foldAttribute).numValues()
+    foldAttributeIndex = String.valueOf(data.attribute(foldAttribute).index() + 1) // 1-indexed
+    foldAttributeValueIndex = String.valueOf(data.attribute(foldAttribute).indexOfValue(currentFold) + 1) // 1-indexed
+    printf "[%s] generating %s folds for leave-one-value-out CV\n", shortClassifierName, foldCount
+
+    testFoldFilter = new RemoveWithValues()
+    testFoldFilter.setModifyHeader(false)
+    testFoldFilter.setAttributeIndex(foldAttributeIndex)
+    testFoldFilter.setNominalIndices(foldAttributeValueIndex)
+    testFoldFilter.setInvertSelection(true)
+    testFoldFilter.setInputFormat(data)
+    test = Filter.useFilter(data, testFoldFilter)
+
+    trainingFoldFilter = new RemoveWithValues()
+    trainingFoldFilter.setModifyHeader(false)
+    trainingFoldFilter.setAttributeIndex(foldAttributeIndex)
+    trainingFoldFilter.setNominalIndices(foldAttributeValueIndex)
+    trainingFoldFilter.setInvertSelection(false)
+    trainingFoldFilter.setInputFormat(data)
+    train = Filter.useFilter(data, trainingFoldFilter)
+} else {
+    printf "[%s] generating folds for %s-fold CV\n", shortClassifierName, foldCount
+    test = data.testCV(foldCount, Integer.valueOf(currentFold))
+    train = data.trainCV(foldCount, Integer.valueOf(currentFold), new Random(1))
+}
+removeFilter.setInvertSelection(false);
+removeFilter.setInputFormat(train);
+train = Filter.useFilter(train, removeFilter);
+//
+// printf "num of attributes = %i ", train.numAttributes()
+//
+cAE.buildEvaluator(train)
+//
+
+// options = cAE.getOptions()
+// for (op_idx in 0..options.length-1){
+//     printf "%s\n", options[op_idx]
+// }
+
+
+outputPrefix = sprintf "attribute_imp-%s-%02d", currentFold, currentBag
+writer = new PrintWriter(new GZIPOutputStream(new FileOutputStream(new File(classifierDir, outputPrefix + ".csv.gz"))))
+writer.write("attribute,attribute_importance,fold,bag,classifier\n")
+for (attribute_index in 0..(train.numAttributes()-2)){
+    attribute_importance = cAE.evaluateAttribute(attribute_index)
+    attribute_name = train.attribute(attribute_index).name()
+//     printf "Attribute Importance of %s by %s: %f\n", attribute_name,shortClassifierName, attribute_importance
+//     printf "%s", currentFold
+//     printf "%s", currentBag
+    String row_format = "%s,%f,%s,%s,%s\n"
+    attribute_row = sprintf(row_format, attribute_name, attribute_importance, currentFold, currentBag, shortClassifierName)
+//     printf "%s", attribute_row
+    writer.write(attribute_row)
+}
+writer.flush()
+writer.close()
+// }
 //
 //
 //

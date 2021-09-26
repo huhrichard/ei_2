@@ -43,7 +43,7 @@ imp_base_predictors = imp_base_predictors.iloc[1:]
 imp_base_predictors['bp_name'] = imp_base_predictors.index
 print(imp_base_predictors)
 imp_base_features = pd.read_csv(bfpath, compression = 'gzip')
-
+imp_base_features = imp_base_features.loc[imp_base_features['fold'] == 1]
 # classifier,modality
 imp_base_features['bag'] = '0'
 imp_base_features[bp_name_col_bfdf] = imp_base_features[['modality','classifier','bag']].agg('.'.join, axis=1)
