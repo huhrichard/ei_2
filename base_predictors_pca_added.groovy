@@ -305,11 +305,11 @@ for (currentNestedFold in 0..nestedFoldCount - 1) {
 
 // if (attr_imp_bool){
 classifier = AbstractClassifier.forName(classifierName, classifierOptions)
-printf "%s", classifierName
-//
-// // aSClassifier = new AttributeSelectedClassifier();
-//
-//
+printf "%s, ", classifierName, classifierOptions
+cAE = new ClassifierAttributeEval()
+cAE.setOptions(Utils.splitOptions("-E AUPRC -IRClass pos"))
+cAE.setClassifier(classifier)
+// Recreate train data
 removeFilter = new Remove()
 if (foldAttribute != "") {
     removeIndices = new int[2]
@@ -321,19 +321,9 @@ if (foldAttribute != "") {
     removeIndices[0] = data.attribute(idAttribute).index()
 }
 
-//
-// // printf "id index: %i\n", data.attribute(idAttribute).index()
+
 removeFilter.setAttributeIndicesArray(removeIndices)
-// // filteredClassifier = new FilteredClassifier()
-// // filteredClassifier.setClassifier(classifier)
-// // filteredClassifier.setFilter(removeFilter)
-//
-// // filteredClassifier.buildClassifier(train)
-//
-cAE = new ClassifierAttributeEval()
-// // cAE.setClassifier(filteredClassifier)
-cAE.setOptions(Utils.splitOptions("-E AUPRC -IRClass pos --"))
-cAE.setClassifier(classifier)
+
 // cAE.setOptions(new String[] {"-E", "AUPRC"})
 
 // cAE.setEvaluationMeasure("AUPRC")
@@ -376,17 +366,8 @@ if (foldAttribute != "") {
 removeFilter.setInvertSelection(false);
 removeFilter.setInputFormat(train);
 train = Filter.useFilter(train, removeFilter);
-//
-// printf "num of attributes = %i ", train.numAttributes()
-//
+
 cAE.buildEvaluator(train)
-//
-
-// options = cAE.getOptions()
-// for (op_idx in 0..options.length-1){
-//     printf "%s\n", options[op_idx]
-// }
-
 
 outputPrefix = sprintf "attribute_imp-%s-%02d", currentFold, currentBag
 writer = new PrintWriter(new GZIPOutputStream(new FileOutputStream(new File(classifierDir, outputPrefix + ".csv.gz"))))
@@ -394,12 +375,10 @@ writer.write("attribute,attribute_importance,fold,bag,classifier\n")
 for (attribute_index in 0..(train.numAttributes()-2)){
     attribute_importance = cAE.evaluateAttribute(attribute_index)
     attribute_name = train.attribute(attribute_index).name()
-//     printf "Attribute Importance of %s by %s: %f\n", attribute_name,shortClassifierName, attribute_importance
-//     printf "%s", currentFold
-//     printf "%s", currentBag
+
     String row_format = "%s,%f,%s,%s,%s\n"
     attribute_row = sprintf(row_format, attribute_name, attribute_importance, currentFold, currentBag, shortClassifierName)
-//     printf "%s", attribute_row
+
     writer.write(attribute_row)
 }
 writer.flush()

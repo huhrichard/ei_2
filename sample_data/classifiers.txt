@@ -8,4 +8,3 @@ weka.classifiers.meta.LogitBoost
 weka.classifiers.trees.RandomForest
 weka.classifiers.rules.PART
 weka.classifiers.lazy.IBk
-weka.classifiers.bayes.BayesNet
