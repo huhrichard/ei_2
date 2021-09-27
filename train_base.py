@@ -42,7 +42,7 @@ parser.add_argument('--classpath', '-CP', type=str, default='./weka.jar', help='
 parser.add_argument('--hpc', type=str2bool, default='true', help='use HPC cluster or not')
 parser.add_argument('--fold', '-F', type=int, default=5, help='number of cross-validation fold')
 parser.add_argument('--dr', type=str2bool, default='False', help='train base classifier by PCA projected features)')
-parser.add_argument('--attr_imp', type=str2bool, default='False', help='train base classifier by PCA projected features)')
+parser.add_argument('--attr_imp', type=str2bool, default='False', help='getting attribute importance')
 args = parser.parse_args()
 ### record starting time
 start = time()
