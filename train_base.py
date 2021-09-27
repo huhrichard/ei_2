@@ -217,8 +217,8 @@ def preprocessing():
 
 
     if not args.hpc:
-        job_file.write('python combine_individual_feature_preds.py %s\npython combine_feature_predicts.py %s\n' % (
-            data_path, data_path))
+        job_file.write('python combine_individual_feature_preds.py %s %s\npython combine_feature_predicts.py %s %s\n' % (
+            data_path, args.attr_imp, data_path, args.attr_imp))
 
 preprocessing()
 
