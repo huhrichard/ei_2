@@ -303,12 +303,14 @@ for (currentNestedFold in 0..nestedFoldCount - 1) {
     writer.close()
 }
 
+// Attribute Importance
+
 // if (attr_imp_bool){
 classifier = AbstractClassifier.forName(classifierName, classifierOptions)
 printf "%s, ", classifierName, classifierOptions
 cAE = new ClassifierAttributeEval()
-cAE.setOptions(Utils.splitOptions("-E AUPRC -IRClass pos"))
-cAE.setClassifier(classifier)
+cAE.setOptions(Utils.splitOptions("-E AUPRC -IRClass pos --"))
+
 // Recreate train data
 removeFilter = new Remove()
 if (foldAttribute != "") {
@@ -324,18 +326,6 @@ if (foldAttribute != "") {
 
 removeFilter.setAttributeIndicesArray(removeIndices)
 
-// cAE.setOptions(new String[] {"-E", "AUPRC"})
-
-// cAE.setEvaluationMeasure("AUPRC")
-// cAE.setEvaluationMeasure(new SelectedTag())
-// cAE.setIRClassValue("pos")
-// // cAE.setEvalUsingTrainingData(false)
-// // cAE.setFolds(5)
-//
-// echo "metric:"
-// echo cAE.getEvaluationMeasure()
-// // printf "IRClass = %s" cAE.getIRClassValue()
-//
 //build classifier with full training set
 if (foldAttribute != "") {
     foldCount = data.attribute(foldAttribute).numValues()
@@ -365,8 +355,10 @@ if (foldAttribute != "") {
 }
 removeFilter.setInvertSelection(false);
 removeFilter.setInputFormat(train);
-train = Filter.useFilter(train, removeFilter);
+train = Filter.useFilter(train, removeFilter)
+classifier.buildClassifier(train)
 
+cAE.setClassifier(classifier)
 cAE.buildEvaluator(train)
 
 outputPrefix = sprintf "attribute_imp-%s-%02d", currentFold, currentBag
@@ -384,10 +376,4 @@ for (attribute_index in 0..(train.numAttributes()-2)){
 writer.flush()
 writer.close()
 // }
-//
-//
-//
-//
-// // cAE.setSeed(1)
-//
-//
+
