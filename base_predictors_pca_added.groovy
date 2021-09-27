@@ -355,7 +355,7 @@ if (foldAttribute != "") {
 removeFilter.setInvertSelection(false);
 removeFilter.setInputFormat(train);
 train = Filter.useFilter(train, removeFilter)
-printf "Number of attributes: %f", train.numAttributes()
+printf "Number of attributes: %s", train.numAttributes()
 classifier.buildClassifier(train)
 
 cAE = new ClassifierAttributeEval()
