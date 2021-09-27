@@ -359,7 +359,7 @@ printf "Number of attributes: %s", train.numAttributes()
 classifier.buildClassifier(train)
 
 cAE = new ClassifierAttributeEval()
-cAE_options_str = '-L -B %s -E AUPRC -IRClass pos -- %s'
+cAE_options_str = '-B %s -E AUPRC -IRClass pos -- %s'
 cAE_options_str = sprintf(cAE_options_str, classifierName, classifierOptions)
 
 cAE.setOptions(Utils.splitOptions(cAE_options_str))
