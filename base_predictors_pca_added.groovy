@@ -359,11 +359,13 @@ printf "Number of attributes: %s", train.numAttributes()
 classifier.buildClassifier(train)
 
 cAE = new ClassifierAttributeEval()
-cAE_options_str = '-B %s -E AUPRC -IRClass pos -- %s'
-cAE_options_str = sprintf(cAE_options_str, classifierName, classifierOptions)
+cAE_options_str = '-E AUPRC -IRClass pos --'
+// cAE_options_str = '-B %s -E AUPRC -IRClass pos -- %s'
+// cAE_options_str = sprintf(cAE_options_str, classifierName, classifierOptions)
 
 cAE.setOptions(Utils.splitOptions(cAE_options_str))
-// cAE.setClassifier(classifier)
+cAE.setClassifier(classifier)
+cAE.setLeaveOneAttributeOut(True)
 cAE.buildEvaluator(train)
 
 outputPrefix = sprintf "attribute_imp-%s-%02d", currentFold, currentBag
