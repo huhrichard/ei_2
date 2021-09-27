@@ -366,7 +366,7 @@ if (attr_imp_bool){
     cAE.setOptions(Utils.splitOptions(cAE_options_str))
     cAE.setClassifier(classifier)
     cAE.setLeaveOneAttributeOut(true)
-    cAE.setNumToEvaluateInParallel(5)
+    cAE.setNumToEvaluateInParallel(10)
     cAE.buildEvaluator(train)
 
     // Export Attribute Importance
