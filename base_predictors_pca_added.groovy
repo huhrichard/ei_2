@@ -365,7 +365,7 @@ cAE_options_str = '-E AUPRC -IRClass pos --'
 
 cAE.setOptions(Utils.splitOptions(cAE_options_str))
 cAE.setClassifier(classifier)
-cAE.setLeaveOneAttributeOut(True)
+cAE.setLeaveOneAttributeOut(true)
 cAE.buildEvaluator(train)
 
 outputPrefix = sprintf "attribute_imp-%s-%02d", currentFold, currentBag
