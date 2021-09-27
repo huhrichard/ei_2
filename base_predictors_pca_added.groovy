@@ -308,8 +308,7 @@ for (currentNestedFold in 0..nestedFoldCount - 1) {
 // if (attr_imp_bool){
 classifier = AbstractClassifier.forName(classifierName, classifierOptions)
 printf "%s, ", classifierName, classifierOptions
-cAE = new ClassifierAttributeEval()
-cAE.setOptions(Utils.splitOptions("-E AUPRC -IRClass pos --"))
+
 
 // Recreate train data
 removeFilter = new Remove()
@@ -356,9 +355,11 @@ if (foldAttribute != "") {
 removeFilter.setInvertSelection(false);
 removeFilter.setInputFormat(train);
 train = Filter.useFilter(train, removeFilter)
-printf "Number of attributes: %i", train.numAttributes()
+printf "Number of attributes: %f", train.numAttributes()
 classifier.buildClassifier(train)
 
+cAE = new ClassifierAttributeEval()
+cAE.setOptions(Utils.splitOptions("-E AUPRC -IRClass pos --"))
 cAE.setClassifier(classifier)
 cAE.buildEvaluator(train)
 
