@@ -74,6 +74,7 @@ def combine_individual(path):
 
 data_folder = abspath(argv[1])
 attr_imp_bool = argv[2]
+print(attr_imp_bool)
 feature_folders = data_dir_list(data_folder)
 # data_name = data_folder.split('/')[-1]
 # fns = listdir(data_folder)
