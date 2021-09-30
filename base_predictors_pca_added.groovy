@@ -356,7 +356,7 @@ if (attr_imp_bool){
     removeFilter.setInputFormat(train);
     train = Filter.useFilter(train, removeFilter)
     // printf "Number of attributes: %s", train.numAttributes()
-    classifier.buildClassifier(train)
+//     classifier.buildClassifier(train)
 
     cAE = new ClassifierAttributeEval()
     cAE_options_str = '-E AUPRC -IRClass pos --'

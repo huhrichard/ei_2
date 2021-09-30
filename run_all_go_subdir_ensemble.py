@@ -122,8 +122,8 @@ if __name__ == "__main__":
                     #     for f_dir in feature_folders:
                     #         jobs_list.append('python ensemble.py --path {}'.format(f_dir))
 
-                    jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir) + ' --attr_imp True')
-                    # jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir))
+                    # jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir) + ' --attr_imp True')
+                    jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir))
         else:
             break
     jobs_txt.write('\n'.join(jobs_list))

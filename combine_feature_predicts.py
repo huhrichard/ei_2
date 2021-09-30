@@ -76,7 +76,7 @@ def merge_base_feat_preds_by_fold(f_list):
 		prediction_dfs.to_csv(data_folder + '/predictions-%s.csv.gz' %value,compression='gzip')
 		validation_dfs.to_csv(data_folder + '/validation-%s.csv.gz' %value,compression='gzip')
 		if attr_imp_bool.lower() == 'true':
-			print('running attribute imp2')
+			# print('running attribute imp2')
 			attribute_imp_dfs = pd.concat(attribute_imp_dfs)
 			attribute_imp_dfs.to_csv(data_folder + '/attribute_imp-%s.csv.gz' %value,compression='gzip')
 
