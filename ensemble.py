@@ -120,6 +120,7 @@ def select_candidate_enhanced(train_df, train_labels, best_classifiers, ensemble
         #                     candidates]
         candidate_scores = [scoring_func(train_labels, train_df[ensemble + [candidate]].mean(axis=1)) for candidate in
                             candidates]
+        # best_candidate = candidates[common.argbest(candidate_scores)]
         best_candidate = candidates[common.argbest(candidate_scores)]
     else:
         best_candidate = best_classifiers.index.values[i]
@@ -153,7 +154,8 @@ def select_candidate_enhanced(train_df, train_labels, best_classifiers, ensemble
 #     train_performance_df = pd.DataFrame.from_records(train_performance)
 #     best_ensemble_size = common.get_best_performer(train_performance_df).ensemble_size.values
 #     best_ensemble = train_performance_df.ensemble[:best_ensemble_size.item(0) + 1]
-#     return get_predictions(test_df, best_ensemble, fold, seedval), \
+#     return get_pred
+#     ictions(test_df, best_ensemble, fold, seedval), \
 #            pd.DataFrame.from_records(test_performance), \
 #            get_predictions(train_df, best_ensemble, fold, seedval)
 
