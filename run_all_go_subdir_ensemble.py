@@ -25,7 +25,7 @@ parser.add_argument('--memory', '-M', type=str,default='5000', help='memory requ
 parser.add_argument('--classpath', '-CP', type=str,default='./weka.jar', help='path to weka.jar')
 parser.add_argument('--hpc', '-MIN', type=str2bool,default='true', help='use hpc cluster or not')
 parser.add_argument('--term_prefix', type=str, default='GO', help='term_prefix')
-parser.add_argument('--attr_imp', type=str2bool, default='true', help='term_prefix')
+parser.add_argument('--attr_imp', type=str2bool, default='false', help='term_prefix')
 
 parser.add_argument('--seed', '-S', type=str,default='1', help='the seed use to generate cross-validataion data')
 
