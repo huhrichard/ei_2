@@ -919,8 +919,8 @@ def main_classification(path, f_list, agg=1, inference_only=False, attr_imp=Fals
                                                y=training_labels,
                                            n_repeats=n_repeats,
                                             random_state=0,
-                                               # scoring = auprc_sklearn
-                                               scoring = fmax_sklearn
+                                               scoring = auprc_sklearn
+                                               # scoring = fmax_sklearn
                                                 )
             print(stacker_pi.importances_mean)
             print(stacker_pi.importances_mean.shape)
