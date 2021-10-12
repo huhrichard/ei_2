@@ -1,6 +1,6 @@
 weka.classifiers.bayes.NaiveBayes -D
 weka.classifiers.functions.Logistic -M 100
-weka.classifiers.functions.SMO -C 1.0E-3 -calibrator "weka.classifiers.functions.Logistic -M 50"
+weka.classifiers.functions.SMO -C 1.0E-3
 weka.classifiers.functions.VotedPerceptron
 weka.classifiers.meta.AdaBoostM1
 weka.classifiers.trees.J48
