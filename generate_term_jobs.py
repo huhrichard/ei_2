@@ -9,6 +9,9 @@ from goatools.semantic import TermCounts
 from goatools.semantic import get_info_content
 import math
 import sys
+import os
+from os.path import exists, abspath, isdir
+from os import mkdir
 
 from goatools.base import download_go_basic_obo
 obo_fname = download_go_basic_obo()
@@ -83,6 +86,9 @@ for suffix, val in dict_suffix.items():
         jobs_fn = './jobs/'+fn
         f = open(jobs_fn, 'w')
         go_stats = 0
+        go_group_dir = os.path.join('/sc/arion/scratch/liy42/', fn.split('.')[0])
+        if not exists(go_group_dir):
+            mkdir(go_group_dir)
         # plt.figure()
         go_by_groups = go_terms_from_tsv[bool_array]
         print(len(go_by_groups))
