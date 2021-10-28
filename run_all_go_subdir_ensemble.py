@@ -111,17 +111,17 @@ if __name__ == "__main__":
         #     go_scratch_dir = scratch_path+jobs_prefix+'/'+term_name
 
                     # data = go_scratch_dir.split('/')[-1]
-                    # data_dir = go_scratch_dir.split('/')[-2]
-                    # if data_dir.split('_')[-1] == 'EI':
-                    #     # p = subprocess.Popen('python tcca_projection.py --path {}'.format(go_dir))
-                    #     # p.wait()
-                    #     # python_cmd_list.append('python tcca_projection.py --path {}'.format(go_dir))
-                    #     fns = listdir(go_scratch_dir)
-                    #     fns = [fn for fn in fns if not fn in excluding_folder]
-                    #     fns = [os.path.join(go_scratch_dir, fn) for fn in fns]
-                    #     feature_folders = [fn for fn in fns if isdir(fn)]
-                    #     for f_dir in feature_folders:
-                    #         jobs_list.append('python ensemble.py --path {}'.format(f_dir))
+                    data_dir = go_scratch_dir.split('/')[-2]
+                    if data_dir.split('_')[-1] == 'EI':
+                        # p = subprocess.Popen('python tcca_projection.py --path {}'.format(go_dir))
+                        # p.wait()
+                        # python_cmd_list.append('python tcca_projection.py --path {}'.format(go_dir))
+                        fns = listdir(go_scratch_dir)
+                        fns = [fn for fn in fns if not fn in excluding_folder]
+                        fns = [os.path.join(go_scratch_dir, fn) for fn in fns]
+                        feature_folders = [fn for fn in fns if isdir(fn)]
+                        for f_dir in feature_folders:
+                            jobs_list.append('python ensemble.py --path {}'.format(f_dir))
 
                     if args.attr_imp is False:
                         jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir))
