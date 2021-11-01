@@ -94,7 +94,8 @@ def processTermFeature_3(param, impute, fold=5):
     merged_df['seqID'] = merged_df.index
     print('before', merged_df.shape)
     merged_df.dropna(inplace=True)
-    kf_split = StratifiedKFold(n_splits=fold, shuffle=True, random_state=64)
+    # kf_split = StratifiedKFold(n_splits=fold, shuffle=True, random_state=64)
+    kf_split = KFold(n_splits=fold, shuffle=True, random_state=64)
     kf_idx_list = kf_split.split(merged_df, y=merged_df['cls'])
     merged_df.reset_index(inplace=True, drop=True)
     merged_df['fold'] = 0
