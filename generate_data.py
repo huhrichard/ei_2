@@ -87,7 +87,7 @@ def processTermFeature_3(param, impute, fold=5):
     cols = (filled_df == 0).all(axis=0)
     cols = cols.loc[cols == False].index.tolist()
     filled_df = filled_df[cols]
-    # filled_df = filled_df.round(3)
+    filled_df = filled_df.round(3)
     # merged_df = pd.merge(filled_df, go_hpo_df, how='inner')
     merged_df = pd.concat([filled_df, go_hpo_df], axis=1, join='inner')
     merged_df.rename(columns={term: 'cls'}, inplace=True)

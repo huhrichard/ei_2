@@ -273,7 +273,7 @@ def thres_fmax(train_label_df, train_pred_df):
 
     return thres
 
-def CES_fmax(path, fold_count=range(5), agg=1):
+def CES_classifier(path, fold_count=range(5), agg=1):
     assert exists(path)
     if not exists('%s/analysis' % path):
         mkdir('%s/analysis' % path)
@@ -531,7 +531,7 @@ def aggregating_ensemble(path, fold_count=range(5), agg=1, median=False,
 
 
 
-def bestbase_fmax(path, fold_count=range(5), agg=1):
+def bestbase_classifier(path, fold_count=range(5), agg=1):
     assert exists(path)
     if not exists('%s/analysis' % path):
         mkdir('%s/analysis' % path)
@@ -748,9 +748,9 @@ def main_classification(path, f_list, agg=1, inference_only=False, attr_imp=Fals
     cols = ['data_name', 'fmax', 'method', 'auc', 'auprc']
 
     dfs = []
-    aggregated_dict = {'CES': CES_fmax,
+    aggregated_dict = {'CES': CES_classifier,
                        'Mean': aggregating_ensemble,
-                       'best base': bestbase_fmax}
+                       'best base': bestbase_classifier}
 
     for key, val in aggregated_dict.items():
         print('[{}] Start building model #################################'.format(key))

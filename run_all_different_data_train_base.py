@@ -27,6 +27,8 @@ if __name__ == "__main__":
         prefix = 'GO'
     elif 'hpo' in ontology:
         prefix = 'HP'
+
+
     for go_dir in dir_list:
 
         # python_cmd = 'python train_base.py --path {}'.format(go_dir)
