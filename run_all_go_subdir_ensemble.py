@@ -86,47 +86,48 @@ if __name__ == "__main__":
     g_jobs_file = find_dir('{}.jobs'.format(jobs_prefix), './jobs')
     cat_dir = args.path
     jobs_fstream = os.listdir(cat_dir)
-    # g_jobs_fstream = open(g_jobs_file[0], "r").read().split('\n')
+
 
     jobs_n = 'ensemble_{}.jobs'.format(jobs_prefix)
     jobs_txt = open(jobs_n, 'w')
     jobs_list = []
     python_cmd_list = []
-    for go_job in os.walk(cat_dir, topdown=True):
-        # print(go_job)
-        root, dirs, files = go_job
-        num_sep = cat_dir.count(os.path.sep)
-        num_sep_this = root.count(os.path.sep)
-        print(root)
-        print(cat_dir)
-        if root == cat_dir:
-            print(dirs)
-            for dir in dirs:
-                go_scratch_dir = os.path.join(root, dir)
-                if go_scratch_dir != cat_dir:
-                    print(go_scratch_dir)
-        # if len(go_job.split(' ')) > 1:
-        #     term_name = go_job.split(' ')[2].replace(':', '')
-        #
-        #     go_scratch_dir = scratch_path+jobs_prefix+'/'+term_name
+    g_jobs_fstream = open(g_jobs_file[0], "r").read().split('\n')
+    for go_job in g_jobs_fstream:
+    # for go_job in os.walk(cat_dir, topdown=True):
+    #     # print(go_job)
+    #     root, dirs, files = go_job
+    #     num_sep = cat_dir.count(os.path.sep)
+    #     num_sep_this = root.count(os.path.sep)
+    #     print(root)
+    #     print(cat_dir)
+    #     if root == cat_dir:
+    #         print(dirs)
+    #         for dir in dirs:
+    #             go_scratch_dir = os.path.join(root, dir)
+    #             if go_scratch_dir != cat_dir:
+    #                 print(go_scratch_dir)
+        if len(go_job.split(' ')) > 1:
+            term_name = go_job.split(' ')[2].replace(':', '')
+            go_scratch_dir = scratch_path+jobs_prefix+'/'+term_name
 
                     # data = go_scratch_dir.split('/')[-1]
-                    data_dir = go_scratch_dir.split('/')[-2]
-                    if data_dir.split('_')[-1] == 'EI':
-                        # p = subprocess.Popen('python tcca_projection.py --path {}'.format(go_dir))
-                        # p.wait()
-                        # python_cmd_list.append('python tcca_projection.py --path {}'.format(go_dir))
-                        fns = listdir(go_scratch_dir)
-                        fns = [fn for fn in fns if not fn in excluding_folder]
-                        fns = [os.path.join(go_scratch_dir, fn) for fn in fns]
-                        feature_folders = [fn for fn in fns if isdir(fn)]
-                        for f_dir in feature_folders:
-                            jobs_list.append('python ensemble.py --path {}'.format(f_dir))
+            data_dir = go_scratch_dir.split('/')[-2]
+            if data_dir.split('_')[-1] == 'EI':
+                # p = subprocess.Popen('python tcca_projection.py --path {}'.format(go_dir))
+                # p.wait()
+                # python_cmd_list.append('python tcca_projection.py --path {}'.format(go_dir))
+                fns = listdir(go_scratch_dir)
+                fns = [fn for fn in fns if not fn in excluding_folder]
+                fns = [os.path.join(go_scratch_dir, fn) for fn in fns]
+                feature_folders = [fn for fn in fns if isdir(fn)]
+                for f_dir in feature_folders:
+                    jobs_list.append('python ensemble.py --path {}'.format(f_dir))
 
-                    if args.attr_imp is False:
-                        jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir))
-                    else:
-                        jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir) + ' --attr_imp True')
+            if args.attr_imp is False:
+                jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir))
+            else:
+                jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir) + ' --attr_imp True')
         else:
             break
     jobs_txt.write('\n'.join(jobs_list))
