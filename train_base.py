@@ -86,7 +86,6 @@ else:
     fold_values = range(int(p['foldCount']))
 
 
-# TODO: Read OuterCV and perform TCCA here?
 
 # fold_values = np.array(range(args.fold))+10000
 id_col = p['idAttribute']

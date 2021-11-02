@@ -538,15 +538,11 @@ def bestbase_classifier(path, fold_count=range(5), agg=1):
     predictions = []
     labels = []
 
-    # for fold in range(fold_count):
     for fold in fold_count:
-        # if '67890' in fold:
-        # if testing_bool or (not 'foldAttribute' in p):
         train_df, train_label, test_df, label = common.read_fold(path, fold)
         test_df = common.unbag(test_df, agg)
         predictions.append(test_df)
         labels = append(labels, label)
-            # thres = thres_fmax(train_label, common.unbag(train_df, agg))
     predictions = pd.concat(predictions)
 
     # need to be changed
@@ -767,25 +763,6 @@ def main_classification(path, f_list, agg=1, inference_only=False, attr_imp=Fals
         print('[{}] AUPRC score is {}.'.format(key, auprc_perf))
         dfs.append(pd.DataFrame(data=[[dn, fmax_perf, key, auc_perf, auprc_perf]], columns=cols, index=[0]))
 
-
-    # print('[CES] Start building model #################################')
-    # ces = CES_fmax(path, fold_values, agg)
-    # print('[CES] Finished evaluating model ############################')
-    # print('[CES] F-max score is %s.' % ces['f-measure']['F'])
-    # print('[CES] AUC score is %s.' % ces['auc'])
-    # print('[Mean] Start building model ################################')
-    # mean = aggregating_ensemble(path, fold_values, agg)
-    # print('[Mean] Finished evaluating model ###########################')
-    # print('[Mean] F-max score is %s.' % mean['f-measure']['F'])
-    # print('[Mean] AUC score is %s.' % mean['auc'])
-    # print('[Best Base] Start building model ###########################')
-    # bestbase = bestbase_fmax(path, fold_values, agg)
-    # print('[Best Base] Finished evaluating model ######################')
-    # print('[Best Base] F-max score is %s.' % bestbase['f-measure'])
-    # print('[Best Base] AUC score is %s.' % bestbase['auc'])
-    # dfs.append(pd.DataFrame(data=[[dn, ces['f-measure']['F'], 'CES', ces['auc']]], columns=cols, index=[0]))
-    # dfs.append(pd.DataFrame(data=[[dn, mean['f-measure']['F'], 'Mean', mean['auc']]], columns=cols, index=[0]))
-    # dfs.append(pd.DataFrame(data=[[dn, bestbase['f-measure'], 'best base', bestbase['auc']]], columns=cols, index=[0]))
     print('Saving results #############################################')
     analysis_path = '%s/analysis' % path
     if not exists(analysis_path):
@@ -802,72 +779,15 @@ def main_classification(path, f_list, agg=1, inference_only=False, attr_imp=Fals
     #             ]
     stackers_dict = {
                      "RF.S": RandomForestClassifier(),
-                     # "RF_CV.S": GridSearchCV(RandomForestClassifier(),
-                     #                      param_grid={'max_features':['auto','sqrt','log2'],
-                     #                                  'criterion': ['gini', 'entropy'],
-                     #                                  'bootstrap': [True, False],
-                     #                                  'oob_score': [True, False],
-                     #                                  'class_weight':['balanced', 'balanced_subsample']}, scoring=fmax_sklearn),
                      "SVM.S": SVC(kernel='linear', probability=True),
-                     # "SVM_CV.S": GridSearchCV(SVC(kernel='linear', probability=True),
-                     #                       param_grid={'C': [0.25, 0.5, 1, 2, 5]},
-                     #                          scoring=fmax_sklearn),
-                     # "KernelSVM.S": SVC(kernel='rbf', probability=True),
-                     # "KernelSVM_CV.S": GridSearchCV(SVC(kernel='rbf', probability=True),
-                     #                         param_grid={'C': [0.25, 0.5, 1, 2, 5],
-                     #                                     'gamma': ['scale', 'auto']},
-                     #                                scoring=fmax_sklearn),
                      "NB.S": GaussianNB(),
-                     # "NB_CV.S": GridSearchCV(GaussianNB(),
-                     #                         param_grid={'var_smoothing': [1e-5, 1e-7, 1e-9, 1e-11, 1e-13]},
-                     #                         scoring=fmax_sklearn),
                      "LR.S": LogisticRegression(),
-                     # "LR_CV.S": GridSearchCV(LogisticRegression(),
-                     #                      param_grid={'penalty': ['l1', 'l2', 'elasticnet', 'none'],
-                     #                                  'C': [0.25, 0.5, 1, 2, 5],
-                     #                                  },
-                     #                         scoring=fmax_sklearn),
                      "AdaBoost.S": AdaBoostClassifier(),
-                     # "AdaBoost_CV.S": GridSearchCV(AdaBoostClassifier(),
-                     #                               param_grid={'learning_rate':[0.1, 0.25, 0.5, 0.75, 1]},
-                     #                               scoring=fmax_sklearn),
                      "DT.S": DecisionTreeClassifier(),
-                     # "DT_CV.S": GridSearchCV(DecisionTreeClassifier(),
-                     #                         param_grid={'criterion': ['gini', 'entropy'],
-                     #                                     'splitter': ["best", "random"],
-                     #                                     'max_features': ['auto', 'sqrt', 'log2'],
-                     #                                     },
-                     #                         scoring=fmax_sklearn),
                      "GradientBoosting.S": GradientBoostingClassifier(),
-                     # "GradientBoosting_CV.S": GridSearchCV(GradientBoostingClassifier(),
-                     #                                    param_grid={'loss':['deviance', 'exponential'],
-                     #                                                'criterion':['friedman_mse', 'mse', 'mae'],
-                     #                                                'max_features': ['auto', 'sqrt', 'log2']},
-                     #                                    scoring=fmax_sklearn),
                      "KNN.S": KNeighborsClassifier(),
-                     # "KNN_CV.S": GridSearchCV(KNeighborsClassifier(),
-                     #                          param_grid={'weights':['uniform', 'distance'],
-                     #                    'p':[1, 2],
-                     #                    'n_neighbors': [2,3,5,10,15],
-                     #                    },
-                     #                    scoring=fmax_sklearn),
-                     "XGB.S": XGBClassifier(),
-                     # "XGB_CV.S": GridSearchCV(XGBClassifier(),
-                     #                          param_grid={"objective": ['reg:squarederror',
-                     #                                                'reg:squaredlogerror',
-                     #                                                'reg:pseudohubererror',
-                     #                                                'reg:gamma',
-                                                                    # 'reg:tweedie'
-                                                                    # ]}
-                                              # )
-
-                        # MLPClassifier(), GaussianProcessClassifier()
+                     "XGB.S": XGBClassifier()
                     }
-    # stacker_names = ["RF.S", "SVM.S", "NB.S", "LR.S", "AB.S", "DT.S", "LB.S", "KNN.S",
-    #                  "XGB.S",
-    #                  # ,"MLP.S", "GP.S"
-    #                  ]
-    # stacker_names_feat_imp = ['{}_stacked_feat_imp'.format(s) for s in stacker_names]
     df_cols = ['f_train_base','f_test_base', 'fold', 'stacker',
                'feat_imp', 'base_data', 'base_cls', 'base_bag']
     stacked_df = pd.DataFrame(columns= df_cols)
@@ -892,27 +812,11 @@ def main_classification(path, f_list, agg=1, inference_only=False, attr_imp=Fals
             stacked_df = stacking_output[0].pop('stacked_df')
         predictions_dfs = [s['testing_df'] for s in stacking_output]
         if attr_imp is True:
-            # coef_dfs = [s['coefs'] for s in stacking_output]
-            # coef_cat_df = pd.concat(coef_dfs)
-            # coef_cat_df.to_csv(os.path.join(analysis_path, 'coefs_lr.csv'))
-            # training_dfs = pd.concat([s['train_dfs'][0] for s in stacking_output])
-            # training_labels = pd.concat([pd.DataFrame({'label':s['train_dfs'][1]}) for s in stacking_output])
             training_dfs = stacking_output[0]['train_dfs'][0]
             training_labels = pd.DataFrame({'label': stacking_output[0]['train_dfs'][1]})
-
-            # training_dfs_diff_to_label = training_dfs
-            # training_dfs_diff_to_label[:] = abs(training_dfs_diff_to_label.values - training_labels)
             print(training_dfs.shape)
-
-            # stacker.fit(training_dfs, training_labels)
             stacker.fit(training_dfs, training_labels)
-            predict_scores = stacker.predict_proba(training_dfs)[:,1]
-            fmax_train_c = common.fmeasure_score(training_labels.values, predict_scores, thres=None)
-            fmax_train_sk = fmax_sklearn(stacker, training_dfs, training_labels)
-            auc_train = sklearn.metrics.roc_auc_score(training_labels.values, predict_scores)
-            print('fmax_sk of the whole training set:', fmax_train_sk)
-            print('fmax_c of the whole training set:', fmax_train_c)
-            print('auc of the whole training set:', auc_train)
+            # predict_scores = stacker.predict_proba(training_dfs)[:,1]
             n_repeats = 100
             stacker_pi = permutation_importance(estimator=stacker,
                                                X=training_dfs,
@@ -920,19 +824,12 @@ def main_classification(path, f_list, agg=1, inference_only=False, attr_imp=Fals
                                            n_repeats=n_repeats,
                                             random_state=0,
                                                scoring = auprc_sklearn
-                                               # scoring = fmax_sklearn
                                                 )
             print(stacker_pi.importances_mean)
             print(stacker_pi.importances_mean.shape)
-            # print(stacker.coef_.shape)
-            # pi_df = pd.DataFrame(data=stacker_pi.importances.T, columns=training_dfs.columns, index=range(n_repeats))
             pi_df = pd.DataFrame(data=[stacker_pi.importances_mean], columns=training_dfs.columns, index=[0])
             pi_df['stacker'] = stacker_name
-            # coefs = pd.DataFrame(data=stacker.coef_, columns=training_dfs.columns, index=[0])
             permute_imp_dfs.append(pi_df)
-            # coef_cat_df = pd.concat(coef_dfs)
-            # coefs.to_csv(os.path.join(analysis_path, 'coefs_lr.csv'))
-            # pi_df.to_csv(os.path.join(analysis_path, 'coefs_lr_pi.csv'))
 
 
 
