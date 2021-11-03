@@ -37,7 +37,7 @@ parser.add_argument('--path', '-P', type=str, required=True, help='data path')
 parser.add_argument('--queue', '-Q', type=str, default='premium', help='LSF queue to submit the job')
 parser.add_argument('--node', '-N', type=str, default='20', help='number of node requested')
 parser.add_argument('--time', '-T', type=str, default='20:00', help='number of hours requested')
-parser.add_argument('--memory', '-M', type=str, default='20000', help='memory requsted in MB')
+parser.add_argument('--memory', '-M', type=str, default='35000', help='memory requsted in MB')
 parser.add_argument('--classpath', '-CP', type=str, default='./weka.jar', help='default weka path')
 parser.add_argument('--hpc', type=str2bool, default='true', help='use HPC cluster or not')
 parser.add_argument('--fold', '-F', type=int, default=5, help='number of cross-validation fold')
@@ -237,7 +237,7 @@ if args.hpc:
     # fn.write('module purge')
     # fn.write('conda activate ei')
     fn.write('module load java\nmodule load python\nmodule load groovy\nmodule load selfsched\nmodule load weka\n')
-    fn.write('export _JAVA_OPTIONS="-XX:ParallelGCThreads=10"\nexport JAVA_OPTS="-Xmx15g"\nexport CLASSPATH=%s\n' % (
+    fn.write('export _JAVA_OPTIONS="-XX:ParallelGCThreads=10"\nexport JAVA_OPTS="-Xmx30g"\nexport CLASSPATH=%s\n' % (
         args.classpath))
 
     fn.write('mpirun selfsched < {}\n'.format(jobs_fn))
