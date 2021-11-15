@@ -70,8 +70,6 @@ if (classifierString.length > 1) {
 // load data parameters from properties file
 p = new Properties()
 p.load(new FileInputStream(parentDir + "/weka.properties"))
-//p.load(new FileInputStream(rootDir + "/weka.properties"))
-//inputFilename       = p.getProperty("inputFilename").trim()
 workingDir          = rootDir + "/" + p.getProperty("workingDir", ".").trim()
 idAttribute         = p.getProperty("idAttribute", "").trim()
 classAttribute      = p.getProperty("classAttribute").trim()
@@ -145,7 +143,7 @@ if (foldAttribute != "") {
 }
 
 
-// TODO: TCCA here?
+// Future work: TCCA here?
 // Write train & test to dummy files
 // Call tcca python script to project features
 // Version2: train & test = projected features
@@ -204,8 +202,6 @@ header = sprintf "# %s@%s %.2f minutes %s\n", System.getProperty("user.name"), j
 writer.write(header)
 writer.write("id,label,prediction,fold,bag,classifier\n")
 for (instance in test) {
-// String or int?
-//     int id = instance.value(test.attribute(idAttribute))
     id = instance.stringValue(test.attribute(idAttribute))
     double prediction
     if (!regression) {
@@ -226,7 +222,7 @@ if (nestedFoldCount == 0) {
 }
 
 // train = data.trainCV(foldCount, Integer.valueOf(currentFold), new Random(1))
-// printf "[%s] re-generated training data, starting %d-fold nested cv\n", shortClassifierName, nestedFoldCount
+
 if (foldAttribute != "") {
     foldCount = data.attribute(foldAttribute).numValues()
     foldAttributeIndex = String.valueOf(data.attribute(foldAttribute).index() + 1) // 1-indexed
@@ -254,7 +250,7 @@ if (foldAttribute != "") {
     train = data.trainCV(foldCount, Integer.valueOf(currentFold), new Random(1))
 }
 
-
+printf "[%s] re-generated training data, starting %d-fold nested cv\n", shortClassifierName, nestedFoldCount
 for (currentNestedFold in 0..nestedFoldCount - 1) {
     nestedTest = train.testCV(nestedFoldCount, currentNestedFold)
     nestedTrain = train.trainCV(nestedFoldCount, currentNestedFold, new Random(1))
