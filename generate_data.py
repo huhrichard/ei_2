@@ -78,7 +78,7 @@ def processTermFeature_3(param, impute, fold=5):
 
 
     before_shape = feature_df.shape
-    # go_hpo_df.fillna(0, inplace=True)
+    go_hpo_df.fillna(0, inplace=True)
     go_hpo_df = go_hpo_df[go_hpo_df != 0]
     go_hpo_df.replace(-1, 'neg', inplace=True)
     go_hpo_df.replace(1, 'pos', inplace=True)
