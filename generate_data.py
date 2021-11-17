@@ -105,6 +105,7 @@ def preprocessingTermFeat(param, impute, index_list, fold=5):
     go_hpo_df.replace(1, 'pos', inplace=True)
 
     filled_df = feature_df.fillna(0)
+    print(index_list.shape, filled_df.shape)
     filled_df = filled_df.loc[index_list]
     filled_df = filled_df.round(5)
     # merged_df = pd.merge(filled_df, go_hpo_df, how='inner')
@@ -267,7 +268,7 @@ if __name__ == "__main__":
         col_intersect = np.logical_and(col_index, col_intersect)
 
     for param in params:
-        cols = preprocessingTermFeat(param, impute=impute_graph, index_list=col_intersect, fold=fold)
+        preprocessingTermFeat(param, impute=impute_graph, index_list=col_intersect, fold=fold)
 
 
 
