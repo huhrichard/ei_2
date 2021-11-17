@@ -86,8 +86,9 @@ def TermFeature_index(param, impute, fold=5):
     filled_df = feature_df.fillna(0)
     cols = (filled_df == 0).all(axis=0)
     cols = cols.loc[cols == False].index.tolist()
+    keep_cols = np.array((cols == False))
 
-    return cols
+    return keep_cols
 
 def preprocessingTermFeat(param, impute, index_list, fold=5):
     term, feature, go_hpo_df, csv_filepath = param
@@ -104,7 +105,7 @@ def preprocessingTermFeat(param, impute, index_list, fold=5):
     go_hpo_df.replace(1, 'pos', inplace=True)
 
     filled_df = feature_df.fillna(0)
-    filled_df = filled_df[index_list]
+    filled_df = filled_df.loc[index_list]
     filled_df = filled_df.round(5)
     # merged_df = pd.merge(filled_df, go_hpo_df, how='inner')
     merged_df = pd.concat([filled_df, go_hpo_df], axis=1, join='inner')
