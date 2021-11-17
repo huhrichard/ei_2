@@ -206,7 +206,7 @@ if __name__ == "__main__":
         go_to_hpo_file = 'GO2HPO_binary.tsv'
     else:
         go_to_hpo_file = 'pos-neg-O-10.tsv'
-    print(len(argv))
+    # print(len(argv))
     if argv[3] != 'EI':
         features = [argv[3]]
     else:
@@ -266,6 +266,9 @@ if __name__ == "__main__":
     col_intersect = col_indices[0]
     for col_index in col_indices:
         col_intersect = np.logical_and(col_index, col_intersect)
+
+    print(col_intersect.shape)
+    print(col_intersect)
 
     for param in params:
         preprocessingTermFeat(param, impute=impute_graph, index_list=col_intersect, fold=fold)
