@@ -87,6 +87,7 @@ def TermFeature_index(param, impute, fold=5):
     cols = (filled_df == 0).all(axis=0)
     cols = cols.loc[cols == False].index.tolist()
     keep_cols = np.array((cols == False))
+    print(keep_cols)
 
     return keep_cols
 
