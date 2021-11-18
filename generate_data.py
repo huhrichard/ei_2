@@ -67,7 +67,7 @@ def convert_to_arff(df, path):
 # #	arff.dump(path, feature_df.values, relation='linhuaw', names = feature_df.columns)
 #         convert_to_arff(feature_df,path)
 
-def TermFeature_index(param, impute, fold=5):
+def processTermArff(param, impute, fold=5):
     term, feature, go_hpo_df, csv_filepath = param
     if impute:
         feature_df = pd.read_csv('{}rwrImputed_{}.csv'.format(csv_filepath, feature), index_col=0)
@@ -86,28 +86,7 @@ def TermFeature_index(param, impute, fold=5):
     filled_df = feature_df.fillna(0)
     cols = (filled_df == 0).all(axis=0)
     cols = cols.loc[cols == False].index.tolist()
-    keep_cols = np.array(cols)
-    print(keep_cols)
-
-    return keep_cols
-
-def preprocessingTermFeat(param, impute, index_list, fold=5):
-    term, feature, go_hpo_df, csv_filepath = param
-    if impute:
-        feature_df = pd.read_csv('{}rwrImputed_{}.csv'.format(csv_filepath, feature), index_col=0)
-        print('using imputed data')
-    else:
-        feature_df = pd.read_csv('{}{}.csv'.format(csv_filepath, feature), index_col=0)
-
-    before_shape = feature_df.shape
-    go_hpo_df.fillna(0, inplace=True)
-    go_hpo_df = go_hpo_df[go_hpo_df != 0]
-    go_hpo_df.replace(-1, 'neg', inplace=True)
-    go_hpo_df.replace(1, 'pos', inplace=True)
-
-    filled_df = feature_df.fillna(0)
-    print(index_list.shape, filled_df.shape)
-    filled_df = filled_df.loc[index_list]
+    filled_df = filled_df.loc[cols]
     filled_df = filled_df.round(5)
     # merged_df = pd.merge(filled_df, go_hpo_df, how='inner')
     merged_df = pd.concat([filled_df, go_hpo_df], axis=1, join='inner')
@@ -211,8 +190,12 @@ if __name__ == "__main__":
     if argv[3] != 'EI':
         features = [argv[3]]
     else:
-        features = ['coexpression', 'cooccurence', 'database', 'experimental', 'fusion', 'neighborhood']
+        features = ['coexpression', 'cooccurence', 'database',
+                    'experimental', 'fusion', 'neighborhood',]
     # features = ['deepNF']
+
+    # all_feat = ['coexpression', 'cooccurence', 'database',
+    #             'experimental', 'fusion', 'neighborhood', 'deepNF', 'mashup']
 
     term = argv[1]
 
@@ -259,20 +242,14 @@ if __name__ == "__main__":
     print(
         '[STARTED: %s] start multithreads computing to generate feature files for GO term: %s...............................' % (
         str(datetime.datetime.now()), term))
-    col_indices = []
     for param in params:
-        cols = TermFeature_index(param, impute=impute_graph, fold=fold)
-        col_indices.append(cols)
+        cols = processTermArff(param, impute=impute_graph, fold=fold)
 
-    col_intersect = col_indices[0]
-    for col_index in col_indices:
-        col_intersect = np.logical_and(col_index, col_intersect)
-
-    print(col_intersect.shape)
-    print(col_intersect)
-
-    for param in params:
-        preprocessingTermFeat(param, impute=impute_graph, index_list=col_intersect, fold=fold)
+    # print(col_intersect.shape)
+    # print(col_intersect)
+    #
+    # for param in params:
+    #     preprocessingTermFeat(param, impute=impute_graph, index_list=col_intersect, fold=fold)
 
 
 
