@@ -75,8 +75,6 @@ def processTermArff(param, impute, fold=5):
     else:
         feature_df = pd.read_csv('{}{}.csv'.format(csv_filepath, feature), index_col=0)
 
-
-
     before_shape = feature_df.shape
     go_hpo_df.fillna(0, inplace=True)
     go_hpo_df = go_hpo_df[go_hpo_df != 0]
@@ -86,7 +84,7 @@ def processTermArff(param, impute, fold=5):
     filled_df = feature_df.fillna(0)
     cols = (filled_df == 0).all(axis=0)
     cols = cols.loc[cols == False].index.tolist()
-    filled_df = filled_df.loc[cols]
+    filled_df = filled_df.loc[:,cols]
     filled_df = filled_df.round(5)
     # merged_df = pd.merge(filled_df, go_hpo_df, how='inner')
     merged_df = pd.concat([filled_df, go_hpo_df], axis=1, join='inner')
