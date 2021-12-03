@@ -19,22 +19,6 @@ from sklearn.ensemble import AdaBoostClassifier, AdaBoostRegressor  # Adaboost
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor  # Decision Tree
 from sklearn.ensemble import GradientBoostingClassifier, GradientBoostingRegressor  # Logit Boost with parameter(loss='deviance')
 from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor  # K nearest neighbors (IBk in weka)
-from sklearn.neural_network import MLPClassifier, MLPRegressor
-from sklearn.gaussian_process import GaussianProcessClassifier, GaussianProcessRegressor
-from sklearn.linear_model import RidgeClassifier
-from sklearn.linear_model import (
-                            LinearRegression,
-                            TheilSenRegressor,
-                            RANSACRegressor,
-                            HuberRegressor,
-                            ElasticNetCV, ElasticNet,
-                            LassoCV, Lasso,
-                            BayesianRidge,
-                            LarsCV, Lars,
-                            LassoLarsCV,
-                            ARDRegression,
-                            RidgeCV, Ridge
-                            )
 
 from sklearn.metrics import fbeta_score, make_scorer
 from xgboost import XGBClassifier, XGBRegressor
@@ -578,7 +562,8 @@ def best_base_predictors(path, fold_count=range(5), agg=1, regression=False):
         name_cls = predictions.columns.tolist()[np.argmin(weighted_mse_score_list)]
         return {'weighted_mse': min_score, 'name': name_cls}
     else:
-        thres = thres_fmax(train_label, common.unbag(train_df, agg))
+        # thres = thres_fmax(train_label, common.unbag(train_df, agg))
+        thres = None
         fmax_list = [common.fmeasure_score(labels, predictions.iloc[:, i], thres=thres)['F'] for i in
                      range(len(predictions.columns))]
         auc_list = [sklearn.metrics.roc_auc_score(labels, predictions.iloc[:, i]) for i in
@@ -737,7 +722,7 @@ def plot_scatter(df, path, x_col, y_col, hue_col, fn, title):
     fig.savefig(path+'/'+fn, bbox_inches="tight")
 
 
-def main_classification(path, f_list, agg=1, inference_only=False, attr_imp=False):
+def main_classification(path, f_list, agg=1, attr_imp=False):
     #
     dn = abspath(path).split('/')[-1]
     # cols = ['data_name', 'fmax', 'method']
@@ -796,20 +781,20 @@ def main_classification(path, f_list, agg=1, inference_only=False, attr_imp=Fals
     for i, (stacker_name, stacker) in enumerate(stackers_dict.items()):
         print('[%s] Start building model ################################' % (stacker_name))
 
-        if (not testing_bool):
-            stacking_output = []
-            for fold in f_list:
-                stack = stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df)
-                stacked_df = stack.pop('stacked_df')
-                if attr_imp:
-                    if fold == 1:
-                #     print(fold)
-                        stacking_output.append(stack)
-                else:
+        # if (not testing_bool):
+        stacking_output = []
+        for fold in f_list:
+            stack = stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df)
+            stacked_df = stack.pop('stacked_df')
+            if attr_imp:
+                if fold == 1:
+            #     print(fold)
                     stacking_output.append(stack)
-        else:
-            stacking_output = [stacked_generalization(path, stacker_name, stacker, '67890', agg, stacked_df)]
-            stacked_df = stacking_output[0].pop('stacked_df')
+            else:
+                stacking_output.append(stack)
+        # else:
+            # stacking_output = [stacked_generalization(path, stacker_name, stacker, '67890', agg, stacked_df)]
+            # stacked_df = stacking_output[0].pop('stacked_df')
         predictions_dfs = [s['testing_df'] for s in stacking_output]
         if attr_imp is True:
             training_dfs = stacking_output[0]['train_dfs'][0]
@@ -862,307 +847,16 @@ def main_classification(path, f_list, agg=1, inference_only=False, attr_imp=Fals
 
     dfs.to_csv(os.path.join(analysis_path, "performance.csv"), index=False)
 
-def main_regression(path, f_list, agg=1, inference_only=False):
-    #
-    dn = abspath(path).split('/')[-1]
-    # cols = ['data_name', 'fmax', 'method']
-    # cols = ['data_name', 'fmax', 'method', 'auc']
-    # cols = ['data_name', 'weighted_mse', 'method']
-    cols = ['data_name', 'weighted_mse', 'method_name', 'by_subject', 'Z_scoring','params_optimized' , 'cls_name']
-    dfs = []
-
-
-    # print('[CES] Start building model #################################')
-    # ces = CES(path, fold_values, agg, regression=True)
-    # print('[CES] Finished evaluating model ############################')
-    # print('[CES] Weighted MSE score is %s.' % ces['weighted_mse'])
-    # print('[Mean] Start building model ################################')
-    # mean = aggregating_ensemble(path, fold_values, agg, regression=True)
-    # print('[Mean] Finished evaluating model ###########################')
-    # print('[Mean] Weighted MSE score is %s.' % mean['weighted_mse'])
-
-    # print('[Median.Z_scoring] Start building model ################################')
-    # median = aggregate_weighted_mse(path, fold_values, agg, median=True, inference_only=inference_only)
-    # median_Z = aggregating_ensemble(path, fold_values, agg,
-    #                               median=True, inference_only=inference_only, regression=True,
-    #                               z_scoring=True)
-    # print('[Median.Z_scoring] Finished evaluating model ###########################')
-    # print('[Median.Z_scoring] Weighted MSE score is %s.' % median_Z['weighted_mse'])
-
-    print('[Median] Start building model ################################')
-    # median = aggregate_weighted_mse(path, fold_values, agg, median=True, inference_only=inference_only)
-    median = aggregating_ensemble(path, fold_values, agg,
-                                  median=True, inference_only=inference_only, regression=True)
-    print('[Median] Finished evaluating model ###########################')
-    print('[Median] Weighted MSE score is %s.' % median['weighted_mse'])
-    # print('[Best Base] Start building model ###########################')
-    # bestbase = best_base_predictors(path, fold_values, agg, regression=True)
-    # print('[Best Base] Finished evaluating model ######################')
-    # print('[Best Base] Weighted MSE score is %s.' % bestbase['weighted_mse'])
-    # dfs.append(pd.DataFrame(data=[[dn, ces['weighted_mse'], 'CES', False, False, False,'CES']], columns=cols, index=[0]))
-    # dfs.append(pd.DataFrame(data=[[dn, mean['weighted_mse'], 'Mean', False, False, False,'Mean']], columns=cols, index=[0]))
-    # dfs.append(pd.DataFrame(data=[[dn, median['weighted_mse'], 'Median', False, False,False, 'Median']], columns=cols, index=[0]))
-    # dfs.append(pd.DataFrame(data=[[dn, median_Z['weighted_mse'], 'Median.Z_scoring', False, True,False, 'Median']], columns=cols, index=[0]))
-    # dfs.append(pd.DataFrame(data=[[dn, bestbase['weighted_mse'], 'best base ({})'.format(bestbase['name']), False, False,False, 'best base']], columns=cols, index=[0]))
-    # Get Stacking Fmax scores
-    z_scoring_params = [True, False]
-    # z_scoring_params = [True]
-    stackers_dict = {
-                    # "RF_L1.S": RandomForestRegressor(criterion='mae'),
-                    # "RF_L1.CV.S": GridSearchCV(RandomForestRegressor(criterion='mae'),
-                    #                          param_grid={
-                    #                                      'max_features':['auto','sqrt','log2']}),
-                    # # "RF_L2.S": RandomForestRegressor(),
-                    #  "RF_L2.CV.S": GridSearchCV(RandomForestRegressor(),
-                    #                          param_grid={'max_features':['auto','sqrt','log2']}),
-                    # # "SVM_L1.S": LinearSVR(),
-                    # "SVM_L1.CV.S": GridSearchCV(LinearSVR(),
-                    #                           param_grid={'C': [0.25, 0.5, 1, 2, 5]}),
-                    # # "SVM_L2.S": LinearSVR(loss='squared_epsilon_insensitive'),
-                    # "SVM_L2.CV.S": GridSearchCV(LinearSVR(loss='squared_epsilon_insensitive'),
-                    #                          param_grid={'C': [0.25, 0.5, 1, 2, 5]}),
-                    # "OLS.S": LinearRegression(),
-                    # # "AdaBoost.S": AdaBoostRegressor(),
-                    # "AdaBoost.CV.S": GridSearchCV(AdaBoostRegressor(),
-                    #                             param_grid={'learning_rate':[0.1, 0.25, 0.5, 0.75, 1],
-                    #                                         'loss': ['linear', 'square', 'exponential'],
-                    #                                         }),
-                    # # "DT.S": DecisionTreeRegressor(),
-                    #  "DT.CV.S": GridSearchCV(DecisionTreeRegressor(),
-                    #                       param_grid={'criterion':['friedman_mse', 'mse', 'mae']}),
-                    # # "GradientBoosting.S": GradientBoostingRegressor(),
-                    #  "GradientBoosting.CV.S": GridSearchCV(GradientBoostingRegressor(),
-                    #          param_grid={'loss': ['ls', 'lad', 'huber', 'quantile'],
-                    #                      'criterion':['friedman_mse', 'mse', 'mae'],
-                    #                      },
-                    #          # scoring=wmse_sklearn
-                    #          ),
-                    # # "KNN.S": KNeighborsRegressor(),
-                    #  "KNN.CV.S": GridSearchCV(KNeighborsRegressor(),
-                    #         param_grid={'weights':['uniform', 'distance'],
-                    #                     'p':[1, 2],
-                    #                     'n_neighbors': [2,3,5,10,15],
-                    #                     },
-                    #          # scoring=wmse_sklearn
-                    #          ),
-                    # #  "XGB.S": XGBRegressor(),
-                    # "XGB.CV.S": GridSearchCV(XGBRegressor(),
-                    #                       param_grid={"objective": ['reg:squarederror',
-                    #                                                 'reg:squaredlogerror',
-                    #                                                 'reg:pseudohubererror',
-                    #                                                 # 'reg:gamma',
-                    #                                                 'reg:tweedie'
-                    #                                                 ]}),
-                    # #  "Huber.S": HuberRegressor(),
-                    #  "Huber.CV.S": GridSearchCV(HuberRegressor(),
-                    #         param_grid={"epsilon":[1.0, 1.2,  1.35, 1.5, 2],
-                    #             'alpha': [0.0001, 0.001, 0.01, 0.1, 1]},
-                    #         # scoring=wmse_sklearn
-                    #          ),
-                    # #  "ElasticNet.S": ElasticNet(),
-                    #  "ElasticNet.CV.S": ElasticNetCV(),
-                    # #  "Lasso.S": Lasso(),
-                    #  "Lasso.CV.S": LassoCV(),
-                    # #  "BayesianRidge.S": BayesianRidge(),
-                    #  "BayesianRidge.CV.S": GridSearchCV(BayesianRidge(),
-                    #                                     param_grid={'tol': [1e-2, 1e-3, 1e-4],
-                    #                                                 'alpha_1':[1e-5,1e-6,1e-7],
-                    #                                                 'alpha_2':[1e-5,1e-6,1e-7],
-                    #                                                 'lambda_1':[1e-5,1e-6,1e-7],
-                    #                                                 'lambda_2':[1e-5,1e-6,1e-7]
-                    #                                                 }),
-                    # #  "Lars.S": Lars(),
-                    #  "Lars.CV.S": LarsCV(),
-                     "Ridge.S": Ridge()
-                     # "Ridge.CV.S": RidgeCV(),
-                    #  # "LassoLarsCV.S": LassoLarsCV(),
-                    # #  # "RANSAC.S",
-                    # #  "TheilSen.S": TheilSenRegressor(),
-                    #  "TheilSen.CV.S": GridSearchCV(TheilSenRegressor(),
-                    #                             param_grid={'tol':[1e-2, 1e-3, 1e-4, 1e-5],
-                    #                                         }),
-                    # #  "MLP.S": MLPRegressor(),
-                    #  "MLP.CV.S": GridSearchCV(MLPRegressor(),
-                    #                        param_grid={
-                    #                                    'alpha': [1e-5, 0.0001, 1e-3,],
-                    #                                    'learning_rate':['constant','invscaling','adaptive'],
-                    #                                    'learning_rate_init':[0.01, 0.001, 0.005],
-                    #                                    'early_stopping': [True, False]}),
-                    #  # "ARD.S": ARDRegression(),
-                    #  "ARD.CV.S": GridSearchCV(ARDRegression(),
-                    #                           param_grid={'tol': [1e-2, 1e-3, 1e-4],
-                    #                                         'alpha_1':[1e-5,1e-6,1e-7],
-                    #                                         'alpha_2':[1e-5,1e-6,1e-7],
-                    #                                         'lambda_1':[1e-5,1e-6,1e-7],
-                    #                                         'lambda_2':[1e-5,1e-6,1e-7],
-                    #                                       'threshold_lambda': [1e3, 1e4, 1e5]
-                    #                                       }),
-                    # # "KernelSVM_RBF.S": sklearn.svm.SVR(),
-                    # "KernelSVM_RBF.CV.S": GridSearchCV(sklearn.svm.SVR(),
-                    #                                    param_grid={'C':[0.1, 1.0, 2.0, 5.0, 10.0],
-                    #                                         'epsilon':[0.1, 0.5, 1.0]},
-                    #          # scoring=wmse_sklearn
-                    # )
-                    }
-    stackers = [v for k, v in stackers_dict.items()]
-    stacker_names_ref = [k for k, v in stackers_dict.items()]
-
-    for z_scoring_param in z_scoring_params:
-        # print(z_scoring_params)
-        # print(1)
-        if z_scoring_param:
-            stacker_names = [s+'.Z_scoring' for s in stacker_names_ref]
-        else:
-            stacker_names = stacker_names_ref
-
-        # stacker_names_feat_imp = ['{}_stacked_feat_imp'.format(s) for s in stacker_names]
-        df_cols = ['wmse_train_base','wmse_test_base', 'fold', 'stacker',
-                   'feat_imp', 'base_data', 'base_cls', 'base_bag']
-        stacked_df = pd.DataFrame(columns= df_cols)
-        for i, (stacker_name, stacker) in enumerate(zip(stacker_names, stackers)):
-            print('[%s] Start building model ################################' % (stacker_name))
-            if (not testing_bool):
-                stacking_output = []
-                for fold in f_list:
-                    stack = stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df,
-                                                   regression=True, z_scoring=z_scoring_param)
-                    stacked_df = stack.pop('stacked_df')
-                    stacking_output.append(stack)
-            else:
-                stacking_output = [stacked_generalization(path, stacker_name, stacker, '67890', agg, stacked_df,
-                                                          regression=True, z_scoring=z_scoring_param)]
-                stacked_df = stacking_output[0].pop('stacked_df')
-            predictions_dfs = [s['testing_df'] for s in stacking_output]
-            _training = stacking_output[0]['training']
-
-            predictions_df = pd.concat(predictions_dfs)
-            predictions_df.set_index('id', inplace=True)
-            # print(predictions_df)
-            if inference_only is True:
-                output_df = predictions_df.prediction.to_frame()
-                output_df.reset_index(inplace=True)
-                output_df.rename(columns={'id': 'measurement_id'}, inplace=True)
-                output_df = output_df[['measurement_id', 'prediction']]
-                # output_df.rename({'id':'measurement_id'}, inplace=True)
-                output_df.to_csv("{}/{}/{}{}".format(path, "analysis", stacker_name.replace('.', '_'), '_test_predictions.csv'),
-                                 index=False)
-            else:
-                weighted_mse_score = weighted_mse(predictions_df.label, predictions_df.prediction)
-
-                print('[%s] Finished evaluating model ###########################' % (stacker_name))
-                print('[%s] Weighted MSE score is %s.' % (stacker_name, weighted_mse_score))
-                params_optimized = '.CV.S' in stacker_names_ref[i]
-                df = pd.DataFrame(data=[[dn, weighted_mse_score, stacker_name, False, z_scoring_param, params_optimized, stacker_names_ref[i]]], columns=cols, index=[0])
-                dfs.append(df)
-
-
-    # """
-    # 1 Model per subject
-    # """
-    # print('[CES.by_subject] Start building model #################################')
-    # ces_by_subject = CES(path, fold_values, agg, subject_model=True, regression=True)
-    # print('[CES.by_subject] Finished evaluating model ############################')
-    # print('[CES.by_subject] Weighted MSE score is %s.' % ces_by_subject['weighted_mse'])
-    # # # print('[Mean_by_subject] Start building model ################################')
-    # # # mean_by_subject = mean_weighted_mse(path, fold_values, agg, subject_model=True)
-    # # # print('[Mean_by_subject] Finished evaluating model ###########################')
-    # # # print('[Mean_by_subject] Weighted MSE score is %s.' % mean['weighted_mse'])
-    # # # print('[Median_by_subject] Start building model ################################')
-    # # # median_by_subject = mean_weighted_mse(path, fold_values, agg, median=True, subject_model=True)
-    # # # print('[Median_by_subject] Finished evaluating model ###########################')
-    # # # print('[Median_by_subject] Weighted MSE score is %s.' % median['weighted_mse'])
-    # dfs.append(pd.DataFrame(data=[[dn, ces_by_subject['weighted_mse'], 'CES.by_subject', True, False, False, 'CES']], columns=cols, index=[0]))
-    # # # dfs.append(pd.DataFrame(data=[[dn, mean_by_subject['weighted_mse'], 'Mean_by_subject']], columns=cols, index=[0]))
-    # # # dfs.append(pd.DataFrame(data=[[dn, median_by_subject['weighted_mse'], 'Median_by_subject']], columns=cols, index=[0]))
-    # # # dfs.append(pd.DataFrame(data=[[dn, bestbase['weighted_mse'], 'best base']], columns=cols, index=[0]))
-    # # # Get Stacking Fmax scores
-    # #
-    # for z_scoring_param in z_scoring_params:
-    #     stacker_names = stacker_names_ref
-    #     if z_scoring_param:
-    #         stacker_names = [s+'.Z_scoring' for s in stacker_names_ref]
-    #     stacker_names = [s+'.by_subject' for s in stacker_names]
-    #
-    #     # stacker_names_feat_imp = ['{}_stacked_feat_imp'.format(s) for s in stacker_names]
-    #     df_cols = ['wmse_train_base', 'wmse_test_base', 'fold', 'stacker',
-    #                'feat_imp', 'base_data', 'base_cls', 'base_bag']
-    #     stacked_df = pd.DataFrame(columns=df_cols)
-    #
-    #     for i, (stacker_name, stacker) in enumerate(zip(stacker_names, stackers)):
-    #         print('[%s] Start building model ################################' % (stacker_name))
-    #
-    #         if (not testing_bool):
-    #             stacking_output = []
-    #             for fold in f_list:
-    #                 stack = stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df,
-    #                                                subject_model=True, regression=True, z_scoring=z_scoring_param)
-    #                 stacked_df = stack.pop('stacked_df')
-    #                 stacking_output.append(stack)
-    #         else:
-    #             stacking_output = [
-    #                 stacked_generalization(path, stacker_name, stacker, '67890', agg, stacked_df,
-    #                                        subject_model=True,regression=True, z_scoring=z_scoring_param)]
-    #             stacked_df = stacking_output[0].pop('stacked_df')
-    #         predictions_dfs = [s['testing_df'] for s in stacking_output]
-    #         _training = stacking_output[0]['training']
-    #
-    #         predictions_df = pd.concat(predictions_dfs)
-    #         predictions_df.set_index('id', inplace=True)
-    #         # print(predictions_df)
-    #         weighted_mse_score = weighted_mse(predictions_df.label, predictions_df.prediction)
-    #
-    #         print('[%s] Finished evaluating model ###########################' % (stacker_name))
-    #         print('[%s] Weighted MSE score is %s.' % (stacker_name, weighted_mse_score))
-    #         params_optimized = '.CV.S' in stacker_names_ref[i]
-    #         df = pd.DataFrame(data=[[dn, weighted_mse_score, stacker_name, True, z_scoring_param, params_optimized, stacker_names_ref[i]]], columns=cols, index=[0])
-    #         dfs.append(df)
-    #
-    # dfs = pd.concat(dfs)
-    #
-    # # hue_list = ['stacker','base_data', 'base_cls']
-    # # y_list = ['f_train_base','f_test_base']
-    # # x_list = ['feat_imp']
-    # # plot_path = './plot/feat_imp_'+path.split('/')[-1]
-    # # common.check_dir_n_mkdir(plot_path)
-    # # params_list = list(product(x_list, y_list, hue_list))
-    # # # print(stacked_df)
-    # # for params in params_list:
-    # #     x, y, hue = params
-    # #     fn = 'scatter_{}_by_{}'
-    # #     title = 'F measure of {} base classifier VS Feature Importance of stackers (by {})'
-    # #     if 'train' in y:
-    # #         fn = fn.format('train', hue)
-    # #         title = title.format('train', hue)
-    # #     else:
-    # #         fn = fn.format('test', hue)
-    # #         title = title.format('test', hue)
-    # #     plot_scatter(df=stacked_df, x_col=x, y_col=y, hue_col=hue, fn=fn, path=plot_path, title=title)
-    #
-    # # Save results
-    # print('Saving results #############################################')
-    # if not exists('%s/analysis' % path):
-    #     mkdir('%s/analysis' % path)
-    # path_suffix = path.split('/')[-1]
-    # dfs.sort_values(by='weighted_mse').to_csv("%s/analysis/performance-%s.csv" % (path,path_suffix), index=False)
-
-
 ### parse arguments
 parser = argparse.ArgumentParser(description='')
 parser.add_argument('--path', '-P', type=str, required=True, help='data path')
 parser.add_argument('--fold', '-F', type=int, default=5, help='cross-validation fold')
 parser.add_argument('--aggregate', '-A', type=int, default=1, help='if aggregate is needed, feed bagcount, else 1')
 parser.add_argument('--regression', '-reg', type=str2bool, default='False', help='Regression or Classification')
-parser.add_argument('--inference_only', '-infer', type=str2bool, default='False', help='Inference to test set')
+# parser.add_argument('--inference_only', '-infer', type=str2bool, default='False', help='Inference to test set')
 parser.add_argument('--attr_imp', type=str2bool, default='False', help='get the attribute importance from stacker')
 args = parser.parse_args()
 data_path = abspath(args.path)
-# fns = listdir(data_path)
-# excluding_folder = ['analysis']
-# fns = [fn for fn in fns if not fn in excluding_folder]
-# fns = [fn for fn in fns if not 'tcca' in fn]
-# fns = [fn for fn in fns if fn != 'analysis']
-# fns = [data_path + '/' + fn for fn in fns]
-# feature_folders = [fn for fn in fns if isdir(fn)]
 
 feature_folders = common.data_dir_list(data_path)
 if len(feature_folders) == 0:
@@ -1173,23 +867,12 @@ p = load_properties(data_path)
 # # fold_values = range(int(p['foldCount']))
 assert ('foldAttribute' in p) or ('foldCount' in p)
 if 'foldAttribute' in p:
-    # input_fn = '%s/%s' % (feature_folders[0], 'data.arff')
-    # assert exists(input_fn)
-    # headers = load_arff_headers(input_fn)
-    # fold_values = headers[p['foldAttribute']]
     df = common.read_arff_to_pandas_df(os.path.join(feature_folders[0],'data.arff'))
     fold_values = df[p['foldAttribute']].unique()
 else:
     fold_values = range(int(p['foldCount']))
-# print(fold_values)
-# pca_fold_values = ['pca_{}'.format(fv) for fv in fold_values]
-# fold_values = ['validation']
-# fold_values = ['test']
-testing_bool = ('67890' in fold_values and 'foldAttribute' in p)
 
 
-if args.regression:
-    main_regression(args.path, fold_values, args.aggregate, args.inference_only)
-else:
-    main_classification(args.path, fold_values, args.aggregate, args.inference_only, args.attr_imp)
-    # main(os.path.join(args.path, 'pca_EI'), pca_fold_values, args.aggregate)
+
+
+main_classification(args.path, fold_values, args.aggregate, args.attr_imp)
