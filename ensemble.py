@@ -248,7 +248,7 @@ def selection(fold, seedval, path, agg, subject_model=False,
                pd.DataFrame.from_records(test_performance), \
                get_predictions(train_df, best_ensemble, fold, seedval)
 
-def thres_fmax(train_label_df, train_pred_df):
+def thres_fmax(train_label_df, train_pred_df, testing_bool=False):
     if testing_bool:
         fmax_training = common.fmeasure_score(train_label_df, train_pred_df)
         thres = fmax_training['thres']
