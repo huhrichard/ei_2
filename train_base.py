@@ -35,7 +35,7 @@ def str2bool(v):
 parser = argparse.ArgumentParser(description='Feed some bsub parameters')
 parser.add_argument('--path', '-P', type=str, required=True, help='data path')
 parser.add_argument('--queue', '-Q', type=str, default='premium', help='LSF queue to submit the job')
-parser.add_argument('--node', '-N', type=str, default='32', help='number of node requested')
+parser.add_argument('--node', '-N', type=str, default='30', help='number of node requested')
 parser.add_argument('--time', '-T', type=str, default='20:00', help='number of hours requested')
 parser.add_argument('--memory', '-M', type=str, default='10000', help='memory requsted in MB')
 parser.add_argument('--classpath', '-CP', type=str, default='./weka.jar', help='default weka path')
@@ -92,7 +92,10 @@ id_col = p['idAttribute']
 label_col = p['classAttribute']
 jobs_fn = "temp_train_base_{}_{}.jobs".format(data_source_dir, data_name)
 job_file = open(jobs_fn, 'w')
-job_file.write('module load groovy\n')
+if not args.hpc:
+    job_file.write('module load groovy\n')
+
+    
 def preprocessing():
     # print(arff_list[0].shape)
     # print(arff_list[0]['fold'])
