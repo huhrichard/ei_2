@@ -95,7 +95,7 @@ job_file = open(jobs_fn, 'w')
 if not args.hpc:
     job_file.write('module load groovy\n')
 
-    
+
 def preprocessing():
     # print(arff_list[0].shape)
     # print(arff_list[0]['fold'])
