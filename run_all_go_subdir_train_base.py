@@ -146,14 +146,15 @@ if __name__ == "__main__":
                 if root == cat_dir:
                     print(dirs)
                     for dir in dirs:
-                        go_scratch_dir = os.path.join(cat_dir, dir)
-                        print(go_scratch_dir)
+                        if (not 'analysis' in dir) and (not 'weka.' in dir):
+                            go_scratch_dir = os.path.join(cat_dir, dir)
+                            print(go_scratch_dir)
 
-                        if args.attr_imp is False:
-                            python_cmd_train = 'python train_base.py --path {}'.format(go_scratch_dir)
-                        else:
-                            python_cmd_train = 'python train_base.py --path {} --attr_imp True'.format(go_scratch_dir)
-                        write_submit_del_job(go_scratch_dir, python_cmd=python_cmd_train)
+                            if args.attr_imp is False:
+                                python_cmd_train = 'python train_base.py --path {}'.format(go_scratch_dir)
+                            else:
+                                python_cmd_train = 'python train_base.py --path {} --attr_imp True'.format(go_scratch_dir)
+                            write_submit_del_job(go_scratch_dir, python_cmd=python_cmd_train)
         # else:
         #     break
         # jobs_list.append(python_cmd_train)

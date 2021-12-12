@@ -134,26 +134,27 @@ if __name__ == "__main__":
             if root == cat_dir:
                 print(dirs)
                 for dir in dirs:
-                    go_scratch_dir = os.path.join(root, dir)
-                    if go_scratch_dir != cat_dir:
-                        print(go_scratch_dir)
-                        data = go_scratch_dir.split('/')[-1]
-                        data_dir = go_scratch_dir.split('/')[-2]
-                        if data_dir.split('_')[-1] == 'EI':
-                            # p = subprocess.Popen('python tcca_projection.py --path {}'.format(go_dir))
-                            # p.wait()
-                            # python_cmd_list.append('python tcca_projection.py --path {}'.format(go_dir))
-                            fns = listdir(go_scratch_dir)
-                            fns = [fn for fn in fns if not fn in excluding_folder]
-                            fns = [os.path.join(go_scratch_dir, fn) for fn in fns]
-                            feature_folders = [fn for fn in fns if isdir(fn)]
-                            for f_dir in feature_folders:
-                                jobs_list.append('python ensemble.py --path {}'.format(f_dir))
+                    if (not 'analysis' in dir) and (not 'weka.' in dir):
+                        go_scratch_dir = os.path.join(root, dir)
+                        if go_scratch_dir != cat_dir:
+                            print(go_scratch_dir)
+                            data = go_scratch_dir.split('/')[-1]
+                            data_dir = go_scratch_dir.split('/')[-2]
+                            if data_dir.split('_')[-1] == 'EI':
+                                # p = subprocess.Popen('python tcca_projection.py --path {}'.format(go_dir))
+                                # p.wait()
+                                # python_cmd_list.append('python tcca_projection.py --path {}'.format(go_dir))
+                                fns = listdir(go_scratch_dir)
+                                fns = [fn for fn in fns if not fn in excluding_folder]
+                                fns = [os.path.join(go_scratch_dir, fn) for fn in fns]
+                                feature_folders = [fn for fn in fns if isdir(fn)]
+                                for f_dir in feature_folders:
+                                    jobs_list.append('python ensemble.py --path {}'.format(f_dir))
 
-                        if args.attr_imp is False:
-                            jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir))
-                        else:
-                            jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir) + ' --attr_imp True')
+                            if args.attr_imp is False:
+                                jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir))
+                            else:
+                                jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir) + ' --attr_imp True')
             else:
                 break
         jobs_txt.write('\n'.join(jobs_list))
