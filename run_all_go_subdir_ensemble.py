@@ -129,12 +129,13 @@ if __name__ == "__main__":
             root, dirs, files = go_job
             num_sep = cat_dir.count(os.path.sep)
             num_sep_this = root.count(os.path.sep)
-            print(root)
-            print(cat_dir)
+            # print(root)
+            # print(cat_dir)
             if root == cat_dir:
-                print(dirs)
+                # print(dirs)
                 for dir in dirs:
                     if (not 'analysis' in dir) and (not 'weka.' in dir):
+                        # print(dir)
                         go_scratch_dir = os.path.join(root, dir)
                         if go_scratch_dir != cat_dir:
                             print(go_scratch_dir)
