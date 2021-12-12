@@ -30,7 +30,7 @@ base_path = args.path
 script_name = args.script
 attr_imp = args.attr_imp
 
-cmd_str = 'python {} --path {} --attr_imp {}'
+cmd_str = 'python {} --path {} --by_jobf false --attr_imp {}'
 for m in list_of_method:
     # if 'ensemble' in script_name:
     #     cmd_str = cmd_str +
