@@ -122,7 +122,7 @@ if __name__ == "__main__":
         jobs_txt.close()
         write_submit_del_job(args.path, jobs_n)
     else:
-        g_jobs_fstream = open(g_jobs_file[0], "r").read().split('\n')
+        # g_jobs_fstream = open(g_jobs_file[0], "r").read().split('\n')
         # for go_job in g_jobs_fstream:
         for go_job in os.walk(cat_dir, topdown=True):
             # print(go_job)
