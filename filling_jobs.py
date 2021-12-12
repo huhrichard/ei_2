@@ -8,7 +8,9 @@ cd_df = pd.read_csv('./plot/cd_csv/cd_input_{}_{}_fmax.csv'.format(term, annotat
 
 annotation_understroke = annotation.replace('-', '_')
 
-data_list = ['EI', 'mashup', 'deepNF']
+data_list = ['EI',
+             # 'mashup', 'deepNF'
+             ]
 
 for data in data_list:
     fn = 'EIdata_{}_{}_{}.jobs'.format(annotation_understroke, term, data)
