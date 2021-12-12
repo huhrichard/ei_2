@@ -26,7 +26,7 @@ parser.add_argument('--classpath', '-CP', type=str,default='./weka.jar', help='p
 parser.add_argument('--hpc', '-MIN', type=str2bool,default='true', help='use hpc cluster or not')
 parser.add_argument('--term_prefix', type=str, default='GO', help='term_prefix')
 parser.add_argument('--attr_imp', type=str2bool, default='false', help='attribute importance')
-
+parser.add_argument('--by_jobf', type=str2bool, default='True', help='submit jobs by the .jobs file')
 parser.add_argument('--seed', '-S', type=str,default='1', help='the seed use to generate cross-validataion data')
 
 args = parser.parse_args()
@@ -92,47 +92,73 @@ if __name__ == "__main__":
     jobs_txt = open(jobs_n, 'w')
     jobs_list = []
     python_cmd_list = []
-    g_jobs_fstream = open(g_jobs_file[0], "r").read().split('\n')
-    for go_job in g_jobs_fstream:
-    # for go_job in os.walk(cat_dir, topdown=True):
-    #     # print(go_job)
-    #     root, dirs, files = go_job
-    #     num_sep = cat_dir.count(os.path.sep)
-    #     num_sep_this = root.count(os.path.sep)
-    #     print(root)
-    #     print(cat_dir)
-    #     if root == cat_dir:
-    #         print(dirs)
-    #         for dir in dirs:
-    #             go_scratch_dir = os.path.join(root, dir)
-    #             if go_scratch_dir != cat_dir:
-    #                 print(go_scratch_dir)
-        if len(go_job.split(' ')) > 1:
-            term_name = go_job.split(' ')[2].replace(':', '')
-            go_scratch_dir = scratch_path+jobs_prefix+'/'+term_name
+    if args.by_jobf is True:
+        g_jobs_fstream = open(g_jobs_file[0], "r").read().split('\n')
+        for go_job in g_jobs_fstream:
+            if len(go_job.split(' ')) > 1:
+                term_name = go_job.split(' ')[2].replace(':', '')
+                go_scratch_dir = scratch_path+jobs_prefix+'/'+term_name
 
-                    # data = go_scratch_dir.split('/')[-1]
-            data_dir = go_scratch_dir.split('/')[-2]
-            if data_dir.split('_')[-1] == 'EI':
-                # p = subprocess.Popen('python tcca_projection.py --path {}'.format(go_dir))
-                # p.wait()
-                # python_cmd_list.append('python tcca_projection.py --path {}'.format(go_dir))
-                fns = listdir(go_scratch_dir)
-                fns = [fn for fn in fns if not fn in excluding_folder]
-                fns = [os.path.join(go_scratch_dir, fn) for fn in fns]
-                feature_folders = [fn for fn in fns if isdir(fn)]
-                for f_dir in feature_folders:
-                    jobs_list.append('python ensemble.py --path {}'.format(f_dir))
+                        # data = go_scratch_dir.split('/')[-1]
+                data_dir = go_scratch_dir.split('/')[-2]
+                if data_dir.split('_')[-1] == 'EI':
+                    # p = subprocess.Popen('python tcca_projection.py --path {}'.format(go_dir))
+                    # p.wait()
+                    # python_cmd_list.append('python tcca_projection.py --path {}'.format(go_dir))
+                    fns = listdir(go_scratch_dir)
+                    fns = [fn for fn in fns if not fn in excluding_folder]
+                    fns = [os.path.join(go_scratch_dir, fn) for fn in fns]
+                    feature_folders = [fn for fn in fns if isdir(fn)]
+                    for f_dir in feature_folders:
+                        jobs_list.append('python ensemble.py --path {}'.format(f_dir))
 
-            if args.attr_imp is False:
-                jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir))
+                if args.attr_imp is False:
+                    jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir))
+                else:
+                    jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir) + ' --attr_imp True')
             else:
-                jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir) + ' --attr_imp True')
-        else:
-            break
-    jobs_txt.write('\n'.join(jobs_list))
-    jobs_txt.close()
-    write_submit_del_job(args.path, jobs_n)
+                break
+        jobs_txt.write('\n'.join(jobs_list))
+        jobs_txt.close()
+        write_submit_del_job(args.path, jobs_n)
+    else:
+        g_jobs_fstream = open(g_jobs_file[0], "r").read().split('\n')
+        # for go_job in g_jobs_fstream:
+        for go_job in os.walk(cat_dir, topdown=True):
+            # print(go_job)
+            root, dirs, files = go_job
+            num_sep = cat_dir.count(os.path.sep)
+            num_sep_this = root.count(os.path.sep)
+            print(root)
+            print(cat_dir)
+            if root == cat_dir:
+                print(dirs)
+                for dir in dirs:
+                    go_scratch_dir = os.path.join(root, dir)
+                    if go_scratch_dir != cat_dir:
+                        print(go_scratch_dir)
+                        data = go_scratch_dir.split('/')[-1]
+                        data_dir = go_scratch_dir.split('/')[-2]
+                        if data_dir.split('_')[-1] == 'EI':
+                            # p = subprocess.Popen('python tcca_projection.py --path {}'.format(go_dir))
+                            # p.wait()
+                            # python_cmd_list.append('python tcca_projection.py --path {}'.format(go_dir))
+                            fns = listdir(go_scratch_dir)
+                            fns = [fn for fn in fns if not fn in excluding_folder]
+                            fns = [os.path.join(go_scratch_dir, fn) for fn in fns]
+                            feature_folders = [fn for fn in fns if isdir(fn)]
+                            for f_dir in feature_folders:
+                                jobs_list.append('python ensemble.py --path {}'.format(f_dir))
+
+                        if args.attr_imp is False:
+                            jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir))
+                        else:
+                            jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir) + ' --attr_imp True')
+            else:
+                break
+        jobs_txt.write('\n'.join(jobs_list))
+        jobs_txt.close()
+        write_submit_del_job(args.path, jobs_n)
 
 
 

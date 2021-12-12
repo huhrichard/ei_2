@@ -37,6 +37,9 @@ parser.add_argument('--classpath', '-CP', type=str,default='./weka.jar', help='p
 parser.add_argument('--hpc', '-MIN', type=str2bool,default='true', help='use hpc cluster or not')
 parser.add_argument('--term_prefix', type=str, default='GO', help='term_prefix')
 parser.add_argument('--attr_imp', type=str2bool, default='false', help='term_prefix')
+parser.add_argument('--by_jobf', type=str2bool, default='True', help='submit jobs by the .jobs file')
+
+
 
 parser.add_argument('--seed', '-S', type=str,default='1', help='the seed use to generate cross-validataion data')
 args = parser.parse_args()
@@ -115,31 +118,42 @@ if __name__ == "__main__":
     # system('module load groovy')
 
     cat_dir = args.path
-    # jobs_fstream = os.listdir(cat_dir)
-    jobs_fstream = open(jobs_file[0], "r").read().split('\n')
-    for go_job in jobs_fstream:
-        dir = go_job.split(' ')[2].replace(':', '')
-        # if True:
-
-
-    # for go_job in os.walk(cat_dir, topdown=True):
     #
-    #     root, dirs, files = go_job
-    #     num_sep = cat_dir.count(os.path.sep)
-    #     num_sep_this = root.count(os.path.sep)
-    #     print(root)
-    #     print(cat_dir)
-    #     if root == cat_dir:
-    #         print(dirs)
-    #         for dir in dirs:
-        go_scratch_dir = os.path.join(cat_dir, dir)
-        print(go_scratch_dir)
+    if args.by_jobf is True:
+        jobs_fstream = open(jobs_file[0], "r").read().split('\n')
+        for go_job in jobs_fstream:
+            dir = go_job.split(' ')[2].replace(':', '')
+            go_scratch_dir = os.path.join(cat_dir, dir)
+            print(go_scratch_dir)
 
-        if args.attr_imp is False:
-            python_cmd_train = 'python train_base.py --path {}'.format(go_scratch_dir)
-        else:
-            python_cmd_train = 'python train_base.py --path {} --attr_imp True'.format(go_scratch_dir)
-        write_submit_del_job(go_scratch_dir, python_cmd=python_cmd_train)
+            if args.attr_imp is False:
+                python_cmd_train = 'python train_base.py --path {}'.format(go_scratch_dir)
+            else:
+                python_cmd_train = 'python train_base.py --path {} --attr_imp True'.format(go_scratch_dir)
+            write_submit_del_job(go_scratch_dir, python_cmd=python_cmd_train)
+    else:
+        jobs_fstream = os.listdir(cat_dir)
+        for go_job in jobs_fstream:
+            # dir = go_job.split(' ')[2].replace(':', '')
+            # if True:
+
+            for go_job in os.walk(cat_dir, topdown=True):
+                root, dirs, files = go_job
+                num_sep = cat_dir.count(os.path.sep)
+                num_sep_this = root.count(os.path.sep)
+                print(root)
+                print(cat_dir)
+                if root == cat_dir:
+                    print(dirs)
+                    for dir in dirs:
+                        go_scratch_dir = os.path.join(cat_dir, dir)
+                        print(go_scratch_dir)
+
+                        if args.attr_imp is False:
+                            python_cmd_train = 'python train_base.py --path {}'.format(go_scratch_dir)
+                        else:
+                            python_cmd_train = 'python train_base.py --path {} --attr_imp True'.format(go_scratch_dir)
+                        write_submit_del_job(go_scratch_dir, python_cmd=python_cmd_train)
         # else:
         #     break
         # jobs_list.append(python_cmd_train)
