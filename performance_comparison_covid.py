@@ -99,13 +99,13 @@ if __name__ == "__main__":
 
     dict_suffix = {'EI': 'Ensemble\nIntegration',
                    # 'EI_PowerSet':'Ensemble Integration\nPower Set',
-                   'demographics': 'Demo-\ngraphics\n(11)',
+                   'demographics': 'Admission\n(11)',
                    # 'labs':'Laboratory\ntests',
                    'labs': 'Lab\ntests\n(49)',
                    # 'medications': 'Medica-\ntions\n(26)',
                    'comorbidities': 'Co-morbi-\ndities\n(19)',
                    'vitals': 'Vital\nsigns\n(6)',
-                   # 'concatenated': 'Concat-\nenated\nAll',
+                   'concatenated': 'Concat-\nenated\nAll',
                    'xgboost': 'XGBoost'}
 
     cp = sns.color_palette(n_colors=len(dict_suffix))

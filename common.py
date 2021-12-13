@@ -76,7 +76,8 @@ def f_max(labels, predictions, thres=None, beta = 1.0, pos_label = 1):
         Radivojac, P. et al. (2013). A Large-Scale Evaluation of Computational Protein Function Prediction. Nature Methods, 10(3), 221-227.
         Manning, C. D. et al. (2008). Evaluation in Information Retrieval. In Introduction to Information Retrieval. Cambridge University Press.
     """
-    precision, recall, threshold = sklearn.metrics.precision_recall_curve(labels, predictions, pos_label)
+    precision, recall, threshold = sklearn.metrics.precision_recall_curve(labels, predictions,
+                                                                          pos_label=pos_label)
     f1 = (1 + beta**2) * (precision * recall) / ((beta**2 * precision) + recall)
     # print(threshold)
     if len(threshold[where(f1==nanmax(f1))]) > 1:
