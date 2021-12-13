@@ -273,7 +273,7 @@ if __name__ == "__main__":
         boxplot with only deceased indicator
         """
         deceased_outcome_since_prefix = 'DECEASED_AT_{}DAYS'
-        deceased_outcome_since_prefix_plot = 'Deceased in days'
+        deceased_outcome_since_prefix_plot = 'Deceased in {}days'
         outcomes_newline_dict = {'DECEASED_INDICATOR': 'Deceased Indicator'}
         # outcomes = {'DECEASED_INDICATOR': 'DECEASED\nINDICATOR'}
         # deceased_days_timeframe = [3, 5, 7, 10]
