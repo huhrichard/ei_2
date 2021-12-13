@@ -272,58 +272,71 @@ if __name__ == "__main__":
         """
         boxplot with only deceased indicator
         """
-        performance_df_cat_di_only = performance_df_cat.loc[performance_df_cat['data_name'] == 'DECEASED_INDICATOR']
-
-        xgb_series = performance_df_cat_di_only.loc[performance_df_cat_di_only['Method'] == 'XGBoost']
-        performance_df_cat_di_only = performance_df_cat_di_only.loc[performance_df_cat_di_only['key'] != 'XGBoost']
-
-        print(performance_df_cat_di_only.columns)
-        print(xgb_series)
-
-        xgb_idx = sorted_dataname_list.index('XGBoost')
-        sorted_cp_no_xgb = sorted_cp.copy()
-        sorted_cp_no_xgb.pop(xgb_idx)
-
-        sorted_dataname_list_no_xgb = sorted_dataname_list.copy()
-        sorted_dataname_list_no_xgb.pop(xgb_idx)
-
-        fig3, ax3 = plt.subplots(1, 1, figsize=(12, 6))
-        ax3 = sns.boxplot(ax=ax3, y=mk, x='Method',
-                          data=performance_df_cat_di_only, palette=sorted_cp_no_xgb, order=sorted_dataname_list_no_xgb,
-                          linewidth=2, width=0.5)
-
-        ax3.axhline(y=xgb_series[mk].values, color='r', ls='--', label='XGBoost')
-        # for tick in ax3.get_xticklabels():
-        #     tick.set_rotation(45)
-        #     tick.set_horizontalalignment("right")
-        ax3.set_ylabel(ylabel, fontsize=22, fontweight='semibold')
-        ax3.set_xlabel('')
-        ax3.set_title('Deceased Indicator', fontweight='semibold')
-        ax3.legend(loc='upper right')
-        for tick in ax3.get_xticklabels():
-            tick.set_fontsize(14)
-            # tick.set_rotation(45)
-            tick.set_fontweight('semibold')
-            # tick.set_horizontalalignment("right")
-
-        for tick in ax3.get_yticklabels():
-            tick.set_fontsize(16)
-            tick.set_fontweight('semibold')
-        fig3.savefig('{}{}{}_{}_comparison_di_only.pdf'.format(plot_dir, 'covid19/', mk, file_prefix), bbox_inches="tight")
-
         deceased_outcome_since_prefix = 'DECEASED_AT_{}DAYS'
-        deceased_outcome_since_prefix_plot = 'DECEASED\nAT_{}DAYS'
-        outcomes = {'DECEASED_INDICATOR': 'DECEASED\nINDICATOR'}
+        deceased_outcome_since_prefix_plot = 'Deceased in days'
+        outcomes_newline_dict = {'DECEASED_INDICATOR': 'Deceased Indicator'}
         # outcomes = {'DECEASED_INDICATOR': 'DECEASED\nINDICATOR'}
         # deceased_days_timeframe = [3, 5, 7, 10]
         deceased_days_timeframe = [10, 7, 5, 3]
         for dday in deceased_days_timeframe:
             # outcomes.append(deceased_outcome_since_prefix.format(dday))
-            outcomes[deceased_outcome_since_prefix.format(dday)] = deceased_outcome_since_prefix_plot.format(dday)
+            outcomes_newline_dict[deceased_outcome_since_prefix.format(dday)] = deceased_outcome_since_prefix_plot.format(dday)
             #
 
-        ensemble_df_cat.replace(outcomes, inplace=True)
-        outcomes_order = [v for k, v in outcomes.items()]
+        for out_k, out_v in outcomes_newline_dict.items():
+            performance_df_cat_di_only = performance_df_cat.loc[performance_df_cat['data_name'] == out_k]
+
+            xgb_series = performance_df_cat_di_only.loc[performance_df_cat_di_only['Method'] == 'XGBoost']
+            performance_df_cat_di_only = performance_df_cat_di_only.loc[performance_df_cat_di_only['key'] != 'XGBoost']
+
+            print(performance_df_cat_di_only.columns)
+            print(xgb_series)
+
+            xgb_idx = sorted_dataname_list.index('XGBoost')
+            sorted_cp_no_xgb = sorted_cp.copy()
+            sorted_cp_no_xgb.pop(xgb_idx)
+
+            sorted_dataname_list_no_xgb = sorted_dataname_list.copy()
+            sorted_dataname_list_no_xgb.pop(xgb_idx)
+
+            fig3, ax3 = plt.subplots(1, 1, figsize=(12, 6))
+            ax3 = sns.boxplot(ax=ax3, y=mk, x='Method',
+                              data=performance_df_cat_di_only, palette=sorted_cp_no_xgb, order=sorted_dataname_list_no_xgb,
+                              linewidth=2, width=0.5)
+
+            ax3.axhline(y=xgb_series[mk].values, color='r', ls='--', label='XGBoost')
+            # for tick in ax3.get_xticklabels():
+            #     tick.set_rotation(45)
+            #     tick.set_horizontalalignment("right")
+            ax3.set_ylabel(ylabel, fontsize=22, fontweight='semibold')
+            ax3.set_xlabel('')
+            ax3.set_title(out_v, fontweight='semibold')
+            ax3.legend(loc='upper right')
+            for tick in ax3.get_xticklabels():
+                tick.set_fontsize(14)
+                # tick.set_rotation(45)
+                tick.set_fontweight('semibold')
+                # tick.set_horizontalalignment("right")
+
+            for tick in ax3.get_yticklabels():
+                tick.set_fontsize(16)
+                tick.set_fontweight('semibold')
+            fig3.savefig('{}{}{}_{}_comparison_{}.pdf'.format(plot_dir, 'covid19/', mk,
+                                                              file_prefix, out_k), bbox_inches="tight")
+
+        deceased_outcome_since_prefix = 'DECEASED_AT_{}DAYS'
+        deceased_outcome_since_prefix_plot = 'Deceased\nin {}days'
+        outcomes_newline_dict = {'DECEASED_INDICATOR': 'Deceased Indicator'}
+        # outcomes = {'DECEASED_INDICATOR': 'DECEASED\nINDICATOR'}
+        # deceased_days_timeframe = [3, 5, 7, 10]
+        deceased_days_timeframe = [10, 7, 5, 3]
+        for dday in deceased_days_timeframe:
+            # outcomes.append(deceased_outcome_since_prefix.format(dday))
+            outcomes_newline_dict[deceased_outcome_since_prefix.format(dday)] = deceased_outcome_since_prefix_plot.format(dday)
+
+
+        ensemble_df_cat.replace(outcomes_newline_dict, inplace=True)
+        outcomes_order = [v for k, v in outcomes_newline_dict.items()]
 
         sorted_dataname_dict = {s:s.replace('-\n', '').replace('\n',' ') for s in sorted_dataname_list}
         sorted_dataname_list = [v for k,v in sorted_dataname_dict.items()]
