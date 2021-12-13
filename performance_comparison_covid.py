@@ -273,14 +273,19 @@ if __name__ == "__main__":
         boxplot with only deceased indicator
         """
         deceased_outcome_since_prefix = 'DECEASED_AT_{}DAYS'
-        deceased_outcome_since_prefix_plot = 'Deceased in {}days'
-        outcomes_newline_dict = {'DECEASED_INDICATOR': 'Deceased Indicator'}
+        # deceased_outcome_since_prefix_plot = 'Deceased in {}days'
+        outcomes_newline_dict = {'DECEASED_INDICATOR': 'Deceased Indicator',
+                                 'DECEASED_in_0-3_DAYS': 'Deceased in 0 to 3 days',
+                                 'DECEASED_in_3-5_DAYS': 'Deceased in 3 to 5 days',
+                                 'DECEASED_in_5-7_DAYS': 'Deceased in 5 to 7 days',
+                                 'DECEASED_in_7-10_DAYS': 'Deceased in 7 to 10 days',
+                                 }
         # outcomes = {'DECEASED_INDICATOR': 'DECEASED\nINDICATOR'}
         # deceased_days_timeframe = [3, 5, 7, 10]
-        deceased_days_timeframe = [10, 7, 5, 3]
-        for dday in deceased_days_timeframe:
+        # deceased_days_timeframe = [10, 7, 5, 3]
+        # for dday in deceased_days_timeframe:
             # outcomes.append(deceased_outcome_since_prefix.format(dday))
-            outcomes_newline_dict[deceased_outcome_since_prefix.format(dday)] = deceased_outcome_since_prefix_plot.format(dday)
+            # outcomes_newline_dict[deceased_outcome_since_prefix.format(dday)] = deceased_outcome_since_prefix_plot.format(dday)
             #
 
         for out_k, out_v in outcomes_newline_dict.items():
@@ -326,14 +331,20 @@ if __name__ == "__main__":
 
         deceased_outcome_since_prefix = 'DECEASED_AT_{}DAYS'
         deceased_outcome_since_prefix_plot = 'Deceased\nin {}days'
-        outcomes_newline_dict = {'DECEASED_INDICATOR': 'Deceased Indicator'}
+        # outcomes_newline_dict = {'DECEASED_INDICATOR': 'Deceased\nIndicator',}
         # outcomes = {'DECEASED_INDICATOR': 'DECEASED\nINDICATOR'}
         # deceased_days_timeframe = [3, 5, 7, 10]
-        deceased_days_timeframe = [10, 7, 5, 3]
-        for dday in deceased_days_timeframe:
-            # outcomes.append(deceased_outcome_since_prefix.format(dday))
-            outcomes_newline_dict[deceased_outcome_since_prefix.format(dday)] = deceased_outcome_since_prefix_plot.format(dday)
+        # deceased_days_timeframe = [10, 7, 5, 3]
+        # for dday in deceased_days_timeframe:
+        #     # outcomes.append(deceased_outcome_since_prefix.format(dday))
+        #     outcomes_newline_dict[deceased_outcome_since_prefix.format(dday)] = deceased_outcome_since_prefix_plot.format(dday)
 
+        outcomes_newline_dict = {'DECEASED_INDICATOR': 'Deceased\nIndicator',
+                                 'DECEASED_in_0-3_DAYS': 'Deceased\nin 0 to 3 days',
+                                 'DECEASED_in_3-5_DAYS': 'Deceased\nin 3 to 5 days',
+                                 'DECEASED_in_5-7_DAYS': 'Deceased\nin 5 to 7 days',
+                                 'DECEASED_in_7-10_DAYS': 'Deceased\nin 7 to 10 days',
+                                 }
 
         ensemble_df_cat.replace(outcomes_newline_dict, inplace=True)
         outcomes_order = [v for k, v in outcomes_newline_dict.items()]
