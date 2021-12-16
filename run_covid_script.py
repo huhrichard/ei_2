@@ -8,7 +8,7 @@ from common import str2bool
 # base_path = '/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR/'
 
 
-list_of_method = ['EI', 'demographics',
+list_of_method = ['EI', 'admission',
                   'labs',
                   # 'medications',
                   'vitals', 'concatenated',
