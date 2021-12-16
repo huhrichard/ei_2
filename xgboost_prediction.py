@@ -84,7 +84,7 @@ def xgboost_predictions_result(outcome_path):
 
         train_label = train_nf[label_col]
 
-        xgb_clf = XGBClassifier()
+        xgb_clf = XGBClassifier(random_state=64)
         xgb_clf.fit(train_feat, train_label)
         test_prediction = xgb_clf.predict_proba(test_feat)[:, 1]
         # test_predictions.append(test_prediction)
