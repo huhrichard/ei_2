@@ -24,8 +24,8 @@ from sklearn.metrics import fbeta_score, make_scorer
 from xgboost import XGBClassifier, XGBRegressor
 from sklearn.model_selection import GridSearchCV
 from sklearn.svm import SVC, LinearSVR
-from beat_pd_scoring_function import weighted_mse, \
-    measurement_subject_df, measurement_id_col, subject_id_col
+# from beat_pd_scoring_function import weighted_mse, \
+#     measurement_subject_df, measurement_id_col, subject_id_col
 from sklearn.preprocessing import StandardScaler
 
 # XGBoost?
@@ -49,7 +49,7 @@ from sklearn.utils import check_random_state
 
 warnings.filterwarnings("ignore")
 
-wmse_sklearn = make_scorer(weighted_mse, greater_is_better=False)
+# wmse_sklearn = make_scorer(weighted_mse, greater_is_better=False)
 fmax_sklearn = make_scorer(common.f_max, greater_is_better=True, needs_proba=True)
 auprc_sklearn = make_scorer(common.auprc, greater_is_better=True, needs_proba=True)
 
@@ -74,10 +74,10 @@ def checkFolder(path, fold_count=5):
 def get_performance(df, ensemble, fold, seedval, regression=False):
     labels = df.index.get_level_values('label').values
     predictions = df[ensemble].mean(axis=1)
-    if regression:
-        score = weighted_mse(labels, predictions)
-    else:
-        score = common.fmeasure_score(labels, predictions)['F']
+    # if regression:
+    #     score = weighted_mse(labels, predictions)
+    # else:
+    score = common.fmeasure_score(labels, predictions)['F']
 
     return {'fold': fold, 'seed': seedval, 'score': score, 'ensemble': ensemble[-1],
             'ensemble_size': len(ensemble)}
@@ -158,95 +158,95 @@ def selection(fold, seedval, path, agg, subject_model=False,
     train_df = common.unbag(train_df, agg)
 
     test_df = common.unbag(test_df, agg)
-    if regression:
-        scoring_func = weighted_mse
-    if subject_model:
-        measurement_id_train = train_df.index.get_level_values('id')
-        measurement_id_test = test_df.index.get_level_values('id')
-        # print(measurement_id_test)
-        subset_ms_df = measurement_subject_df.loc[measurement_subject_df[measurement_id_col].isin(measurement_id_train)]
-        subject_id_list = subset_ms_df[subject_id_col].unique()
-        # print(subject_id_list)
-        # m_count_per_subject = subset_ms_df_train[subject_id_col].value_counts()
-        # print(measurement_id_train)
-
-        test_pred_df_list = []
-        test_record_list = []
-        train_pred_df_list = []
-
-        for subject_id in subject_id_list:
-            # print(subject_id)
-
-            measurements_of_subject = measurement_subject_df.loc[(measurement_subject_df[subject_id_col] == subject_id), measurement_id_col]
-
-            measurements_train_bool_of_subject = measurement_id_train.isin(measurements_of_subject)
-            measurements_test_bool_of_subject = measurement_id_test.isin(measurements_of_subject)
-
-            train_df_per_subject = train_df.loc[measurements_train_bool_of_subject]
-            # print(train_df_per_subject)
-            train_label_per_subject = train_labels[measurements_train_bool_of_subject]
-            test_df_per_subject = test_df.loc[measurements_test_bool_of_subject]
-            # print(test_df_per_subject)
-            test_label_per_subject = test_labels[measurements_test_bool_of_subject]
-
-            best_classifiers_per_subject = train_df_per_subject.apply(lambda x: weighted_mse(train_label_per_subject, x)).sort_values(
-                ascending=greater_is_better)
-            # print(best_classifiers)
-            train_performance = []
-            test_performance = []
-            ensemble = []
-            for i in range(min(max_ensemble_size, len(best_classifiers_per_subject))):
-                best_candidate = select_candidate_enhanced(train_df_per_subject, train_label_per_subject,
-                                                           best_classifiers_per_subject, ensemble, i,
-                                                           scoring_func=scoring_func)
-                ensemble.append(best_candidate)
-                train_performance.append(get_performance(train_df_per_subject, ensemble, fold, seedval, regression=regression))
-                test_performance.append(get_performance(test_df_per_subject, ensemble, fold, seedval, regression=regression))
-            train_performance_df = pd.DataFrame.from_records(train_performance)
-            best_ensemble_size = common.get_best_performer(train_performance_df, _greater_is_better=greater_is_better).ensemble_size.values
-            # print(best_ensemble_size)
-            best_ensemble = train_performance_df.ensemble[:best_ensemble_size.item(0) + 1]
-
-            test_pred_df = get_predictions(test_df_per_subject, best_ensemble, fold, seedval)
-            test_record = pd.DataFrame.from_records(test_performance)
-            train_pred_df = get_predictions(train_df_per_subject, best_ensemble, fold, seedval)
-            # print(test_pred_df)
-
-            test_pred_df_list.append(test_pred_df)
-            test_record_list.append(test_record)
-            train_pred_df_list.append(train_pred_df)
-
-        return pd.concat(test_pred_df_list), pd.concat(test_record_list), pd.concat(train_pred_df_list)
-
-        # return get_predictions(test_df, best_ensemble, fold, seedval), \
-        #        pd.DataFrame.from_records(test_performance), \
-        #        get_predictions(train_df, best_ensemble, fold, seedval)
-
-    else:
+    # if regression:
+    #     scoring_func = weighted_mse
+    # if subject_model:
+    #     measurement_id_train = train_df.index.get_level_values('id')
+    #     measurement_id_test = test_df.index.get_level_values('id')
+    #     # print(measurement_id_test)
+    #     subset_ms_df = measurement_subject_df.loc[measurement_subject_df[measurement_id_col].isin(measurement_id_train)]
+    #     subject_id_list = subset_ms_df[subject_id_col].unique()
+    #     # print(subject_id_list)
+    #     # m_count_per_subject = subset_ms_df_train[subject_id_col].value_counts()
+    #     # print(measurement_id_train)
+    #
+    #     test_pred_df_list = []
+    #     test_record_list = []
+    #     train_pred_df_list = []
+    #
+    #     for subject_id in subject_id_list:
+    #         # print(subject_id)
+    #
+    #         measurements_of_subject = measurement_subject_df.loc[(measurement_subject_df[subject_id_col] == subject_id), measurement_id_col]
+    #
+    #         measurements_train_bool_of_subject = measurement_id_train.isin(measurements_of_subject)
+    #         measurements_test_bool_of_subject = measurement_id_test.isin(measurements_of_subject)
+    #
+    #         train_df_per_subject = train_df.loc[measurements_train_bool_of_subject]
+    #         # print(train_df_per_subject)
+    #         train_label_per_subject = train_labels[measurements_train_bool_of_subject]
+    #         test_df_per_subject = test_df.loc[measurements_test_bool_of_subject]
+    #         # print(test_df_per_subject)
+    #         test_label_per_subject = test_labels[measurements_test_bool_of_subject]
+    #
+    #         best_classifiers_per_subject = train_df_per_subject.apply(lambda x: weighted_mse(train_label_per_subject, x)).sort_values(
+    #             ascending=greater_is_better)
+    #         # print(best_classifiers)
+    #         train_performance = []
+    #         test_performance = []
+    #         ensemble = []
+    #         for i in range(min(max_ensemble_size, len(best_classifiers_per_subject))):
+    #             best_candidate = select_candidate_enhanced(train_df_per_subject, train_label_per_subject,
+    #                                                        best_classifiers_per_subject, ensemble, i,
+    #                                                        scoring_func=scoring_func)
+    #             ensemble.append(best_candidate)
+    #             train_performance.append(get_performance(train_df_per_subject, ensemble, fold, seedval, regression=regression))
+    #             test_performance.append(get_performance(test_df_per_subject, ensemble, fold, seedval, regression=regression))
+    #         train_performance_df = pd.DataFrame.from_records(train_performance)
+    #         best_ensemble_size = common.get_best_performer(train_performance_df, _greater_is_better=greater_is_better).ensemble_size.values
+    #         # print(best_ensemble_size)
+    #         best_ensemble = train_performance_df.ensemble[:best_ensemble_size.item(0) + 1]
+    #
+    #         test_pred_df = get_predictions(test_df_per_subject, best_ensemble, fold, seedval)
+    #         test_record = pd.DataFrame.from_records(test_performance)
+    #         train_pred_df = get_predictions(train_df_per_subject, best_ensemble, fold, seedval)
+    #         # print(test_pred_df)
+    #
+    #         test_pred_df_list.append(test_pred_df)
+    #         test_record_list.append(test_record)
+    #         train_pred_df_list.append(train_pred_df)
+    #
+    #     return pd.concat(test_pred_df_list), pd.concat(test_record_list), pd.concat(train_pred_df_list)
+    #
+    #     # return get_predictions(test_df, best_ensemble, fold, seedval), \
+    #     #        pd.DataFrame.from_records(test_performance), \
+    #     #        get_predictions(train_df, best_ensemble, fold, seedval)
+    #
+    # else:
         # best_classifiers = train_df.apply(lambda x: common.fmeasure_score(train_labels, x)['F']).sort_values(
-        best_classifiers = train_df.apply(lambda x: scoring_func(train_labels, x)).sort_values(
-            ascending=greater_is_better)
-        # print(best_classifiers)
+    best_classifiers = train_df.apply(lambda x: scoring_func(train_labels, x)).sort_values(
+        ascending=greater_is_better)
+    # print(best_classifiers)
 
-        train_performance = []
-        test_performance = []
-        ensemble = []
-        for i in range(min(max_ensemble_size, len(best_classifiers))):
-            best_candidate = select_candidate_enhanced(train_df, train_labels, best_classifiers, ensemble, i,
-                                                       scoring_func=scoring_func)
-            ensemble.append(best_candidate)
-            train_performance.append(get_performance(train_df, ensemble, fold, seedval,
-                                                     regression=regression))
-            test_performance.append(get_performance(test_df, ensemble, fold, seedval,
-                                                    regression=regression))
-        train_performance_df = pd.DataFrame.from_records(train_performance)
-        best_ensemble_size = common.get_best_performer(train_performance_df,
-                                                       _greater_is_better=greater_is_better).ensemble_size.values
-        # print(best_ensemble_size)
-        best_ensemble = train_performance_df.ensemble[:best_ensemble_size.item(0) + 1]
-        return get_predictions(test_df, best_ensemble, fold, seedval), \
-               pd.DataFrame.from_records(test_performance), \
-               get_predictions(train_df, best_ensemble, fold, seedval)
+    train_performance = []
+    test_performance = []
+    ensemble = []
+    for i in range(min(max_ensemble_size, len(best_classifiers))):
+        best_candidate = select_candidate_enhanced(train_df, train_labels, best_classifiers, ensemble, i,
+                                                   scoring_func=scoring_func)
+        ensemble.append(best_candidate)
+        train_performance.append(get_performance(train_df, ensemble, fold, seedval,
+                                                 regression=regression))
+        test_performance.append(get_performance(test_df, ensemble, fold, seedval,
+                                                regression=regression))
+    train_performance_df = pd.DataFrame.from_records(train_performance)
+    best_ensemble_size = common.get_best_performer(train_performance_df,
+                                                   _greater_is_better=greater_is_better).ensemble_size.values
+    # print(best_ensemble_size)
+    best_ensemble = train_performance_df.ensemble[:best_ensemble_size.item(0) + 1]
+    return get_predictions(test_df, best_ensemble, fold, seedval), \
+           pd.DataFrame.from_records(test_performance), \
+           get_predictions(train_df, best_ensemble, fold, seedval)
 
 def thres_fmax(train_label_df, train_pred_df, testing_bool=False):
     if testing_bool:
@@ -374,9 +374,9 @@ def CES(path, fold_count=range(5), agg=1,
         if inference_only is True:
             predictions_scores.to_csv("{}/{}/{}".format(path, "analysis",'CES_test_predictions'))
             return {'weighted_mse': np.nan}
-        else:
-            weighted_mse_score = weighted_mse(predictions_df['label'].values, predictions_scores)
-            return {'weighted_mse': weighted_mse_score}
+        # else:
+        #     weighted_mse_score = weighted_mse(predictions_df['label'].values, predictions_scores)
+        #     return {'weighted_mse': weighted_mse_score}
     else:
         auc = '%.3f' % (sklearn.metrics.roc_auc_score(predictions_df.label, predictions_df.prediction))
         fmax = (common.fmeasure_score(predictions_df.label, predictions_df.prediction, thres=thres))
@@ -500,18 +500,18 @@ def aggregating_ensemble(path, fold_count=range(5), agg=1, median=False,
         output_df.to_csv(output_path, index=False)
         return {'weighted_mse': np.nan}
     else:
-        if regression:
-            weighted_mse_score = weighted_mse(labels, predictions)
-            return {'weighted_mse': weighted_mse_score}
-        else:
-            # thres = thres_fmax(train_label, _unbag_mean(train_df))
-            thres = thres_fmax(train_labels, train_dfs)
+        # if regression:
+        #     weighted_mse_score = weighted_mse(labels, predictions)
+        #     return {'weighted_mse': weighted_mse_score}
+        # else:
+        # thres = thres_fmax(train_label, _unbag_mean(train_df))
+        thres = thres_fmax(train_labels, train_dfs)
 
-            fmax = common.fmeasure_score(labels, predictions, thres)
-            auc = sklearn.metrics.roc_auc_score(labels, predictions)
-            auprc = common.auprc(labels, predictions)
+        fmax = common.fmeasure_score(labels, predictions, thres)
+        auc = sklearn.metrics.roc_auc_score(labels, predictions)
+        auprc = common.auprc(labels, predictions)
 
-            return {'f-measure': fmax, 'auc': auc, 'auprc': auprc}
+        return {'f-measure': fmax, 'auc': auc, 'auprc': auprc}
 
 
 
@@ -555,21 +555,21 @@ def best_base_predictors(path, fold_count=range(5), agg=1, regression=False):
     predictions = pd.concat(predictions)
 
     # need to be changed
-    if regression:
-        weighted_mse_score_list = [weighted_mse(labels, predictions.iloc[:, i]) for i in
-                                   range(len(predictions.columns))]
-        min_score = min(weighted_mse_score_list)
-        name_cls = predictions.columns.tolist()[np.argmin(weighted_mse_score_list)]
-        return {'weighted_mse': min_score, 'name': name_cls}
-    else:
+    # if regression:
+    #     weighted_mse_score_list = [weighted_mse(labels, predictions.iloc[:, i]) for i in
+    #                                range(len(predictions.columns))]
+    #     min_score = min(weighted_mse_score_list)
+    #     name_cls = predictions.columns.tolist()[np.argmin(weighted_mse_score_list)]
+    #     return {'weighted_mse': min_score, 'name': name_cls}
+    # else:
         # thres = thres_fmax(train_label, common.unbag(train_df, agg))
-        thres = None
-        fmax_list = [common.fmeasure_score(labels, predictions.iloc[:, i], thres=thres)['F'] for i in
-                     range(len(predictions.columns))]
-        auc_list = [sklearn.metrics.roc_auc_score(labels, predictions.iloc[:, i]) for i in
-                    range(len(predictions.columns))]
+    thres = None
+    fmax_list = [common.fmeasure_score(labels, predictions.iloc[:, i], thres=thres)['F'] for i in
+                 range(len(predictions.columns))]
+    auc_list = [sklearn.metrics.roc_auc_score(labels, predictions.iloc[:, i]) for i in
+                range(len(predictions.columns))]
 
-        return {'f-measure': max(fmax_list), 'auc': max(auc_list)}
+    return {'f-measure': max(fmax_list), 'auc': max(auc_list)}
 
 def reshape_base_pred_to_tensor(base_pred_df):
     base_pred_cols = base_pred_df.columns
@@ -620,85 +620,85 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df,
         test_df[:] = z_scaler.transform(test_df.values)
         # print(test_df)
 
-    if subject_model:
-        measurement_id_train = train_df.index.get_level_values('id')
-        measurement_id_test = test_df.index.get_level_values('id')
-        # print(measurement_id_test)
-        subset_ms_df = measurement_subject_df.loc[
-            measurement_subject_df[measurement_id_col].isin(measurement_id_train)]
-        subject_id_list = subset_ms_df[subject_id_col].unique()
-        test_predictions = []
-        train_predictions = []
-        test_labels_dummy = []
-        train_labels_dummy = []
-        for subject_id in subject_id_list:
-            # print(subject_id)
+    # if subject_model:
+    #     measurement_id_train = train_df.index.get_level_values('id')
+    #     measurement_id_test = test_df.index.get_level_values('id')
+    #     # print(measurement_id_test)
+    #     subset_ms_df = measurement_subject_df.loc[
+    #         measurement_subject_df[measurement_id_col].isin(measurement_id_train)]
+    #     subject_id_list = subset_ms_df[subject_id_col].unique()
+    #     test_predictions = []
+    #     train_predictions = []
+    #     test_labels_dummy = []
+    #     train_labels_dummy = []
+    #     for subject_id in subject_id_list:
+    #         # print(subject_id)
+    #
+    #         measurements_of_subject = measurement_subject_df.loc[
+    #             (measurement_subject_df[subject_id_col] == subject_id), measurement_id_col]
+    #
+    #         measurements_train_bool_of_subject = measurement_id_train.isin(measurements_of_subject)
+    #         measurements_test_bool_of_subject = measurement_id_test.isin(measurements_of_subject)
+    #
+    #         train_df_per_subject = train_df.loc[measurements_train_bool_of_subject]
+    #         # print(train_df_per_subject)
+    #         train_label_per_subject = train_labels[measurements_train_bool_of_subject]
+    #         test_df_per_subject = test_df.loc[measurements_test_bool_of_subject]
+    #         # print(test_df_per_subject)
+    #         test_label_per_subject = test_labels[measurements_test_bool_of_subject]
+    #         stacker = stacker.fit(train_df_per_subject, train_label_per_subject)
+    #
+    #         test_predictions.append(stacker.predict(test_df_per_subject))
+    #         train_predictions.append(stacker.predict(train_df_per_subject))
+    #         test_labels_dummy.append(test_label_per_subject)
+    #         train_labels_dummy.append(train_label_per_subject)
+    #
+    #     test_predictions = np.concatenate(test_predictions, axis=None)
+    #     train_predictions = np.concatenate(train_predictions, axis=None)
+    #     test_labels = np.concatenate(test_labels_dummy, axis=None)
+    #     train_labels = np.concatenate(train_labels_dummy, axis=None)
 
-            measurements_of_subject = measurement_subject_df.loc[
-                (measurement_subject_df[subject_id_col] == subject_id), measurement_id_col]
-
-            measurements_train_bool_of_subject = measurement_id_train.isin(measurements_of_subject)
-            measurements_test_bool_of_subject = measurement_id_test.isin(measurements_of_subject)
-
-            train_df_per_subject = train_df.loc[measurements_train_bool_of_subject]
-            # print(train_df_per_subject)
-            train_label_per_subject = train_labels[measurements_train_bool_of_subject]
-            test_df_per_subject = test_df.loc[measurements_test_bool_of_subject]
-            # print(test_df_per_subject)
-            test_label_per_subject = test_labels[measurements_test_bool_of_subject]
-            stacker = stacker.fit(train_df_per_subject, train_label_per_subject)
-
-            test_predictions.append(stacker.predict(test_df_per_subject))
-            train_predictions.append(stacker.predict(train_df_per_subject))
-            test_labels_dummy.append(test_label_per_subject)
-            train_labels_dummy.append(train_label_per_subject)
-
-        test_predictions = np.concatenate(test_predictions, axis=None)
-        train_predictions = np.concatenate(train_predictions, axis=None)
-        test_labels = np.concatenate(test_labels_dummy, axis=None)
-        train_labels = np.concatenate(train_labels_dummy, axis=None)
-
+    # else:
+    stacker = stacker.fit(train_df, train_labels)
+    # feat_imp = []
+    # if hasattr(stacker, 'feature_importances_'):
+    #     feat_imp = stacker.feature_importances_
+    # elif hasattr(stacker, 'coef_'):
+    #     feat_imp = stacker.coef_
+    # elif hasattr(stacker, 'theta_'):
+    #     feat_imp = stacker.theta_
+    # if len(feat_imp)>0:
+    #     # feat_imp = np.squeeze(feat_imp)
+    #     if len(feat_imp.shape) > 1:
+    #         feat_imp = feat_imp[-1,:]
+    #     # if not fold in stacked_df['fold']:
+    #     new_df = pd.DataFrame({'f_train_base':fscore_train_base,
+    #                            'f_test_base': fscore_test_base,
+    #                            # 'base': train_df_cols,
+    #                            'feat_imp': feat_imp,
+    #                            'base_data':'', 'base_cls':'', 'base_bag': ''
+    #                            })
+    #
+    #     split_str = pd.Series(train_df_cols).str.split('.',expand=True)
+    #     # print(split_str[0])
+    #     # new_df.loc[:,['base_data', 'base_cls', 'base_bag']] = ''
+    #     # new_df.loc[:,['base_data', 'base_cls', 'base_bag']] =
+    #     new_df.loc[:,'base_data'] = split_str[0]
+    #     new_df.loc[:,'base_cls'] = split_str[1]
+    #     new_df.loc[:,'base_bag'] = split_str[2]
+    #     new_df['fold'] = fold
+    #     new_df['stacker'] = stacker_name
+    #     # print(new_df.to_string())
+    #     stacked_df = pd.concat([stacked_df, new_df])
+    if hasattr(stacker, "predict_proba") and (not regression):
+        test_predictions = stacker.predict_proba(test_df)[:, 1]
+        train_predictions = stacker.predict_proba(train_df)[:, 1]
     else:
-        stacker = stacker.fit(train_df, train_labels)
-        # feat_imp = []
-        # if hasattr(stacker, 'feature_importances_'):
-        #     feat_imp = stacker.feature_importances_
-        # elif hasattr(stacker, 'coef_'):
-        #     feat_imp = stacker.coef_
-        # elif hasattr(stacker, 'theta_'):
-        #     feat_imp = stacker.theta_
-        # if len(feat_imp)>0:
-        #     # feat_imp = np.squeeze(feat_imp)
-        #     if len(feat_imp.shape) > 1:
-        #         feat_imp = feat_imp[-1,:]
-        #     # if not fold in stacked_df['fold']:
-        #     new_df = pd.DataFrame({'f_train_base':fscore_train_base,
-        #                            'f_test_base': fscore_test_base,
-        #                            # 'base': train_df_cols,
-        #                            'feat_imp': feat_imp,
-        #                            'base_data':'', 'base_cls':'', 'base_bag': ''
-        #                            })
-        #
-        #     split_str = pd.Series(train_df_cols).str.split('.',expand=True)
-        #     # print(split_str[0])
-        #     # new_df.loc[:,['base_data', 'base_cls', 'base_bag']] = ''
-        #     # new_df.loc[:,['base_data', 'base_cls', 'base_bag']] =
-        #     new_df.loc[:,'base_data'] = split_str[0]
-        #     new_df.loc[:,'base_cls'] = split_str[1]
-        #     new_df.loc[:,'base_bag'] = split_str[2]
-        #     new_df['fold'] = fold
-        #     new_df['stacker'] = stacker_name
-        #     # print(new_df.to_string())
-        #     stacked_df = pd.concat([stacked_df, new_df])
-        if hasattr(stacker, "predict_proba") and (not regression):
-            test_predictions = stacker.predict_proba(test_df)[:, 1]
-            train_predictions = stacker.predict_proba(train_df)[:, 1]
-        else:
-            test_predictions = stacker.predict(test_df)
-            train_predictions = stacker.predict(train_df)
-            if regression is False:
-                test_predictions = test_predictions[:, 1]
-                train_predictions = train_predictions[:, 1]
+        test_predictions = stacker.predict(test_df)
+        train_predictions = stacker.predict(train_df)
+        if regression is False:
+            test_predictions = test_predictions[:, 1]
+            train_predictions = train_predictions[:, 1]
 
     # print(stacker.coef_)
     if stacker_name == "LR.S":
