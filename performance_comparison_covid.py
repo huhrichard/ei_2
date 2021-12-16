@@ -365,7 +365,7 @@ if __name__ == "__main__":
         sorted_dataname_dict = {s:s.replace('-\n', '').replace('\n',' ') for s in sorted_dataname_list}
         sorted_dataname_list = [v for k,v in sorted_dataname_dict.items()]
         ensemble_df_cat.replace(sorted_dataname_dict, inplace=True)
-        fig2, ax2 = plt.subplots(1, 1, figsize=(16, 6))
+        fig2, ax2 = plt.subplots(1, 1, figsize=(18, 6))
         ax2 = sns.barplot(ax=ax2, y=best_metric_str, x='Outcome', hue='Method',
                           hue_order=sorted_dataname_list,
                           data=ensemble_df_cat, palette=sorted_cp,
@@ -386,5 +386,6 @@ if __name__ == "__main__":
         for tick in ax2.get_yticklabels():
             tick.set_fontsize(16)
             tick.set_fontweight('semibold')
+        ax2.legend(loc='upper right')
         fig2.savefig('{}{}{}_{}_bar_comparison.pdf'.format(plot_dir, 'covid19/', mk, file_prefix), bbox_inches="tight")
         ensemble_df_cat.to_csv(os.path.join(plot_dir, 'performance_cat_covid_{}.csv'.format(mk)))
