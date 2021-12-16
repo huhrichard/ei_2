@@ -133,29 +133,30 @@ if __name__ == "__main__":
             write_submit_del_job(go_scratch_dir, python_cmd=python_cmd_train)
     else:
         jobs_fstream = os.listdir(cat_dir)
-        for go_job in jobs_fstream:
+        # for go_job in jobs_fstream:
             # dir = go_job.split(' ')[2].replace(':', '')
             # if True:
 
-            for go_job in os.walk(cat_dir, topdown=True):
-                root, dirs, files = go_job
-                num_sep = cat_dir.count(os.path.sep)
-                num_sep_this = root.count(os.path.sep)
-                # print(root)
-                # print(cat_dir)
-                if root == cat_dir:
-                    # print(dirs)
-                    for dir in dirs:
-                        if (not 'analysis' in dir) and (not 'weka.' in dir):
-                            # print(dir)
-                            go_scratch_dir = os.path.join(cat_dir, dir)
-                            print(go_scratch_dir)
+        for go_job in os.walk(cat_dir, topdown=True):
+            root, dirs, files = go_job
+            num_sep = cat_dir.count(os.path.sep)
+            num_sep_this = root.count(os.path.sep)
+            # print(root)
+            # print(cat_dir)
+            if root == cat_dir:
+                # print(dirs)
+                if num_sep_this
+                for dir in dirs:
+                    if (not 'analysis' in dir) and (not 'weka.' in dir):
+                        # print(dir)
+                        go_scratch_dir = os.path.join(cat_dir, dir)
+                        print(go_scratch_dir)
 
-                            if args.attr_imp is False:
-                                python_cmd_train = 'python train_base.py --path {}'.format(go_scratch_dir)
-                            else:
-                                python_cmd_train = 'python train_base.py --path {} --attr_imp True'.format(go_scratch_dir)
-                            write_submit_del_job(go_scratch_dir, python_cmd=python_cmd_train)
+                        if args.attr_imp is False:
+                            python_cmd_train = 'python train_base.py --path {}'.format(go_scratch_dir)
+                        else:
+                            python_cmd_train = 'python train_base.py --path {} --attr_imp True'.format(go_scratch_dir)
+                        write_submit_del_job(go_scratch_dir, python_cmd=python_cmd_train)
         # else:
         #     break
         # jobs_list.append(python_cmd_train)

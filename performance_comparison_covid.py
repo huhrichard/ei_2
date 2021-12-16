@@ -279,6 +279,10 @@ if __name__ == "__main__":
                                  'DECEASED_in_3-5_DAYS': 'Deceased in 3 to 5 days',
                                  'DECEASED_in_5-7_DAYS': 'Deceased in 5 to 7 days',
                                  'DECEASED_in_7-10_DAYS': 'Deceased in 7 to 10 days',
+                                 'DECEASED_in_0-5_DAYS': 'Deceased in 0 to 5 days',
+                                 'DECEASED_in_0-7_DAYS': 'Deceased in 0 to 7 days',
+                                 'DECEASED_in_0-10_DAYS': 'Deceased in 0 to 10 days',
+                                 'DECEASED_after_10_DAYS': 'Deceased after 10 days',
                                  }
         # outcomes = {'DECEASED_INDICATOR': 'DECEASED\nINDICATOR'}
         # deceased_days_timeframe = [3, 5, 7, 10]
@@ -293,6 +297,11 @@ if __name__ == "__main__":
 
             xgb_series = performance_df_cat_di_only.loc[performance_df_cat_di_only['Method'] == 'XGBoost']
             performance_df_cat_di_only = performance_df_cat_di_only.loc[performance_df_cat_di_only['key'] != 'XGBoost']
+
+            sorted_list = sorted(zip(median_fmax_list, data_list, cp_new), reverse=True, key=lambda x: x[0])
+            sorted_dataname_list = [s[1] for s in sorted_list]
+            print(sorted_dataname_list)
+            sorted_cp = [s[2] for s in sorted_list]
 
             print(performance_df_cat_di_only.columns)
             print(xgb_series)
@@ -344,6 +353,10 @@ if __name__ == "__main__":
                                  'DECEASED_in_3-5_DAYS': 'Deceased\nin 3 to 5 days',
                                  'DECEASED_in_5-7_DAYS': 'Deceased\nin 5 to 7 days',
                                  'DECEASED_in_7-10_DAYS': 'Deceased\nin 7 to 10 days',
+                                 'DECEASED_in_0-5_DAYS': 'Deceased\nin 0 to 5 days',
+                                 'DECEASED_in_0-7_DAYS': 'Deceased\nin 0 to 7 days',
+                                 'DECEASED_in_0-10_DAYS': 'Deceased\nin 0 to 10 days',
+                                 'DECEASED_after_10_DAYS': 'Deceased\nafter 10 days',
                                  }
 
         ensemble_df_cat.replace(outcomes_newline_dict, inplace=True)
