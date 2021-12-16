@@ -145,7 +145,7 @@ if __name__ == "__main__":
             # print(cat_dir)
             if root == cat_dir:
                 # print(dirs)
-                if num_sep_this
+                # if num_sep_this
                 for dir in dirs:
                     if (not 'analysis' in dir) and (not 'weka.' in dir):
                         # print(dir)
