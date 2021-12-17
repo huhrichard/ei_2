@@ -283,6 +283,7 @@ if __name__ == "__main__":
                                  'DECEASED_in_0-7_DAYS': 'Deceased in 0 to 7 days',
                                  'DECEASED_in_0-10_DAYS': 'Deceased in 0 to 10 days',
                                  'DECEASED_after_10_DAYS': 'Deceased after 10 days',
+                                 'DECEASED_after_5_DAYS': 'Deceased after 5 days',
                                  }
         # outcomes = {'DECEASED_INDICATOR': 'DECEASED\nINDICATOR'}
         # deceased_days_timeframe = [3, 5, 7, 10]
@@ -357,6 +358,7 @@ if __name__ == "__main__":
                                  'DECEASED_in_0-7_DAYS': 'Deceased\nin 0 to 7 days',
                                  'DECEASED_in_0-10_DAYS': 'Deceased\nin 0 to 10 days',
                                  'DECEASED_after_10_DAYS': 'Deceased\nafter 10 days',
+                                 'DECEASED_after_5_DAYS': 'Deceased\nafter 5 days',
                                  }
 
         ensemble_df_cat.replace(outcomes_newline_dict, inplace=True)
