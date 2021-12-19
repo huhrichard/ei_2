@@ -105,7 +105,8 @@ def xgboost_predictions_result(outcome_path):
         mkdir(analysis_folder)
     performance_df.to_csv(os.path.join(analysis_folder, "performance.csv"), index=False)
 
-data_path = '/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR_normalized/xgboost'
+# data_path = '/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR_normalized/xgboost'
+data_path = argv[-1]
 for outcome in os.walk(data_path, topdown=True):
     root, dirs, files = outcome
     num_sep = data_path.count(os.path.sep)
