@@ -328,7 +328,7 @@ if __name__ == "__main__":
             ax3.set_title(out_v, fontweight='semibold')
             ax3.legend(loc='upper right')
             for tick in ax3.get_xticklabels():
-                tick.set_fontsize(14)
+                tick.set_fontsize(16)
                 # tick.set_rotation(45)
                 tick.set_fontweight('semibold')
                 # tick.set_horizontalalignment("right")
@@ -367,12 +367,13 @@ if __name__ == "__main__":
         sorted_dataname_dict = {s:s.replace('-\n', '').replace('\n',' ') for s in sorted_dataname_list}
         sorted_dataname_list = [v for k,v in sorted_dataname_dict.items()]
         ensemble_df_cat.replace(sorted_dataname_dict, inplace=True)
-        fig2, ax2 = plt.subplots(1, 1, figsize=(20, 6))
+        fig2, ax2 = plt.subplots(1, 1, figsize=(16, 6))
         ax2 = sns.barplot(ax=ax2, y=best_metric_str, x='Outcome', hue='Method',
                           hue_order=sorted_dataname_list,
                           data=ensemble_df_cat, palette=sorted_cp,
                           order=outcomes_order,
                           )
+        ax2.legend(ncol=len(sorted_dataname_list))
         # for tick in ax3.get_xticklabels():
         #     tick.set_rotation(45)
         #     tick.set_horizontalalignment("right")
@@ -380,7 +381,7 @@ if __name__ == "__main__":
         ax2.set_xlabel('')
         ax2.set_title(title_name, fontweight='semibold')
         for tick in ax2.get_xticklabels():
-            tick.set_fontsize(14)
+            tick.set_fontsize(16)
             # tick.set_rotation(45)
             tick.set_fontweight('semibold')
             # tick.set_horizontalalignment("right")
