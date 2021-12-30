@@ -390,7 +390,7 @@ if __name__ == "__main__":
         for tick in ax2.get_yticklabels():
             tick.set_fontsize(16)
             tick.set_fontweight('semibold')
-        ax2.legend(loc='upper right')
+        # ax2.legend(loc='upper right')
         fig2.savefig('{}{}{}_{}_bar_comparison.pdf'.format(plot_dir, 'covid19/', mk, file_prefix), bbox_inches="tight")
         ensemble_df_cat.to_csv(os.path.join(plot_dir, 'performance_cat_covid_{}.csv'.format(mk)))
 
@@ -465,6 +465,6 @@ if __name__ == "__main__":
         for tick in ax2.get_yticklabels():
             tick.set_fontsize(16)
             tick.set_fontweight('semibold')
-        ax2.legend(loc='upper right')
+        # ax2.legend(loc='upper right')
         fig2.savefig('{}{}{}_{}_bar_comparison_withoutXGB.pdf'.format(plot_dir, 'covid19/', mk, file_prefix), bbox_inches="tight")
         ensemble_df_cat.to_csv(os.path.join(plot_dir, 'performance_cat_covid_{}.csv'.format(mk)))
