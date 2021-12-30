@@ -384,7 +384,7 @@ if __name__ == "__main__":
             for tick in ax3.get_yticklabels():
                 tick.set_fontsize(16)
                 tick.set_fontweight('semibold')
-            fig3.savefig('{}{}{}_{}_comparison_{}.pdf'.format(plot_dir, 'covid19/', mk,
+            fig3.savefig('{}{}{}_{}_comparison_{}_withoutXGB.pdf'.format(plot_dir, 'covid19/', mk,
                                                               file_prefix, out_k), bbox_inches="tight")
 
         deceased_outcome_since_prefix = 'DECEASED_AT_{}DAYS'
