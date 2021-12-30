@@ -349,7 +349,8 @@ if __name__ == "__main__":
         #     # outcomes.append(deceased_outcome_since_prefix.format(dday))
         #     outcomes_newline_dict[deceased_outcome_since_prefix.format(dday)] = deceased_outcome_since_prefix_plot.format(dday)
 
-        outcomes_newline_dict = {'DECEASED_INDICATOR': 'Deceased\nIndicator',
+        outcomes_newline_dict = {
+            # 'DECEASED_INDICATOR': 'Deceased\nIndicator',
                                  'DECEASED_in_0-3_DAYS': 'Deceased\nin 0 to 3 days',
                                  'DECEASED_in_3-5_DAYS': 'Deceased\nin 3 to 5 days',
                                  # 'DECEASED_in_5-7_DAYS': 'Deceased\nin 5 to 7 days',
@@ -367,13 +368,13 @@ if __name__ == "__main__":
         sorted_dataname_dict = {s:s.replace('-\n', '').replace('\n',' ') for s in sorted_dataname_list}
         sorted_dataname_list = [v for k,v in sorted_dataname_dict.items()]
         ensemble_df_cat.replace(sorted_dataname_dict, inplace=True)
-        fig2, ax2 = plt.subplots(1, 1, figsize=(16, 6))
+        fig2, ax2 = plt.subplots(1, 1, figsize=(14, 6))
         ax2 = sns.barplot(ax=ax2, y=best_metric_str, x='Outcome', hue='Method',
                           hue_order=sorted_dataname_list,
                           data=ensemble_df_cat, palette=sorted_cp,
                           order=outcomes_order,
                           )
-        ax2.legend(ncol=len(sorted_dataname_list))
+        ax2.legend(mode = "expand", ncol=len(sorted_dataname_list))
         # for tick in ax3.get_xticklabels():
         #     tick.set_rotation(45)
         #     tick.set_horizontalalignment("right")
@@ -448,7 +449,7 @@ if __name__ == "__main__":
                           data=performance_df_cat_noxgb, palette=sorted_cp,
                           order=outcomes_order,
                           )
-        ax2.legend(ncol=len(sorted_dataname_list))
+        ax2.legend(mode="expand", ncol=len(sorted_dataname_list))
         # for tick in ax3.get_xticklabels():
         #     tick.set_rotation(45)
         #     tick.set_horizontalalignment("right")
