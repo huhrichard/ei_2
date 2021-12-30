@@ -418,15 +418,15 @@ if __name__ == "__main__":
 
         # performance_df_cat_di_only = performance_df_cat.loc[performance_df_cat['data_name'] == out_k]
 
-        xgb_series = performance_df_cat.loc[performance_df_cat['Method'] == 'XGBoost']
-        performance_df_cat_noxgb = performance_df_cat.loc[performance_df_cat['key'] != 'XGBoost']
+        xgb_series = ensemble_df_cat.loc[ensemble_df_cat['Method'] == 'XGBoost']
+        performance_df_cat_noxgb = ensemble_df_cat.loc[ensemble_df_cat['key'] != 'XGBoost']
 
         sorted_list = sorted(zip(median_fmax_list, data_list, cp_new), reverse=True, key=lambda x: x[0])
         sorted_dataname_list = [s[1] for s in sorted_list]
         print(sorted_dataname_list)
         sorted_cp = [s[2] for s in sorted_list]
 
-        print(performance_df_cat_di_only.columns)
+        # print(performance_df_cat_di_only.columns)
         print(xgb_series)
 
         xgb_idx = sorted_dataname_list.index('XGBoost')
