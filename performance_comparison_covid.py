@@ -368,7 +368,7 @@ if __name__ == "__main__":
         sorted_dataname_dict = {s:s.replace('-\n', '').replace('\n',' ').split('(')[0] for s in sorted_dataname_list}
         sorted_dataname_list = [v for k,v in sorted_dataname_dict.items()]
         ensemble_df_cat.replace(sorted_dataname_dict, inplace=True)
-        fig2, ax2 = plt.subplots(1, 1, figsize=(10, 6))
+        fig2, ax2 = plt.subplots(1, 1, figsize=(12, 8))
         ax2 = sns.barplot(ax=ax2, y=best_metric_str, x='Outcome', hue='Method',
                           hue_order=sorted_dataname_list,
                           data=ensemble_df_cat, palette=sorted_cp,
@@ -443,10 +443,10 @@ if __name__ == "__main__":
         sorted_dataname_dict = {s: s.replace('-\n', '').replace('\n', ' ').split('(')[0] for s in sorted_dataname_list}
         sorted_dataname_list = [v for k, v in sorted_dataname_dict.items()]
         performance_df_cat_noxgb.replace(sorted_dataname_dict, inplace=True)
-        fig2, ax2 = plt.subplots(1, 1, figsize=(10, 6))
+        fig2, ax2 = plt.subplots(1, 1, figsize=(12, 8))
         ax2 = sns.barplot(ax=ax2, y=best_metric_str, x='Outcome', hue='Method',
-                          hue_order=sorted_dataname_list,
-                          data=performance_df_cat_noxgb, palette=sorted_cp,
+                          hue_order=sorted_dataname_list_no_xgb,
+                          data=performance_df_cat_noxgb, palette=sorted_cp_no_xgb,
                           order=outcomes_order,
                           )
         ax2.legend(mode="expand", ncol=len(sorted_dataname_list))
