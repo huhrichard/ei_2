@@ -365,10 +365,10 @@ if __name__ == "__main__":
         ensemble_df_cat.replace(outcomes_newline_dict, inplace=True)
         outcomes_order = [v for k, v in outcomes_newline_dict.items()]
 
-        sorted_dataname_dict = {s:s.replace('-\n', '').replace('\n',' ') for s in sorted_dataname_list}
+        sorted_dataname_dict = {s:s.replace('-\n', '').replace('\n',' ').split('(')[0] for s in sorted_dataname_list}
         sorted_dataname_list = [v for k,v in sorted_dataname_dict.items()]
         ensemble_df_cat.replace(sorted_dataname_dict, inplace=True)
-        fig2, ax2 = plt.subplots(1, 1, figsize=(14, 6))
+        fig2, ax2 = plt.subplots(1, 1, figsize=(10, 6))
         ax2 = sns.barplot(ax=ax2, y=best_metric_str, x='Outcome', hue='Method',
                           hue_order=sorted_dataname_list,
                           data=ensemble_df_cat, palette=sorted_cp,
@@ -440,10 +440,10 @@ if __name__ == "__main__":
         performance_df_cat_noxgb.replace(outcomes_newline_dict, inplace=True)
         outcomes_order = [v for k, v in outcomes_newline_dict.items()]
 
-        sorted_dataname_dict = {s: s.replace('-\n', '').replace('\n', ' ') for s in sorted_dataname_list}
+        sorted_dataname_dict = {s: s.replace('-\n', '').replace('\n', ' ').split('(')[0] for s in sorted_dataname_list}
         sorted_dataname_list = [v for k, v in sorted_dataname_dict.items()]
         performance_df_cat_noxgb.replace(sorted_dataname_dict, inplace=True)
-        fig2, ax2 = plt.subplots(1, 1, figsize=(8, 10))
+        fig2, ax2 = plt.subplots(1, 1, figsize=(10, 6))
         ax2 = sns.barplot(ax=ax2, y=best_metric_str, x='Outcome', hue='Method',
                           hue_order=sorted_dataname_list,
                           data=performance_df_cat_noxgb, palette=sorted_cp,
