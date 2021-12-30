@@ -350,7 +350,7 @@ if __name__ == "__main__":
         #     outcomes_newline_dict[deceased_outcome_since_prefix.format(dday)] = deceased_outcome_since_prefix_plot.format(dday)
 
         outcomes_newline_dict = {
-            # 'DECEASED_INDICATOR': 'Deceased\nIndicator',
+            'DECEASED_INDICATOR': 'Deceased\nIndicator',
                                  'DECEASED_in_0-3_DAYS': 'Deceased\nin 0 to 3 days',
                                  'DECEASED_in_3-5_DAYS': 'Deceased\nin 3 to 5 days',
                                  # 'DECEASED_in_5-7_DAYS': 'Deceased\nin 5 to 7 days',
@@ -368,7 +368,7 @@ if __name__ == "__main__":
         sorted_dataname_dict = {s:s.replace('-\n', '').replace('\n',' ').split('(')[0] for s in sorted_dataname_list}
         sorted_dataname_list = [v for k,v in sorted_dataname_dict.items()]
         ensemble_df_cat.replace(sorted_dataname_dict, inplace=True)
-        fig2, ax2 = plt.subplots(1, 1, figsize=(12, 8))
+        fig2, ax2 = plt.subplots(1, 1, figsize=(15, 8))
         ax2 = sns.barplot(ax=ax2, y=best_metric_str, x='Outcome', hue='Method',
                           hue_order=sorted_dataname_list,
                           data=ensemble_df_cat, palette=sorted_cp,
