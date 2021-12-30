@@ -325,7 +325,7 @@ if __name__ == "__main__":
             #     tick.set_horizontalalignment("right")
             ax3.set_ylabel(ylabel, fontsize=22, fontweight='semibold')
             ax3.set_xlabel('')
-            ax3.set_title(out_v, fontweight='semibold')
+            ax3.set_title(out_v, fontweight='semibold', fontsize=18)
             ax3.legend(loc='upper right')
             for tick in ax3.get_xticklabels():
                 tick.set_fontsize(16)
@@ -373,7 +373,7 @@ if __name__ == "__main__":
             #     tick.set_horizontalalignment("right")
             ax3.set_ylabel(ylabel, fontsize=22, fontweight='semibold')
             ax3.set_xlabel('')
-            ax3.set_title(out_v, fontweight='semibold')
+            ax3.set_title(out_v, fontweight='semibold', fontsize=18)
             ax3.legend(loc='upper right')
             for tick in ax3.get_xticklabels():
                 tick.set_fontsize(16)
