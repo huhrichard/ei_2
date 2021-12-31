@@ -422,7 +422,7 @@ if __name__ == "__main__":
                           data=ensemble_df_cat, palette=sorted_cp,
                           order=outcomes_order,
                           )
-        ax2.legend(ncol=int(np.ceil(len(sorted_dataname_list)/2)), fontsize=16, fontweight='semibold')
+        ax2.legend(ncol=int(np.ceil(len(sorted_dataname_list)/2)), fontsize=16)
         ax2.set_ylim([0, 1.15])
         # for tick in ax3.get_xticklabels():
         #     tick.set_rotation(45)
@@ -498,7 +498,7 @@ if __name__ == "__main__":
                           data=performance_df_cat_noxgb, palette=sorted_cp_no_xgb,
                           order=outcomes_order,
                           )
-        ax2.legend(ncol=int(np.ceil(len(sorted_dataname_list)/2)), fontsize=16, fontweight='semibold')
+        ax2.legend(ncol=int(np.ceil(len(sorted_dataname_list)/2)), fontsize=16)
         ax2.set_ylim([0, 1.15])
         # for tick in ax3.get_xticklabels():
         #     tick.set_rotation(45)
