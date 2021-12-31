@@ -423,13 +423,13 @@ if __name__ == "__main__":
                           order=outcomes_order,
                           )
         ax2.legend(ncol=int(np.ceil(len(sorted_dataname_list)/2)), fontsize=16)
-        ax2.set_ylim([0, 1])
+        ax2.set_ylim([0, 1.05])
         # for tick in ax3.get_xticklabels():
         #     tick.set_rotation(45)
         #     tick.set_horizontalalignment("right")
         ax2.set_ylabel(ylabel, fontsize=22, fontweight='semibold')
         ax2.set_xlabel('')
-        ax2.set_title(title_name, fontweight='semibold', fontsize=22)
+        # ax2.set_title(title_name, fontweight='semibold', fontsize=22)
         for tick in ax2.get_xticklabels():
             tick.set_fontsize(16)
             # tick.set_rotation(45)
@@ -499,13 +499,13 @@ if __name__ == "__main__":
                           order=outcomes_order,
                           )
         ax2.legend(ncol=int(np.ceil(len(sorted_dataname_list)/2)), fontsize=16)
-        ax2.set_ylim([0, 1])
+        ax2.set_ylim([0, 1.05])
         # for tick in ax3.get_xticklabels():
         #     tick.set_rotation(45)
         #     tick.set_horizontalalignment("right")
         ax2.set_ylabel(ylabel, fontsize=22, fontweight='semibold')
         ax2.set_xlabel('')
-        ax2.set_title(title_name, fontweight='semibold', fontsize=22)
+        # ax2.set_title(title_name, fontweight='semibold', fontsize=22)
         for tick in ax2.get_xticklabels():
             tick.set_fontsize(16)
             # tick.set_rotation(45)
