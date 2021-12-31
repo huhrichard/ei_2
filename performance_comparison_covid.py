@@ -422,22 +422,22 @@ if __name__ == "__main__":
                           data=ensemble_df_cat, palette=sorted_cp,
                           order=outcomes_order,
                           )
-        ax2.legend(ncol=int(np.ceil(len(sorted_dataname_list)/2)), fontsize=16)
-        ax2.set_ylim([0, 1.05])
+        ax2.legend(ncol=int(np.ceil(len(sorted_dataname_list)/2)), fontsize=16, fontweight='semibold')
+        ax2.set_ylim([0, 1.15])
         # for tick in ax3.get_xticklabels():
         #     tick.set_rotation(45)
         #     tick.set_horizontalalignment("right")
-        ax2.set_ylabel(ylabel, fontsize=22, fontweight='semibold')
+        ax2.set_ylabel(ylabel, fontsize=24, fontweight='semibold')
         ax2.set_xlabel('')
         # ax2.set_title(title_name, fontweight='semibold', fontsize=22)
         for tick in ax2.get_xticklabels():
-            tick.set_fontsize(16)
+            tick.set_fontsize(22)
             # tick.set_rotation(45)
             tick.set_fontweight('semibold')
             # tick.set_horizontalalignment("right")
 
         for tick in ax2.get_yticklabels():
-            tick.set_fontsize(16)
+            tick.set_fontsize(20)
             tick.set_fontweight('semibold')
         # ax2.legend(loc='upper right')
         fig2.savefig('{}{}{}_{}_bar_comparison.pdf'.format(plot_dir, 'covid19/', mk, file_prefix), bbox_inches="tight")
@@ -498,22 +498,22 @@ if __name__ == "__main__":
                           data=performance_df_cat_noxgb, palette=sorted_cp_no_xgb,
                           order=outcomes_order,
                           )
-        ax2.legend(ncol=int(np.ceil(len(sorted_dataname_list)/2)), fontsize=16)
-        ax2.set_ylim([0, 1.05])
+        ax2.legend(ncol=int(np.ceil(len(sorted_dataname_list)/2)), fontsize=16, fontweight='semibold')
+        ax2.set_ylim([0, 1.15])
         # for tick in ax3.get_xticklabels():
         #     tick.set_rotation(45)
         #     tick.set_horizontalalignment("right")
-        ax2.set_ylabel(ylabel, fontsize=22, fontweight='semibold')
+        ax2.set_ylabel(ylabel, fontsize=24, fontweight='semibold')
         ax2.set_xlabel('')
         # ax2.set_title(title_name, fontweight='semibold', fontsize=22)
         for tick in ax2.get_xticklabels():
-            tick.set_fontsize(16)
+            tick.set_fontsize(22)
             # tick.set_rotation(45)
             tick.set_fontweight('semibold')
             # tick.set_horizontalalignment("right")
 
         for tick in ax2.get_yticklabels():
-            tick.set_fontsize(16)
+            tick.set_fontsize(20)
             tick.set_fontweight('semibold')
         # ax2.legend(loc='upper right')
         fig2.savefig('{}{}{}_{}_bar_comparison_withoutXGB.pdf'.format(plot_dir, 'covid19/', mk, file_prefix), bbox_inches="tight")
