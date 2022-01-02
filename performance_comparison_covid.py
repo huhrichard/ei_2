@@ -399,13 +399,13 @@ if __name__ == "__main__":
 
         outcomes_newline_dict = {
             'DECEASED_INDICATOR': 'Deceased\nIndicator',
-                                 'DECEASED_in_0-3_DAYS': 'Deceased\nin 0 to 3 days',
+                                 'DECEASED_in_0-3_DAYS': 'Deceased in\n0 to 3 days',
                                  # 'DECEASED_in_3-5_DAYS': 'Deceased\nin 3 to 5 days',
                                  # 'DECEASED_in_5-7_DAYS': 'Deceased\nin 5 to 7 days',
                                  # 'DECEASED_in_7-10_DAYS': 'Deceased\nin 7 to 10 days',
-                                 'DECEASED_in_0-5_DAYS': 'Deceased\nin 0 to 5 days',
-                                 'DECEASED_in_0-7_DAYS': 'Deceased\nin 0 to 7 days',
-                                 'DECEASED_in_0-10_DAYS': 'Deceased\nin 0 to 10 days',
+                                 'DECEASED_in_0-5_DAYS': 'Deceased in\n0 to 5 days',
+                                 'DECEASED_in_0-7_DAYS': 'Deceased in\n0 to 7 days',
+                                 'DECEASED_in_0-10_DAYS': 'Deceased in\n0 to 10 days',
                                  # 'DECEASED_after_10_DAYS': 'Deceased\nafter 10 days',
                                  # 'DECEASED_after_5_DAYS': 'Deceased\nafter 5 days',
                                  }
@@ -456,13 +456,13 @@ if __name__ == "__main__":
 
         outcomes_newline_dict = {
                                 # 'DECEASED_INDICATOR': 'Deceased\nIndicator',
-                                 'DECEASED_in_0-3_DAYS': 'Deceased\nin 0 to 3 days',
+                                  'DECEASED_in_0-3_DAYS': 'Deceased in\n0 to 3 days',
                                  # 'DECEASED_in_3-5_DAYS': 'Deceased\nin 3 to 5 days',
                                  # 'DECEASED_in_5-7_DAYS': 'Deceased\nin 5 to 7 days',
                                  # 'DECEASED_in_7-10_DAYS': 'Deceased\nin 7 to 10 days',
-                                 'DECEASED_in_0-5_DAYS': 'Deceased\nin 0 to 5 days',
-                                 'DECEASED_in_0-7_DAYS': 'Deceased\nin 0 to 7 days',
-                                 'DECEASED_in_0-10_DAYS': 'Deceased\nin 0 to 10 days',
+                                 'DECEASED_in_0-5_DAYS': 'Deceased in\n0 to 5 days',
+                                 'DECEASED_in_0-7_DAYS': 'Deceased in\n0 to 7 days',
+                                 'DECEASED_in_0-10_DAYS': 'Deceased in\n0 to 10 days',
                                  # 'DECEASED_after_10_DAYS': 'Deceased\nafter 10 days',
                                  # 'DECEASED_after_5_DAYS': 'Deceased\nafter 5 days',
                                  }
