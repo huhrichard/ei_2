@@ -424,7 +424,7 @@ if __name__ == "__main__":
                           )
         ax2.legend(ncol=int(np.ceil(len(sorted_dataname_list)/2)),
                    prop={'weight':'bold', 'size':16})
-        ax2.set_ylim([0, 1.15])
+        ax2.set_ylim([0, 1.05])
         # for tick in ax3.get_xticklabels():
         #     tick.set_rotation(45)
         #     tick.set_horizontalalignment("right")
@@ -501,7 +501,7 @@ if __name__ == "__main__":
                           )
         ax2.legend(ncol=int(np.ceil(len(sorted_dataname_list)/2)),
                    prop={'weight':'bold','size':16})
-        ax2.set_ylim([0, 1.15])
+        ax2.set_ylim([0, 1.05])
         # for tick in ax3.get_xticklabels():
         #     tick.set_rotation(45)
         #     tick.set_horizontalalignment("right")
