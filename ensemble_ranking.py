@@ -55,14 +55,19 @@ print(imp_base_features)
 multiplied_rank_col = 'product_rank'
 
 imp_base_predictors['bp_descending_rank'] = imp_base_predictors[bpdf_imp_col].rank(pct=True, ascending=False)
-imp_base_features['bf_descending_rank'] = imp_base_features[bfdf_imp_col].rank(pct=True, ascending=False)
+# imp_base_features['bf_descending_rank'] = imp_base_features[bfdf_imp_col].rank(pct=True, ascending=False)
 imp_base_features[multiplied_rank_col] = 0.0
 
 for bp_idx, bp in imp_base_predictors.iterrows():
     bp_name = bp[bp_name_col_bpdf]
     bp_rank = bp['bp_descending_rank']
     bf_df_matched_bool = imp_base_features[bp_name_col_bfdf] == bp_name
+    # bf_ranks = imp_base_features.loc[bf_df_matched_bool, 'bf_descending_rank']
+    bf_in_bp = imp_base_features.loc[bf_df_matched_bool,:]
+    imp_base_features.loc[bf_df_matched_bool, 'bf_descending_rank'] = bf_in_bp[bfdf_imp_col].rank(pct=True, ascending=False)
     bf_ranks = imp_base_features.loc[bf_df_matched_bool, 'bf_descending_rank']
+    # imp_base_features['bf_descending_rank'] = imp_base_features[bfdf_imp_col].rank(pct=True, ascending=False)
+    # imp_base_features['bf_descending_rank'] = imp_base_features[bfdf_imp_col].rank(pct=True, ascending=False)
     print(bf_ranks*bp_rank)
     imp_base_features.loc[bf_df_matched_bool, multiplied_rank_col] = bf_ranks*bp_rank
     # imp_base_features.loc[bf_df_matched_bool, multiplied_rank_col] = bf_ranks*bp_rank
