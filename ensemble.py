@@ -618,6 +618,7 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
             if attr_imp:
                 if fold == 1:
             #     print(fold)
+
                     stacking_output.append(stack)
             else:
                 stacking_output.append(stack)
@@ -625,7 +626,7 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
             # stacking_output = [stacked_generalization(path, stacker_name, stacker, '67890', agg, stacked_df)]
             # stacked_df = stacking_output[0].pop('stacked_df')
         predictions_dfs = [s['testing_df'] for s in stacking_output]
-        if attr_imp is True:
+        if attr_imp and (stacker_name == 'RF.S' or 'LR.S'):
             training_dfs = stacking_output[0]['train_dfs'][0]
             training_labels = pd.DataFrame({'label': stacking_output[0]['train_dfs'][1]})
             print(training_dfs.shape)
