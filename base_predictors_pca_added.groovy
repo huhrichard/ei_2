@@ -299,7 +299,7 @@ for (currentNestedFold in 0..nestedFoldCount - 1) {
     writer.close()
 }
 
-Attribute Importance
+// Attribute Importance
 
 if (attr_imp_bool){
     classifier = AbstractClassifier.forName(classifierName, classifierOptions)
