@@ -416,14 +416,14 @@ if __name__ == "__main__":
         sorted_dataname_dict = {s:s.replace('-\n', '').replace('\n',' ').split('(')[0] for s in sorted_dataname_list}
         sorted_dataname_list = [v for k,v in sorted_dataname_dict.items()]
         ensemble_df_cat.replace(sorted_dataname_dict, inplace=True)
-        fig2, ax2 = plt.subplots(1, 1, figsize=(15, 8))
+        fig2, ax2 = plt.subplots(1, 1, figsize=(14, 8))
         ax2 = sns.barplot(ax=ax2, y=best_metric_str, x='Outcome', hue='Method',
                           hue_order=sorted_dataname_list,
                           data=ensemble_df_cat, palette=sorted_cp,
                           order=outcomes_order,
                           )
         ax2.legend(ncol=int(np.ceil(len(sorted_dataname_list)/2)),
-                   prop={'weight':'bold', 'size':16})
+                   prop={'weight':'bold', 'size':22})
         ax2.set_ylim([0, 1.05])
         # for tick in ax3.get_xticklabels():
         #     tick.set_rotation(45)
@@ -432,13 +432,13 @@ if __name__ == "__main__":
         ax2.set_xlabel('')
         # ax2.set_title(title_name, fontweight='semibold', fontsize=22)
         for tick in ax2.get_xticklabels():
-            tick.set_fontsize(22)
+            tick.set_fontsize(24)
             # tick.set_rotation(45)
             tick.set_fontweight('semibold')
             # tick.set_horizontalalignment("right")
 
         for tick in ax2.get_yticklabels():
-            tick.set_fontsize(20)
+            tick.set_fontsize(22)
             tick.set_fontweight('semibold')
         # ax2.legend(loc='upper right')
         fig2.savefig('{}{}{}_{}_bar_comparison.pdf'.format(plot_dir, 'covid19/', mk, file_prefix), bbox_inches="tight")
