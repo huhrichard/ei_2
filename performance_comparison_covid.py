@@ -326,7 +326,7 @@ if __name__ == "__main__":
             ax3.set_ylabel(ylabel, fontsize=22, fontweight='semibold')
             ax3.set_xlabel('')
             # ax3.set_title(out_v, fontweight='semibold', fontsize=22)
-            ax3.legend(loc='upper right', prop={'weight':'semibold', 'size':16})
+            ax3.legend(loc='upper right', prop={'weight':'bold', 'size':16})
             for tick in ax3.get_xticklabels():
                 tick.set_fontsize(16)
                 # tick.set_rotation(45)

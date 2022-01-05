@@ -150,7 +150,7 @@ def processTermArff(param, impute, fold=5):
 #             print('invalid labels', l)
 #             exit(0)
 #
-#     feature_df = feature_df.round(3)
+    feature_df = feature_df.round(3)
 #     feature_df['cls'] = labs
 #     del feature_df.index.name
 #     p = os.path.join(scratch_data_dir, feature)
