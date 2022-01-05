@@ -314,7 +314,7 @@ if __name__ == "__main__":
             sorted_dataname_list_no_xgb = sorted_dataname_list.copy()
             sorted_dataname_list_no_xgb.pop(xgb_idx)
 
-            fig3, ax3 = plt.subplots(1, 1, figsize=(12, 6))
+            fig3, ax3 = plt.subplots(1, 1, figsize=(10, 6))
             ax3 = sns.boxplot(ax=ax3, y=mk, x='Method',
                               data=performance_df_cat_di_only, palette=sorted_cp_no_xgb, order=sorted_dataname_list_no_xgb,
                               linewidth=2, width=0.5)
@@ -326,15 +326,15 @@ if __name__ == "__main__":
             ax3.set_ylabel(ylabel, fontsize=22, fontweight='semibold')
             ax3.set_xlabel('')
             # ax3.set_title(out_v, fontweight='semibold', fontsize=22)
-            ax3.legend(loc='upper right', prop={'weight':'bold', 'size':16})
+            ax3.legend(loc='upper right', prop={'weight':'bold', 'size':20})
             for tick in ax3.get_xticklabels():
-                tick.set_fontsize(16)
+                tick.set_fontsize(20)
                 # tick.set_rotation(45)
                 tick.set_fontweight('semibold')
                 # tick.set_horizontalalignment("right")
 
             for tick in ax3.get_yticklabels():
-                tick.set_fontsize(16)
+                tick.set_fontsize(20)
                 tick.set_fontweight('semibold')
             fig3.savefig('{}{}{}_{}_comparison_{}.pdf'.format(plot_dir, 'covid19/', mk,
                                                               file_prefix, out_k), bbox_inches="tight")
@@ -361,7 +361,7 @@ if __name__ == "__main__":
             sorted_dataname_list_no_xgb = sorted_dataname_list.copy()
             sorted_dataname_list_no_xgb.pop(xgb_idx)
 
-            fig3, ax3 = plt.subplots(1, 1, figsize=(12, 6))
+            fig3, ax3 = plt.subplots(1, 1, figsize=(10, 6))
             ax3 = sns.boxplot(ax=ax3, y=mk, x='Method',
                               data=performance_df_cat_di_only, palette=sorted_cp_no_xgb,
                               order=sorted_dataname_list_no_xgb,
@@ -374,15 +374,15 @@ if __name__ == "__main__":
             ax3.set_ylabel(ylabel, fontsize=22, fontweight='semibold')
             ax3.set_xlabel('')
             # ax3.set_title(out_v, fontweight='semibold', fontsize=22)
-            ax3.legend(loc='upper right', prop={'weight':'bold', 'size':16})
+            ax3.legend(loc='upper right', prop={'weight':'bold', 'size':20})
             for tick in ax3.get_xticklabels():
-                tick.set_fontsize(16)
+                tick.set_fontsize(20)
                 # tick.set_rotation(45)
                 tick.set_fontweight('semibold')
                 # tick.set_horizontalalignment("right")
 
             for tick in ax3.get_yticklabels():
-                tick.set_fontsize(16)
+                tick.set_fontsize(20)
                 tick.set_fontweight('semibold')
             fig3.savefig('{}{}{}_{}_comparison_{}_withoutXGB.pdf'.format(plot_dir, 'covid19/', mk,
                                                               file_prefix, out_k), bbox_inches="tight")
