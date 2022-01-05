@@ -11,7 +11,7 @@ parser = argparse.ArgumentParser(description='')
 # parser.add_argument('--bppath', '-bpp', type=str, required=True, help='data path of importance of base predictors')
 # parser.add_argument('--bppath', '-bpp', type=str, required=True, help='data path of importance of base predictors')
 parser.add_argument('--path', '-p', type=str, required=True, help='data path of importance of base features')
-parser.add_argument('--ensemble', '-e', type=str, default='none', help='stacker which performs the best')
+parser.add_argument('--ensemble', '-e', type=str, default='none', help='ensemble which performs the best')
 # parser.add_argument('--outcome', '-o', type=str, default='none', help='data path of importance of base features')
 # parser.add_argument('--perfdf', '-pdf', type=str, default='none', help='data path of importance of base features')
 
@@ -33,10 +33,13 @@ bfdf_imp_col = 'attribute_importance'
 bfdf_feature_col = 'attribute'
 bp_name_col_bpdf = 'bp_name'
 bp_name_col_bfdf = 'base_predictor'
+ens_col = 'ensemble_method'
+
+outcome = args.path.split('/')[-1]
 
 imp_base_predictors = pd.read_csv(bppath)
-imp_base_predictors = imp_base_predictors.loc[imp_base_predictors['stacker'] == ensemble]
-imp_base_predictors.drop(columns=['stacker'], inplace=True)
+imp_base_predictors = imp_base_predictors.loc[imp_base_predictors[ens_col] == ensemble]
+imp_base_predictors.drop(columns=[ens_col], inplace=True)
 imp_base_predictors = imp_base_predictors.T
 imp_base_predictors.rename(columns={imp_base_predictors.columns[0]: 'bp_imp'}, inplace=True)
 imp_base_predictors = imp_base_predictors.iloc[1:]
@@ -62,9 +65,10 @@ for bp_idx, bp in imp_base_predictors.iterrows():
     bf_ranks = imp_base_features.loc[bf_df_matched_bool, 'bf_descending_rank']
     print(bf_ranks*bp_rank)
     imp_base_features.loc[bf_df_matched_bool, multiplied_rank_col] = bf_ranks*bp_rank
+    # imp_base_features.loc[bf_df_matched_bool, multiplied_rank_col] = bf_ranks*bp_rank
 
-imp_base_predictors.to_csv('base_predictors_rank.csv')
-imp_base_features.to_csv('base_features_rank.csv')
+imp_base_predictors.to_csv('base_predictors_rank_{}.csv'.format(outcome))
+imp_base_features.to_csv('base_features_rank_{}.csv'.format(outcome))
 
 base_features_list = imp_base_features[bfdf_feature_col].unique().tolist()
 base_feature_rank_agg = {}
@@ -94,7 +98,7 @@ base_feature_rank_df['mean_ascending_rank'] = base_feature_rank_df['mean_agg'].r
 base_feature_rank_df['median_ascending_rank'] = base_feature_rank_df['median_agg'].rank(ascending=True)
 # base_feature_rank_df['min_rank'] = base_feature_rank_df[].rank()
 # base_feature_rank_df.rename(columns={imp_base_predictors.columns[0]: 'bf_rank'}, inplace=True)
-base_feature_rank_df.to_csv('base_feature_agg_rank.csv')
+base_feature_rank_df.to_csv('base_feature_agg_rank_{}.csv'.format(outcome))
 
 
 

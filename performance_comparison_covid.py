@@ -274,7 +274,7 @@ if __name__ == "__main__":
         """
         deceased_outcome_since_prefix = 'DECEASED_AT_{}DAYS'
         # deceased_outcome_since_prefix_plot = 'Deceased in {}days'
-        outcomes_newline_dict = {'DECEASED_INDICATOR': 'Deceased Indicator',
+        outcomes_newline_dict = {'DECEASED_INDICATOR': 'Deceased',
                                  'DECEASED_in_0-3_DAYS': 'Deceased in 0 to 3 days',
                                  'DECEASED_in_3-5_DAYS': 'Deceased in 3 to 5 days',
                                  # 'DECEASED_in_5-7_DAYS': 'Deceased in 5 to 7 days',
@@ -398,7 +398,7 @@ if __name__ == "__main__":
         #     outcomes_newline_dict[deceased_outcome_since_prefix.format(dday)] = deceased_outcome_since_prefix_plot.format(dday)
 
         outcomes_newline_dict = {
-            'DECEASED_INDICATOR': 'Deceased\nIndicator',
+            'DECEASED_INDICATOR': 'Deceased',
                                  'DECEASED_in_0-3_DAYS': 'Deceased in\n0 to 3 days',
                                  'DECEASED_in_3-5_DAYS': 'Deceased in\n3 to 5 days',
                                  # 'DECEASED_in_5-7_DAYS': 'Deceased\nin 5 to 7 days',
