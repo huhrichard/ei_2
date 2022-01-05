@@ -237,7 +237,7 @@ def CES_classifier(path, fold_count=range(5), agg=1, attr_imp=False):
     if attr_imp:
         print(best_ensembles[0])
         frequency_bp_selected = best_ensembles[0].value_counts()
-        local_model_weight_df = pd.DataFrame(data=np.zeros((len(train_df.columns))), columns=train_df.columns, index=[0])
+        local_model_weight_df = pd.DataFrame(data=np.zeros((len(train_df.columns),1)), columns=train_df.columns, index=[0])
         # for bp, freq in frequency_bp_selected.items():
         for bp in list(train_df.columns):
             if bp.split('.')[0] in frequency_bp_selected.index:
@@ -420,7 +420,7 @@ def aggregating_ensemble(path, fold_count=range(5), agg=1, attr_imp=False, media
 
         if attr_imp:
             # frequency_bp_selected = best_ensembles[0]['ensemble'].value_counts()
-            local_model_weight_df = pd.DataFrame(data=np.ones((len(train_df.columns))), columns=train_df.columns,
+            local_model_weight_df = pd.DataFrame(data=np.ones((len(train_df.columns),1)), columns=train_df.columns,
                                                  index=[0])
             local_model_weight_df['ensemble_method'] = 'mean'
         else:
