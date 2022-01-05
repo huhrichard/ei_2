@@ -572,7 +572,8 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
             fmax_perf = perf['f-measure']['F']
         else:
             fmax_perf = perf['f-measure']
-            local_model_weight_dfs = perf['model_weight']
+            if attr_imp:
+                local_model_weight_dfs.append(perf['model_weight'])
         auc_perf = perf['auc']
         auprc_perf = perf['auprc']
         print('[{}] Finished evaluating model ############################'.format(key))
