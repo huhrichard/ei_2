@@ -255,7 +255,7 @@ if __name__ == "__main__":
         # for tick in ax1.get_xticklabels():
         #     tick.set_rotation(45)
         #     tick.set_horizontalalignment("right")
-        ax1.set_ylabel(ylabel, fontsize=22, fontweight='semibold')
+        ax1.set_ylabel(ylabel, fontsize=22, fontweight='bold')
         ax1.set_xlabel('')
         ax1.set_title(title_name, fontweight='semibold')
         for tick in ax1.get_xticklabels():
@@ -323,7 +323,7 @@ if __name__ == "__main__":
             # for tick in ax3.get_xticklabels():
             #     tick.set_rotation(45)
             #     tick.set_horizontalalignment("right")
-            ax3.set_ylabel(ylabel, fontsize=24, fontweight='semibold')
+            ax3.set_ylabel(ylabel, fontsize=24, fontweight='bold')
             ax3.set_xlabel('')
             # ax3.set_title(out_v, fontweight='semibold', fontsize=22)
             ax3.legend(loc='upper right', prop={'weight':'bold', 'size':20})
@@ -371,7 +371,7 @@ if __name__ == "__main__":
             # for tick in ax3.get_xticklabels():
             #     tick.set_rotation(45)
             #     tick.set_horizontalalignment("right")
-            ax3.set_ylabel(ylabel, fontsize=24, fontweight='semibold')
+            ax3.set_ylabel(ylabel, fontsize=24, fontweight='bold')
             ax3.set_xlabel('')
             # ax3.set_title(out_v, fontweight='semibold', fontsize=22)
             ax3.legend(loc='upper right', prop={'weight':'bold', 'size':20})
@@ -428,7 +428,7 @@ if __name__ == "__main__":
         # for tick in ax3.get_xticklabels():
         #     tick.set_rotation(45)
         #     tick.set_horizontalalignment("right")
-        ax2.set_ylabel(ylabel, fontsize=24, fontweight='semibold')
+        ax2.set_ylabel(ylabel, fontsize=24, fontweight='bold')
         ax2.set_xlabel('')
         # ax2.set_title(title_name, fontweight='semibold', fontsize=22)
         for tick in ax2.get_xticklabels():
@@ -505,7 +505,7 @@ if __name__ == "__main__":
         # for tick in ax3.get_xticklabels():
         #     tick.set_rotation(45)
         #     tick.set_horizontalalignment("right")
-        ax2.set_ylabel(ylabel, fontsize=24, fontweight='semibold')
+        ax2.set_ylabel(ylabel, fontsize=24, fontweight='bold')
         ax2.set_xlabel('')
         # ax2.set_title(title_name, fontweight='semibold', fontsize=22)
         for tick in ax2.get_xticklabels():
