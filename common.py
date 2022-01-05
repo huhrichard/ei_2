@@ -132,7 +132,8 @@ def rmse_score(a, b):
 def unbag(df, bag_count, remove_label=False):
     cols = []
     bag_start_indices = range(0, df.shape[1], bag_count)
-    names = [_.split('.')[0] for _ in df.columns.values[bag_start_indices]]
+    # names = [_.split('.')[0] for _ in df.columns.values[bag_start_indices]]
+    names = [_.rsplit('.',1)[0] for _ in df.columns.values[bag_start_indices]]
     for i in bag_start_indices:
         cols.append(df.iloc[:, i:i+bag_count].mean(axis = 1))
     df = concat(cols, axis = 1)

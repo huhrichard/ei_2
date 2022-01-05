@@ -180,7 +180,8 @@ def selection(fold, seedval, path, agg, subject_model=False,
     best_ensemble = train_performance_df.ensemble[:best_ensemble_size.item(0) + 1]
     return get_predictions(test_df, best_ensemble, fold, seedval), \
            pd.DataFrame.from_records(test_performance), \
-           get_predictions(train_df, best_ensemble, fold, seedval)
+           get_predictions(train_df, best_ensemble, fold, seedval), \
+           best_ensemble, train_df
 
 def thres_fmax(train_label_df, train_pred_df, testing_bool=False):
     if testing_bool:
@@ -191,7 +192,7 @@ def thres_fmax(train_label_df, train_pred_df, testing_bool=False):
 
     return thres
 
-def CES_classifier(path, fold_count=range(5), agg=1):
+def CES_classifier(path, fold_count=range(5), agg=1, attr_imp=False):
     assert exists(path)
     if not exists('%s/analysis' % path):
         mkdir('%s/analysis' % path)
@@ -208,17 +209,21 @@ def CES_classifier(path, fold_count=range(5), agg=1):
     train_predictions_dfs = []
     performance_dfs = []
     seeds = range(agg)
+    best_ensembles = []
 
     for seedval in seeds:
         # for fold in range(fold_count):
         for fold in fold_count:
             # if '67890' in fold:
             # if testing_bool or (not 'foldAttribute' in p):
-            pred_df, perf_df, train_pred_df = method_function(fold, seedval, path, agg)
+            pred_df, perf_df, train_pred_df, best_ensemble, train_df = method_function(fold, seedval, path, agg)
             predictions_dfs.append(pred_df)
             train_predictions_dfs.append(train_pred_df)
             performance_dfs.append(perf_df)
             thres = thres_fmax(train_pred_df.label, train_pred_df.prediction)
+            if attr_imp:
+                if fold == 1:
+                    best_ensembles.append(best_ensemble)
     performance_df = pd.concat(performance_dfs)
     performance_df.to_csv('%s/analysis/selection-%s-%s-iterations.csv' % (path, method, 'fmax'), index=False)
     predictions_df = pd.concat(predictions_dfs)
@@ -227,16 +232,17 @@ def CES_classifier(path, fold_count=range(5), agg=1):
     predictions_df.to_csv('%s/analysis/selection-%s-%s.csv' % (path, method, 'fmax'), index=False)
     auc = sklearn.metrics.roc_auc_score(predictions_df.label, predictions_df.prediction)
     auprc = common.auprc(predictions_df.label, predictions_df.prediction)
-    # auprc = sklearn.metrics.pre(predictions_df.label, predictions_df.prediction)
-
-    # if ('67890' in fold_count and 'foldAttribute' in p):
-    #     train_predictions_df = pd.concat(train_predictions_dfs)
-    #
-    #
-    # else:
     print(thres)
     fmax = (common.fmeasure_score(predictions_df.label, predictions_df.prediction, thres=thres))
-    return {'f-measure':fmax, 'auc':float(auc), 'auprc':auprc}
+    if attr_imp:
+        frequency_bp_selected = best_ensembles[0]['ensemble'].value_counts()
+        local_model_weight_df = pd.DataFrame(data=np.zeros(len(train_df.columns)), columns=train_df.columns, index=[0])
+        for bp, freq in frequency_bp_selected.items():
+            local_model_weight_df[bp] = freq
+        local_model_weight_df['ensemble_method'] = 'CES'
+    else:
+        local_model_weight_df = None
+    return {'f-measure':fmax, 'auc':float(auc), 'auprc':auprc, 'model_weight': local_model_weight_df}
 
 def CES(path, fold_count=range(5), agg=1,
                      subject_model=False, inference_only=False,
@@ -319,7 +325,7 @@ def CES(path, fold_count=range(5), agg=1,
 
 # m
 
-def aggregating_ensemble(path, fold_count=range(5), agg=1, median=False,
+def aggregating_ensemble(path, fold_count=range(5), agg=1, attr_imp=False, median=False,
                          subject_model=False, inference_only=False,
                          z_scoring=False, regression=False, test_set=False):
     def _unbag_mean(df, agg=agg):
@@ -358,43 +364,7 @@ def aggregating_ensemble(path, fold_count=range(5), agg=1, median=False,
     train_labels = []
     # for fold in range(fold_count):
     for fold in fold_count:
-
-        # if testing_bool or (not 'foldAttribute' in p):
-
         train_df, train_label, test_df, test_label = common.read_fold(path, fold)
-        # if subject_model:
-        #     measurement_id_train = train_df.index.get_level_values('id')
-        #     measurement_id_test = test_df.index.get_level_values('id')
-        #     # print(measurement_id_test)
-        #     subset_ms_df = measurement_subject_df.loc[
-        #         measurement_subject_df[measurement_id_col].isin(measurement_id_train)]
-        #     subject_id_list = subset_ms_df[subject_id_col].unique()
-        #
-        #     for subject_id in subject_id_list:
-        #         # print(subject_id)
-        #
-        #         measurements_of_subject = measurement_subject_df.loc[
-        #             (measurement_subject_df[subject_id_col] == subject_id), measurement_id_col]
-        #
-        #         measurements_train_bool_of_subject = measurement_id_train.isin(measurements_of_subject)
-        #         measurements_test_bool_of_subject = measurement_id_test.isin(measurements_of_subject)
-        #
-        #         train_df_per_subject = train_df.loc[measurements_train_bool_of_subject]
-        #         # print(train_df_per_subject)
-        #         train_label_per_subject = train_label[measurements_train_bool_of_subject]
-        #         test_df_per_subject = test_df.loc[measurements_test_bool_of_subject]
-        #         # print(test_df_per_subject)
-        #         test_label_per_subject = test_label[measurements_test_bool_of_subject]
-        #         if median:
-        #             predict = _unbag_median(test_df_per_subject, agg)
-        #         else:
-        #             predict = _unbag_mean(test_df_per_subject, agg)
-        #         predictions.append(predict)
-        #         labels.append(test_label_per_subject)
-        # else:
-
-        # thres = thres_fmax(train_label, _unbag_mean(train_df))
-
         if median:
             train_agg = _unbag_median(train_df, agg, z_scoring=z_scoring, train_df_temp=train_df)
             predict = _unbag_median(test_df, agg, z_scoring=z_scoring, train_df_temp=train_df)
@@ -445,11 +415,19 @@ def aggregating_ensemble(path, fold_count=range(5), agg=1, median=False,
         auc = sklearn.metrics.roc_auc_score(labels, predictions)
         auprc = common.auprc(labels, predictions)
 
-        return {'f-measure': fmax, 'auc': auc, 'auprc': auprc}
+        if attr_imp:
+            # frequency_bp_selected = best_ensembles[0]['ensemble'].value_counts()
+            local_model_weight_df = pd.DataFrame(data=np.ones(len(train_df.columns)), columns=train_df.columns,
+                                                 index=[0])
+            local_model_weight_df['ensemble_method'] = 'mean'
+        else:
+            local_model_weight_df = None
+
+        return {'f-measure': fmax, 'auc': auc, 'auprc': auprc, 'model_weight': local_model_weight_df}
 
 
 
-def bestbase_classifier(path, fold_count=range(5), agg=1):
+def bestbase_classifier(path, fold_count=range(5), agg=1, attr_imp=false):
     assert exists(path)
     if not exists('%s/analysis' % path):
         mkdir('%s/analysis' % path)
@@ -539,91 +517,9 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df,
                            z_scoring=False, subject_model=False,
                            regression=False):
     train_df, train_labels, test_df, test_labels = common.read_fold(path, fold)
-    # print('number of complex: {} out of {}'.format(np.sum(np.iscomplex(train_df.values)),
-    #                                                           train_df.values.size))
-    # train_df_cols = train_df.columns
-    # f_train_base = [common.fmeasure_score(train_labels, train_df[c].values) for c in train_df_cols]
-    # thres_train_base = [f['thres'] for f in f_train_base]
-    # fscore_train_base = [f['F'] for f in f_train_base]
-    # f_test_base = [common.fmeasure_score(test_labels, test_df[c].values, thres_train_base[idx]) for idx, c in enumerate(train_df_cols)]
-    # fscore_test_base = [f['F'] for f in f_test_base]
-    if z_scoring:
-        z_scaler = StandardScaler()
-        # print(test_df)
-        train_df[:] = z_scaler.fit_transform(train_df.values)
-        test_df[:] = z_scaler.transform(test_df.values)
-        # print(test_df)
-
-    # if subject_model:
-    #     measurement_id_train = train_df.index.get_level_values('id')
-    #     measurement_id_test = test_df.index.get_level_values('id')
-    #     # print(measurement_id_test)
-    #     subset_ms_df = measurement_subject_df.loc[
-    #         measurement_subject_df[measurement_id_col].isin(measurement_id_train)]
-    #     subject_id_list = subset_ms_df[subject_id_col].unique()
-    #     test_predictions = []
-    #     train_predictions = []
-    #     test_labels_dummy = []
-    #     train_labels_dummy = []
-    #     for subject_id in subject_id_list:
-    #         # print(subject_id)
-    #
-    #         measurements_of_subject = measurement_subject_df.loc[
-    #             (measurement_subject_df[subject_id_col] == subject_id), measurement_id_col]
-    #
-    #         measurements_train_bool_of_subject = measurement_id_train.isin(measurements_of_subject)
-    #         measurements_test_bool_of_subject = measurement_id_test.isin(measurements_of_subject)
-    #
-    #         train_df_per_subject = train_df.loc[measurements_train_bool_of_subject]
-    #         # print(train_df_per_subject)
-    #         train_label_per_subject = train_labels[measurements_train_bool_of_subject]
-    #         test_df_per_subject = test_df.loc[measurements_test_bool_of_subject]
-    #         # print(test_df_per_subject)
-    #         test_label_per_subject = test_labels[measurements_test_bool_of_subject]
-    #         stacker = stacker.fit(train_df_per_subject, train_label_per_subject)
-    #
-    #         test_predictions.append(stacker.predict(test_df_per_subject))
-    #         train_predictions.append(stacker.predict(train_df_per_subject))
-    #         test_labels_dummy.append(test_label_per_subject)
-    #         train_labels_dummy.append(train_label_per_subject)
-    #
-    #     test_predictions = np.concatenate(test_predictions, axis=None)
-    #     train_predictions = np.concatenate(train_predictions, axis=None)
-    #     test_labels = np.concatenate(test_labels_dummy, axis=None)
-    #     train_labels = np.concatenate(train_labels_dummy, axis=None)
-
-    # else:
+    # test_df = common.unbag(test_df, agg)
     stacker = stacker.fit(train_df, train_labels)
-    # feat_imp = []
-    # if hasattr(stacker, 'feature_importances_'):
-    #     feat_imp = stacker.feature_importances_
-    # elif hasattr(stacker, 'coef_'):
-    #     feat_imp = stacker.coef_
-    # elif hasattr(stacker, 'theta_'):
-    #     feat_imp = stacker.theta_
-    # if len(feat_imp)>0:
-    #     # feat_imp = np.squeeze(feat_imp)
-    #     if len(feat_imp.shape) > 1:
-    #         feat_imp = feat_imp[-1,:]
-    #     # if not fold in stacked_df['fold']:
-    #     new_df = pd.DataFrame({'f_train_base':fscore_train_base,
-    #                            'f_test_base': fscore_test_base,
-    #                            # 'base': train_df_cols,
-    #                            'feat_imp': feat_imp,
-    #                            'base_data':'', 'base_cls':'', 'base_bag': ''
-    #                            })
-    #
-    #     split_str = pd.Series(train_df_cols).str.split('.',expand=True)
-    #     # print(split_str[0])
-    #     # new_df.loc[:,['base_data', 'base_cls', 'base_bag']] = ''
-    #     # new_df.loc[:,['base_data', 'base_cls', 'base_bag']] =
-    #     new_df.loc[:,'base_data'] = split_str[0]
-    #     new_df.loc[:,'base_cls'] = split_str[1]
-    #     new_df.loc[:,'base_bag'] = split_str[2]
-    #     new_df['fold'] = fold
-    #     new_df['stacker'] = stacker_name
-    #     # print(new_df.to_string())
-    #     stacked_df = pd.concat([stacked_df, new_df])
+
     if hasattr(stacker, "predict_proba") and (not regression):
         test_predictions = stacker.predict_proba(test_df)[:, 1]
         train_predictions = stacker.predict_proba(train_df)[:, 1]
@@ -663,17 +559,20 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
     cols = ['data_name', 'fmax', 'method', 'auc', 'auprc']
 
     dfs = []
+
+    local_model_weight_dfs = []
     aggregated_dict = {'CES': CES_classifier,
                        'Mean': aggregating_ensemble,
                        'best base': bestbase_classifier}
 
     for key, val in aggregated_dict.items():
         print('[{}] Start building model #################################'.format(key))
-        perf = val(path, fold_values, agg)
+        perf = val(path, fold_values, agg, attr_imp)
         if key != 'best base':
             fmax_perf = perf['f-measure']['F']
         else:
             fmax_perf = perf['f-measure']
+            local_model_weight_dfs = perf['model_weight']
         auc_perf = perf['auc']
         auprc_perf = perf['auprc']
         print('[{}] Finished evaluating model ############################'.format(key))
@@ -686,16 +585,7 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
     analysis_path = '%s/analysis' % path
     if not exists(analysis_path):
         mkdir(analysis_path)
-    """ Staking Ensemble """
-    # stackers = [RandomForestClassifier(n_estimators=200, max_depth=2, bootstrap=False, random_state=0),
-    #             SVC(C=1.0, cache_size=10000, class_weight=None, coef0=0.0,
-    #                 decision_function_shape='ovr', degree=3, gamma='auto', kernel='linear', probability=True,
-    #                 max_iter=1e8, random_state=None, shrinking=True,
-    #                 tol=0.001, verbose=False), GaussianNB(), LogisticRegression(), AdaBoostClassifier(),
-    #             DecisionTreeClassifier(), GradientBoostingClassifier(loss='deviance'), KNeighborsClassifier(),
-    #             XGBClassifier(),
-    #             # MLPClassifier(), GaussianProcessClassifier()
-    #             ]
+    """ Stacking Ensemble """
     stackers_dict = {
                      "RF.S": RandomForestClassifier(),
                      "SVM.S": SVC(kernel='linear', probability=True),
@@ -710,7 +600,7 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
     df_cols = ['f_train_base','f_test_base', 'fold', 'stacker',
                'feat_imp', 'base_data', 'base_cls', 'base_bag']
     stacked_df = pd.DataFrame(columns= df_cols)
-    permute_imp_dfs = []
+
     # for i, (stacker_name, stacker) in enumerate(zip(stacker_names, stackers)):
     for i, (stacker_name, stacker) in enumerate(stackers_dict.items()):
         print('[%s] Start building model ################################' % (stacker_name))
@@ -747,8 +637,8 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
             print(stacker_pi.importances_mean)
             print(stacker_pi.importances_mean.shape)
             pi_df = pd.DataFrame(data=[stacker_pi.importances_mean], columns=training_dfs.columns, index=[0])
-            pi_df['stacker'] = stacker_name
-            permute_imp_dfs.append(pi_df)
+            pi_df['ensemble_method'] = stacker_name
+            local_model_weight_dfs.append(pi_df)
 
 
 
@@ -773,8 +663,8 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
         dfs.append(df)
     dfs = pd.concat(dfs)
     if attr_imp is True:
-        permute_imp_df = pd.concat(permute_imp_dfs)
-        permute_imp_df.to_csv(os.path.join(analysis_path, 'pi_stackers.csv'))
+        local_mr_df = pd.concat(local_model_weight_dfs)
+        local_mr_df.to_csv(os.path.join(analysis_path, 'pi_stackers.csv'))
 
 
     """ Save results """
