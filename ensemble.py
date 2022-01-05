@@ -573,10 +573,11 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
         perf = val(path, fold_values, agg, attr_imp)
         if key != 'best base':
             fmax_perf = perf['f-measure']['F']
-        else:
-            fmax_perf = perf['f-measure']
             if attr_imp:
                 local_model_weight_dfs.append(perf['model_weight'])
+        else:
+            fmax_perf = perf['f-measure']
+
         auc_perf = perf['auc']
         auprc_perf = perf['auprc']
         print('[{}] Finished evaluating model ############################'.format(key))
