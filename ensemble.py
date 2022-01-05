@@ -427,7 +427,7 @@ def aggregating_ensemble(path, fold_count=range(5), agg=1, attr_imp=False, media
 
 
 
-def bestbase_classifier(path, fold_count=range(5), agg=1, attr_imp=false):
+def bestbase_classifier(path, fold_count=range(5), agg=1, attr_imp=False):
     assert exists(path)
     if not exists('%s/analysis' % path):
         mkdir('%s/analysis' % path)
