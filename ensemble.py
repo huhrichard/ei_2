@@ -669,6 +669,7 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
         dfs.append(df)
     dfs = pd.concat(dfs)
     if attr_imp is True:
+        print(local_model_weight_dfs)
         local_mr_df = pd.concat(local_model_weight_dfs)
         local_mr_df.to_csv(os.path.join(analysis_path, 'pi_stackers.csv'))
 
