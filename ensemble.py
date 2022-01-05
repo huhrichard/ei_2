@@ -420,7 +420,7 @@ def aggregating_ensemble(path, fold_count=range(5), agg=1, attr_imp=False, media
 
         if attr_imp:
             # frequency_bp_selected = best_ensembles[0]['ensemble'].value_counts()
-            local_model_weight_df = pd.DataFrame(data=np.ones((len(train_df.columns),1)), columns=train_df.columns,
+            local_model_weight_df = pd.DataFrame(data=np.ones((len(train_df.columns))), columns=train_df.columns,
                                                  index=[0])
             local_model_weight_df['ensemble_method'] = 'mean'
         else:
