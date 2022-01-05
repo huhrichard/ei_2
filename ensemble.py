@@ -237,8 +237,10 @@ def CES_classifier(path, fold_count=range(5), agg=1, attr_imp=False):
     if attr_imp:
         frequency_bp_selected = best_ensembles[0]['ensemble'].value_counts()
         local_model_weight_df = pd.DataFrame(data=np.zeros(len(train_df.columns)), columns=train_df.columns, index=[0])
-        for bp, freq in frequency_bp_selected.items():
-            local_model_weight_df[bp] = freq
+        # for bp, freq in frequency_bp_selected.items():
+        for bp in list(train_df.columns):
+            if bp.split('.')[0] in frequency_bp_selected.index:
+                local_model_weight_df[bp] = frequency_bp_selected[bp.split('.')[0]]
         local_model_weight_df['ensemble_method'] = 'CES'
     else:
         local_model_weight_df = None
