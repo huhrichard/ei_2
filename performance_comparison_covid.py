@@ -104,7 +104,7 @@ if __name__ == "__main__":
                    'labs': 'Lab\ntests\n(44)',
                    # 'medications': 'Medica-\ntions\n(26)',
                    'comorbidities': 'Co-morbi-\ndities\n(23)',
-                   'vitals': 'Vital\nsigns\n(7)',
+                   'vitals': 'Vital\nsigns\n(9)',
                    # 'concatenated': 'Concat-\nenated\nAll',
                    'xgboost': 'XGBoost'}
 
@@ -274,16 +274,16 @@ if __name__ == "__main__":
         """
         deceased_outcome_since_prefix = 'DECEASED_AT_{}DAYS'
         # deceased_outcome_since_prefix_plot = 'Deceased in {}days'
-        outcomes_newline_dict = {'DECEASED_INDICATOR': 'Deceased',
-                                 'DECEASED_in_0-3_DAYS': 'Deceased in 0 to 3 days',
-                                 'DECEASED_in_3-5_DAYS': 'Deceased in 3 to 5 days',
+        outcomes_newline_dict = {'DECEASED_INDICATOR': 'Mortality during hospitalization',
+                                 'DECEASED_in_0-3_DAYS': 'Mortality within 0-3 days',
+                                 'DECEASED_in_3-5_DAYS': 'Mortality within 3-5 days',
                                  # 'DECEASED_in_5-7_DAYS': 'Deceased in 5 to 7 days',
                                  # 'DECEASED_in_7-10_DAYS': 'Deceased in 7 to 10 days',
                                  # 'DECEASED_in_0-5_DAYS': 'Deceased in 0 to 5 days',
                                  # 'DECEASED_in_0-7_DAYS': 'Deceased in 0 to 7 days',
                                  # 'DECEASED_in_0-10_DAYS': 'Deceased in 0 to 10 days',
                                  # 'DECEASED_after_10_DAYS': 'Deceased after 10 days',
-                                 'DECEASED_after_5_DAYS': 'Deceased after 5 days',
+                                 'DECEASED_after_5_DAYS': 'Mortality after 5 days',
                                  }
         # outcomes = {'DECEASED_INDICATOR': 'DECEASED\nINDICATOR'}
         # deceased_days_timeframe = [3, 5, 7, 10]
@@ -397,17 +397,16 @@ if __name__ == "__main__":
         #     # outcomes.append(deceased_outcome_since_prefix.format(dday))
         #     outcomes_newline_dict[deceased_outcome_since_prefix.format(dday)] = deceased_outcome_since_prefix_plot.format(dday)
 
-        outcomes_newline_dict = {
-            'DECEASED_INDICATOR': 'Deceased',
-                                 'DECEASED_in_0-3_DAYS': 'Deceased in\n0 to 3 days',
-                                 'DECEASED_in_3-5_DAYS': 'Deceased in\n3 to 5 days',
-                                 # 'DECEASED_in_5-7_DAYS': 'Deceased\nin 5 to 7 days',
-                                 # 'DECEASED_in_7-10_DAYS': 'Deceased\nin 7 to 10 days',
-                                 # 'DECEASED_in_0-5_DAYS': 'Deceased in\n0 to 5 days',
-                                 # 'DECEASED_in_0-7_DAYS': 'Deceased in\n0 to 7 days',
-                                 # 'DECEASED_in_0-10_DAYS': 'Deceased in\n0 to 10 days',
-                                 # 'DECEASED_after_10_DAYS': 'Deceased\nafter 10 days',
-                                 'DECEASED_after_5_DAYS': 'Deceased\nafter 5 days',
+        outcomes_newline_dict = {'DECEASED_INDICATOR': 'Mortality\nduring\nhospitalization',
+                                 'DECEASED_in_0-3_DAYS': 'Mortality\nwithin\n0-3 days',
+                                 'DECEASED_in_3-5_DAYS': 'Mortality\nwithin\n3-5 days',
+                                 # 'DECEASED_in_5-7_DAYS': 'Deceased in 5 to 7 days',
+                                 # 'DECEASED_in_7-10_DAYS': 'Deceased in 7 to 10 days',
+                                 # 'DECEASED_in_0-5_DAYS': 'Deceased in 0 to 5 days',
+                                 # 'DECEASED_in_0-7_DAYS': 'Deceased in 0 to 7 days',
+                                 # 'DECEASED_in_0-10_DAYS': 'Deceased in 0 to 10 days',
+                                 # 'DECEASED_after_10_DAYS': 'Deceased after 10 days',
+                                 'DECEASED_after_5_DAYS': 'Mortality\nafter\n5 days',
                                  }
 
         ensemble_df_cat.replace(outcomes_newline_dict, inplace=True)
@@ -455,16 +454,16 @@ if __name__ == "__main__":
         #     outcomes_newline_dict[deceased_outcome_since_prefix.format(dday)] = deceased_outcome_since_prefix_plot.format(dday)
 
         outcomes_newline_dict = {
-                                # 'DECEASED_INDICATOR': 'Deceased\nIndicator',
-                                  'DECEASED_in_0-3_DAYS': 'Deceased in\n0 to 3 days',
-                                 'DECEASED_in_3-5_DAYS': 'Deceased in\n3 to 5 days',
-                                 # 'DECEASED_in_5-7_DAYS': 'Deceased\nin 5 to 7 days',
-                                 # 'DECEASED_in_7-10_DAYS': 'Deceased\nin 7 to 10 days',
-                                 # 'DECEASED_in_0-5_DAYS': 'Deceased in\n0 to 5 days',
-                                 # 'DECEASED_in_0-7_DAYS': 'Deceased in\n0 to 7 days',
-                                 # 'DECEASED_in_0-10_DAYS': 'Deceased in\n0 to 10 days',
-                                 # 'DECEASED_after_10_DAYS': 'Deceased\nafter 10 days',
-                                 'DECEASED_after_5_DAYS': 'Deceased\nafter 5 days',
+                # 'DECEASED_INDICATOR': 'Mortality\nduring\nhospitalization',
+                                 'DECEASED_in_0-3_DAYS': 'Mortality\nwithin\n0-3 days',
+                                 'DECEASED_in_3-5_DAYS': 'Mortality\nwithin\n3-5 days',
+                                 # 'DECEASED_in_5-7_DAYS': 'Deceased in 5 to 7 days',
+                                 # 'DECEASED_in_7-10_DAYS': 'Deceased in 7 to 10 days',
+                                 # 'DECEASED_in_0-5_DAYS': 'Deceased in 0 to 5 days',
+                                 # 'DECEASED_in_0-7_DAYS': 'Deceased in 0 to 7 days',
+                                 # 'DECEASED_in_0-10_DAYS': 'Deceased in 0 to 10 days',
+                                 # 'DECEASED_after_10_DAYS': 'Deceased after 10 days',
+                                 'DECEASED_after_5_DAYS': 'Mortality\nafter\n5 days',
                                  }
 
         # performance_df_cat_di_only = performance_df_cat.loc[performance_df_cat['data_name'] == out_k]
