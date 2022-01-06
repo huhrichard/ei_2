@@ -99,12 +99,12 @@ if __name__ == "__main__":
 
     dict_suffix = {'EI': 'Ensemble\nIntegration',
                    # 'EI_PowerSet':'Ensemble Integration\nPower Set',
-                   'admission': 'Admission\n(11)',
+                   'admission': 'Admission\n(23)',
                    # 'labs':'Laboratory\ntests',
-                   'labs': 'Lab\ntests\n(49)',
+                   'labs': 'Lab\ntests\n(44)',
                    # 'medications': 'Medica-\ntions\n(26)',
-                   'comorbidities': 'Co-morbi-\ndities\n(19)',
-                   'vitals': 'Vital\nsigns\n(6)',
+                   'comorbidities': 'Co-morbi-\ndities\n(23)',
+                   'vitals': 'Vital\nsigns\n(7)',
                    # 'concatenated': 'Concat-\nenated\nAll',
                    'xgboost': 'XGBoost'}
 
