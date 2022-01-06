@@ -44,6 +44,7 @@ def xgboost_predictions_result(outcome_path):
     df = read_arff_to_pandas_df(os.path.join(outcome_path,
                                              'xgboost/data.arff'))
 
+    print(df.shape)
 
 
     fold_values = list(df[p['foldAttribute']].unique())
