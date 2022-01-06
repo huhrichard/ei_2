@@ -87,7 +87,7 @@ def add_colon(str):
 if __name__ == "__main__":
 
     # Load all performance csv
-    metrics = {'fmax': r'$F_{max}$',
+    metrics = {'fmax': r'$\bf F_{max}$',
                'auc': 'AUC',
                'auprc': 'AUPRC'}
     # group = sys.argv[-2]

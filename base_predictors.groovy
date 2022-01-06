@@ -28,7 +28,6 @@ import weka.filters.unsupervised.attribute.*
 import weka.filters.unsupervised.instance.*
 import weka.attributeSelection.*
 import weka.attributeSelection.ClassifierAttributeEval
-// import weka.attributeSelection.Ranker
 
 void dump(instances, filename) {
     w = new BufferedWriter(new FileWriter(filename))
@@ -141,13 +140,6 @@ if (foldAttribute != "") {
     test = data.testCV(foldCount, Integer.valueOf(currentFold))
     train = data.trainCV(foldCount, Integer.valueOf(currentFold), new Random(1))
 }
-
-
-// Future work: TCCA here?
-// Write train & test to dummy files
-// Call tcca python script to project features
-// Version2: train & test = projected features
-// Version3: concat projected features to base predictions
 
 // resample and balance training fold if necessary
 if (bagCount > 0) {
@@ -300,7 +292,6 @@ for (currentNestedFold in 0..nestedFoldCount - 1) {
 }
 
 // Attribute Importance
-
 if (attr_imp_bool){
     classifier = AbstractClassifier.forName(classifierName, classifierOptions)
     printf "%s, ", classifierName, classifierOptions
