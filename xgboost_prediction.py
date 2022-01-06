@@ -16,8 +16,8 @@ import common
 def read_arff_to_pandas_df(arff_path):
     # loadarff doesn't support string attribute
     # data = arff.loadarff(arff_path)
-    df = pd.read_csv(arff_path, comment='@')
-    print(df.shape)
+    df = pd.read_csv(arff_path, comment='@', header=None)
+    # print(df.columns)
     num_col = df.shape[1]
     columns = []
     file1 = open(arff_path, 'r')
