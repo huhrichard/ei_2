@@ -191,10 +191,10 @@ def CES_classifier(path, fold_count=range(5), agg=1, attr_imp=False):
         train_df, train_labels, test_df, test_labels = common.read_fold(path, 1)
         frequency_bp_selected = best_ensembles[0].value_counts()
         local_model_weight_df = pd.DataFrame(data=np.zeros((1,len(train_df.columns))), columns=train_df.columns, index=[0])
-        # for bp, freq in frequency_bp_selected.items():
-        for bp in list(train_df.columns):
-            if bp.split('.')[0] in frequency_bp_selected.index:
-                local_model_weight_df[bp] = frequency_bp_selected[bp.split('.')[0]]
+        for bp, freq in frequency_bp_selected.items():
+        # for bp in list(train_df.columns):
+        #     if bp.split('.')[0] in frequency_bp_selected.index:
+            local_model_weight_df[bp] = frequency_bp_selected[bp.split('.')[0]]
         local_model_weight_df['ensemble_method'] = 'CES'
     else:
         local_model_weight_df = None
@@ -380,7 +380,8 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
             else:
                 stacking_output.append(stack)
         predictions_dfs = [s['testing_df'] for s in stacking_output]
-        if attr_imp:
+        # if attr_imp:
+        if attr_imp and (stacker_name in ['LR.S', 'NB.S', 'RF.S', 'SVM.S']):
             training_dfs = stacking_output[0]['train_dfs'][0]
             training_labels = pd.DataFrame({'label': stacking_output[0]['train_dfs'][1]})
             print(training_dfs.shape)
