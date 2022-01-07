@@ -229,7 +229,7 @@ for ontology in list_ontology:
                           order=sorted(set(cd_df_melted['go_depth'].values)),
                           linewidth=2.5)
         ax2.get_legend().remove()
-        ax2.legend(loc='upper right')
+        ax2.legend(loc='upper right', prop={'weight':'bold', 'size':18})
         ax2.set_ylabel(ylabel, fontsize=22, fontweight='bold')
         ax2.set_xlabel('Depth in GO Hierarchy', fontsize=22)
         ax2_new_xticks = []
@@ -287,7 +287,7 @@ for ontology in list_ontology:
                           order=ic_group_list,
                           linewidth=2.5)
         ax3.get_legend().remove()
-        ax3.legend(loc='upper right')
+        ax3.legend(loc='upper right', prop={'weight':'bold', 'size':18})
         ax3.set_ylabel(ylabel, fontsize=22, fontweight='bold')
         for xtick in ax3.get_xticklabels():
 
