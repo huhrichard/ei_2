@@ -8,7 +8,7 @@ from goatools.semantic import get_info_content
 from goatools.gosubdag.gosubdag import GoSubDag
 from goatools.anno.factory import get_objanno
 from goatools.semantic import TermCounts
-from statannot import add_stat_annotation
+# from statannot import add_stat_annotation
 
 from goatools.base import download_go_basic_obo
 import seaborn as sns
@@ -169,7 +169,7 @@ for ontology in list_ontology:
                       linewidth=2.5)
 
     pv_list = [2e-16, 2e-16, 1.03e-12]
-    pair_list = [('Ensemble\nIntegration', 'DeepNF'),
+    pair_list = [('Ensemble\nIntegration', 'deepNF'),
                  ('Ensemble\nIntegration', 'Mashup'),
                  ('Ensemble\nIntegration', 'Coexpression')]
     # pair_list = [(0, 1),
