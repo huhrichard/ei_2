@@ -238,10 +238,10 @@ for ontology in list_ontology:
             original_tick = tick.get_text()
             print(original_tick)
 
-            new_tick = '{}\n({})'.format(original_tick, int(value_count_depth[int(original_tick)]))
-            print(new_tick)
-            tick.set_text(new_tick)
-            ax2_new_xticks.append(new_tick)
+            # new_tick = '{}\n({})'.format(original_tick, int(value_count_depth[int(original_tick)]))
+            # print(new_tick)
+            tick.set_text(original_tick)
+            ax2_new_xticks.append(original_tick)
             tick.set_fontsize(20)
 
         for ytick in ax2.get_yticklabels():
