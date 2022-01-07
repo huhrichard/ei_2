@@ -84,9 +84,10 @@ for ontology in list_ontology:
     # print(cd_df.isna().sum())
     csv_fp = cd_csv_path+'cd_input_{}.csv'.format(ontology)
     cd_df = pd.read_csv(csv_fp)
+
     # cd_df.to_csv(csv_fp, index_label=False)
     # cd_df = pd.read_csv('')
-    # print(cd_df)
+    print(cd_df)
 
 
     algo_names = cd_df.columns
