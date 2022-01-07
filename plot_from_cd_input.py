@@ -220,7 +220,7 @@ for ontology in list_ontology:
         fig2_plot_only = ['Mashup', 'deepNF', 'Ensemble\nIntegration']
         # idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
         # cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
-        fig2 = plt.figure()
+        fig2 = plt.figure(figsize=(12,6))
         ax2 = fig2.add_subplot(111)
         ax2 = sns.boxplot(ax=ax2, y='fmax', x='go_depth',
                           data=cd_df_melted[cd_df_melted['algo'].isin(fig2_plot_only)],
@@ -242,9 +242,9 @@ for ontology in list_ontology:
             print(new_tick)
             tick.set_text(new_tick)
             ax2_new_xticks.append(new_tick)
-            tick.set_fontsize(22)
+            tick.set_fontsize(21)
 
-        for ytick in ax2.get_xticklabels():
+        for ytick in ax2.get_yticklabels():
 
             ytick.set_fontsize(22)
 
@@ -278,7 +278,7 @@ for ontology in list_ontology:
         #
         #     ic_group_list.append(group_name)
         print(cd_df_melted['ic_group'].value_counts())
-        fig3 = plt.figure()
+        fig3 = plt.figure(figsize=(10,6))
         ax3 = fig3.add_subplot(111)
         ax3 = sns.boxplot(ax=ax3, y='fmax', x='ic_group',
                           data=cd_df_melted[cd_df_melted['algo'].isin(fig2_plot_only)],
