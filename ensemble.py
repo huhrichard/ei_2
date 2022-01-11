@@ -420,7 +420,7 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
         df = pd.DataFrame(data=[[dn, fmax['F'], stacker_name, auc, auprc]], columns=cols, index=[0])
         dfs.append(df)
     dfs = pd.concat(dfs)
-    predictions_dataframe = pd.concat(predictions_dataframes)
+    predictions_dataframe = pd.concat(predictions_dataframes, axis=1)
 
     if attr_imp is True:
         print(local_model_weight_dfs)
@@ -429,7 +429,7 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
 
 
     """ Save results """
-    predictions_dataframe.to_csv(os.path.join(analysis_path, "predictions.csv"), index=False)
+    predictions_dataframe.to_csv(os.path.join(analysis_path, "predictions.csv"))
 
     dfs.to_csv(os.path.join(analysis_path, "performance.csv"), index=False)
 
