@@ -169,10 +169,15 @@ def CES_classifier(path, fold_count=range(5), agg=1, attr_imp=False):
     predictions_df = pd.concat(predictions_dfs)
     predictions_df['method'] = method
     predictions_df['metric'] = 'fmax'
+    print(predictions_df)
     predictions_df.to_csv('%s/analysis/selection-%s-%s.csv' % (path, method, 'fmax'), index=False)
+
     auc = sklearn.metrics.roc_auc_score(predictions_df.label, predictions_df.prediction)
     auprc = common.auprc(predictions_df.label, predictions_df.prediction)
     fmax = (common.fmeasure_score(predictions_df.label, predictions_df.prediction, thres=thres))
+
+    predictions_only_df = predictions_df.loc[:,['prediction']]
+    predictions_only_df.rename(columns={'prediction':'CES'}, inplace=True)
     if attr_imp:
         frequency_bp_selected = best_ensembles[0].value_counts()
         local_model_weight_df = pd.DataFrame(data=np.zeros((1,len(train_df.columns))), columns=train_df.columns, index=[0])
@@ -181,7 +186,9 @@ def CES_classifier(path, fold_count=range(5), agg=1, attr_imp=False):
         local_model_weight_df['ensemble_method'] = 'CES'
     else:
         local_model_weight_df = None
-    return {'f-measure':fmax, 'auc':float(auc), 'auprc':auprc, 'model_weight': local_model_weight_df}
+    return {'f-measure':fmax, 'auc':float(auc), 'auprc':auprc,
+            'model_weight': local_model_weight_df,
+            'predictions': predictions_only_df}
 
 
 
@@ -332,6 +339,7 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
         print('[{}] F-max score is {}.'.format(key, fmax_perf))
         print('[{}] AUC score is {}.'.format(key, auc_perf) )
         print('[{}] AUPRC score is {}.'.format(key, auprc_perf))
+        predictions_dataframes.append(perf['predictions'])
         dfs.append(pd.DataFrame(data=[[dn, fmax_perf, key, auc_perf, auprc_perf]], columns=cols, index=[0]))
 
     print('Saving results #############################################')
@@ -403,7 +411,7 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
         print('stacking:')
         predictions_df.drop(columns=['fold'], inplace=True)
         predictions_df.rename(columns={'prediction':stacker_name}, inplace=True)
-        predictions_df.set_index(['id', 'label'])
+        predictions_df.set_index(['id', 'label'], inplace=True)
         print(predictions_df)
 
         df = pd.DataFrame(data=[[dn, fmax['F'], stacker_name, auc, auprc]], columns=cols, index=[0])
