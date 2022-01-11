@@ -309,6 +309,7 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
     cols = ['data_name', 'fmax', 'method', 'auc', 'auprc']
 
     dfs = []
+    predictions_dataframes = []
 
     local_model_weight_dfs = []
     aggregated_dict = {'CES': CES_classifier,
