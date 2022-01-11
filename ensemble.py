@@ -227,13 +227,16 @@ def aggregating_ensemble(path, fold_count=range(5), agg=1, attr_imp=False, media
     auc = sklearn.metrics.roc_auc_score(labels, predictions)
     auprc = common.auprc(labels, predictions)
 
-    print(predictions)
-
+    # print(predictions)
+    # print()
+    pred_out_df = predictions.to_frame()
+    pred_out_df.columns = ['Mean']
+    print(pred_out_df)
     if attr_imp:
         local_model_weight_df = pd.DataFrame(data=np.ones((1, len(train_df.columns))),
                                              columns=train_df.columns,
                                              index=[0])
-        local_model_weight_df['ensemble_method'] = 'mean'
+        local_model_weight_df['ensemble_method'] = 'Mean'
     else:
         local_model_weight_df = None
 
@@ -262,6 +265,7 @@ def bestbase_classifier(path, fold_count=range(5), agg=1, attr_imp=False):
     best_auc = sklearn.metrics.roc_auc_score(labels, best_bp_predictions)
     best_auprc = common.auprc(labels, best_bp_predictions)
     print('best_bp')
+    best_bp_predictions.columns = ['best base']
     print(best_bp_predictions)
     print(predictions)
 
@@ -384,8 +388,7 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
         thres = thres_fmax(_training[0], _training[1])
 
         predictions_df = pd.concat(predictions_dfs)
-        print('stacking:')
-        print(predictions_df)
+
         fmax = common.fmeasure_score(predictions_df.label, predictions_df.prediction, thres)
         auc = sklearn.metrics.roc_auc_score(predictions_df.label, predictions_df.prediction)
         auprc = common.auprc(predictions_df.label, predictions_df.prediction)
@@ -396,6 +399,10 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
             print('[%s] Recall score is %s.' % (stacker_name, fmax['R']))
         print('[%s] AUC score is %s.' % (stacker_name, auc))
         print('[%s] AUPRC score is %s.' % (stacker_name, auprc))
+        print('stacking:')
+        predictions_df.rename(columns={'prediction':stacker_name}, inplace=True)
+        print(predictions_df)
+
         df = pd.DataFrame(data=[[dn, fmax['F'], stacker_name, auc, auprc]], columns=cols, index=[0])
         dfs.append(df)
     dfs = pd.concat(dfs)
