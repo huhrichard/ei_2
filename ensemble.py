@@ -154,17 +154,18 @@ def CES_classifier(path, fold_count=range(5), agg=1, attr_imp=False):
     seeds = range(agg)
     best_ensembles = []
 
-    for fold in fold_count:
-        pred_df, perf_df, train_pred_df, best_ensemble, train_df = method_function(fold, seedval, path, agg)
-        predictions_dfs.append(pred_df)
-        train_predictions_dfs.append(train_pred_df)
-        performance_dfs.append(perf_df)
-        thres = thres_fmax(train_pred_df.label, train_pred_df.prediction)
-        if attr_imp:
-            if fold == 1:
-                best_ensembles.append(best_ensemble)
-    performance_df = pd.concat(performance_dfs)
-    performance_df.to_csv('%s/analysis/selection-%s-%s-iterations.csv' % (path, method, 'fmax'), index=False)
+    for seedval in seeds:
+        for fold in fold_count:
+            pred_df, perf_df, train_pred_df, best_ensemble, train_df = method_function(fold, seedval, path, agg)
+            predictions_dfs.append(pred_df)
+            train_predictions_dfs.append(train_pred_df)
+            performance_dfs.append(perf_df)
+            thres = thres_fmax(train_pred_df.label, train_pred_df.prediction)
+            if attr_imp:
+                if fold == 1:
+                    best_ensembles.append(best_ensemble)
+        performance_df = pd.concat(performance_dfs)
+        performance_df.to_csv('%s/analysis/selection-%s-%s-iterations.csv' % (path, method, 'fmax'), index=False)
     predictions_df = pd.concat(predictions_dfs)
     predictions_df['method'] = method
     predictions_df['metric'] = 'fmax'
