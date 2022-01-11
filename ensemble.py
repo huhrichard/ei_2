@@ -7,25 +7,22 @@
 import common
 import pandas as pd
 import argparse
-from time import time
 from os import mkdir
 import os
 from os.path import abspath, exists
-from sys import argv
 from numpy import array, column_stack, append
 from numpy.random import choice, seed
 
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor  # Random Forest
 from sklearn.naive_bayes import GaussianNB  # Naive Bayes
-from sklearn.linear_model import LogisticRegression, LinearRegression  # Logistic regression
+from sklearn.linear_model import LogisticRegression, LinearRegression  # LR
 from sklearn.ensemble import AdaBoostClassifier, AdaBoostRegressor  # Adaboost
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor  # Decision Tree
 from sklearn.ensemble import GradientBoostingClassifier, GradientBoostingRegressor  # Logit Boost with parameter(loss='deviance')
-from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor  # K nearest neighbors (IBk in weka)
+from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor  # KNN
 
 from sklearn.metrics import fbeta_score, make_scorer
-from xgboost import XGBClassifier, XGBRegressor
-from sklearn.model_selection import GridSearchCV
+from xgboost import XGBClassifier, XGBRegressor # XGB
 from sklearn.svm import SVC, LinearSVR
 
 import sklearn
@@ -85,11 +82,8 @@ def select_candidate_enhanced(train_df, train_labels, best_classifiers, ensemble
     max_candidates = 50
     if len(ensemble) >= initial_ensemble_size:
         candidates = choice(best_classifiers.index.values, min(max_candidates, len(best_classifiers)), replace=False)
-        # candidate_scores = [common.score(train_labels, train_df[ensemble + [candidate]].mean(axis=1)) for candidate in
-        #                     candidates]
         candidate_scores = [scoring_func(train_labels, train_df[ensemble + [candidate]].mean(axis=1)) for candidate in
                             candidates]
-        # best_candidate = candidates[common.argbest(candidate_scores)]
         best_candidate = candidates[common.argbest(candidate_scores)]
     else:
         best_candidate = best_classifiers.index.values[i]
@@ -106,13 +100,11 @@ def selection(fold, seedval, path, agg,
     accuracy_weight = 0.5
     max_clusters = 20
     train_df, train_labels, test_df, test_labels = common.read_fold(path, fold)
-    # print(train_df)
     train_df = common.unbag(train_df, agg)
 
     test_df = common.unbag(test_df, agg)
     best_classifiers = train_df.apply(lambda x: scoring_func(train_labels, x)).sort_values(
         ascending=greater_is_better)
-    # print(best_classifiers)
 
     train_performance = []
     test_performance = []
@@ -128,7 +120,6 @@ def selection(fold, seedval, path, agg,
     train_performance_df = pd.DataFrame.from_records(train_performance)
     best_ensemble_size = common.get_best_performer(train_performance_df,
                                                    _greater_is_better=greater_is_better).ensemble_size.values
-    # print(best_ensemble_size)
     best_ensemble = train_performance_df.ensemble[:best_ensemble_size.item(0) + 1]
     return get_predictions(test_df, best_ensemble, fold, seedval), \
            pd.DataFrame.from_records(test_performance), \
@@ -163,19 +154,15 @@ def CES_classifier(path, fold_count=range(5), agg=1, attr_imp=False):
     seeds = range(agg)
     best_ensembles = []
 
-    for seedval in seeds:
-        # for fold in range(fold_count):
-        for fold in fold_count:
-            # if '67890' in fold:
-            # if testing_bool or (not 'foldAttribute' in p):
-            pred_df, perf_df, train_pred_df, best_ensemble, train_df = method_function(fold, seedval, path, agg)
-            predictions_dfs.append(pred_df)
-            train_predictions_dfs.append(train_pred_df)
-            performance_dfs.append(perf_df)
-            thres = thres_fmax(train_pred_df.label, train_pred_df.prediction)
-            if attr_imp:
-                if fold == 1:
-                    best_ensembles.append(best_ensemble)
+    for fold in fold_count:
+        pred_df, perf_df, train_pred_df, best_ensemble, train_df = method_function(fold, seedval, path, agg)
+        predictions_dfs.append(pred_df)
+        train_predictions_dfs.append(train_pred_df)
+        performance_dfs.append(perf_df)
+        thres = thres_fmax(train_pred_df.label, train_pred_df.prediction)
+        if attr_imp:
+            if fold == 1:
+                best_ensembles.append(best_ensemble)
     performance_df = pd.concat(performance_dfs)
     performance_df.to_csv('%s/analysis/selection-%s-%s-iterations.csv' % (path, method, 'fmax'), index=False)
     predictions_df = pd.concat(predictions_dfs)
@@ -184,18 +171,11 @@ def CES_classifier(path, fold_count=range(5), agg=1, attr_imp=False):
     predictions_df.to_csv('%s/analysis/selection-%s-%s.csv' % (path, method, 'fmax'), index=False)
     auc = sklearn.metrics.roc_auc_score(predictions_df.label, predictions_df.prediction)
     auprc = common.auprc(predictions_df.label, predictions_df.prediction)
-    print(thres)
     fmax = (common.fmeasure_score(predictions_df.label, predictions_df.prediction, thres=thres))
     if attr_imp:
-        print(best_ensembles[0])
-        # train_df, train_labels, test_df, test_labels = common.read_fold(path, 1)
         frequency_bp_selected = best_ensembles[0].value_counts()
-        print(train_df.columns)
         local_model_weight_df = pd.DataFrame(data=np.zeros((1,len(train_df.columns))), columns=train_df.columns, index=[0])
         for bp, freq in frequency_bp_selected.items():
-        # for bp in list(train_df.columns):
-        #     if bp.split('.')[0] in frequency_bp_selected.index:
-        #     local_model_weight_df[bp] = frequency_bp_selected[bp.split('.')[0]]
             local_model_weight_df[bp] = freq
         local_model_weight_df['ensemble_method'] = 'CES'
     else:
@@ -221,12 +201,12 @@ def aggregating_ensemble(path, fold_count=range(5), agg=1, attr_imp=False, media
     labels = []
     train_dfs = []
     train_labels = []
-    # for fold in range(fold_count):
+
     for fold in fold_count:
         train_df, train_label, test_df, test_label = common.read_fold(path, fold)
         if median:
-            train_agg = _unbag_median(train_df, agg, z_scoring=z_scoring, train_df_temp=train_df)
-            predict = _unbag_median(test_df, agg, z_scoring=z_scoring, train_df_temp=train_df)
+            train_agg = _unbag_median(train_df, agg, train_df_temp=train_df)
+            predict = _unbag_median(test_df, agg, train_df_temp=train_df)
         else:
             train_agg = _unbag_mean(train_df, agg)
             predict = _unbag_mean(test_df, agg)
@@ -246,9 +226,11 @@ def aggregating_ensemble(path, fold_count=range(5), agg=1, attr_imp=False, media
     auc = sklearn.metrics.roc_auc_score(labels, predictions)
     auprc = common.auprc(labels, predictions)
 
+    print(predictions)
+
     if attr_imp:
-        # frequency_bp_selected = best_ensembles[0]['ensemble'].value_counts()
-        local_model_weight_df = pd.DataFrame(data=np.ones((1, len(train_df.columns))), columns=train_df.columns,
+        local_model_weight_df = pd.DataFrame(data=np.ones((1, len(train_df.columns))),
+                                             columns=train_df.columns,
                                              index=[0])
         local_model_weight_df['ensemble_method'] = 'mean'
     else:
@@ -267,17 +249,24 @@ def bestbase_classifier(path, fold_count=range(5), agg=1, attr_imp=False):
 
     for fold in fold_count:
         train_df, train_label, test_df, label = common.read_fold(path, fold)
-        test_df = common.unbag(test_df, agg)
+        # test_df = common.unbag(test_df, agg)
         predictions.append(test_df)
         labels = append(labels, label)
     predictions = pd.concat(predictions)
 
-    # need to be changed
     fmax_list = [common.fmeasure_score(labels, predictions.iloc[:, i])['F'] for i in range(len(predictions.columns))]
-    auc_list = [sklearn.metrics.roc_auc_score(labels, predictions.iloc[:, i]) for i in range(len(predictions.columns))]
-    auprc_list = [common.auprc(labels, predictions.iloc[:, i]) for i in range(len(predictions.columns))]
+    argmax_bp_idx = np.argmax(fmax_list)
+    best_bp_predictions = predictions.iloc[:,argmax_bp_idx]
+    best_fmax = max(fmax_list)
+    best_auc = sklearn.metrics.roc_auc_score(labels, best_bp_predictions)['F']
+    best_auprc = common.auprc(labels, best_bp_predictions)['F']
+    # auc_list = [sklearn.metrics.roc_auc_score(labels, predictions.iloc[:, i]) for i in range(len(predictions.columns))]
+    # auprc_list = [common.auprc(labels, predictions.iloc[:, i]) for i in range(len(predictions.columns))]
+    print('best_bp')
+    print(best_bp_predictions)
+    print(predictions)
 
-    return {'f-measure':max(fmax_list), 'auc':max(auc_list), 'auprc':max(auprc_list)}
+    return {'f-measure': best_fmax, 'auc': best_auc, 'auprc': best_auprc}
 
 def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df,
                            regression=False):
@@ -294,20 +283,15 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df,
             test_predictions = test_predictions[:, 1]
             train_predictions = train_predictions[:, 1]
 
-    # print(stacker.coef_)
-    if stacker_name == "LR.S":
-        print(train_df.columns)
-        # print(stacker.coef_)
-        coefs = pd.DataFrame(data=list(stacker.coef_), columns=train_df.columns, index=[0])
-        coefs['fold'] = fold
-    else:
-        coefs = None
+
 
     df = pd.DataFrame(
         {'fold': fold, 'id': test_df.index.get_level_values('id'), 'label': test_labels, 'prediction': test_predictions,
          'diversity': common.diversity_score(test_df.values)})
+    print('stacking_df:')
+    print(df)
     return {'testing_df':df, "training": [train_labels, train_predictions], 'train_dfs': [train_df, train_labels],
-            'stacked_df':stacked_df, 'coefs':coefs}
+            'stacked_df':stacked_df}
 
 def plot_scatter(df, path, x_col, y_col, hue_col, fn, title):
     fig, ax = plt.subplots(1,1)

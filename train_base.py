@@ -62,7 +62,6 @@ if __name__ == "__main__":
     fns = [fn for fn in fns if not 'tcca' in fn]
     fns = [data_path + '/' + fn for fn in fns]
     feature_folders = [fn for fn in fns if isdir(fn)]
-    from functools import partial
 
 
     assert len(feature_folders) > 0
@@ -72,7 +71,6 @@ if __name__ == "__main__":
     if 'foldAttribute' in p:
         df = read_arff_to_pandas_df(feature_folders[0] + '/data.arff')
         fold_values = list(df[p['foldAttribute']].unique())
-        # pca_fold_values = ['pca_' + fv for fv in fold_values]
     else:
         fold_values = range(int(p['foldCount']))
     id_col = p['idAttribute']
@@ -108,10 +106,6 @@ if __name__ == "__main__":
         fn.write(
             '#!/bin/bash\n#BSUB -J EI-%s\n#BSUB -P acc_pandeg01a\n#BSUB -q %s\n#BSUB -n %s\n#BSUB -sp 100\n#BSUB -W %s\n#BSUB -o %s.stdout\n#BSUB -eo %s.stderr\n#BSUB -R rusage[mem=20000]\n' % (
             data_name, args.queue, args.node, args.time, data_source_dir, data_source_dir))
-        # fn.write('module load python/2.7.14\n')
-        # fn.write('module load py_packages\n')
-        # fn.write('module purge')
-        # fn.write('conda activate ei')
         fn.write('module load java\nmodule load python\nmodule load groovy\nmodule load selfsched\nmodule load weka\n')
         fn.write('export _JAVA_OPTIONS="-XX:ParallelGCThreads=10"\nexport JAVA_OPTS="-Xmx30g"\nexport CLASSPATH=%s\n' % (
             args.classpath))
