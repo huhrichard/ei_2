@@ -421,7 +421,7 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
         dfs.append(df)
     dfs = pd.concat(dfs)
     predictions_dataframe = pd.concat(predictions_dataframes)
-    
+
     if attr_imp is True:
         print(local_model_weight_dfs)
         local_mr_df = pd.concat(local_model_weight_dfs)
@@ -429,6 +429,7 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
 
 
     """ Save results """
+    predictions_dataframe.to_csv(os.path.join(analysis_path, "predictions.csv"), index=False)
 
     dfs.to_csv(os.path.join(analysis_path, "performance.csv"), index=False)
 
