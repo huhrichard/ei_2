@@ -257,12 +257,10 @@ def bestbase_classifier(path, fold_count=range(5), agg=1, attr_imp=False):
 
     fmax_list = [common.fmeasure_score(labels, predictions.iloc[:, i])['F'] for i in range(len(predictions.columns))]
     argmax_bp_idx = np.argmax(fmax_list)
-    best_bp_predictions = predictions.iloc[:,argmax_bp_idx]
+    best_bp_predictions = predictions.iloc[:,[argmax_bp_idx]]
     best_fmax = max(fmax_list)
     best_auc = sklearn.metrics.roc_auc_score(labels, best_bp_predictions)
     best_auprc = common.auprc(labels, best_bp_predictions)
-    # auc_list = [sklearn.metrics.roc_auc_score(labels, predictions.iloc[:, i]) for i in range(len(predictions.columns))]
-    # auprc_list = [common.auprc(labels, predictions.iloc[:, i]) for i in range(len(predictions.columns))]
     print('best_bp')
     print(best_bp_predictions)
     print(predictions)
@@ -287,10 +285,9 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df,
 
 
     df = pd.DataFrame(
-        {'fold': fold, 'id': test_df.index.get_level_values('id'), 'label': test_labels, 'prediction': test_predictions,
-         'diversity': common.diversity_score(test_df.values)})
-    print('stacking_df:')
-    print(df)
+        {'fold': fold, 'id': test_df.index.get_level_values('id'), 'label': test_labels, 'prediction': test_predictions})
+    # print('stacking_df:')
+    # print(df)
     return {'testing_df':df, "training": [train_labels, train_predictions], 'train_dfs': [train_df, train_labels],
             'stacked_df':stacked_df}
 
@@ -367,11 +364,9 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
             else:
                 stacking_output.append(stack)
         predictions_dfs = [s['testing_df'] for s in stacking_output]
-        # if attr_imp:
-        if attr_imp and (stacker_name in ['LR.S', 'NB.S', 'RF.S', 'SVM.S']):
+        if attr_imp:
             training_dfs = stacking_output[0]['train_dfs'][0]
             training_labels = pd.DataFrame({'label': stacking_output[0]['train_dfs'][1]})
-            print(training_dfs.shape)
             stacker.fit(training_dfs, training_labels)
             n_repeats = 100
             stacker_pi = permutation_importance(estimator=stacker,
@@ -381,8 +376,6 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
                                             random_state=0,
                                                scoring = auprc_sklearn
                                                 )
-            print(stacker_pi.importances_mean)
-            print(stacker_pi.importances_mean.shape)
             pi_df = pd.DataFrame(data=[stacker_pi.importances_mean], columns=training_dfs.columns, index=[0])
             pi_df['ensemble_method'] = stacker_name
             local_model_weight_dfs.append(pi_df)
@@ -391,9 +384,9 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
         thres = thres_fmax(_training[0], _training[1])
 
         predictions_df = pd.concat(predictions_dfs)
-        print(thres)
+        print('stacking:')
+        print(predictions_df)
         fmax = common.fmeasure_score(predictions_df.label, predictions_df.prediction, thres)
-        print(fmax)
         auc = sklearn.metrics.roc_auc_score(predictions_df.label, predictions_df.prediction)
         auprc = common.auprc(predictions_df.label, predictions_df.prediction)
         print('[%s] Finished evaluating model ###########################' % (stacker_name))
