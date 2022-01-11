@@ -178,6 +178,7 @@ def CES_classifier(path, fold_count=range(5), agg=1, attr_imp=False):
 
     predictions_only_df = predictions_df.loc[:,['prediction']]
     predictions_only_df.rename(columns={'prediction':'CES'}, inplace=True)
+    print(predictions_only_df)
     if attr_imp:
         frequency_bp_selected = best_ensembles[0].value_counts()
         local_model_weight_df = pd.DataFrame(data=np.zeros((1,len(train_df.columns))), columns=train_df.columns, index=[0])
@@ -247,7 +248,9 @@ def aggregating_ensemble(path, fold_count=range(5), agg=1, attr_imp=False, media
     else:
         local_model_weight_df = None
 
-    return {'f-measure': fmax, 'auc': auc, 'auprc': auprc, 'model_weight': local_model_weight_df}
+    return {'f-measure': fmax, 'auc': auc, 'auprc': auprc,
+            'model_weight': local_model_weight_df,
+            'predictions': pred_out_df}
 
 
 
@@ -274,9 +277,9 @@ def bestbase_classifier(path, fold_count=range(5), agg=1, attr_imp=False):
     print('best_bp')
     best_bp_predictions.columns = ['best base']
     print(best_bp_predictions)
-    print(predictions)
 
-    return {'f-measure': best_fmax, 'auc': best_auc, 'auprc': best_auprc}
+    return {'f-measure': best_fmax, 'auc': best_auc,
+            'auprc': best_auprc, 'predictions': best_bp_predictions}
 
 def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df,
                            regression=False):
@@ -413,7 +416,7 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
         predictions_df.rename(columns={'prediction':stacker_name}, inplace=True)
         predictions_df.set_index(['id', 'label'], inplace=True)
         print(predictions_df)
-
+        predictions_dataframes.append(predictions_df)
         df = pd.DataFrame(data=[[dn, fmax['F'], stacker_name, auc, auprc]], columns=cols, index=[0])
         dfs.append(df)
     dfs = pd.concat(dfs)
