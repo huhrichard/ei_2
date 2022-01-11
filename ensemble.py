@@ -259,8 +259,8 @@ def bestbase_classifier(path, fold_count=range(5), agg=1, attr_imp=False):
     argmax_bp_idx = np.argmax(fmax_list)
     best_bp_predictions = predictions.iloc[:,argmax_bp_idx]
     best_fmax = max(fmax_list)
-    best_auc = sklearn.metrics.roc_auc_score(labels, best_bp_predictions)['F']
-    best_auprc = common.auprc(labels, best_bp_predictions)['F']
+    best_auc = sklearn.metrics.roc_auc_score(labels, best_bp_predictions)
+    best_auprc = common.auprc(labels, best_bp_predictions)
     # auc_list = [sklearn.metrics.roc_auc_score(labels, predictions.iloc[:, i]) for i in range(len(predictions.columns))]
     # auprc_list = [common.auprc(labels, predictions.iloc[:, i]) for i in range(len(predictions.columns))]
     print('best_bp')
