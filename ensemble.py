@@ -400,7 +400,9 @@ def main_classification(path, f_list, agg=1, attr_imp=False):
         print('[%s] AUC score is %s.' % (stacker_name, auc))
         print('[%s] AUPRC score is %s.' % (stacker_name, auprc))
         print('stacking:')
+        predictions_df.drop(columns=['fold'], inplace=True)
         predictions_df.rename(columns={'prediction':stacker_name}, inplace=True)
+        predictions_df.set_index(['id', 'label'])
         print(predictions_df)
 
         df = pd.DataFrame(data=[[dn, fmax['F'], stacker_name, auc, auprc]], columns=cols, index=[0])
