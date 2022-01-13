@@ -169,7 +169,7 @@ for ontology in list_ontology:
                       data=cd_df_melted, palette=sorted_cp, order=sorted_algo_names,
                       linewidth=2.5)
 
-    ax1 = sns.stripplot(ax=ax1, y='fmax', x='algo',jitter =1,
+    ax1 = sns.stripplot(ax=ax1, y='fmax', x='algo',jitter =True,
                       data=cd_df_melted, order=sorted_algo_names,
                         size=4, color=".3", linewidth=0)
 
