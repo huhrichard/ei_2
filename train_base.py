@@ -41,8 +41,9 @@ def create_pseudoTestdata(data_dir, feat_folders, original_dir):
         df_shape = feat_df.shape
         for i in range(20):
             ri = i + df_shape[0]
-            number_of_real_col = len(real_val_cols)
-            feat_df.loc[ri] = np.random.randn(number_of_real_col)
+            # number_of_real_col = len(real_val_cols)
+            # feat_df.loc[ri] = np.random.randn(number_of_real_col)
+            feat_df.loc[ri] = np.random.randn(df_shape[1])
             feat_df.loc[ri, 'fold'] = 1
             feat_df.loc[ri, 'seqID'] = i
             if (i % 2) == 0:
