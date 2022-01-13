@@ -169,6 +169,10 @@ for ontology in list_ontology:
                       data=cd_df_melted, palette=sorted_cp, order=sorted_algo_names,
                       linewidth=2.5)
 
+    ax1 = sns.stripplot(ax=ax1, y='fmax', x='algo',
+                      data=cd_df_melted, order=sorted_algo_names,
+                        size=4, color=".3", linewidth=0)
+
     pv_list = [2e-16, 2e-16, 1.03e-12]
     pair_list = [('Ensemble\nIntegration', 'deepNF'),
                  ('Ensemble\nIntegration', 'Mashup'),
@@ -228,6 +232,12 @@ for ontology in list_ontology:
                           hue='algo', hue_order=fig2_plot_only,
                           order=sorted(set(cd_df_melted['go_depth'].values)),
                           linewidth=2.5)
+
+        ax2 = sns.stripplot(ax=ax2, y='fmax', x='go_depth',
+                          data=cd_df_melted[cd_df_melted['algo'].isin(fig2_plot_only)],
+                          order=sorted(set(cd_df_melted['go_depth'].values)),
+                            size=4, color=".3", linewidth=0)
+
         ax2.get_legend().remove()
         ax2.legend(loc='upper right', prop={'weight':'bold', 'size':18})
         ax2.set_ylabel(ylabel, fontsize=22, fontweight='bold')
@@ -286,6 +296,12 @@ for ontology in list_ontology:
                           hue='algo', hue_order=fig2_plot_only,
                           order=ic_group_list,
                           linewidth=2.5)
+
+        ax3 = sns.stripplot(ax=ax3, y='fmax', x='ic_group',
+                          data=cd_df_melted[cd_df_melted['algo'].isin(fig2_plot_only)],
+                          order=ic_group_list,
+                            size=4, color=".3", linewidth=0)
+
         ax3.get_legend().remove()
         ax3.legend(loc='upper right', prop={'weight':'bold', 'size':18})
         ax3.set_ylabel(ylabel, fontsize=22, fontweight='bold')
