@@ -36,6 +36,7 @@ def create_pseudoTestdata(data_dir, feat_folders, original_dir):
     for ff in feat_folders:
         feat_df = read_arff_to_pandas_df(os.path.join(ff, 'data.arff'))
         real_val_cols = []
+        feat_df.loc[:, 'fold'] = 0
         # create 20 pseudo test entries
         df_shape = feat_df.shape
         for i in range(20):

@@ -306,7 +306,7 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df,
             'stacked_df':stacked_df}
 
 
-def main_classification(path, f_list, agg=1, rank=False):
+def main_classification(path, f_list, agg=1, rank=False, ens_for_rank=''):
     #
     dn = abspath(path).split('/')[-1]
     cols = ['data_name', 'fmax', 'method', 'auc', 'auprc']
@@ -319,24 +319,27 @@ def main_classification(path, f_list, agg=1, rank=False):
                        'Mean': aggregating_ensemble,
                        'best base': bestbase_classifier}
 
+
+
     for key, val in aggregated_dict.items():
         print('[{}] Start building model #################################'.format(key))
-        perf = val(path, fold_values, agg, rank)
-        if key != 'best base':
-            fmax_perf = perf['f-measure']['F']
-            if rank:
-                local_model_weight_dfs.append(perf['model_weight'])
-        else:
-            fmax_perf = perf['f-measure']
+        if (rank and (key == ens_for_rank)) or (not rank):
+            perf = val(path, fold_values, agg, rank)
+            if key != 'best base':
+                fmax_perf = perf['f-measure']['F']
+                if rank:
+                    local_model_weight_dfs.append(perf['model_weight'])
+            else:
+                fmax_perf = perf['f-measure']
 
-        auc_perf = perf['auc']
-        auprc_perf = perf['auprc']
-        print('[{}] Finished evaluating model ############################'.format(key))
-        print('[{}] F-max score is {}.'.format(key, fmax_perf))
-        print('[{}] AUC score is {}.'.format(key, auc_perf) )
-        print('[{}] AUPRC score is {}.'.format(key, auprc_perf))
-        predictions_dataframes.append(perf['predictions'])
-        dfs.append(pd.DataFrame(data=[[dn, fmax_perf, key, auc_perf, auprc_perf]], columns=cols, index=[0]))
+            auc_perf = perf['auc']
+            auprc_perf = perf['auprc']
+            print('[{}] Finished evaluating model ############################'.format(key))
+            print('[{}] F-max score is {}.'.format(key, fmax_perf))
+            print('[{}] AUC score is {}.'.format(key, auc_perf) )
+            print('[{}] AUPRC score is {}.'.format(key, auprc_perf))
+            predictions_dataframes.append(perf['predictions'])
+            dfs.append(pd.DataFrame(data=[[dn, fmax_perf, key, auc_perf, auprc_perf]], columns=cols, index=[0]))
 
     print('Saving results #############################################')
     analysis_path = '%s/analysis' % path
@@ -359,56 +362,57 @@ def main_classification(path, f_list, agg=1, rank=False):
     stacked_df = pd.DataFrame(columns= df_cols)
 
     for i, (stacker_name, stacker) in enumerate(stackers_dict.items()):
-        print('[%s] Start building model ################################' % (stacker_name))
-        stacking_output = []
-        for fold in f_list:
-            stack = stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df)
-            stacked_df = stack.pop('stacked_df')
-            if rank:
-                if fold == 1:
+        if (rank and (stacker_name == ens_for_rank)) or (not rank):
+            print('[%s] Start building model ################################' % (stacker_name))
+            stacking_output = []
+            for fold in f_list:
+                stack = stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df)
+                stacked_df = stack.pop('stacked_df')
+                if rank:
+                    if fold == 1:
+                        stacking_output.append(stack)
+                else:
                     stacking_output.append(stack)
-            else:
-                stacking_output.append(stack)
-        predictions_dfs = [s['testing_df'] for s in stacking_output]
-        if rank:
-            training_dfs = stacking_output[0]['train_dfs'][0]
-            training_labels = pd.DataFrame({'label': stacking_output[0]['train_dfs'][1]})
-            stacker.fit(training_dfs, training_labels)
-            n_repeats = 100
-            stacker_pi = permutation_importance(estimator=stacker,
-                                               X=training_dfs,
-                                               y=training_labels,
-                                           n_repeats=n_repeats,
-                                            random_state=0,
-                                               scoring = auprc_sklearn
-                                                )
-            pi_df = pd.DataFrame(data=[stacker_pi.importances_mean], columns=training_dfs.columns, index=[0])
-            pi_df['ensemble_method'] = stacker_name
-            local_model_weight_dfs.append(pi_df)
+            predictions_dfs = [s['testing_df'] for s in stacking_output]
+            if rank:
+                training_dfs = stacking_output[0]['train_dfs'][0]
+                training_labels = pd.DataFrame({'label': stacking_output[0]['train_dfs'][1]})
+                stacker.fit(training_dfs, training_labels)
+                n_repeats = 100
+                stacker_pi = permutation_importance(estimator=stacker,
+                                                   X=training_dfs,
+                                                   y=training_labels,
+                                               n_repeats=n_repeats,
+                                                random_state=0,
+                                                   scoring = auprc_sklearn
+                                                    )
+                pi_df = pd.DataFrame(data=[stacker_pi.importances_mean], columns=training_dfs.columns, index=[0])
+                pi_df['ensemble_method'] = stacker_name
+                local_model_weight_dfs.append(pi_df)
 
-        _training = stacking_output[0]['training']
-        thres = thres_fmax(_training[0], _training[1])
+            _training = stacking_output[0]['training']
+            thres = thres_fmax(_training[0], _training[1])
 
-        predictions_df = pd.concat(predictions_dfs)
+            predictions_df = pd.concat(predictions_dfs)
 
-        fmax = common.fmeasure_score(predictions_df.label, predictions_df.prediction, thres)
-        auc = sklearn.metrics.roc_auc_score(predictions_df.label, predictions_df.prediction)
-        auprc = common.auprc(predictions_df.label, predictions_df.prediction)
-        print('[%s] Finished evaluating model ###########################' % (stacker_name))
-        print('[%s] F-measure score is %s.' % (stacker_name, fmax['F']))
-        if 'P' in fmax:
-            print('[%s] Precision score is %s.' % (stacker_name, fmax['P']))
-            print('[%s] Recall score is %s.' % (stacker_name, fmax['R']))
-        print('[%s] AUC score is %s.' % (stacker_name, auc))
-        print('[%s] AUPRC score is %s.' % (stacker_name, auprc))
-        # print('stacking:')
-        predictions_df.drop(columns=['fold'], inplace=True)
-        predictions_df.rename(columns={'prediction':stacker_name}, inplace=True)
-        predictions_df.set_index(['id', 'label'], inplace=True)
-        # print(predictions_df)
-        predictions_dataframes.append(predictions_df)
-        df = pd.DataFrame(data=[[dn, fmax['F'], stacker_name, auc, auprc]], columns=cols, index=[0])
-        dfs.append(df)
+            fmax = common.fmeasure_score(predictions_df.label, predictions_df.prediction, thres)
+            auc = sklearn.metrics.roc_auc_score(predictions_df.label, predictions_df.prediction)
+            auprc = common.auprc(predictions_df.label, predictions_df.prediction)
+            print('[%s] Finished evaluating model ###########################' % (stacker_name))
+            print('[%s] F-measure score is %s.' % (stacker_name, fmax['F']))
+            if 'P' in fmax:
+                print('[%s] Precision score is %s.' % (stacker_name, fmax['P']))
+                print('[%s] Recall score is %s.' % (stacker_name, fmax['R']))
+            print('[%s] AUC score is %s.' % (stacker_name, auc))
+            print('[%s] AUPRC score is %s.' % (stacker_name, auprc))
+            # print('stacking:')
+            predictions_df.drop(columns=['fold'], inplace=True)
+            predictions_df.rename(columns={'prediction':stacker_name}, inplace=True)
+            predictions_df.set_index(['id', 'label'], inplace=True)
+            # print(predictions_df)
+            predictions_dataframes.append(predictions_df)
+            df = pd.DataFrame(data=[[dn, fmax['F'], stacker_name, auc, auprc]], columns=cols, index=[0])
+            dfs.append(df)
     dfs = pd.concat(dfs)
     predictions_dataframe = pd.concat(predictions_dataframes, axis=1)
 
@@ -434,13 +438,16 @@ if __name__ == "__main__":
     parser.add_argument('--fold', '-F', type=int, default=5, help='cross-validation fold')
     parser.add_argument('--aggregate', '-A', type=int, default=1, help='if aggregate is needed, feed bagcount, else 1')
     parser.add_argument('--rank', type=str2bool, default='False', help='Boolean of getting local model ranking or not (default:False)')
+    parser.add_argument('--ens_for_rank', type=str, default='Choose one of the ensemble', help='Choose the ensemble for EI interpretation')
     args = parser.parse_args()
     data_path = abspath(args.path)
+    if args.rank:
+        data_path = os.path.join(data_path,'feature_rank')
 
     feature_folders = common.data_dir_list(data_path)
     if len(feature_folders) == 0:
         feature_folders = common.data_dir_list(os.path.join(data_path, '../'))
-    assert len(feature_folders) > 0
+    # assert len(feature_folders) > 0
     ### get basic properties from weka.properties
     p = load_properties(data_path)
     assert ('foldAttribute' in p) or ('foldCount' in p)
@@ -450,4 +457,4 @@ if __name__ == "__main__":
     else:
         fold_values = range(int(p['foldCount']))
 
-    main_classification(args.path, fold_values, args.aggregate, args.rank)
+    main_classification(data_path, fold_values, args.aggregate, args.rank, args.ens_for_rank)

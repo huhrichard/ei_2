@@ -13,6 +13,8 @@ if __name__ == "__main__":
     parser.add_argument('--ensemble', '-e', type=str, default='none', help='ensemble which performs the best')
 
     args = parser.parse_args()
+    # feat_rank_data_path = os.path.join(args.path, 'feature_rank')
+
     bfpath = os.path.join(args.path, 'attribute_imp-1.csv.gz')
     bppath = os.path.join(args.path, 'analysis/pi_stackers.csv')
     ensemble = args.ensemble
@@ -82,9 +84,11 @@ if __name__ == "__main__":
         base_feature_rank_median.append(median_rank)
         # base_feature_rank_agg['min_agg'] = [avg_ranks]
 
-    base_feature_rank_agg['min_agg'] = base_feature_rank_min
+    # base_feature_rank_agg['min_agg'] = base_feature_rank_min
+    base_feature_rank_agg['mean_agg'] = base_feature_rank_mean
     base_feature_rank_df = pd.DataFrame(base_feature_rank_agg, index=base_features_list)
-    base_feature_rank_df['min_ascending_rank'] = base_feature_rank_df['min_agg'].rank(ascending=True)
+    # base_feature_rank_df['min_ascending_rank'] = base_feature_rank_df['min_agg'].rank(ascending=True)
+    base_feature_rank_df['mean_ascending_rank'] = base_feature_rank_df['mean_agg'].rank(ascending=True)
     base_feature_rank_df.to_csv('base_feature_agg_rank_{}.csv'.format(outcome))
 
 
