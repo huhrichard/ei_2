@@ -137,7 +137,7 @@ for ontology in list_ontology:
 
 
 
-        ic_of_terms = cd_df.loc[cd_df['algo']=='PPI','go_ic'].values
+        ic_of_terms = cd_df['go_ic'].values
         # _, bin_edges = np.histogram(ic_of_terms, bins=5)
         bin_edges = np.percentile(ic_of_terms, np.linspace(0, 100, 6))
         ic_group_list = []

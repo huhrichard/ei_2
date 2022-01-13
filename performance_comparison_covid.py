@@ -320,7 +320,7 @@ if __name__ == "__main__":
                               linewidth=2, width=0.5)
             ax3 = sns.stripplot(ax=ax3, y=mk, x='Method',
                               data=performance_df_cat_di_only, order=sorted_dataname_list_no_xgb,
-                                size=4, color=".3", linewidth=0)
+                                size=6, color=".3", linewidth=0)
 
             ax3.axhline(y=xgb_series[mk].values, color='r', ls='--', label='XGBoost')
             # for tick in ax3.get_xticklabels():
