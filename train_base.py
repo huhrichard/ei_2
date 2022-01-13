@@ -13,6 +13,8 @@ from os.path import abspath, dirname, exists
 from sys import argv
 from common import load_properties, read_arff_to_pandas_df
 from time import time
+import generate_data
+import numpy as np
 
 
 
@@ -24,10 +26,39 @@ def str2bool(v):
     else:
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
-def create_pseudoTestdata(arff_path):
+def create_pseudoTestdata(data_dir, feat_folders, original_dir):
+    new_feat_folders = []
 
-    generate_data.convert_to_arff(projected_df, v_fn)
-
+    os.system('cp {} {}'.format(os.path.join(original_dir, 'classifiers.txt'),
+                                data_dir))
+    os.system('cp {} {}'.format(os.path.join(original_dir,'weka.properties'),
+                                data_dir))
+    for ff in feat_folders:
+        feat_df = read_arff_to_pandas_df(os.path.join(ff, 'data.arff'))
+        real_val_cols = []
+        # create 20 pseudo test entries
+        df_shape = feat_df.shape
+        for i in range(20):
+            ri = i + df_shape[0]
+            number_of_real_col = len(real_val_cols)
+            feat_df.loc[ri] = np.random.randn(number_of_real_col)
+            feat_df.loc[ri, 'fold'] = 1
+            feat_df.loc[ri, 'seqID'] = i
+            if (i % 2) == 0:
+                c = 'pos'
+            else:
+                c = 'neg'
+            feat_df.loc[ri, 'cls'] = c
+        new_feat_dir = os.path.join(data_dir, ff.split('/')[-1])
+        if not exists(new_feat_dir):
+            os.mkdir(new_feat_dir)
+        os.system('cp {} {}'.format(os.path.join(original_dir, 'classifiers.txt'),
+                                    new_feat_dir))
+        os.system('cp {} {}'.format(os.path.join(original_dir, 'weka.properties'),
+                                    new_feat_dir))
+        generate_data.convert_to_arff(feat_df, new_feat_dir)
+        new_feat_folders.append(new_feat_dir)
+    return data_dir, new_feat_folders
 
 if __name__ == "__main__":
     ### parse arguments
@@ -72,16 +103,16 @@ if __name__ == "__main__":
         feature_rank_path = os.path.join(data_path,'feature_rank')
         if not exists(feature_rank_path):
             os.mkdir(feature_rank_path)
-        create_pseudoTestdata(feature_rank_path, feature_folders)
-        data_path =
+        data_path, feature_folders = create_pseudoTestdata(feature_rank_path, feature_folders)
 
-    ### get paths of the list of features
-    fns = listdir(data_path)
-    excluding_folder = ['analysis', 'feature_rank']
-    fns = [fn for fn in fns if not fn in excluding_folder]
-    fns = [fn for fn in fns if not 'tcca' in fn]
-    fns = [data_path + '/' + fn for fn in fns]
-    feature_folders = [fn for fn in fns if isdir(fn)]
+
+    # ### get paths of the list of features
+    # fns = listdir(data_path)
+    # excluding_folder = ['analysis', 'feature_rank']
+    # fns = [fn for fn in fns if not fn in excluding_folder]
+    # fns = [fn for fn in fns if not 'tcca' in fn]
+    # fns = [data_path + '/' + fn for fn in fns]
+    # feature_folders = [fn for fn in fns if isdir(fn)]
 
 
 
