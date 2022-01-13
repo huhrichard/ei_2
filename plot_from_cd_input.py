@@ -233,10 +233,10 @@ for ontology in list_ontology:
                           order=sorted(set(cd_df_melted['go_depth'].values)),
                           linewidth=2.5)
 
-        ax2 = sns.stripplot(ax=ax2, y='fmax', x='go_depth',jitter=1,
+        ax2 = sns.stripplot(ax=ax2, y='fmax', x='go_depth',jitter=True,
                           data=cd_df_melted[cd_df_melted['algo'].isin(fig2_plot_only)],
                           order=sorted(set(cd_df_melted['go_depth'].values)),
-                            hue='algo', hue_order=fig2_plot_only,
+                            hue='algo', hue_order=fig2_plot_only,  dodge=True,
                             size=4, color=".3", linewidth=0)
 
         ax2.get_legend().remove()
@@ -298,10 +298,10 @@ for ontology in list_ontology:
                           order=ic_group_list,
                           linewidth=2.5)
 
-        ax3 = sns.stripplot(ax=ax3, y='fmax', x='ic_group', jitter=1,
+        ax3 = sns.stripplot(ax=ax3, y='fmax', x='ic_group', jitter=True,
                           data=cd_df_melted[cd_df_melted['algo'].isin(fig2_plot_only)],
                           order=ic_group_list,
-                            hue='algo', hue_order=fig2_plot_only,
+                            hue='algo', hue_order=fig2_plot_only, dodge=True,
                             size=4, color=".3", linewidth=0)
 
         ax3.get_legend().remove()
