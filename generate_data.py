@@ -5,15 +5,8 @@ import os
 from os.path import exists, abspath, isdir
 from os import mkdir
 from sys import argv
-from glob import glob
-from multiprocessing import Pool
 from itertools import product
-import arff
-# from soft_impute import SoftImpute
-from scipy.sparse import coo_matrix, csr_matrix, eye, load_npz, save_npz
-# from rwr_from_jeff import *
 from sklearn.model_selection import KFold, StratifiedKFold
-# import networkx as nx
 
 def convert_to_arff(df, path):
     fn = open(path, 'w')
@@ -44,28 +37,6 @@ def convert_to_arff(df, path):
     print(path, 'finished writing df')
     fn.close()
 
-
-# def processTermFeature(param):
-# 	term, feature, labels = param
-# 	feature_df =  pd.read_csv('%s.csv' %feature,index_col=0)
-# 	before_shape = feature_df.shape
-# 	cols = [ c for c in feature_df.columns if c in seqs]
-# 	feature_df = feature_df.loc[seqs,cols]
-# 	feature_df.fillna(0,inplace=True)
-# 	feature_df = feature_df.loc[:,(feature_df !=0).any(axis=0)]
-# 	feature_df = feature_df.round(3)
-# 	feature_df['cls'] = labels
-# 	del feature_df.index.name
-# 	feature_df['seqID'] = feature_df.index
-#
-#         p = '%s/%s/%s' %(scratch_data_dir, t, feature)
-#
-#         if not exists(p):
-#             mkdir(p)
-#
-#         path = p + '/' + t + '.arff'
-# #	arff.dump(path, feature_df.values, relation='linhuaw', names = feature_df.columns)
-#         convert_to_arff(feature_df,path)
 
 def processTermArff(param, impute, fold=5):
     term, feature, go_hpo_df, csv_filepath = param
@@ -111,54 +82,6 @@ def processTermArff(param, impute, fold=5):
         mkdir(p)
     path = os.path.join(p, 'data.arff')
     convert_to_arff(merged_df, path)
-
-
-
-# def processTermFeature_2(param):
-#     term, feature, go_hpo_df, csv_file = param
-#     feature_df = pd.read_csv('{}{}.csv'.format(csv_file, feature), index_col=0)
-#     before_shape = feature_df.shape
-#     go_hpo_df.fillna(0, inplace=True)
-#     print('before', go_hpo_df.shape)
-#     go_hpo_df = go_hpo_df[go_hpo_df != 0]
-#     print('after', go_hpo_df.shape)
-#     term_inds = go_hpo_df.index.tolist()
-#     sel_inds = [ind for ind in feature_df.index.tolist() if ind in term_inds]
-#     feature_df.fillna(0, inplace=True)
-#     feature_df = feature_df.loc[sel_inds,]
-#     go_hpo_df = go_hpo_df.loc[sel_inds]
-#
-#
-#     print(term, feature, before_shape, feature_df.shape)
-#     labs = []
-#     print(go_hpo_df)
-#     # print(feature_df)
-#
-#
-#     counter = 0
-#     for l in go_hpo_df:
-#
-#         print(counter, l)
-#         counter += 1
-#
-#         if l == -1:
-#             labs.append('neg')
-#         elif l == 1:
-#             labs.append('pos')
-#
-#         else:
-#             print('invalid labels', l)
-#             exit(0)
-#
-    feature_df = feature_df.round(3)
-#     feature_df['cls'] = labs
-#     del feature_df.index.name
-#     p = os.path.join(scratch_data_dir, feature)
-#     if not exists(p):
-#         mkdir(p)
-#     path = os.path.join(p, t+'.arff')
-#     convert_to_arff(feature_df, path)
-
 
 if __name__ == "__main__":
 

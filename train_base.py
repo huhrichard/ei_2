@@ -1,13 +1,14 @@
 '''
 	Scripts to train base classifiers in a nested cross-validation structure by Weka.
 	See README.md for detailed information.
-	@author: Yan-Chak Li
+	@author: Yan-Chak Li, Linhua Wang
 '''
 from os.path import isdir
 from os import listdir
 import argparse
 from itertools import product
 from os import system
+import os
 from os.path import abspath, dirname, exists
 from sys import argv
 from common import load_properties, read_arff_to_pandas_df
@@ -23,6 +24,10 @@ def str2bool(v):
     else:
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
+def create_pseudoTestdata(arff_path):
+
+    generate_data.convert_to_arff(projected_df, v_fn)
+
 
 if __name__ == "__main__":
     ### parse arguments
@@ -35,7 +40,7 @@ if __name__ == "__main__":
     parser.add_argument('--classpath', '-CP', type=str, default='./weka.jar', help='default weka path')
     parser.add_argument('--hpc', type=str2bool, default='true', help='use HPC cluster or not')
     parser.add_argument('--fold', '-F', type=int, default=5, help='number of cross-validation fold')
-    parser.add_argument('--attr_imp', type=str2bool, default='False', help='getting attribute importance')
+    parser.add_argument('--rank', type=str2bool, default='False', help='getting attribute importance')
     args = parser.parse_args()
     ### record starting time
     start = time()
@@ -57,16 +62,36 @@ if __name__ == "__main__":
 
     ### get paths of the list of features
     fns = listdir(data_path)
-    excluding_folder = ['analysis']
+    excluding_folder = ['analysis', 'feature_rank']
+    fns = [fn for fn in fns if not fn in excluding_folder]
+    fns = [fn for fn in fns if not 'tcca' in fn]
+    fns = [data_path + '/' + fn for fn in fns]
+    feature_folders = [fn for fn in fns if isdir(fn)]
+
+    if args.rank:
+        feature_rank_path = os.path.join(data_path,'feature_rank')
+        if not exists(feature_rank_path):
+            os.mkdir(feature_rank_path)
+        create_pseudoTestdata(feature_rank_path, feature_folders)
+        data_path =
+
+    ### get paths of the list of features
+    fns = listdir(data_path)
+    excluding_folder = ['analysis', 'feature_rank']
     fns = [fn for fn in fns if not fn in excluding_folder]
     fns = [fn for fn in fns if not 'tcca' in fn]
     fns = [data_path + '/' + fn for fn in fns]
     feature_folders = [fn for fn in fns if isdir(fn)]
 
 
+
+
     assert len(feature_folders) > 0
 
     # get fold, id and label attribute
+
+
+
 
     if 'foldAttribute' in p:
         df = read_arff_to_pandas_df(feature_folders[0] + '/data.arff')
@@ -88,11 +113,11 @@ if __name__ == "__main__":
         for parameters in all_parameters:
             project_path, classifier, fold, bag = parameters
             jf.write('groovy -cp %s %s/base_predictors.groovy %s %s %s %s %s %s\n' % (
-                classpath, working_dir, data_path, project_path, fold, bag, args.attr_imp, classifier))
+                classpath, working_dir, data_path, project_path, fold, bag, args.rank, classifier))
 
         if not args.hpc:
             jf.write('python combine_individual_feature_preds.py %s %s\npython combine_feature_predicts.py %s %s\n' % (
-                data_path, args.attr_imp, data_path, args.attr_imp))
+                data_path, args.rank, data_path, args.rank))
 
         return jf
 
@@ -113,7 +138,7 @@ if __name__ == "__main__":
         fn.write('mpirun selfsched < {}\n'.format(jobs_fn))
         fn.write('rm {}\n'.format(jobs_fn))
         fn.write('python combine_individual_feature_preds.py %s %s\npython combine_feature_predicts.py %s %s\n' % (
-        data_path, args.attr_imp, data_path, args.attr_imp))
+        data_path, args.rank, data_path, args.rank))
         fn.close()
         system('bsub < %s' % lsf_fn)
         system('rm %s' % lsf_fn)
