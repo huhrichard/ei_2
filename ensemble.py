@@ -416,19 +416,20 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank=''):
                 predictions_dataframes.append(predictions_df)
             df = pd.DataFrame(data=[[dn, fmax['F'], stacker_name, auc, auprc]], columns=cols, index=[0])
             dfs.append(df)
-            
-    dfs = pd.concat(dfs)
-    predictions_dataframe = pd.concat(predictions_dataframes, axis=1)
+
+
 
     if rank is True:
         # print(local_model_weight_dfs)
         local_mr_df = pd.concat(local_model_weight_dfs)
-        local_mr_df.to_csv(os.path.join(analysis_path, 'pi_stackers.csv'))
+        local_mr_df.to_csv(os.path.join(analysis_path, 'local_model_ranks.csv'))
 
 
     """ Save results """
-    predictions_dataframe.to_csv(os.path.join(analysis_path, "predictions.csv"))
     if rank is False:
+        dfs = pd.concat(dfs)
+        predictions_dataframe = pd.concat(predictions_dataframes, axis=1)
+        predictions_dataframe.to_csv(os.path.join(analysis_path, "predictions.csv"))
         dfs.to_csv(os.path.join(analysis_path, "performance.csv"), index=False)
 
 if __name__ == "__main__":
