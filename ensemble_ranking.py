@@ -13,10 +13,11 @@ if __name__ == "__main__":
     parser.add_argument('--ensemble', '-e', type=str, default='none', help='ensemble which performs the best')
 
     args = parser.parse_args()
-    # feat_rank_data_path = os.path.join(args.path, 'feature_rank')
+    feat_rank_data_path = os.path.join(args.path, 'feature_rank')
 
     bfpath = os.path.join(args.path, 'attribute_imp-1.csv.gz')
-    bppath = os.path.join(args.path, 'analysis/pi_stackers.csv')
+    bppath = os.path.join(args.path, 'analysis/local_model_ranks.csv')
+    analysis_path = os.path.join(args.path, 'analysis/')
     ensemble = args.ensemble
 
     # define column names of dataframe
@@ -65,8 +66,8 @@ if __name__ == "__main__":
         print(bf_ranks*bp_rank)
         imp_base_features.loc[bf_df_matched_bool, multiplied_rank_col] = bf_ranks*bp_rank
 
-    imp_base_predictors.to_csv('base_predictors_rank_{}.csv'.format(outcome))
-    imp_base_features.to_csv('base_features_rank_{}.csv'.format(outcome))
+    imp_base_predictors.to_csv(os.path.join(analysis_path,'LMR_sorted.csv'))
+    imp_base_features.to_csv(os.path.join(analysis_path,'LFR_sorted.csv'))
 
     base_features_list = imp_base_features[bfdf_feature_col].unique().tolist()
     base_feature_rank_agg = {}
@@ -85,11 +86,11 @@ if __name__ == "__main__":
         # base_feature_rank_agg['min_agg'] = [avg_ranks]
 
     # base_feature_rank_agg['min_agg'] = base_feature_rank_min
-    base_feature_rank_agg['mean_agg'] = base_feature_rank_mean
+    base_feature_rank_agg['rank_product_score'] = base_feature_rank_mean
     base_feature_rank_df = pd.DataFrame(base_feature_rank_agg, index=base_features_list)
     # base_feature_rank_df['min_ascending_rank'] = base_feature_rank_df['min_agg'].rank(ascending=True)
-    base_feature_rank_df['mean_ascending_rank'] = base_feature_rank_df['mean_agg'].rank(ascending=True)
-    base_feature_rank_df.to_csv('base_feature_agg_rank_{}.csv'.format(outcome))
+    base_feature_rank_df['rps_sorted'] = base_feature_rank_df['rank_product_score'].rank(ascending=True)
+    base_feature_rank_df.to_csv(os.path.join(analysis_path,'ensemble_feature_rank.csv'))
 
 
 
