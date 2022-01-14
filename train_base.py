@@ -58,7 +58,7 @@ def create_pseudoTestdata(data_dir, feat_folders, original_dir):
                                     new_feat_dir))
         os.system('cp {} {}'.format(os.path.join(original_dir, 'weka.properties'),
                                     new_feat_dir))
-        generate_data.convert_to_arff(feat_df, new_feat_dir)
+        generate_data.convert_to_arff(feat_df, os.path.join(new_feat_dir,'data.arff'))
         new_feat_folders.append(new_feat_dir)
     return data_dir, new_feat_folders
 
