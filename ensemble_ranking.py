@@ -89,8 +89,10 @@ if __name__ == "__main__":
     base_feature_rank_agg['rank_product_score'] = base_feature_rank_mean
     base_feature_rank_df = pd.DataFrame(base_feature_rank_agg, index=base_features_list)
     # base_feature_rank_df['min_ascending_rank'] = base_feature_rank_df['min_agg'].rank(ascending=True)
-    base_feature_rank_df['rps_sorted'] = base_feature_rank_df['rank_product_score'].rank(ascending=True)
-    base_feature_rank_df
+    base_feature_rank_df['final_rank'] = base_feature_rank_df['rank_product_score'].rank(ascending=True)
+    base_feature_rank_df.sort_values(by=['final rank'], inplace=True)
+    print('The top 10 features of EI model({}):'.format(ensemble))
+    print(base_feature_rank_df.head(10))
     base_feature_rank_df.to_csv(os.path.join(analysis_path,'ensemble_feature_rank.csv'))
 
 
