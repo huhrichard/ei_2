@@ -54,6 +54,7 @@ def create_pseudoTestdata(data_dir, feat_folders, original_dir):
         new_feat_dir = os.path.join(data_dir, ff.split('/')[-1])
         if not exists(new_feat_dir):
             os.mkdir(new_feat_dir)
+        feat_df['fold'] = feat_df['fold'].astype(int)
         os.system('cp {} {}'.format(os.path.join(original_dir, 'classifiers.txt'),
                                     new_feat_dir))
         os.system('cp {} {}'.format(os.path.join(original_dir, 'weka.properties'),
