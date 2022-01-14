@@ -322,8 +322,9 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank=''):
 
 
     for key, val in aggregated_dict.items():
-        print('[{}] Start building model #################################'.format(key))
+
         if (rank and (key == ens_for_rank)) or (not rank):
+            print('[{}] Start building model #################################'.format(key))
             perf = val(path, fold_values, agg, rank)
             if key != 'best base':
                 fmax_perf = perf['f-measure']['F']
@@ -332,16 +333,17 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank=''):
             else:
                 fmax_perf = perf['f-measure']
 
-            auc_perf = perf['auc']
-            auprc_perf = perf['auprc']
-            print('[{}] Finished evaluating model ############################'.format(key))
-            print('[{}] F-max score is {}.'.format(key, fmax_perf))
-            print('[{}] AUC score is {}.'.format(key, auc_perf) )
-            print('[{}] AUPRC score is {}.'.format(key, auprc_perf))
-            predictions_dataframes.append(perf['predictions'])
-            dfs.append(pd.DataFrame(data=[[dn, fmax_perf, key, auc_perf, auprc_perf]], columns=cols, index=[0]))
+            if (not rank):
+                auc_perf = perf['auc']
+                auprc_perf = perf['auprc']
+                print('[{}] Finished evaluating model ############################'.format(key))
+                print('[{}] F-max score is {}.'.format(key, fmax_perf))
+                print('[{}] AUC score is {}.'.format(key, auc_perf) )
+                print('[{}] AUPRC score is {}.'.format(key, auprc_perf))
+                predictions_dataframes.append(perf['predictions'])
+                dfs.append(pd.DataFrame(data=[[dn, fmax_perf, key, auc_perf, auprc_perf]], columns=cols, index=[0]))
 
-    print('Saving results #############################################')
+    # print('Saving results #############################################')
     analysis_path = '%s/analysis' % path
     if not exists(analysis_path):
         mkdir(analysis_path)
@@ -398,21 +400,23 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank=''):
             fmax = common.fmeasure_score(predictions_df.label, predictions_df.prediction, thres)
             auc = sklearn.metrics.roc_auc_score(predictions_df.label, predictions_df.prediction)
             auprc = common.auprc(predictions_df.label, predictions_df.prediction)
-            print('[%s] Finished evaluating model ###########################' % (stacker_name))
-            print('[%s] F-measure score is %s.' % (stacker_name, fmax['F']))
-            if 'P' in fmax:
-                print('[%s] Precision score is %s.' % (stacker_name, fmax['P']))
-                print('[%s] Recall score is %s.' % (stacker_name, fmax['R']))
-            print('[%s] AUC score is %s.' % (stacker_name, auc))
-            print('[%s] AUPRC score is %s.' % (stacker_name, auprc))
-            # print('stacking:')
-            predictions_df.drop(columns=['fold'], inplace=True)
-            predictions_df.rename(columns={'prediction':stacker_name}, inplace=True)
-            predictions_df.set_index(['id', 'label'], inplace=True)
-            # print(predictions_df)
-            predictions_dataframes.append(predictions_df)
+            if (not rank):
+                print('[%s] Finished evaluating model ###########################' % (stacker_name))
+                print('[%s] F-measure score is %s.' % (stacker_name, fmax['F']))
+                if 'P' in fmax:
+                    print('[%s] Precision score is %s.' % (stacker_name, fmax['P']))
+                    print('[%s] Recall score is %s.' % (stacker_name, fmax['R']))
+                print('[%s] AUC score is %s.' % (stacker_name, auc))
+                print('[%s] AUPRC score is %s.' % (stacker_name, auprc))
+                # print('stacking:')
+                predictions_df.drop(columns=['fold'], inplace=True)
+                predictions_df.rename(columns={'prediction':stacker_name}, inplace=True)
+                predictions_df.set_index(['id', 'label'], inplace=True)
+                # print(predictions_df)
+                predictions_dataframes.append(predictions_df)
             df = pd.DataFrame(data=[[dn, fmax['F'], stacker_name, auc, auprc]], columns=cols, index=[0])
             dfs.append(df)
+            
     dfs = pd.concat(dfs)
     predictions_dataframe = pd.concat(predictions_dataframes, axis=1)
 
