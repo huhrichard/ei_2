@@ -15,9 +15,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
     feat_rank_data_path = os.path.join(args.path, 'feature_rank')
 
-    bfpath = os.path.join(args.path, 'attribute_imp-1.csv.gz')
-    bppath = os.path.join(args.path, 'analysis/local_model_ranks.csv')
-    analysis_path = os.path.join(args.path, 'analysis/')
+    bfpath = os.path.join(feat_rank_data_path, 'attribute_imp-1.csv.gz')
+    bppath = os.path.join(feat_rank_data_path, 'analysis/local_model_ranks.csv')
+    analysis_path = os.path.join(feat_rank_data_path, 'analysis/')
     ensemble = args.ensemble
 
     # define column names of dataframe
