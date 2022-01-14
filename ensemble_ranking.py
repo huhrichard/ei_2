@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
     imp_base_features['bag'] = '0'
     imp_base_features[bp_name_col_bfdf] = imp_base_features[['modality','classifier','bag']].agg('.'.join, axis=1)
-    print(imp_base_features)
+    # print(imp_base_features)
 
     multiplied_rank_col = 'product_rank'
     # Sort the base predictors rank by descending order (Higher values = top feature)
@@ -63,7 +63,7 @@ if __name__ == "__main__":
         imp_base_features.loc[bf_df_matched_bool, 'bf_descending_rank'] = bf_in_bp[bfdf_imp_col].rank(pct=True, ascending=False)
         bf_ranks = imp_base_features.loc[bf_df_matched_bool, 'bf_descending_rank']
 
-        print(bf_ranks*bp_rank)
+        # print(bf_ranks*bp_rank)
         imp_base_features.loc[bf_df_matched_bool, multiplied_rank_col] = bf_ranks*bp_rank
 
     imp_base_predictors.to_csv(os.path.join(analysis_path,'LMR_sorted.csv'))
@@ -90,6 +90,7 @@ if __name__ == "__main__":
     base_feature_rank_df = pd.DataFrame(base_feature_rank_agg, index=base_features_list)
     # base_feature_rank_df['min_ascending_rank'] = base_feature_rank_df['min_agg'].rank(ascending=True)
     base_feature_rank_df['rps_sorted'] = base_feature_rank_df['rank_product_score'].rank(ascending=True)
+    base_feature_rank_df
     base_feature_rank_df.to_csv(os.path.join(analysis_path,'ensemble_feature_rank.csv'))
 
 
