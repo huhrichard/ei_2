@@ -446,8 +446,8 @@ if __name__ == "__main__":
     parser.add_argument('--ens_for_rank', type=str, default='Choose one of the ensemble', help='Choose the ensemble for EI interpretation')
     args = parser.parse_args()
     data_path = abspath(args.path)
-    if args.rank:
-        data_path = os.path.join(data_path,'feature_rank')
+    # if args.rank:
+    #     data_path = os.path.join(data_path,'feature_rank')
 
     feature_folders = common.data_dir_list(data_path)
     if len(feature_folders) == 0:
