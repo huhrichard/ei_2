@@ -107,8 +107,8 @@ if __name__ == "__main__":
         if not exists(feature_rank_path):
             os.mkdir(feature_rank_path)
         data_path, feature_folders = create_pseudoTestdata(feature_rank_path,
-    #                                                        feature_folders,
-    #                                                        original_dir=data_path)
+                                                           feature_folders,
+                                                           original_dir=data_path)
 
 
     # ### get paths of the list of features
@@ -122,7 +122,7 @@ if __name__ == "__main__":
 
 
 
-    assert len(feature_folders) > 0
+    # assert len(feature_folders) > 0
 
     # get fold, id and label attribute
 
