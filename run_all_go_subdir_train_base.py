@@ -36,7 +36,7 @@ parser.add_argument('--memory', '-M', type=str,default='10000', help='memory req
 parser.add_argument('--classpath', '-CP', type=str,default='./weka.jar', help='path to weka.jar')
 parser.add_argument('--hpc', '-MIN', type=str2bool,default='true', help='use hpc cluster or not')
 parser.add_argument('--term_prefix', type=str, default='GO', help='term_prefix')
-parser.add_argument('--attr_imp', type=str2bool, default='false', help='term_prefix')
+parser.add_argument('--rank', type=str2bool, default='false', help='term_prefix')
 parser.add_argument('--by_jobf', type=str2bool, default='True', help='submit jobs by the .jobs file')
 
 
@@ -126,10 +126,10 @@ if __name__ == "__main__":
             go_scratch_dir = os.path.join(cat_dir, dir)
             print(go_scratch_dir)
 
-            if args.attr_imp is False:
+            if args.rank is False:
                 python_cmd_train = 'python train_base.py --path {}'.format(go_scratch_dir)
             else:
-                python_cmd_train = 'python train_base.py --path {} --attr_imp True'.format(go_scratch_dir)
+                python_cmd_train = 'python train_base.py --path {} --rank True'.format(go_scratch_dir)
             write_submit_del_job(go_scratch_dir, python_cmd=python_cmd_train)
     else:
         jobs_fstream = os.listdir(cat_dir)
@@ -152,10 +152,10 @@ if __name__ == "__main__":
                         go_scratch_dir = os.path.join(cat_dir, dir)
                         print(go_scratch_dir)
 
-                        if args.attr_imp is False:
+                        if args.rank is False:
                             python_cmd_train = 'python train_base.py --path {}'.format(go_scratch_dir)
                         else:
-                            python_cmd_train = 'python train_base.py --path {} --attr_imp True'.format(go_scratch_dir)
+                            python_cmd_train = 'python train_base.py --path {} --rank True'.format(go_scratch_dir)
                         write_submit_del_job(go_scratch_dir, python_cmd=python_cmd_train)
         # else:
         #     break

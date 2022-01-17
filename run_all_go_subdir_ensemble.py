@@ -115,7 +115,7 @@ if __name__ == "__main__":
                 if args.attr_imp is False:
                     jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir))
                 else:
-                    jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir) + ' --attr_imp True')
+                    jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir) + ' --rank True')
             else:
                 break
         jobs_txt.write('\n'.join(jobs_list))

@@ -22,7 +22,7 @@ list_of_method = ['EI', 'admission',
 
 parser = argparse.ArgumentParser(description='Feed some bsub parameters')
 parser.add_argument('--path', '-P', type=str, required=True, help='data path')
-parser.add_argument('--attr_imp', type=str2bool, default='false', help='attribute importance')
+parser.add_argument('--rank', type=str2bool, default='false', help='attribute importance')
 parser.add_argument('--script', type=str, default='none', help='attribute importance')
 args = parser.parse_args()
 
@@ -30,7 +30,7 @@ base_path = args.path
 script_name = args.script
 attr_imp = args.attr_imp
 
-cmd_str = 'python {} --path {} --by_jobf false --attr_imp {}'
+cmd_str = 'python {} --path {} --by_jobf false --rank {}'
 for m in list_of_method:
     # if 'ensemble' in script_name:
     #     cmd_str = cmd_str +
