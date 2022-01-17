@@ -25,7 +25,7 @@ parser.add_argument('--memory', '-M', type=str,default='4000', help='memory requ
 parser.add_argument('--classpath', '-CP', type=str,default='./weka.jar', help='path to weka.jar')
 parser.add_argument('--hpc', '-MIN', type=str2bool,default='true', help='use hpc cluster or not')
 parser.add_argument('--term_prefix', type=str, default='GO', help='term_prefix')
-parser.add_argument('--attr_imp', type=str2bool, default='false', help='attribute importance')
+parser.add_argument('--rank', type=str2bool, default='false', help='attribute importance')
 parser.add_argument('--by_jobf', type=str2bool, default='True', help='submit jobs by the .jobs file')
 parser.add_argument('--seed', '-S', type=str,default='1', help='the seed use to generate cross-validataion data')
 
@@ -112,7 +112,7 @@ if __name__ == "__main__":
                     for f_dir in feature_folders:
                         jobs_list.append('python ensemble.py --path {}'.format(f_dir))
 
-                if args.attr_imp is False:
+                if args.rank is False:
                     jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir))
                 else:
                     jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir) + ' --rank True')
@@ -152,10 +152,10 @@ if __name__ == "__main__":
                                 for f_dir in feature_folders:
                                     jobs_list.append('python ensemble.py --path {}'.format(f_dir))
 
-                            if args.attr_imp is False:
+                            if args.rank is False:
                                 jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir))
                             else:
-                                jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir) + ' --attr_imp True')
+                                jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir) + ' --rank True')
             else:
                 break
         jobs_txt.write('\n'.join(jobs_list))

@@ -28,11 +28,11 @@ args = parser.parse_args()
 
 base_path = args.path
 script_name = args.script
-attr_imp = args.attr_imp
+rank = args.rank
 
 cmd_str = 'python {} --path {} --by_jobf false --rank {}'
 for m in list_of_method:
     # if 'ensemble' in script_name:
     #     cmd_str = cmd_str +
     m_path = os.path.join(base_path, m)
-    os.system(cmd_str.format(script_name, m_path, attr_imp))
+    os.system(cmd_str.format(script_name, m_path, rank))
