@@ -102,11 +102,11 @@ if __name__ == "__main__":
     fns = [data_path + '/' + fn for fn in fns]
     feature_folders = [fn for fn in fns if isdir(fn)]
 
-    # if args.rank:
-    #     feature_rank_path = os.path.join(data_path,'feature_rank')
-    #     if not exists(feature_rank_path):
-    #         os.mkdir(feature_rank_path)
-    #     data_path, feature_folders = create_pseudoTestdata(feature_rank_path,
+    if args.rank:
+        feature_rank_path = os.path.join(data_path,'feature_rank')
+        if not exists(feature_rank_path):
+            os.mkdir(feature_rank_path)
+        data_path, feature_folders = create_pseudoTestdata(feature_rank_path,
     #                                                        feature_folders,
     #                                                        original_dir=data_path)
 
