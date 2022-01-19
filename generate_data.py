@@ -101,12 +101,12 @@ if __name__ == "__main__":
     else:
         impute_graph = False
 
-    csv_dir = './not_on_github/csv/'
-    tsv_dir = './not_on_github/tsv/'
+    csv_dir = './GOterm/'
+    tsv_dir = './GOterm/'
     if 'go' in argv[2]:
-        go_to_hpo_file = 'GO2HPO_binary.tsv'
-    else:
-        go_to_hpo_file = 'pos-neg-O-10.tsv'
+        go_to_hpo_file = 'GO_annotation.tsv'
+    # else:
+    #     go_to_hpo_file = 'pos-neg-O-10.tsv'
     # print(len(argv))
     if argv[3] != 'EI':
         features = [argv[3]]
