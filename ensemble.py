@@ -381,12 +381,12 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank=''):
                 print(training_dfs)
                 training_labels = pd.DataFrame({'label': stacking_output[0]['train_dfs'][1]})
                 print(training_labels)
-                stacker.fit(training_dfs.values, training_labels)
+                stacker.fit(training_dfs.values, training_labels.values)
                 print(stacker.predict_proba(training_dfs.values))
                 n_repeats = 100
                 stacker_pi = permutation_importance(estimator=stacker,
                                                    X=training_dfs.values,
-                                                   y=training_labels,
+                                                   y=training_labels.values,
                                                n_repeats=n_repeats,
                                                 random_state=0,
                                                    scoring = auprc_sklearn
