@@ -26,7 +26,7 @@ if __name__ == "__main__":
     # print(protein_list.shape)
     protein_list = list(protein_df.columns.tolist())
     for p in list(protein_df.values):
-        protein_list.append(str(p))
+        protein_list.append(str(p[0]))
 
 
 
@@ -35,6 +35,7 @@ if __name__ == "__main__":
     print(b.shape)
     print(type(b))
     deepnf_cols = ['dnf_{}'.format(i) for i in range(b.shape[1])]
+    print(b)
     deepnf_df = pd.DataFrame(b,
                              index=node_list,
                              columns=deepnf_cols).sort_index()
