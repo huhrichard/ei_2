@@ -22,11 +22,13 @@ if __name__ == "__main__":
     node_list = list(G.nodes())
     print(node_list)
     print(len(node_list))
+    node_list_int = [int(i) for i in node_list]
     protein_df = pd.read_csv(os.path.join(args.deepnf_path, 'gene_list.txt'),)
     # print(protein_list.shape)
     protein_list = list(protein_df.columns.tolist())
     for p in list(protein_df.values):
         protein_list.append(str(p[0]))
+    print(protein_list)
 
 
 
@@ -37,10 +39,10 @@ if __name__ == "__main__":
     deepnf_cols = ['dnf_{}'.format(i) for i in range(b.shape[1])]
     print(b)
     deepnf_df = pd.DataFrame(b,
-                             index=node_list,
+                             index=node_list_int,
                              columns=deepnf_cols).sort_index()
     print(deepnf_df)
-    deepnf_df = deepnf_df.reindex(protein_list)
+    deepnf_df.index = protein_list
     print(deepnf_df)
     deepnf_df.to_csv(os.path.join(args.output_path, 'deepNF.csv'))
 
