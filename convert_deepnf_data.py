@@ -24,9 +24,9 @@ if __name__ == "__main__":
     print(len(node_list))
     protein_df = pd.read_csv(os.path.join(args.deepnf_path, 'gene_list.txt'),)
     # print(protein_list.shape)
-    protein_list = protein_df.columns.tolist()
+    protein_list = list(protein_df.columns.tolist())
     for p in list(protein_df.values):
-        protein_list.append(p)
+        protein_list.append(str(p))
 
 
 
