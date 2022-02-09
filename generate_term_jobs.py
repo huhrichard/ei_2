@@ -89,9 +89,9 @@ if __name__ == "__main__":
                         depth_go = godag[go].depth
                         if depth_go >= 2:
                             # f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], suffix))
-                            f.write('python generate_data.py --outcome {} --output_dir {} --method {} --feature_csv_path {} --outcome_tsv_path {}\n'.format(go, fn.split('.')[0], suffix, args.prepro_path, path))
+                            f.write('python generate_data.py --outcome {} --output_dir {} --method {} --feature_csv_path {} --outcome_tsv_path {}\n'.format(go, go_group_dir, suffix, args.prepro_path, path))
                     else:
-                        f.write('python generate_data.py --outcome {} --output_dir {} --method {} --feature_csv_path {} --outcome_tsv_path {}\n'.format(go, fn.split('.')[0], suffix, args.prepro_path, path))
+                        f.write('python generate_data.py --outcome {} --output_dir {} --method {} --feature_csv_path {} --outcome_tsv_path {}\n'.format(go, go_group_dir, suffix, args.prepro_path, path))
                 except KeyError:
                     pass
             f.close()
