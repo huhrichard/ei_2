@@ -102,13 +102,13 @@ def main_v2(net_file, out_file, node_file=node_fn, **kwargs):
     # with open(out_file, 'w') as out:
     #     pickle.dump(A, out)
 
-W_list = []
-W_keep_list = []
-for sub_net in sub_network_list:
-    W, W_keep = main_v2(net_file=txt_dir+edge_txt_format.format(sub_net),
-            out_file="{}rwrImputed_{}.csv".format(csv_dir, sub_net))
-    W_list.append(W)
-    W_keep_list.append(W_keep)
+# W_list = []
+# W_keep_list = []
+# for sub_net in sub_network_list:
+#     W, W_keep = main_v2(net_file=txt_dir+edge_txt_format.format(sub_net),
+#             out_file="{}rwrImputed_{}.csv".format(csv_dir, sub_net))
+#     W_list.append(W)
+#     W_keep_list.append(W_keep)
 
 # W_keep_bool = np.zeros_like(W_keep_list[0], dtype=bool)
 # for idx, sub_net in enumerate(sub_network_list):

@@ -26,7 +26,7 @@ def str2bool(v):
     else:
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
-def create_pseudoTestdata(data_dir, feat_folders, original_dir, create_rank_dir):
+def create_pseudoTestdata(data_dir, feat_folders, original_dir):
     new_feat_folders = []
 
     os.system('cp {} {}'.format(os.path.join(original_dir, 'classifiers.txt'),
@@ -62,12 +62,11 @@ def create_pseudoTestdata(data_dir, feat_folders, original_dir, create_rank_dir)
         new_feat_dir = os.path.join(data_dir, ff.split('/')[-1])
         if not exists(new_feat_dir):
             os.mkdir(new_feat_dir)
-        feat_df['fold'] = feat_df['fold'].astype(int)
-        os.system('cp {} {}'.format(os.path.join(original_dir, 'classifiers.txt'),
-                                    new_feat_dir))
-        os.system('cp {} {}'.format(os.path.join(original_dir, 'weka.properties'),
-                                    new_feat_dir))
-        if create_rank_dir:
+            feat_df['fold'] = feat_df['fold'].astype(int)
+            os.system('cp {} {}'.format(os.path.join(original_dir, 'classifiers.txt'),
+                                        new_feat_dir))
+            os.system('cp {} {}'.format(os.path.join(original_dir, 'weka.properties'),
+                                        new_feat_dir))
             generate_data.convert_to_arff(feat_df, os.path.join(new_feat_dir,'data.arff'))
         new_feat_folders.append(new_feat_dir)
     return data_dir, new_feat_folders
@@ -84,7 +83,7 @@ if __name__ == "__main__":
     parser.add_argument('--hpc', type=str2bool, default='true', help='use HPC cluster or not')
     parser.add_argument('--fold', '-F', type=int, default=5, help='number of cross-validation fold')
     parser.add_argument('--rank', type=str2bool, default='False', help='getting attribute importance')
-    parser.add_argument('--create_rank_dir', type=str2bool, default='False', help='getting attribute importance')
+    # parser.add_argument('--create_rank_dir', type=str2bool, default='False', help='getting attribute importance')
     args = parser.parse_args()
     ### record starting time
     start = time()
@@ -119,7 +118,7 @@ if __name__ == "__main__":
         data_path, feature_folders = create_pseudoTestdata(feature_rank_path,
                                                            feature_folders,
                                                            original_dir=data_path,
-                                                           create_rank_dir=args.create_rank_dir,
+                                                           # create_rank_dir=args.create_rank_dir,
                                                            )
 
 
