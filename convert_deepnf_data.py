@@ -29,7 +29,7 @@ if __name__ == "__main__":
         b = pickle.load(handle)
     print(b.shape)
     print(type(b))
-    deepnf_cols = ['dnf_{}'.format(i) for i in b.shape[1]]
+    deepnf_cols = ['dnf_{}'.format(i) for i in range(b.shape[1])]
     deepnf_df = pd.DataFrame(b,
                              index=protein_list.values,
                              columns=deepnf_cols)
