@@ -30,7 +30,7 @@ if __name__ == "__main__":
     # parser.add_argument('--clf_as_view', '-cav', type=str2bool, default='false', help='desired reduced dimension')
     args = parser.parse_args()
     godag = get_godag(os.path.join(args.prepro_path, 'go.obo'))
-    ontology = sys.argv[-1]
+    ontology = args.ontology
     if 'go' in ontology:
         is_go = True
     else:
