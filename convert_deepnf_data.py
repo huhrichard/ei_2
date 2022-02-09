@@ -22,7 +22,7 @@ if __name__ == "__main__":
     node_list = list(G.nodes())
     protein_list = pd.read_csv(os.path.join(args.deepnf_path, 'gene_list.txt'))
 
-    with open(args.pkl, 'rb') as handle:
+    with open(args.pkl_path, 'rb') as handle:
         b = pickle.load(handle)
     print(b)
     print(type(b))
