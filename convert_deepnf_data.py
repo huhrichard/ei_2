@@ -22,8 +22,13 @@ if __name__ == "__main__":
     node_list = list(G.nodes())
     print(node_list)
     print(len(node_list))
-    protein_list = pd.read_csv(os.path.join(args.deepnf_path, 'gene_list.txt'))
-    print(protein_list.shape)
+    protein_df = pd.read_csv(os.path.join(args.deepnf_path, 'gene_list.txt'),)
+    # print(protein_list.shape)
+    protein_list = protein_df.columns.tolist()
+    for p in list(protein_df.values):
+        protein_list.append(p)
+
+
 
     with open(args.pkl_path, 'rb') as handle:
         b = pickle.load(handle)
@@ -31,8 +36,10 @@ if __name__ == "__main__":
     print(type(b))
     deepnf_cols = ['dnf_{}'.format(i) for i in range(b.shape[1])]
     deepnf_df = pd.DataFrame(b,
-                             index=protein_list.values,
-                             columns=deepnf_cols)
+                             index=node_list,
+                             columns=deepnf_cols).sort_index()
+    deepnf_df = deepnf_df.reindex(protein_list)
+    print(deepnf_df)
     deepnf_df.to_csv(os.path.join(args.output_path, 'deepNF.csv'))
 
 
