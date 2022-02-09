@@ -95,7 +95,7 @@ if __name__ == "__main__":
     parser.add_argument('--method', type=str, default='EI', help='attribute importance')
     parser.add_argument('--feature_csv_path', type=str, required=True, help='attribute importance')
     parser.add_argument('--outcome_tsv_path', type=str, required=True, help='attribute importance')
-    parser.add_argument('--outcome_tsv_name', type=str, required=True, help='attribute importance')
+    # parser.add_argument('--outcome_tsv_name', type=str, required=True, help='attribute importance')
     args = parser.parse_args()
     # scratch_data_dir = '/sc/arion/scratch/liy42/'
     # group_number_goterm = argv[2]

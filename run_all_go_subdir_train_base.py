@@ -3,6 +3,7 @@ import sys
 from os import remove, system
 from os.path import abspath
 import argparse
+import common
 
 def str2bool(v):
     if v.lower() in ('yes', 'true', 't', 'y', '1'):
@@ -122,7 +123,8 @@ if __name__ == "__main__":
     if args.by_jobf is True:
         jobs_fstream = open(jobs_file[0], "r").read().split('\n')
         for go_job in jobs_fstream:
-            dir = go_job.split(' ')[2].replace(':', '')
+            # dir = go_job.split(' ')[2].replace(':', '')
+            dir = common.load_cmd_option(go_job, 'outcome').replace(':', '')
             go_scratch_dir = os.path.join(cat_dir, dir)
             print(go_scratch_dir)
 

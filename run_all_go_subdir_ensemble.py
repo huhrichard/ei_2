@@ -7,6 +7,7 @@ from os import remove, system, listdir
 import glob
 import argparse
 import subprocess
+import common
 
 def str2bool(v):
     if v.lower() in ('yes', 'true', 't', 'y', '1'):
@@ -96,7 +97,8 @@ if __name__ == "__main__":
         g_jobs_fstream = open(g_jobs_file[0], "r").read().split('\n')
         for go_job in g_jobs_fstream:
             if len(go_job.split(' ')) > 1:
-                term_name = go_job.split(' ')[2].replace(':', '')
+                # term_name = go_job.split(' ')[2].replace(':', '')
+                term_name = common.load_cmd_option(go_job, 'outcome').replace(':', '')
                 go_scratch_dir = scratch_path+jobs_prefix+'/'+term_name
 
                         # data = go_scratch_dir.split('/')[-1]
