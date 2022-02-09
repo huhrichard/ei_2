@@ -90,6 +90,9 @@ def f_max(labels, predictions, thres=None, beta = 1.0, pos_label = 1):
 
 # def fmeasure(labels, predictions)
 
+def load_cmd_option(cmd, option):
+    return cmd.split('--{} '.format(option))[-1].split(' --')[0]
+
 def load_arff(filename):
     return DataFrame.from_records(loadarff(filename)[0])
 

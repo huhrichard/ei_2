@@ -93,6 +93,9 @@ if __name__ == "__main__":
     parser.add_argument('--outcome', type=str, required=True, help='data path')
     parser.add_argument('--output_dir', type=str, default='./', help='attribute importance')
     parser.add_argument('--method', type=str, default='EI', help='attribute importance')
+    parser.add_argument('--feature_csv_path', type=str, required=True, help='attribute importance')
+    parser.add_argument('--outcome_tsv_path', type=str, required=True, help='attribute importance')
+    parser.add_argument('--outcome_tsv_name', type=str, required=True, help='attribute importance')
     args = parser.parse_args()
     # scratch_data_dir = '/sc/arion/scratch/liy42/'
     # group_number_goterm = argv[2]
@@ -110,10 +113,10 @@ if __name__ == "__main__":
     # else:
     impute_graph = False
 
-    csv_dir = './PFP/STRING_csv/'
-    tsv_dir = './PFP/'
-    if 'go' in args.outcome.lower():
-        go_to_hpo_file = 'GO_annotation.tsv'
+    csv_dir = args.feature_csv_path
+    tsv_dir = args.outcome_tsv_path
+    # if 'go' in args.outcome.lower():
+    #     go_to_hpo_file = args.outcome_tsv_name
     if args.method != 'EI':
         features = [args.method]
     else:
@@ -156,7 +159,8 @@ if __name__ == "__main__":
     # deepNF_net = pd.read_csv('/sc/hydra/scratch/liy42/deepNF/%s/%s.arff' %(t,t), header=None,comment='@')
     # seqs = deepNF_net.iloc[:,-1].tolist()
     # labels = deepNF_net.iloc[:,-2].tolist()
-    go_to_hpo_df = pd.read_csv(tsv_dir + go_to_hpo_file, sep='\t', index_col=0)
+    # go_to_hpo_df = pd.read_csv(os.path.join(tsv_dir, go_to_hpo_file), sep='\t', index_col=0)
+    go_to_hpo_df = pd.read_csv(tsv_dir, sep='\t', index_col=0)
     print(term)
     go_to_hpo_df_with_specific_term = go_to_hpo_df[[term]]
 
