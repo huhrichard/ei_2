@@ -39,6 +39,7 @@ if __name__ == "__main__":
     deepnf_df = pd.DataFrame(b,
                              index=node_list,
                              columns=deepnf_cols).sort_index()
+    print(deepnf_df)
     deepnf_df = deepnf_df.reindex(protein_list)
     print(deepnf_df)
     deepnf_df.to_csv(os.path.join(args.output_path, 'deepNF.csv'))
