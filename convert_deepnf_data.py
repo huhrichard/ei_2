@@ -16,7 +16,7 @@ if __name__ == "__main__":
     # parser.add_argument('--rdim', '-R', type=int, default=10, help='desired reduced dimension')
     # parser.add_argument('--clf_as_view', '-cav', type=str2bool, default='false', help='desired reduced dimension')
     args = parser.parse_args()
-    data_path = abspath(args.path)
+    # data_path = abspath(args.path)
 
     G = nx.read_edgelist(os.path.join(args.deepnf_path, 'coexpression_deepnf.txt'), edgetype=float, data=(('weight', float),))
     node_list = list(G.nodes())
