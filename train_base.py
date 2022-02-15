@@ -76,9 +76,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Feed some bsub parameters')
     parser.add_argument('--path', '-P', type=str, required=True, help='data path')
     parser.add_argument('--queue', '-Q', type=str, default='premium', help='LSF queue to submit the job')
-    parser.add_argument('--node', '-N', type=str, default='20', help='number of node requested')
-    parser.add_argument('--time', '-T', type=str, default='10:00', help='number of hours requested')
-    parser.add_argument('--memory', '-M', type=str, default='0000', help='memory requsted in MB')
+    parser.add_argument('--node', '-N', type=str, default='32', help='number of node requested')
+    parser.add_argument('--time', '-T', type=str, default='20:00', help='number of hours requested')
+    parser.add_argument('--memory', '-M', type=str, default='20000', help='memory requsted in MB')
     parser.add_argument('--classpath', '-CP', type=str, default='./weka.jar', help='default weka path')
     parser.add_argument('--hpc', type=str2bool, default='true', help='use HPC cluster or not')
     parser.add_argument('--fold', '-F', type=int, default=5, help='number of cross-validation fold')
@@ -176,12 +176,11 @@ if __name__ == "__main__":
         lsf_fn = 'run_%s_%s.lsf' % (data_source_dir, data_name)
         fn = open(lsf_fn, 'w')
         fn.write(
-            # '#!/bin/bash\n#BSUB -J EI-%s\n#BSUB -P acc_pandeg01a\n#BSUB -q %s\n#BSUB -n %s\n#BSUB -sp 100\n#BSUB -W %s\n#BSUB -o %s.stdout\n#BSUB -eo %s.stderr\n#BSUB -R rusage[mem=20000]\n' % (
-            '#!/bin/bash\n#BSUB -J EI-%s\n#BSUB -P acc_pandeg01a\n#BSUB -q %s\n#BSUB -n %s\n#BSUB -sp 100\n#BSUB -W %s\n#BSUB -o %s.stdout\n#BSUB -eo %s.stderr\n#BSUB -R himem\n' % (
-            data_name, args.queue, args.node, args.time, data_source_dir, data_source_dir))
+            '#!/bin/bash\n#BSUB -J EI-%s\n#BSUB -P acc_pandeg01a\n#BSUB -q %s\n#BSUB -n %s\n#BSUB -W %s\n#BSUB -o %s.stdout\n#BSUB -eo %s.stderr\n#BSUB -R rusage[mem=%s]\n' % (
+            # '#!/bin/bash\n#BSUB -J EI-%s\n#BSUB -P acc_pandeg01a\n#BSUB -q %s\n#BSUB -n %s\n#BSUB -W %s\n#BSUB -o %s.stdout\n#BSUB -eo %s.stderr\n#BSUB -R himem\n' % (
+            data_name, args.queue, args.node, args.time, data_source_dir, data_source_dir, args.memory))
         fn.write('module load java\nmodule load python\nmodule load groovy\nmodule load selfsched\nmodule load weka\n')
-        fn.write('export _JAVA_OPTIONS="-XX:ParallelGCThreads=10"\nexport JAVA_OPTS="-Xmx30g"\nexport CLASSPATH=%s\n' % (
-            args.classpath))
+        fn.write('export _JAVA_OPTIONS="-XX:ParallelGCThreads=10"\nexport JAVA_OPTS="-Xmx{}g"\nexport CLASSPATH=%s\n' % ((args.memory/1000),args.classpath))
 
         fn.write('mpirun selfsched < {}\n'.format(jobs_fn))
         fn.write('rm {}\n'.format(jobs_fn))
