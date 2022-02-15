@@ -180,7 +180,7 @@ if __name__ == "__main__":
             # '#!/bin/bash\n#BSUB -J EI-%s\n#BSUB -P acc_pandeg01a\n#BSUB -q %s\n#BSUB -n %s\n#BSUB -W %s\n#BSUB -o %s.stdout\n#BSUB -eo %s.stderr\n#BSUB -R himem\n' % (
             data_name, args.queue, args.node, args.time, data_source_dir, data_source_dir, args.memory))
         fn.write('module load java\nmodule load python\nmodule load groovy\nmodule load selfsched\nmodule load weka\n')
-        fn.write('export _JAVA_OPTIONS="-XX:ParallelGCThreads=10"\nexport JAVA_OPTS="-Xmx{}g"\nexport CLASSPATH=%s\n' % (int(args.memory/1024)-1,args.classpath))
+        fn.write('export _JAVA_OPTIONS="-XX:ParallelGCThreads=10"\nexport JAVA_OPTS="-Xmx{}g"\nexport CLASSPATH=%s\n' % (int(float(args.memory)/1024)-1,args.classpath))
 
         fn.write('mpirun selfsched < {}\n'.format(jobs_fn))
         fn.write('rm {}\n'.format(jobs_fn))
