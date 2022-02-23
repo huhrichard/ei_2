@@ -48,9 +48,10 @@ if __name__ == "__main__":
     pos_entry = (df == 1).values
     go_terms_from_tsv = df.columns
     go_pos_count = sum(pos_entry)
-    dict_suffix = {'EI': 'EI',
-                   'deepNF': 'DeepNF',
-                   # 'mashup': 'mashup',
+    dict_suffix = {
+                    # 'EI': 'EI',
+                   # 'deepNF': 'DeepNF',
+                   'mashup': 'mashup',
                    }
 
     sorted = np.argsort(-1*go_pos_count)[:2]
