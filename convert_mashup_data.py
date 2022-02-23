@@ -38,11 +38,11 @@ if __name__ == "__main__":
     print(mashup_csv)
     mashup_df = pd.DataFrame(mashup_csv.values,
                              index=protein_list,
-                             columns=mashup_cols).sort_index()
+                             columns=mashup_cols)
     print(mashup_df)
-    mashup_df.index = protein_list
+    # mashup_df.index = protein_list
     print(mashup_df)
-    
+
     mashup_df.to_csv(os.path.join(args.output_path, 'mashup.csv'))
 
 
