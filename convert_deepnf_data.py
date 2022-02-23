@@ -32,18 +32,19 @@ if __name__ == "__main__":
 
 
 
+
     with open(args.pkl_path, 'rb') as handle:
         b = pickle.load(handle)
     print(b.shape)
     print(type(b))
-    deepnf_cols = ['dnf_{}'.format(i) for i in range(b.shape[1])]
+    deepnf_cols = ['deepnf_{}'.format(i) for i in range(b.shape[1])]
     print(b)
     deepnf_df = pd.DataFrame(b,
                              index=node_list_int,
                              columns=deepnf_cols).sort_index()
     print(deepnf_df)
     deepnf_df.index = protein_list
-    print(deepnf_df)
+    # print(deepnf_df)
     deepnf_df.to_csv(os.path.join(args.output_path, 'deepNF.csv'))
 
 
