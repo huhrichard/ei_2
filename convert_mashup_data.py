@@ -42,6 +42,7 @@ if __name__ == "__main__":
     print(mashup_df)
     mashup_df.index = protein_list
     print(mashup_df)
+    
     mashup_df.to_csv(os.path.join(args.output_path, 'mashup.csv'))
 
 
