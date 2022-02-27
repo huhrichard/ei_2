@@ -29,7 +29,8 @@ for data in data_list:
 
     missed_term = cd_df[cd_df.isnull().any(axis=1)].index
     print(missed_term)
+    go_group_dir = os.path.join('/sc/arion/scratch/liy42/', fn.split('.')[0])
     cmd_str = 'python generate_data.py --outcome {} --output_dir {} --method {} --feature_csv_path {} --outcome_tsv_path {}\n'
     for t in missed_term:
-        f.write(cmd_str.format(t, fn.split('.')[0], data, args.prepro_path, path))
+        f.write(cmd_str.format(t, go_group_dir, data, args.prepro_path, path))
     f.close()
