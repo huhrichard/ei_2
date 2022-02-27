@@ -13,7 +13,7 @@ from goatools.semantic import TermCounts
 from goatools.base import download_go_basic_obo
 import seaborn as sns
 
-obo_fname = download_go_basic_obo()
+# obo_fname = download_go_basic_obo()
 # from os.path import abspath
 from os.path import abspath, isdir, exists
 from os import remove, system, listdir
@@ -21,6 +21,7 @@ from os import remove, system, listdir
 import os, fnmatch
 import sys
 from os import system
+import argparse
 
 system('module load R')
 plot_dir = './plot/'
@@ -65,18 +66,25 @@ def add_colon(str):
     return str[:2]+':'+str[2:]
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='')
+    parser.add_argument('--prepro_path', type=str, required=True, help='data path')
+    # parser.add_argument('--go_tsv', type=str, required=True, help='')
+    parser.add_argument('--ontology', type=str, default='go', help='')
+    parser.add_argument('--group', type=str, required=True, help='')
+    parser.add_argument('--file_prefix', type=str, required=True, help='')
     metrics = {'fmax': r'$F_{max}$',
                'auc': 'AUC',
                'auprc': 'AUPRC'}
 
     # Load all performance csv
-    group = sys.argv[-2]
+    args = parser.parse_args()
+    group = args.group
     if '-' not in group:
         group = '>' + group
     title_name = "#annotated proteins: {}".format(group)
-    file_prefix = sys.argv[-3]
+    file_prefix = args.file_prefix
     dict_suffix = {'EI': 'Ensemble\nIntegration',
-                   'deepNF': 'DeepNF',
+                   'deepNF': 'deepNF',
                    'mashup': 'Mashup',
                    '/coexpression': 'Coexpression',
                    '/cooccurence': 'Co-occurrence',
@@ -94,7 +102,8 @@ if __name__ == "__main__":
     # rwr_dict_suffix['rwrImpute'] = 'Ensemble\nIntegration\n(RWR Impute)'
     cp = sns.color_palette(n_colors=len(dict_suffix))
 
-    godag = get_godag("go-basic.obo")
+    # godag = get_godag("go-basic.obo")
+    godag = get_godag(os.path.join(args.prepro_pat, "go.obo")
     objanno = get_objanno('goa_human.gaf', 'gaf', godag=godag)
     termcounts = TermCounts(godag, objanno.get_id2gos_nss())
     # performance_df_dict = dict()
@@ -105,19 +114,19 @@ if __name__ == "__main__":
         median_performance_list = []
         data_list = []
         ensemble_df_list = []
-        is_go = 'go' in sys.argv[-1]
+        is_go = 'go' in args.ontology
 
         # ensemble_df
         for key, val in dict_suffix.items():
             # if len(key) > 0:
-            #     go_dir = sys.argv[-1] + '_' + key
+            #     go_dir = args.ontology + '_' + key
             # else:
-            #     go_dir = sys.argv[-1]
+            #     go_dir = args.ontology
             if not '/' in key:
-                go_dir = sys.argv[-1] + '_' + key
+                go_dir = args.ontology + '_' + key
                 sub_data_folder = ''
             else:
-                go_dir = sys.argv[-1] + '_EI'
+                go_dir = args.ontology + '_EI'
                 sub_data_folder = key[1:]+'/'
             # print(sub_data_folder)
             fns = listdir(go_dir)
@@ -145,7 +154,7 @@ if __name__ == "__main__":
                 #     performance_file_list += find('performance.csv', term_dir + key + '/')
             # print(key, term_dirs)
             # print(performance_file_list)
-            # dir = sys.argv[-1].split('/')[-2]
+            # dir = args.ontology.split('/')[-2]
             performance_df_list = []
             for term_name, performance_file in performance_file_list.items():
                 df = pd.read_csv(performance_file)
@@ -214,7 +223,7 @@ if __name__ == "__main__":
         cd_input_df = cd_input.pivot_table(best_mk, ['data_name'], 'input').reset_index()
         cd_input_df.set_index('data_name', inplace=True)
 
-        cd_csv_fn = '{}cd_input_{}_{}_{}.csv'.format(plot_dir + 'cd_csv/', file_prefix, sys.argv[-2], mk)
+        cd_csv_fn = '{}cd_input_{}_{}_{}.csv'.format(plot_dir + 'cd_csv/', file_prefix, group, mk)
         cd_input_df.to_csv(cd_csv_fn, index_label=False)
         cmd = "R CMD BATCH --no-save --no-restore '--args cd_fn=\"{}\"' R/plotCDdiagram.R".format(cd_csv_fn)
         os.system(cmd)
@@ -253,7 +262,7 @@ if __name__ == "__main__":
         ax1.set_ylabel(ylabel)
         ax1.set_xlabel('')
         ax1.set_title(title_name)
-        fig1.savefig('{}{}_{}_comparison_{}.pdf'.format(plot_dir,mk, file_prefix, sys.argv[-2]), bbox_inches="tight")
+        fig1.savefig('{}{}_{}_comparison_{}.pdf'.format(plot_dir,mk, file_prefix, group), bbox_inches="tight")
 
         if is_go:
 
@@ -273,7 +282,7 @@ if __name__ == "__main__":
             ax2.set_ylabel(ylabel)
             ax2.set_xlabel('Depth in GO Hierarchy')
             ax2.set_title(title_name)
-            fig2.savefig('{}{}_{}_by_depth_{}.pdf'.format(plot_dir,mk, img_str, sys.argv[-2]), bbox_inches="tight")
+            fig2.savefig('{}{}_{}_by_depth_{}.pdf'.format(plot_dir,mk, img_str, group), bbox_inches="tight")
 
             # fig2_plot_only = ['Mashup', 'DeepNF', 'EI']
             # idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
@@ -301,7 +310,7 @@ if __name__ == "__main__":
             ax3.set_ylabel(ylabel)
             ax3.set_xlabel('Information Content')
             ax3.set_title(title_name)
-            fig3.savefig('{}{}_{}_by_ic_{}.pdf'.format(plot_dir,mk, img_str, sys.argv[-2]), bbox_inches="tight")
+            fig3.savefig('{}{}_{}_by_ic_{}.pdf'.format(plot_dir,mk, img_str, group), bbox_inches="tight")
 
         #
         # ax1.boxplot(sorted_fmax_list)
