@@ -92,7 +92,7 @@ if __name__ == "__main__":
                             # f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], suffix))
                             f.write('python generate_data.py --outcome {} --output_dir {} --method {} --feature_csv_path {} --outcome_tsv_path {}\n'.format(go, go_group_dir, suffix, args.prepro_path, path))
                         else:
-                            print("depth < 2 in {}:{}".format(fn, go, depth_go))
+                            print("depth < 2 in {}:{}, depth={}".format(fn, go, depth_go))
                     else:
                         f.write('python generate_data.py --outcome {} --output_dir {} --method {} --feature_csv_path {} --outcome_tsv_path {}\n'.format(go, go_group_dir, suffix, args.prepro_path, path))
                 except KeyError:
