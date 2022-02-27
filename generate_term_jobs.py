@@ -63,9 +63,9 @@ if __name__ == "__main__":
         ontology_suffix = ontology + '_' + suffix
         go_by_count_dict = {
                             # 'EIdata_top2_{}.jobs'.format(ontology_suffix): top2_bool
-                            # 'EIdata_500_1000_{}.jobs'.format(ontology_suffix):np.logical_and((go_pos_count>500), (go_pos_count<=1000)),
-                            # 'EIdata_1000_{}.jobs'.format(ontology_suffix): go_pos_count > 1000,
-                            # 'EIdata_200_500_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>200), (go_pos_count<=500)),
+                            'EIdata_500_1000_{}.jobs'.format(ontology_suffix):np.logical_and((go_pos_count>500), (go_pos_count<=1000)),
+                            'EIdata_1000_{}.jobs'.format(ontology_suffix): go_pos_count > 1000,
+                            'EIdata_200_500_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>200), (go_pos_count<=500)),
                             # 'EIdata_10_50_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>10), (go_pos_count<=50)),
                             # 'EIdata_10_{}.jobs'.format(ontology_suffix): go_pos_count<=10,
                             'EIdata_50_100_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>50), (go_pos_count<=100)),
@@ -91,6 +91,8 @@ if __name__ == "__main__":
                         if depth_go >= 2:
                             # f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], suffix))
                             f.write('python generate_data.py --outcome {} --output_dir {} --method {} --feature_csv_path {} --outcome_tsv_path {}\n'.format(go, go_group_dir, suffix, args.prepro_path, path))
+                        else:
+                            print("depth < 2 in {}:{}".format(fn, go))
                     else:
                         f.write('python generate_data.py --outcome {} --output_dir {} --method {} --feature_csv_path {} --outcome_tsv_path {}\n'.format(go, go_group_dir, suffix, args.prepro_path, path))
                 except KeyError:
