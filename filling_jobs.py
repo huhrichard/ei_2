@@ -11,11 +11,12 @@ parser.add_argument('--go_tsv', type=str, required=True, help='')
 parser.add_argument('--ontology', type=str, default='go', help='')
 parser.add_argument('--annotation', type=str, required=True, help='')
 
-cd_df = pd.read_csv('./plot/cd_csv/cd_input_{}_{}_fmax.csv'.format(term, annotation))
+
 
 args = parser.parse_args()
 annotation_understroke = args.annotation.replace('-', '_')
 term = args.ontology
+cd_df = pd.read_csv('./plot/cd_csv/cd_input_{}_{}_fmax.csv'.format(term, args.annotation))
 data_list = ['EI',
              # 'mashup', 'deepNF'
              ]
