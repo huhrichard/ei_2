@@ -105,7 +105,7 @@ if __name__ == "__main__":
                    # 'medications': 'Medica-\ntions\n(26)',
                    'comorbidities': 'Co-morbi-\ndities\n(23)',
                    'vitals': 'Vital\nsigns\n(9)',
-                   # 'concatenated': 'Concat-\nenated\nAll',
+                   'concatenated': 'Concat-\nenated\nAll',
                    'xgboost': 'XGBoost'}
 
     cp = sns.color_palette(n_colors=len(dict_suffix))
