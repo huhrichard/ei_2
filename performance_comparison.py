@@ -123,10 +123,10 @@ if __name__ == "__main__":
             # else:
             #     go_dir = args.ontology
             if not '/' in key:
-                go_dir = args.ontology + '_' + key
+                go_dir = args.file_prefix + '_' + key
                 sub_data_folder = ''
             else:
-                go_dir = args.ontology + '_EI'
+                go_dir = args.file_prefix + '_EI'
                 sub_data_folder = key[1:]+'/'
             # print(sub_data_folder)
             fns = listdir(go_dir)
