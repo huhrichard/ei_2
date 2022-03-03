@@ -82,7 +82,8 @@ if __name__ == "__main__":
     if '-' not in group:
         group = '>' + group
     title_name = "#annotated proteins: {}".format(group)
-    file_prefix = args.file_prefix
+    # file_prefix = args.file_prefix
+    file_prefix = args.ontology
     dict_suffix = {'EI': 'Ensemble\nIntegration',
                    'deepNF': 'deepNF',
                    'mashup': 'Mashup',
