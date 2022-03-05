@@ -169,8 +169,13 @@ if __name__ == "__main__":
 
             performance_df = pd.concat(performance_df_list)
             performance_df['data_name'] = performance_df['data_name'].apply(add_colon)
-            performance_df.to_csv(os.path.join(plot_dir, 'performances_cat_{}_{}_{}.csv.gz'.format(mk, file_prefix, group)),
-                                               compression='gzip')
+            # k =
+            performance_df.to_csv(os.path.join(plot_dir,
+                                               'performances_cat_{}_{}_{}_{}.csv.gz'.format(mk,
+                                                                                          key.split('/')[-1],
+                                                                                          file_prefix,
+                                                                                          group)),
+                                                                            compression='gzip')
             # print(performance_df.columns)
 
             go_terms_set = set(list(performance_df['data_name']))
