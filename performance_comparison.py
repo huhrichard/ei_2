@@ -80,8 +80,11 @@ if __name__ == "__main__":
     args = parser.parse_args()
     group = args.group
     if '-' not in group:
-        group = '>' + group
-    title_name = "#annotated proteins: {}".format(group)
+        title_gp = '>' + group
+    else:
+        title_gp = group
+
+    title_name = "#annotated proteins: {}".format(title_gp)
     # file_prefix = args.file_prefix
     file_prefix = args.ontology
     dict_suffix = {'EI': 'Ensemble\nIntegration',
