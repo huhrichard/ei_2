@@ -109,6 +109,7 @@ if __name__ == "__main__":
     termcounts = TermCounts(godag, objanno.get_id2gos_nss())
     # performance_df_dict = dict()
     # fmax_df = pd.DataFrame()
+    base_save_dir = './analysis_folder'
 
     for mk, mv in metrics.items():
         performance_value_list = []
@@ -141,7 +142,10 @@ if __name__ == "__main__":
             for term_dir in term_dirs:
 
                 file_name = term_dir + '/' +sub_data_folder + 'analysis/' + 'performance.csv'
-                print(file_name)
+                # _name = term_dir + '/' +sub_data_folder + 'analysis/' + 'performance.csv'
+                # print(file_name)
+
+                # os.system('cp {} {}'.format(file_name, os.path.join(base_save_dir, )))
                 term_name = term_dir.split('/')[-1]
 
                 if exists(file_name):
@@ -164,8 +168,11 @@ if __name__ == "__main__":
                 performance_df_list.append(df)
 
             performance_df = pd.concat(performance_df_list)
-            # print(performance_df.columns)
             performance_df['data_name'] = performance_df['data_name'].apply(add_colon)
+            performance_df.to_csv(os.path.join(plot_dir, 'performances_cat_{}_{}_{}.csv.gz'.format(mk, file_prefix, group)),
+                                               compression='gzip')
+            # print(performance_df.columns)
+
             go_terms_set = set(list(performance_df['data_name']))
             # print(performance_df['data_name'].values[0])
 
