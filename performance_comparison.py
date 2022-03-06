@@ -151,6 +151,9 @@ if __name__ == "__main__":
                 # os.system('cp {} {}'.format(file_name, os.path.join(base_save_dir, )))
                 term_name = term_dir.split('/')[-1]
 
+                if is_go:
+
+
                 if exists(file_name):
                     performance_file_list[term_name] = file_name
                 # if not '/' in key:
@@ -166,6 +169,7 @@ if __name__ == "__main__":
             performance_df_list = []
             for term_name, performance_file in performance_file_list.items():
                 df = pd.read_csv(performance_file)
+
                 df['data_name'] = term_name
                 # print(df)
                 performance_df_list.append(df)
@@ -174,7 +178,7 @@ if __name__ == "__main__":
             performance_df['data_name'] = performance_df['data_name'].apply(add_colon)
             # k =
             performance_df.to_csv(os.path.join(plot_dir,
-                                               'performances_cat_{}_{}_{}_{}.csv.gz'.format(mk,
+                                               'performances/performances_cat_{}_{}_{}_{}.csv.gz'.format(mk,
                                                                                           key.split('/')[-1],
                                                                                           file_prefix,
                                                                                           group)),
