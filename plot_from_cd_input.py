@@ -50,8 +50,10 @@ dict_suffix = ['Ensemble\nIntegration',
                  'Neighborhood']
 cp = sns.color_palette(n_colors=len(dict_suffix))
 
-godag = get_godag("go-basic.obo")
-objanno = get_objanno('goa_human.gaf', 'gaf', godag=godag)
+prepro_path = '../oracle_data/go_string_2022/GO_STRING_2022/preprocessed/'
+
+godag = get_godag(prepro_path + "go.obo")
+objanno = get_objanno(prepro_path + 'goa_human.gaf', 'gaf', godag=godag)
 termcounts = TermCounts(godag, objanno.get_id2gos_nss())
 
 cd_csv_path = 'plot/'
@@ -99,6 +101,8 @@ for ontology in list_ontology:
         cd_df.rename(columns={'EI': 'Ensemble\nIntegration'}, inplace=True)
     if 'Curated database' in algo_names:
         cd_df.rename(columns={'Curated database': 'Curated\nDatabases'}, inplace=True)
+    if 'DeepNF' in algo_names:
+        cd_df.rename(columns={'DeepNF': 'deepNF'}, inplace=True)
 
     # cd_df.to_csv(file, index_label=False)
     # cmd = "R CMD BATCH --no-save --no-restore '--args cd_fn=\"{}\"' R/plotCDdiagram.R".format(file.split('/')[-1])
@@ -233,11 +237,11 @@ for ontology in list_ontology:
                           order=sorted(set(cd_df_melted['go_depth'].values)),
                           linewidth=2.5)
 
-        ax2 = sns.stripplot(ax=ax2, y='fmax', x='go_depth',jitter=True,
-                          data=cd_df_melted[cd_df_melted['algo'].isin(fig2_plot_only)],
-                          order=sorted(set(cd_df_melted['go_depth'].values)),
-                            hue='algo', hue_order=fig2_plot_only,  dodge=True,
-                            size=4, color=".3", linewidth=0)
+        # ax2 = sns.stripplot(ax=ax2, y='fmax', x='go_depth',jitter=True,
+        #                   data=cd_df_melted[cd_df_melted['algo'].isin(fig2_plot_only)],
+        #                   order=sorted(set(cd_df_melted['go_depth'].values)),
+        #                     hue='algo', hue_order=fig2_plot_only,  dodge=True,
+        #                     size=4, color=".3", linewidth=0)
 
         ax2.get_legend().remove()
         ax2.legend(loc='upper right', prop={'weight':'bold', 'size':18})
@@ -298,11 +302,11 @@ for ontology in list_ontology:
                           order=ic_group_list,
                           linewidth=2.5)
 
-        ax3 = sns.stripplot(ax=ax3, y='fmax', x='ic_group', jitter=True,
-                          data=cd_df_melted[cd_df_melted['algo'].isin(fig2_plot_only)],
-                          order=ic_group_list,
-                            hue='algo', hue_order=fig2_plot_only, dodge=True,
-                            size=4, color=".3", linewidth=0)
+        # ax3 = sns.stripplot(ax=ax3, y='fmax', x='ic_group', jitter=True,
+        #                   data=cd_df_melted[cd_df_melted['algo'].isin(fig2_plot_only)],
+        #                   order=ic_group_list,
+        #                     hue='algo', hue_order=fig2_plot_only, dodge=True,
+        #                     size=4, color=".3", linewidth=0)
 
         ax3.get_legend().remove()
         ax3.legend(loc='upper right', prop={'weight':'bold', 'size':18})

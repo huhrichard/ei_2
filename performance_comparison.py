@@ -151,11 +151,11 @@ if __name__ == "__main__":
                 # os.system('cp {} {}'.format(file_name, os.path.join(base_save_dir, )))
                 term_name = term_dir.split('/')[-1]
 
-                if is_go:
+                # if is_go:
 
 
-                if exists(file_name):
-                    performance_file_list[term_name] = file_name
+                # if exists(file_name):
+                #     performance_file_list[term_name] = file_name
                 # if not '/' in key:
                 #     # performance_file_list += find('performance.csv', term_dir + 'analysis/')
                 #     # temp = find('performance.csv', term_dir + 'analysis/')
