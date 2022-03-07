@@ -85,7 +85,7 @@ for ontology in list_ontology:
     # cd_df = pd.concat(cd_csv_list)
     # print(cd_df.isna().sum())
     csv_fp = cd_csv_path+'cd_input_{}_fmax.csv'.format(ontology)
-    cd_df = pd.read_csv(csv_fp, index_col=False)
+    cd_df = pd.read_csv(csv_fp)
     # cd_df = pd.read_csv(csv_fp, index_col=0)
 
     # cd_df.to_csv(csv_fp, index_label=False)
@@ -174,9 +174,9 @@ for ontology in list_ontology:
                       data=cd_df_melted, palette=sorted_cp, order=sorted_algo_names,
                       linewidth=2.5)
 
-    ax1 = sns.stripplot(ax=ax1, y='fmax', x='algo',jitter =True,
-                      data=cd_df_melted, order=sorted_algo_names,
-                        size=4, color=".3", linewidth=0)
+    # ax1 = sns.stripplot(ax=ax1, y='fmax', x='algo',jitter =True,
+    #                   data=cd_df_melted, order=sorted_algo_names,
+    #                     size=4, color=".3", linewidth=0)
 
     pv_list = [2e-16, 2e-16, 1.03e-12]
     pair_list = [('Ensemble\nIntegration', 'deepNF'),
