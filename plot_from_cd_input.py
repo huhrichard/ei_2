@@ -85,7 +85,8 @@ for ontology in list_ontology:
     # cd_df = pd.concat(cd_csv_list)
     # print(cd_df.isna().sum())
     csv_fp = cd_csv_path+'cd_input_{}_fmax.csv'.format(ontology)
-    cd_df = pd.read_csv(csv_fp, index_col=0)
+    cd_df = pd.read_csv(csv_fp, index_col=False)
+    # cd_df = pd.read_csv(csv_fp, index_col=0)
 
     # cd_df.to_csv(csv_fp, index_label=False)
     # cd_df = pd.read_csv('')
@@ -101,8 +102,8 @@ for ontology in list_ontology:
         cd_df.rename(columns={'EI': 'Ensemble\nIntegration'}, inplace=True)
     if 'Curated database' in algo_names:
         cd_df.rename(columns={'Curated database': 'Curated\nDatabases'}, inplace=True)
-    # if 'DeepNF' in algo_names:
-    #     cd_df.rename(columns={'DeepNF': 'deepNF'}, inplace=True)
+    if 'DeepNF' in algo_names:
+        cd_df.rename(columns={'DeepNF': 'deepNF'}, inplace=True)
 
     # cd_df.to_csv(file, index_label=False)
     # cmd = "R CMD BATCH --no-save --no-restore '--args cd_fn=\"{}\"' R/plotCDdiagram.R".format(file.split('/')[-1])
