@@ -350,7 +350,7 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank=''):
     """ Stacking Ensemble """
     stackers_dict = {
                      "RF.S": RandomForestClassifier(),
-                     "SVM.S": SVC(kernel='linear', probability=True, max_iter=1e5),
+                     "SVM.S": SVC(kernel='linear', probability=True, max_iter=1e7),
                      "NB.S": GaussianNB(),
                      "LR.S": LogisticRegression(),
                      "AdaBoost.S": AdaBoostClassifier(),
