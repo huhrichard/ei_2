@@ -85,7 +85,7 @@ for ontology in list_ontology:
     # cd_df = pd.concat(cd_csv_list)
     # print(cd_df.isna().sum())
     csv_fp = cd_csv_path+'cd_input_{}_fmax.csv'.format(ontology)
-    cd_df = pd.read_csv(csv_fp, index_col=0, index_label=False)
+    cd_df = pd.read_csv(csv_fp, index_col=0)
     # cd_df = pd.read_csv(csv_fp, index_col=0)
 
     # cd_df.to_csv(csv_fp, index_label=False)
