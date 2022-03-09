@@ -83,18 +83,23 @@ if __name__ == "__main__":
                 mkdir(go_group_dir)
             # plt.figure()
             go_by_groups = go_terms_from_tsv[bool_array]
-            print(len(go_by_groups))
+            # print(len(go_by_groups))
+            go_counter = 0
             for go in go_by_groups:
-                try:
-                    if is_go:
-                        depth_go = godag[go].depth
-                        if depth_go >= 2:
-                            # f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], suffix))
-                            f.write('python minerva_scripts/generate_data.py --outcome {} --output_dir {} --method {} --feature_csv_path {} --outcome_tsv_path {}\n'.format(go, go_group_dir, suffix, args.prepro_path, path))
-                        else:
-                            print("depth < 2 in {}:{}, depth={}".format(fn, go, depth_go))
-                    else:
+                # try:
+                if is_go:
+                    depth_go = godag[go].depth
+                    if depth_go >= 2:
+                        # f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], suffix))
                         f.write('python minerva_scripts/generate_data.py --outcome {} --output_dir {} --method {} --feature_csv_path {} --outcome_tsv_path {}\n'.format(go, go_group_dir, suffix, args.prepro_path, path))
-                except KeyError:
-                    pass
+                        go_counter += 1
+                    else:
+                        print("depth < 2 in {}:{}, depth={}".format(fn, go, depth_go))
+                else:
+                    f.write('python minerva_scripts/generate_data.py --outcome {} --output_dir {} --method {} --feature_csv_path {} --outcome_tsv_path {}\n'.format(go, go_group_dir, suffix, args.prepro_path, path))
+                    go_counter += 1
+                # except KeyError:
+                #     pass
+
+            print(fn, go_counter)
             f.close()
