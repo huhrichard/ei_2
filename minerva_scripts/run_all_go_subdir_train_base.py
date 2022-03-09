@@ -4,7 +4,7 @@ from os import remove, system
 from os.path import abspath
 import argparse
 import sys
-sys.path.append('..')
+sys.path.append('./')
 import common
 
 def str2bool(v):
