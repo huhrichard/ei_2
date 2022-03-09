@@ -68,7 +68,7 @@ if __name__ == "__main__":
                             'EIdata_200_500_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>200), (go_pos_count<=500)),
                             # 'EIdata_10_50_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>10), (go_pos_count<=50)),
                             # 'EIdata_10_{}.jobs'.format(ontology_suffix): go_pos_count<=10,
-                            'EIdata_50_100_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>50), (go_pos_count<=100)),
+                            'EIdata_50_100_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>=50), (go_pos_count<=100)),
                             'EIdata_100_200_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>100), (go_pos_count<=200)),
                             }
 
@@ -90,11 +90,11 @@ if __name__ == "__main__":
                         depth_go = godag[go].depth
                         if depth_go >= 2:
                             # f.write('python generate_data.py {} {}/ {}\n'.format(go, fn.split('.')[0], suffix))
-                            f.write('python generate_data.py --outcome {} --output_dir {} --method {} --feature_csv_path {} --outcome_tsv_path {}\n'.format(go, go_group_dir, suffix, args.prepro_path, path))
+                            f.write('python minerva_scripts/generate_data.py --outcome {} --output_dir {} --method {} --feature_csv_path {} --outcome_tsv_path {}\n'.format(go, go_group_dir, suffix, args.prepro_path, path))
                         else:
                             print("depth < 2 in {}:{}, depth={}".format(fn, go, depth_go))
                     else:
-                        f.write('python generate_data.py --outcome {} --output_dir {} --method {} --feature_csv_path {} --outcome_tsv_path {}\n'.format(go, go_group_dir, suffix, args.prepro_path, path))
+                        f.write('python minerva_scripts/generate_data.py --outcome {} --output_dir {} --method {} --feature_csv_path {} --outcome_tsv_path {}\n'.format(go, go_group_dir, suffix, args.prepro_path, path))
                 except KeyError:
                     pass
             f.close()
