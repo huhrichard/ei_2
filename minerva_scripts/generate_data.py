@@ -7,7 +7,7 @@ from os import mkdir
 from sys import argv
 from itertools import product
 from sklearn.model_selection import KFold, StratifiedKFold
-import common
+# import common
 
 def convert_to_arff(df, path):
     fn = open(path, 'w')
