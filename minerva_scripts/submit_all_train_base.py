@@ -10,7 +10,7 @@ script.write('#!/bin/bash\n#BSUB -J train_all_base\n#BSUB -P acc_pandeg01a\n#BSU
 script.write('module purge\nmodule load java\nmodule load python\nmodule load groovy\n'
              'module load selfsched\n')
 
-python_cmd = 'python run_all_different_data_train_base.py {}'.format(ontology)
+python_cmd = 'python minerva_scripts/run_all_different_data_train_base.py {}'.format(ontology)
 script.write(python_cmd)
 script.close()
 os.system('bsub < {}'.format(lsf_fn))
