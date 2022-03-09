@@ -1,0 +1,16 @@
+#!/bin/bash
+#BSUB -J performance
+#BSUB -P acc_pandeg01a
+#BSUB -q premium
+#BSUB -n 4
+#BSUB -W 10:00
+#BSUB -o performance.stdout
+#BSUB -eo performance.stderr
+#BSUB -R rusage[mem=20480]
+
+module purge
+module load java
+module load groovy
+module load selfsched
+module load R
+python plot_from_cd_input.py
