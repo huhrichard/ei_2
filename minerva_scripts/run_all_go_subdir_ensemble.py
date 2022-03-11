@@ -7,6 +7,7 @@ from os import remove, system, listdir
 import glob
 import argparse
 import subprocess
+sys.path.append('./')
 import common
 
 def str2bool(v):

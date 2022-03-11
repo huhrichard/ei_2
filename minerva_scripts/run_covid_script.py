@@ -4,6 +4,7 @@ from itertools import chain, combinations
 import numpy as np
 from sys import argv
 import argparse
+sys.path.append('./')
 from common import str2bool
 # base_path = '/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR/'
 
