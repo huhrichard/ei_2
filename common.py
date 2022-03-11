@@ -57,9 +57,13 @@ def fmeasure_score(labels, predictions, thres=None, beta = 1.0, pos_label = 1):
         # print(threshold)
         if len(threshold[where(f1==nanmax(f1))]) > 1:
             opt_threshold = threshold[where(f1==nanmax(f1))][0]
+            r_max = recall[where(f1==nanmax(f1))][0]
+            p_max = precision[where(f1 == nanmax(f1))][0]
         else:
             opt_threshold = threshold[where(f1 == nanmax(f1))]
-        return {'F':nanmax(f1), 'thres':opt_threshold}
+            r_max = recall[where(f1 == nanmax(f1))]
+            p_max = precision[where(f1 == nanmax(f1))]
+        return {'F':nanmax(f1), 'thres':opt_threshold, 'P':p_max, 'R':r_max}
 
     else:
         predictions[predictions > thres] = 1

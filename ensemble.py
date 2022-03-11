@@ -269,6 +269,35 @@ def bestbase_classifier(path, fold_count=range(5), agg=1, rank=False):
     predictions = pd.concat(predictions)
 
     fmax_list = [common.fmeasure_score(labels, predictions.iloc[:, i])['F'] for i in range(len(predictions.columns))]
+    fscores_list = [common.fmeasure_score(labels, predictions.iloc[:, i]) for i in range(len(predictions.columns))]
+    argmax_bp_idx = np.argmax(fmax_list)
+    best_bp_predictions = predictions.iloc[:,[argmax_bp_idx]]
+    best_fmax = max(fmax_list)
+    best_auc = sklearn.metrics.roc_auc_score(labels, best_bp_predictions)
+    best_auprc = common.auprc(labels, best_bp_predictions)
+    print('best_bp')
+    best_bp_predictions.columns = ['best base']
+    print(best_bp_predictions)
+
+    return {'f-measure':{'F':best_fmax, 'R':fscores_list[argmax_bp_idx]['R'], 'P':fscores_list[argmax_bp_idx]['P']},
+            'auc': best_auc,
+            'auprc': best_auprc, 'predictions': best_bp_predictions}
+
+def median_base_classifier(path, fold_count=range(5), agg=1, rank=False):
+    assert exists(path)
+    if not exists('%s/analysis' % path):
+        mkdir('%s/analysis' % path)
+    predictions = []
+    labels = []
+
+    for fold in fold_count:
+        train_df, train_label, test_df, label = common.read_fold(path, fold)
+        # test_df = common.unbag(test_df, agg)
+        predictions.append(test_df)
+        labels = append(labels, label)
+    predictions = pd.concat(predictions)
+
+    fmax_list = [common.fmeasure_score(labels, predictions.iloc[:, i])['F'] for i in range(len(predictions.columns))]
     argmax_bp_idx = np.argmax(fmax_list)
     best_bp_predictions = predictions.iloc[:,[argmax_bp_idx]]
     best_fmax = max(fmax_list)
@@ -309,7 +338,7 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df,
 def main_classification(path, f_list, agg=1, rank=False, ens_for_rank=''):
     #
     dn = abspath(path).split('/')[-1]
-    cols = ['data_name', 'fmax', 'method', 'auc', 'auprc']
+    cols = ['data_name', 'fmax', 'method', 'auc', 'auprc', 'pmax', 'rmax']
 
     dfs = []
     predictions_dataframes = []
@@ -317,7 +346,9 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank=''):
     local_model_weight_dfs = []
     aggregated_dict = {'CES': CES_classifier,
                        'Mean': aggregating_ensemble,
-                       'best base': bestbase_classifier}
+                       'best base': bestbase_classifier,
+                       # 'median base': _bestbaseclassifier
+                       }
 
 
 
@@ -326,12 +357,14 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank=''):
         if (rank and (key == ens_for_rank)) or (not rank):
             print('[{}] Start building model #################################'.format(key))
             perf = val(path, fold_values, agg, rank)
-            if key != 'best base':
-                fmax_perf = perf['f-measure']['F']
-                if rank:
-                    local_model_weight_dfs.append(perf['model_weight'])
-            else:
-                fmax_perf = perf['f-measure']
+            # if key != 'best base':
+            #     fmax_perf = perf['f-measure']['F']
+            #     if rank:
+            #         local_model_weight_dfs.append(perf['model_weight'])
+            # else:
+            fmax_perf = perf['f-measure']['F']
+            rmax_perf = perf['f-measure']['R']
+            pmax_perf = perf['f-measure']['P']
 
             if (not rank):
                 auc_perf = perf['auc']
@@ -341,7 +374,7 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank=''):
                 print('[{}] AUC score is {}.'.format(key, auc_perf) )
                 print('[{}] AUPRC score is {}.'.format(key, auprc_perf))
                 predictions_dataframes.append(perf['predictions'])
-                dfs.append(pd.DataFrame(data=[[dn, fmax_perf, key, auc_perf, auprc_perf]], columns=cols, index=[0]))
+                dfs.append(pd.DataFrame(data=[[dn, fmax_perf, key, auc_perf, auprc_perf, pmax_perf, rmax_perf]], columns=cols, index=[0]))
 
     # print('Saving results #############################################')
     analysis_path = '%s/analysis' % path
@@ -417,7 +450,7 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank=''):
                 predictions_df.set_index(['id', 'label'], inplace=True)
                 # print(predictions_df)
                 predictions_dataframes.append(predictions_df)
-            df = pd.DataFrame(data=[[dn, fmax['F'], stacker_name, auc, auprc]], columns=cols, index=[0])
+            df = pd.DataFrame(data=[[dn, fmax['F'], stacker_name, auc, auprc, fmax['R'], fmax['P']]], columns=cols, index=[0])
             dfs.append(df)
 
 
