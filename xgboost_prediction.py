@@ -12,6 +12,10 @@ from common import load_arff_headers, load_properties, read_arff_to_pandas_df
 from xgboost import XGBClassifier
 from os import mkdir
 import common
+from sklearn.inspection import permutation_importance
+
+from sklearn.metrics import fbeta_score, make_scorer
+auprc_sklearn = make_scorer(common.auprc, greater_is_better=True, needs_proba=True)
 
 def read_arff_to_pandas_df(arff_path):
     # loadarff doesn't support string attribute
@@ -91,7 +95,7 @@ def xgboost_predictions_result(outcome_path):
         test_prediction = xgb_clf.predict_proba(test_feat)[:, 1]
         # test_predictions.append(test_prediction)
         test_df = pd.DataFrame(
-            {'label': test_label, 'prediction': test_prediction})
+            {'id': test_nf[id_col], 'label': test_label, 'prediction': test_prediction})
         test_dfs.append(test_df)
 
     test_df_cat = pd.concat(test_dfs)
@@ -99,13 +103,29 @@ def xgboost_predictions_result(outcome_path):
     fmax = common.fmeasure_score(test_df_cat.label, test_df_cat.prediction, None)
     auc = sklearn.metrics.roc_auc_score(test_df_cat.label, test_df_cat.prediction)
     auprc = common.auprc(test_df_cat.label, test_df_cat.prediction)
-    cols = ['data_name', 'fmax', 'method', 'auc', 'auprc']
+    cols = ['data_name', 'fmax', 'method', 'auc', 'auprc', 'pmax', 'rmax']
     dn = abspath(outcome_path).split('/')[-1]
-    performance_df = pd.DataFrame(data=[[dn, fmax['F'], 'XGB_base', auc, auprc]], columns=cols, index=[0])
+    performance_df = pd.DataFrame(data=[[dn, fmax['F'], 'XGB_base', auc, auprc, fmax['P'], fmax['R']]], columns=cols, index=[0])
     analysis_folder = os.path.join(outcome_path, 'analysis')
     if not exists(analysis_folder):
         mkdir(analysis_folder)
     performance_df.to_csv(os.path.join(analysis_folder, "performance.csv"), index=False)
+    test_df_cat.rename(columns={'prediction': 'XGB'}, inplace=True)
+    test_df_cat.to_csv(os.path.join(analysis_folder, "predictions.csv"), index=False)
+
+    # feature importance
+    xgb_clf = XGBClassifier(random_state=64)
+    xgb_clf.fit(df[column_non_feature], df[label_col])
+    xgb_pi = permutation_importance(estimator=xgb_clf,
+                                        X=df[column_non_feature],
+                                        y=df[label_col],
+                                        n_repeats=100,
+                                        random_state=0,
+                                        scoring=common.auprc_sklearn
+                                        )
+
+    pi_df = pd.DataFrame(data=[xgb_pi.importances_mean], columns=column_non_feature, index=[0])
+    pi_df.to_csv(os.path.join(analysis_folder, "xgb_feat_ranks.csv"), index=False)
 
 # data_path = '/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR_normalized/xgboost'
 data_path = argv[-1]

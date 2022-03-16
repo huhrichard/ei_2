@@ -22,6 +22,8 @@ from os import remove, system, listdir
 import os, fnmatch
 import sys
 from os import system
+sys.path.append('./')
+import common
 
 system('module load R')
 plot_dir = './plot/'
@@ -118,6 +120,7 @@ if __name__ == "__main__":
         # is_go = 'go' in sys.argv[-1]
 
         # ensemble_df
+        prediction_plot_df = []
         for key, val in dict_suffix.items():
             # if len(key) > 0:
             #     go_dir = sys.argv[-1] + '_' + key
@@ -142,12 +145,13 @@ if __name__ == "__main__":
             performance_file_list = {}
             for term_dir in term_dirs:
 
-                file_name = term_dir + '/' + sub_data_folder + 'analysis/' + 'performance.csv'
+                performance_file_name = term_dir + '/' + sub_data_folder + 'analysis/' + 'performance.csv'
+                prediction_file_name = term_dir + '/' + sub_data_folder + 'analysis/' + 'predictions.csv'
                 # print(file_name)
                 term_name = term_dir.split('/')[-1]
 
-                if exists(file_name):
-                    performance_file_list[term_name] = file_name
+                if exists(performance_file_name):
+                    performance_file_list[term_name] = (performance_file_name, prediction_file_name)
                 # if not '/' in key:
                 #     # performance_file_list += find('performance.csv', term_dir + 'analysis/')
                 #     # temp = find('performance.csv', term_dir + 'analysis/')
@@ -159,13 +163,19 @@ if __name__ == "__main__":
             # print(performance_file_list)
             # dir = sys.argv[-1].split('/')[-2]
             performance_df_list = []
-            for term_name, performance_file in performance_file_list.items():
+            prediction_df_list = []
+            for term_name, (performance_file, prediction_file) in performance_file_list.items():
                 df = pd.read_csv(performance_file)
                 df['data_name'] = term_name
+
+                pred_df = pd.read_csv(prediction_file)
+                pred_df['data_name'] = term_name
+                prediction_df_list.append(pred_df)
                 # print(df)
                 performance_df_list.append(df)
 
             performance_df = pd.concat(performance_df_list)
+            prediction_df = pd.concat(prediction_df_list)
             # print(performance_df.columns)
             # performance_df['data_name'] = performance_df['data_name'].apply(add_colon)
             go_terms_set = performance_df['data_name'].unique()
@@ -174,6 +184,15 @@ if __name__ == "__main__":
 
             # ensemble_df = extract_df_by_method(performance_df, method='LR.S', drop_columns=['method'])
             ensemble_df = best_ensemble_score(performance_df, input=key, metric=mk)
+            best_performing_dfs = []
+            for term_name, (_perf, _pred) in performance_file_list.items():
+                best_performer = ensemble_df.loc[ensemble_df['data_name'] == term_name,'best_ensmble_method'].value
+                best_performer_pred = prediction_df[prediction_df['data_name'] == term_name,[best_performer, 'label', 'data_name']]
+                best_performing_dfs.append(best_performer_pred)
+
+            best_performing_df = pd.concat(best_performing_dfs)
+            best_performing_df['Method'] = val
+            best_performing_df['key'] = key
 
             ensemble_df['Method'] = val
             ensemble_df['key'] = key
@@ -189,6 +208,9 @@ if __name__ == "__main__":
             # data_list.append(val)
             ensemble_df_list.append(ensemble_df)
             performance_plot_df.append(performance_df)
+            prediction_plot_df.append(best_performing_df)
+
+
 
         # print(median_fmax_list)
         # print(len(fmax_list), len(median_fmax_list))
@@ -207,6 +229,7 @@ if __name__ == "__main__":
 
         ensemble_df_cat = pd.concat(ensemble_df_list)
         performance_df_cat = pd.concat(performance_plot_df)
+        best_performer_pred_cat = pd.concat(prediction_plot_df)
 
         print(ensemble_df_cat['Method'].unique())
         # print('shape before drop', ensemble_df_cat.shape)
@@ -342,6 +365,26 @@ if __name__ == "__main__":
             fig3.savefig('{}{}{}_{}_comparison_{}.pdf'.format(plot_dir, 'covid19/', mk,
                                                               file_prefix, out_k), bbox_inches="tight")
 
+            # TODO: make AUPRC plot
+            if mk == 'fmax':
+                best_performer_out_k = best_performer_pred_cat.loc[best_performer_pred_cat['data_name'] == out_k]
+                best_performer_prc = []
+                best_performer_prmax = {}
+                for pred_method in sorted_dataname_list:
+                    best_performer_outk_mk = best_performer_out_k.loc[best_performer_out_k['Method'] == pred_method]
+                    fs = common.fmeasure_score(best_performer_outk_mk.label, best_performer_outk_mk.prediction, None)
+                    p_curve, r_curve = fs['PR-curve']
+                    best_performer_prc_df = pd.DataFrame({'precision':p_curve, 'recall':r_curve})
+                    best_performer_name = ensemble_df_cat.loc[(ensemble_df_cat['Outcome']==out_k) & (ensemble_df_cat['Method']==pred_method), 'best_ensmble_method'].value
+                    best_performer_prc_df['method'] = pred_method + best_performer_name
+                    pmax = fs['P']
+                    rmax = fs['R']
+                    best_performer_prmax[pred_method] = [pmax, rmax]
+
+
+
+
+
             # Without xgb
 
             performance_df_cat_di_only = performance_df_cat.loc[performance_df_cat['data_name'] == out_k]
@@ -389,6 +432,10 @@ if __name__ == "__main__":
                 tick.set_fontweight('semibold')
             fig3.savefig('{}{}{}_{}_comparison_{}_withoutXGB.pdf'.format(plot_dir, 'covid19/', mk,
                                                               file_prefix, out_k), bbox_inches="tight")
+
+
+
+
 
         deceased_outcome_since_prefix = 'DECEASED_AT_{}DAYS'
         deceased_outcome_since_prefix_plot = 'Deceased\nin {}days'
