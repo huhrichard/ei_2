@@ -73,9 +73,12 @@ def write_submit_del_job(ensemble_dir, jobs_fn):
     # script.write(python_cmd)
     # script.write('rm %s.jobs' % second_sub)
     script.close()
+    print('written lsf script')
     ####### Submit the lsf job and remove lsf script
     system('bsub < %s' % lsf_fn)
-    remove(lsf_fn)
+    print('submitted job')
+    # remove(lsf_fn)
+    # print('removed files')
 
 excluding_folder = ['analysis']
 
