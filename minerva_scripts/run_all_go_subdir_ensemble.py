@@ -62,10 +62,11 @@ def write_submit_del_job(ensemble_dir, jobs_fn):
     script.write('#BSUB -o ensemble_%s.stdout\n#BSUB -eo ensemble_%s.stderr\n#BSUB -L /bin/bash\n' % (second_sub, second_sub))
     # script.write('module purge')
     # script.write('conda activate largegopred')
-    # script.write(
+    script.write(
         #     # 'module load python\n'+
         #     # 'module load py_packages\n'
-        # 'module load java\nmodule load groovy\nmodule load selfsched\nmodule load weka\n')
+        # 'module load java\nmodule load groovy\n'
+        'module load selfsched\n')
     # script.write('export _JAVA_OPTIONS=\"-XX:ParallelGCThreads=10\"\nexport JAVA_OPTS=\"-Xmx10g\"\n')
     script.write('mpirun selfsched < %s' % jobs_fn)
     # python_cmd = "\n".join(python_cmd_list)
