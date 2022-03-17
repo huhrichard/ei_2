@@ -15,6 +15,7 @@ import common
 from sklearn.inspection import permutation_importance
 
 from sklearn.metrics import fbeta_score, make_scorer
+import shap
 auprc_sklearn = make_scorer(common.auprc, greater_is_better=True, needs_proba=True)
 
 def read_arff_to_pandas_df(arff_path):
@@ -115,17 +116,21 @@ def xgboost_predictions_result(outcome_path):
 
     # feature importance
     xgb_clf = XGBClassifier(random_state=64)
-    xgb_clf.fit(df[column_non_feature], df[label_col])
-    xgb_pi = permutation_importance(estimator=xgb_clf,
-                                        X=df[column_non_feature],
-                                        y=df[label_col],
-                                        n_repeats=100,
-                                        random_state=0,
-                                        scoring=common.auprc_sklearn
-                                        )
+    xgb_clf.fit(df[feature_columns], df[label_col])
+    # xgb_pi = permutation_importance(estimator=xgb_clf,
+    #                                     X=df[feature_columns],
+    #                                     y=df[label_col],
+    #                                     n_repeats=100,
+    #                                     random_state=0,
+    #                                     scoring=common.auprc_sklearn
+    #                                     )
 
-    pi_df = pd.DataFrame(data=[xgb_pi.importances_mean], columns=column_non_feature, index=[0])
-    pi_df.to_csv(os.path.join(analysis_folder, "xgb_feat_ranks.csv"), index=False)
+    explainer = shap.TreeExplainer(xgb_clf)
+    shap_vals = explainer.shap_values(df[feature_columns])
+    print(shap_vals)
+
+    # pi_df = pd.DataFrame(data=[xgb_pi.importances_mean], columns=column_non_feature, index=[0])
+    # pi_df.to_csv(os.path.join(analysis_folder, "xgb_feat_ranks.csv"), index=False)
 
 # data_path = '/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR_normalized/xgboost'
 data_path = argv[-1]
