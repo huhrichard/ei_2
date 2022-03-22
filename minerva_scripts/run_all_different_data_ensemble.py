@@ -87,6 +87,6 @@ if __name__ == "__main__":
 
         # python_cmd = 'python train_base.py --path {}'.format(go_dir)
 
-        python_cmd = 'python run_all_go_subdir_ensemble.py --path {} --term_prefix {}'.format(scratch_path+go_dir.split('.')[0],
+        python_cmd = 'python minerva_scripts/run_all_go_subdir_ensemble.py --path {} --term_prefix {}'.format(scratch_path+go_dir.split('.')[0],
                                                                                               prefix)
         write_submit_del_job(go_dir.split('.')[0], python_cmd=python_cmd)
