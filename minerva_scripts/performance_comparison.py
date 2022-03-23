@@ -157,12 +157,14 @@ if __name__ == "__main__":
             # if len(feature_folders) == 0:
             #     feature_folders.append('./')
             # assert len(feature_folders) > 0
+
+            print(go_dir)
             performance_file_list = {}
             for term_dir in term_dirs:
 
                 file_name = term_dir + '/' +sub_data_folder + 'analysis/' + 'performance.csv'
                 # _name = term_dir + '/' +sub_data_folder + 'analysis/' + 'performance.csv'
-                # print(file_name)
+                print(file_name)
 
                 # os.system('cp {} {}'.format(file_name, os.path.join(base_save_dir, )))
                 term_name = term_dir.split('/')[-1]
