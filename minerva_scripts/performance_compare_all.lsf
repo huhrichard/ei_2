@@ -13,4 +13,4 @@ module load java
 module load groovy
 module load selfsched
 module load R
-python performance_comparison_all.py
+python minerva_scripts/performance_comparison_all.py
