@@ -184,6 +184,7 @@ if __name__ == "__main__":
             # dir = args.ontology.split('/')[-2]
             performance_df_list = []
             for term_name, performance_file in performance_file_list.items():
+                print(performance_file)
                 df = pd.read_csv(performance_file)
 
                 df['data_name'] = term_name
