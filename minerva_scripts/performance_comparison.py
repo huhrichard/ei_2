@@ -187,8 +187,9 @@ if __name__ == "__main__":
                 df = pd.read_csv(performance_file)
 
                 df['data_name'] = term_name
-                # print(df)
+                print(df)
                 performance_df_list.append(df)
+            print(performance_df_list)
 
             performance_df = pd.concat(performance_df_list)
             performance_df['data_name'] = performance_df['data_name'].apply(add_colon)
