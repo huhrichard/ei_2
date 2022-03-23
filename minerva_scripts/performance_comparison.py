@@ -46,20 +46,33 @@ def best_ensemble_score(df, input, mk, ensemble_suffix='.S'):
     list_best_base = ['deepNF', 'mashup']
     # return_df = pd.DataFrame([])
     col_wo_method = df.columns.tolist()
-
-    pivoted_df = df.pivot_table(mk, ['data_name'], 'method')
+    if (mk == 'pmax') or (mk == 'rmax'):
+        pick_by = 'fmax'
+    else:
+        pick_by = mk
+    pivoted_df = df.pivot_table(pick_by, ['data_name'], 'method')
     ensemble_cols = df['method'].unique().tolist()
     ensemble_cols.remove('best base')
     # ensemble_cols.remove('XGB.S')
+
     best_mk = 'best_{}'.format(mk)
     # pivoted_df['best_fmax'] = 0
     if input in list_best_base:
         pivoted_df[best_mk] = pivoted_df['best base'].values
+        pivoted_df['best_ensemble_method'] = (pivoted_df[ensemble_cols]).idxmax(axis=1).values
     else:
-        pivoted_df[best_mk] = (pivoted_df[ensemble_cols]).max(axis=1).values
+        if (mk == 'pmax') or (mk == 'rmax'):
+            ens_fmax = (pivoted_df[ensemble_cols]).idxmax(axis=1).values
+            pivoted_pr_df = df.pivot_table(mk, ['data_name'], 'method')
+            pivoted_pr_df[best_mk] = pivoted_pr_df[ens_fmax].values
+            pivoted_pr_df['best_ensemble_method'] = (pivoted_df[ensemble_cols]).idxmax(axis=1).values
+            pivoted_df = pivoted_pr_df
+        else:
+            pivoted_df[best_mk] = (pivoted_df[ensemble_cols]).max(axis=1).values
+            pivoted_df['best_ensemble_method'] = (pivoted_df[ensemble_cols]).idxmax(axis=1).values
     # pivoted_df.loc['best_ensemble_method'] = ''
     # print(pivoted_df[ensemble_cols])
-    pivoted_df['best_ensemble_method'] = (pivoted_df[ensemble_cols]).idxmax(axis=1).values
+
     return pivoted_df.reset_index()
 
 def add_colon(str):
@@ -74,7 +87,10 @@ if __name__ == "__main__":
     parser.add_argument('--file_prefix', type=str, required=True, help='')
     metrics = {'fmax': r'$F_{max}$',
                'auc': 'AUC',
-               'auprc': 'AUPRC'}
+               'auprc': 'AUPRC',
+               'rmax': r'$Recall at F_{max}$',
+               'pmax': r'$Precision at F_{max}$'
+               }
 
     # Load all performance csv
     args = parser.parse_args()
