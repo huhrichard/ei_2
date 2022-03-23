@@ -10,7 +10,7 @@ from goatools.gosubdag.gosubdag import GoSubDag
 from goatools.anno.factory import get_objanno
 from goatools.semantic import TermCounts
 
-from goatools.base import download_go_basic_obo
+# from goatools.base import download_go_basic_obo
 import seaborn as sns
 
 # obo_fname = download_go_basic_obo()
