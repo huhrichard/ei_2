@@ -88,8 +88,8 @@ for ontology in list_ontology:
         'fmax': r'$F_{max}$',
         # 'auc': 'AUC',
         # 'auprc': 'AUPRC',
-        'rmax': r'$Recall at F_{max}$',
-        'pmax': r'$Precision at F_{max}$'
+        'rmax': r'Recall at $F_{max}$',
+        'pmax': r'Precision at $F_{max}$'
     }
 
     for mk, mv in metrics.items():
