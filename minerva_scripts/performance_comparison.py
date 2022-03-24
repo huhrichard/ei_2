@@ -59,7 +59,7 @@ def best_ensemble_score(df, input, mk, ensemble_suffix='.S'):
     # pivoted_df['best_fmax'] = 0
     if input in list_best_base:
         pivoted_df[best_mk] = pivoted_df['best base'].values
-        pivoted_df['best_ensemble_method'] = (pivoted_df[ensemble_cols]).idxmax(axis=1).values
+        pivoted_df['best_ensemble_method'] = 'best base'
     else:
         if (mk == 'pmax') or (mk == 'rmax'):
             ens_fmax = (pivoted_df[ensemble_cols]).idxmax(axis=1)
@@ -161,7 +161,7 @@ if __name__ == "__main__":
             #     feature_folders.append('./')
             # assert len(feature_folders) > 0
 
-            print(go_dir)
+            # print(go_dir)
             performance_file_list = {}
             prediction_file_list = {}
             for term_dir in term_dirs:
@@ -193,14 +193,14 @@ if __name__ == "__main__":
             # dir = args.ontology.split('/')[-2]
             performance_df_list = []
             for term_name, performance_file in performance_file_list.items():
-                print(performance_file)
+                # print(performance_file)
                 perf_df = pd.read_csv(performance_file)
 
                 perf_df['data_name'] = term_name
-                print(perf_df)
+                # print(perf_df)
                 performance_df_list.append(perf_df)
 
-            print(performance_df_list)
+            # print(performance_df_list)
 
             performance_df = pd.concat(performance_df_list)
             performance_df['data_name'] = performance_df['data_name'].apply(add_colon)
