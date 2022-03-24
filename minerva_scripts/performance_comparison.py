@@ -63,6 +63,7 @@ def best_ensemble_score(df, input, mk, ensemble_suffix='.S'):
     else:
         if (mk == 'pmax') or (mk == 'rmax'):
             ens_fmax = (pivoted_df[ensemble_cols]).idxmax(axis=1)
+            print(ens_fmax)
             pivoted_pr_df = df.pivot_table(mk, ['data_name'], 'method')
             print(pivoted_pr_df)
             pivoted_pr_df[best_mk] = pivoted_pr_df[ens_fmax].values
@@ -86,9 +87,10 @@ if __name__ == "__main__":
     parser.add_argument('--ontology', type=str, default='go', help='')
     parser.add_argument('--group', type=str, required=True, help='')
     parser.add_argument('--file_prefix', type=str, required=True, help='')
-    metrics = {'fmax': r'$F_{max}$',
-               'auc': 'AUC',
-               'auprc': 'AUPRC',
+    metrics = {
+                # 'fmax': r'$F_{max}$',
+               # 'auc': 'AUC',
+               # 'auprc': 'AUPRC',
                'rmax': r'$Recall at F_{max}$',
                'pmax': r'$Precision at F_{max}$'
                }
@@ -171,6 +173,7 @@ if __name__ == "__main__":
                 # os.system('cp {} {}'.format(file_name, os.path.join(base_save_dir, )))
                 term_name = term_dir.split('/')[-1]
                 performance_file_list[term_name] = file_name
+                prediction_file_list[term_name] = prediction_file_name
                 # prediction_file_name =
 
                 # if is_go:
@@ -196,6 +199,7 @@ if __name__ == "__main__":
                 perf_df['data_name'] = term_name
                 print(perf_df)
                 performance_df_list.append(perf_df)
+
             print(performance_df_list)
 
             performance_df = pd.concat(performance_df_list)
