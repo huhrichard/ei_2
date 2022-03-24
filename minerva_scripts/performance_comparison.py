@@ -164,7 +164,7 @@ if __name__ == "__main__":
 
                 file_name = term_dir + '/' +sub_data_folder + 'analysis/' + 'performance.csv'
                 # _name = term_dir + '/' +sub_data_folder + 'analysis/' + 'performance.csv'
-                print(file_name)
+                # print(file_name)
 
                 # os.system('cp {} {}'.format(file_name, os.path.join(base_save_dir, )))
                 term_name = term_dir.split('/')[-1]
@@ -187,11 +187,11 @@ if __name__ == "__main__":
             performance_df_list = []
             for term_name, performance_file in performance_file_list.items():
                 print(performance_file)
-                df = pd.read_csv(performance_file)
+                perf_df = pd.read_csv(performance_file)
 
-                df['data_name'] = term_name
-                print(df)
-                performance_df_list.append(df)
+                perf_df['data_name'] = term_name
+                print(perf_df)
+                performance_df_list.append(perf_df)
             print(performance_df_list)
 
             performance_df = pd.concat(performance_df_list)
