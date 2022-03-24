@@ -62,10 +62,11 @@ def best_ensemble_score(df, input, mk, ensemble_suffix='.S'):
         pivoted_df['best_ensemble_method'] = (pivoted_df[ensemble_cols]).idxmax(axis=1).values
     else:
         if (mk == 'pmax') or (mk == 'rmax'):
-            ens_fmax = (pivoted_df[ensemble_cols]).idxmax(axis=1).values
+            ens_fmax = (pivoted_df[ensemble_cols]).idxmax(axis=1)
             pivoted_pr_df = df.pivot_table(mk, ['data_name'], 'method')
+            print(pivoted_pr_df)
             pivoted_pr_df[best_mk] = pivoted_pr_df[ens_fmax].values
-            pivoted_pr_df['best_ensemble_method'] = (pivoted_df[ensemble_cols]).idxmax(axis=1).values
+            pivoted_pr_df['best_ensemble_method'] = ens_fmax.values
             pivoted_df = pivoted_pr_df
         else:
             pivoted_df[best_mk] = (pivoted_df[ensemble_cols]).max(axis=1).values
@@ -160,15 +161,17 @@ if __name__ == "__main__":
 
             print(go_dir)
             performance_file_list = {}
+            prediction_file_list = {}
             for term_dir in term_dirs:
 
                 file_name = term_dir + '/' +sub_data_folder + 'analysis/' + 'performance.csv'
-                # _name = term_dir + '/' +sub_data_folder + 'analysis/' + 'performance.csv'
+                prediction_file_name = term_dir + '/' +sub_data_folder + 'analysis/' + 'performance.csv'
                 # print(file_name)
 
                 # os.system('cp {} {}'.format(file_name, os.path.join(base_save_dir, )))
                 term_name = term_dir.split('/')[-1]
                 performance_file_list[term_name] = file_name
+                # prediction_file_name =
 
                 # if is_go:
 
