@@ -188,7 +188,7 @@ if __name__ == "__main__":
             best_performing_dfs = []
             for term_name, (_perf, _pred) in performance_file_list.items():
                 best_performer = ensemble_df.loc[ensemble_df['data_name'] == term_name,'best_ensemble_method'].values
-                print(prediction_df)
+                # print(prediction_df)
                 best_performer_pred = prediction_df.loc[prediction_df['data_name'] == term_name,[best_performer[0], 'label', 'data_name']]
                 best_performing_dfs.append(best_performer_pred)
 
@@ -374,6 +374,7 @@ if __name__ == "__main__":
                 best_performer_prmax = {}
                 for pred_method in sorted_dataname_list:
                     best_performer_outk_mk = best_performer_out_k.loc[best_performer_out_k['Method'] == pred_method]
+                    print(best_performer_outk_mk)
                     fs = common.fmeasure_score(best_performer_outk_mk.label, best_performer_outk_mk.prediction, None)
                     p_curve, r_curve = fs['PR-curve']
                     best_performer_prc_df = pd.DataFrame({'precision':p_curve, 'recall':r_curve})
