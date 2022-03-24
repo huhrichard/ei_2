@@ -73,6 +73,9 @@ def xgboost_predictions_result(outcome_path):
     test_dfs = []
     print(fold_values)
 
+    list_shap_values = list()
+    list_test_sets = list()
+
     for outer_fold in fold_values:
         test_bool = df[fold_col] == outer_fold
         train_bool = df[fold_col] != outer_fold
@@ -99,6 +102,19 @@ def xgboost_predictions_result(outcome_path):
             {'id': test_nf[id_col], 'label': test_label, 'prediction': test_prediction})
         test_dfs.append(test_df)
 
+        explainer = shap.TreeExplainer(xgb_clf)
+        shap_values = explainer.shap_values(test_feat)
+        # for each iteration we save the test_set index and the shap_values
+        list_shap_values.append(shap_values)
+        list_test_sets.append(test_feat)
+
+    whole_feat = pd.concat(list_test_sets)
+    shap_values = np.concatenate(list_shap_values,axis=1)
+    print(shap_values)
+
+    shap.summary_plot(shap_values[1], whole_feat,show=False).savefig('./plot/covid19/shap_xgb_plot.pdf', bbox_inches="tight")
+
+
     test_df_cat = pd.concat(test_dfs)
     print(test_df_cat)
     fmax = common.fmeasure_score(test_df_cat.label, test_df_cat.prediction, None)
@@ -115,8 +131,8 @@ def xgboost_predictions_result(outcome_path):
     test_df_cat.to_csv(os.path.join(analysis_folder, "predictions.csv"), index=False)
 
     # feature importance
-    xgb_clf = XGBClassifier(random_state=64)
-    xgb_clf.fit(df[feature_columns], df[label_col])
+    # xgb_clf = XGBClassifier(random_state=64)
+    # xgb_clf.fit(df[feature_columns], df[label_col])
     # xgb_pi = permutation_importance(estimator=xgb_clf,
     #                                     X=df[feature_columns],
     #                                     y=df[label_col],
