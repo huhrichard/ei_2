@@ -123,12 +123,12 @@ def xgboost_predictions_result(outcome_path):
     auprc = common.auprc(test_df_cat.label, test_df_cat.prediction)
     cols = ['data_name', 'fmax', 'method', 'auc', 'auprc', 'pmax', 'rmax']
     dn = abspath(outcome_path).split('/')[-1]
-    performance_df = pd.DataFrame(data=[[dn, fmax['F'], 'XGB_base', auc, auprc, fmax['P'], fmax['R']]], columns=cols, index=[0])
+    performance_df = pd.DataFrame(data=[[dn, fmax['F'], 'XGBoost', auc, auprc, fmax['P'], fmax['R']]], columns=cols, index=[0])
     analysis_folder = os.path.join(outcome_path, 'analysis')
     if not exists(analysis_folder):
         mkdir(analysis_folder)
     performance_df.to_csv(os.path.join(analysis_folder, "performance.csv"), index=False)
-    test_df_cat.rename(columns={'prediction': 'XGB'}, inplace=True)
+    test_df_cat.rename(columns={'prediction': 'XGBoost'}, inplace=True)
     test_df_cat.to_csv(os.path.join(analysis_folder, "predictions.csv"), index=False)
 
     # feature importance
@@ -142,9 +142,9 @@ def xgboost_predictions_result(outcome_path):
     #                                     scoring=common.auprc_sklearn
     #                                     )
 
-    explainer = shap.TreeExplainer(xgb_clf)
-    shap_vals = explainer.shap_values(df[feature_columns])
-    print(shap_vals)
+    # explainer = shap.TreeExplainer(xgb_clf)
+    # shap_vals = explainer.shap_values(df[feature_columns])
+    # print(shap_vals)
 
     # pi_df = pd.DataFrame(data=[xgb_pi.importances_mean], columns=column_non_feature, index=[0])
     # pi_df.to_csv(os.path.join(analysis_folder, "xgb_feat_ranks.csv"), index=False)
