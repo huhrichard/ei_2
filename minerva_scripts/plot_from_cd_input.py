@@ -226,7 +226,7 @@ for ontology in list_ontology:
         ax1.set_xlabel('')
         # ax1.set_title(title_name)
         # fig1.savefig('{}f_max_{}_comparison_{}.pdf'.format(plot_dir, ontology, group_fn_suffix), bbox_inches="tight")
-        fig1.savefig('{}f_max_{}_comparison.pdf'.format(plot_dir, ontology), bbox_inches="tight")
+        fig1.savefig('{}{}_{}_comparison.pdf'.format(plot_dir, mk, ontology), bbox_inches="tight")
         #
         value_count_depth = cd_df['go_depth'].value_counts().to_dict()
         value_count_ic_bin = cd_df['go_ic'].value_counts(bins=5).to_dict()
@@ -277,7 +277,7 @@ for ontology in list_ontology:
 
             # ax2.set_title(title_name)
             # fig2.savefig('{}f_max_{}_by_depth_{}.png'.format(plot_dir, ontology, group_fn_suffix), bbox_inches="tight")
-            fig2.savefig('{}f_max_{}_by_depth.pdf'.format(plot_dir, ontology), bbox_inches="tight")
+            fig2.savefig('{}{}_{}_by_depth.pdf'.format(plot_dir,mk, ontology), bbox_inches="tight")
 
 
 
@@ -330,4 +330,4 @@ for ontology in list_ontology:
             ax3.set_xlabel('Information Content', fontsize=22)
             # ax3.set_title(title_name)
             # fig3.savefig('{}f_max_{}_by_ic_{}.png'.format(plot_dir, ontology, group_fn_suffix), bbox_inches="tight")
-            fig3.savefig('{}f_max_{}_by_ic.pdf'.format(plot_dir, ontology), bbox_inches="tight")
+            fig3.savefig('{}{}_{}_by_ic.pdf'.format(plot_dir,mk , ontology), bbox_inches="tight")
