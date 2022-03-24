@@ -380,7 +380,8 @@ if __name__ == "__main__":
                     p_curve, r_curve = fs['PR-curve']
                     best_performer_prc_df = pd.DataFrame({'precision':p_curve, 'recall':r_curve})
                     best_performer_name = ensemble_df_cat.loc[(ensemble_df_cat['Outcome']==out_k) & (ensemble_df_cat['Method']==pred_method), 'best_ensemble_method'].values
-                    best_performer_prc_df['method'] = pred_method + best_performer_name
+                    print(best_performer_name)
+                    best_performer_prc_df['method'] = pred_method + best_performer_name[0]
                     pmax = fs['P']
                     rmax = fs['R']
                     best_performer_prmax[pred_method] = [pmax, rmax]
