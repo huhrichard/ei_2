@@ -28,7 +28,7 @@ import sys
 from os import system
 
 # system('module load R')
-plot_dir = '../plot/'
+plot_dir = './plot/'
 
 def find(pattern, path):
     result = []
