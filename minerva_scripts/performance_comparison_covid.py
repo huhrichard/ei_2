@@ -385,6 +385,7 @@ if __name__ == "__main__":
                     pmax = fs['P']
                     rmax = fs['R']
                     best_performer_prmax[pred_method] = [pmax, rmax]
+                    best_performer_prc.append(best_performer_prc_df)
 
                 best_performer_prc_cat = pd.concat(best_performer_prc)
                 fig_prc, ax_prc = plt.subplots(1, 1, figsize=(12, 8))
