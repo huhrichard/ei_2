@@ -168,6 +168,7 @@ if __name__ == "__main__":
 
                 # os.system('cp {} {}'.format(file_name, os.path.join(base_save_dir, )))
                 term_name = term_dir.split('/')[-1]
+                performance_file_list[term_name] = file_name
 
                 # if is_go:
 
