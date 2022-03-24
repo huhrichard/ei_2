@@ -366,7 +366,7 @@ if __name__ == "__main__":
                                                               file_prefix, out_k), bbox_inches="tight")
 
             # TODO: make AUPRC plot
-            if mk == 'fmax':
+            if (mk == 'fmax') and (out_k == 'DECEASED_INDICATOR'):
                 best_performer_out_k = best_performer_pred_cat.loc[best_performer_pred_cat['data_name'] == out_k]
                 best_performer_prc = []
                 best_performer_prmax = {}
