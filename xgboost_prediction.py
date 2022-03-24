@@ -109,7 +109,7 @@ def xgboost_predictions_result(outcome_path):
         list_test_sets.append(test_feat)
 
     whole_feat = pd.concat(list_test_sets)
-    shap_values = np.concatenate(list_shap_values,axis=1)
+    shap_values = np.concatenate(list_shap_values)
     print(shap_values)
 
     shap.summary_plot(shap_values[1], whole_feat,show=False).savefig('./plot/covid19/shap_xgb_plot.pdf', bbox_inches="tight")
