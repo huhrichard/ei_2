@@ -107,7 +107,7 @@ if __name__ == "__main__":
                    # 'medications': 'Medica-\ntions\n(26)',
                    'comorbidities': 'Co-morbi-\ndities\n(23)',
                    'vitals': 'Vital\nsigns\n(9)',
-                   'concatenated': 'Concat-\nenated\nAll',
+                   # 'concatenated': 'Concat-\nenated\nAll',
                    'xgboost': 'XGBoost'}
 
     cp = sns.color_palette(n_colors=len(dict_suffix))
@@ -190,6 +190,7 @@ if __name__ == "__main__":
                 best_performer = ensemble_df.loc[ensemble_df['data_name'] == term_name,'best_ensemble_method'].values
                 # print(prediction_df)
                 best_performer_pred = prediction_df.loc[prediction_df['data_name'] == term_name,[best_performer[0], 'label', 'data_name']]
+                best_performer_pred.rename(column={best_performer[0]:'prediction'})
                 best_performing_dfs.append(best_performer_pred)
 
             best_performing_df = pd.concat(best_performing_dfs)
