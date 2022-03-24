@@ -56,7 +56,7 @@ godag = get_godag(prepro_path + "go.obo")
 objanno = get_objanno(prepro_path + 'goa_human.gaf', 'gaf', godag=godag)
 termcounts = TermCounts(godag, objanno.get_id2gos_nss())
 
-cd_csv_path = '../plot/'
+cd_csv_path = './plot/'
 # list_ontology = ['go', 'hpo']
 list_ontology = ['go']
 # list_of_groups = ['1000', '500-1000', '200-500', '100-200', '50-100', '10-50']
