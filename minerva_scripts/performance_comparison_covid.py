@@ -188,7 +188,7 @@ if __name__ == "__main__":
             best_performing_dfs = []
             for term_name, (_perf, _pred) in performance_file_list.items():
                 best_performer = ensemble_df.loc[ensemble_df['data_name'] == term_name,'best_ensemble_method'].values
-                best_performer_pred = prediction_df[prediction_df['data_name'] == term_name,[best_performer, 'label', 'data_name']]
+                best_performer_pred = prediction_df[prediction_df['data_name'] == term_name,[best_performer[0], 'label', 'data_name']]
                 best_performing_dfs.append(best_performer_pred)
 
             best_performing_df = pd.concat(best_performing_dfs)
