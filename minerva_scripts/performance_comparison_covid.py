@@ -184,9 +184,10 @@ if __name__ == "__main__":
 
             # ensemble_df = extract_df_by_method(performance_df, method='LR.S', drop_columns=['method'])
             ensemble_df = best_ensemble_score(performance_df, input=key, metric=mk)
+
             best_performing_dfs = []
             for term_name, (_perf, _pred) in performance_file_list.items():
-                best_performer = ensemble_df.loc[ensemble_df['data_name'] == term_name,'best_ensmble_method'].value
+                best_performer = ensemble_df.loc[ensemble_df['data_name'] == term_name,'best_ensemble_method'].value
                 best_performer_pred = prediction_df[prediction_df['data_name'] == term_name,[best_performer, 'label', 'data_name']]
                 best_performing_dfs.append(best_performer_pred)
 
@@ -375,7 +376,7 @@ if __name__ == "__main__":
                     fs = common.fmeasure_score(best_performer_outk_mk.label, best_performer_outk_mk.prediction, None)
                     p_curve, r_curve = fs['PR-curve']
                     best_performer_prc_df = pd.DataFrame({'precision':p_curve, 'recall':r_curve})
-                    best_performer_name = ensemble_df_cat.loc[(ensemble_df_cat['Outcome']==out_k) & (ensemble_df_cat['Method']==pred_method), 'best_ensmble_method'].value
+                    best_performer_name = ensemble_df_cat.loc[(ensemble_df_cat['Outcome']==out_k) & (ensemble_df_cat['Method']==pred_method), 'best_ensemble_method'].value
                     best_performer_prc_df['method'] = pred_method + best_performer_name
                     pmax = fs['P']
                     rmax = fs['R']
