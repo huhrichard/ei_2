@@ -381,6 +381,18 @@ if __name__ == "__main__":
                     rmax = fs['R']
                     best_performer_prmax[pred_method] = [pmax, rmax]
 
+                best_performer_prc_cat = pd.concat(best_performer_prc)
+                fig_prc, ax_prc = plt.subplots(1, 1, figsize=(12, 8))
+                ax_prc = sns.lineplot(ax=ax_prc, data=best_performer_prc_cat,
+                                      x="recall", y="precision", hue="method",
+                                      palette=sorted_cp)
+                for pr_idx, (pred_method, pr_list) in enumerate(best_performer_prmax.items()):
+                    ax_prc.plot(pr_list[0], pr_list[1], c=sorted_cp[pr_idx])
+                    # best_performer_prmax[pred_method] = [pmax, rmax]
+
+                fig_prc.savefig('{}{}{}_{}_comparison.pdf'.format(plot_dir, 'covid19/', 'PRcurve', file_prefix), bbox_inches="tight")
+
+
 
 
 
