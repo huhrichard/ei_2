@@ -254,7 +254,9 @@ for ontology in list_ontology:
             #                     size=4, color=".3", linewidth=0)
 
             ax2.get_legend().remove()
-            ax2.legend(loc='upper right', prop={'weight':'bold', 'size':18})
+            # ax2.legend(loc='upper right', prop={'weight':'bold', 'size':18})
+            ax2.legend(bbox_to_anchor=(0, 1.02, 1, 0.2), loc="lower left",
+                       mode="expand", borderaxespad=0, ncol=3, prop={'weight': 'bold', 'size': 18})
             ax2.set_ylabel(mv, fontsize=22, fontweight='bold')
             ax2.set_xlabel('Depth in GO Hierarchy', fontsize=21)
             ax2_new_xticks = []
@@ -319,7 +321,10 @@ for ontology in list_ontology:
             #                     size=4, color=".3", linewidth=0)
 
             ax3.get_legend().remove()
-            ax3.legend(loc='upper right', prop={'weight':'bold', 'size':18})
+            # ax3.legend(loc='upper right', prop={'weight':'bold', 'size':18})
+            ax3.legend(bbox_to_anchor=(0, 1.02, 1, 0.2), loc="lower left",
+                       mode="expand", borderaxespad=0, ncol=3, prop={'weight': 'bold', 'size': 18})
+            # ax3.legend(loc='upper right', prop={'weight':'bold', 'size':18})
             ax3.set_ylabel(mv, fontsize=22, fontweight='bold')
             for xtick in ax3.get_xticklabels():
 

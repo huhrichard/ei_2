@@ -356,6 +356,8 @@ if __name__ == "__main__":
             ax3.set_xlabel('')
             # ax3.set_title(out_v, fontweight='semibold', fontsize=22)
             ax3.legend(loc='upper right', prop={'weight':'bold', 'size':20})
+            # ax3.legend(bbox_to_anchor=(0,1.02,1,0.2), loc="lower left",
+            #            mode="expand", borderaxespad=0, ncol=3, prop={'weight':'bold', 'size':20})
             for tick in ax3.get_xticklabels():
                 tick.set_fontsize(22)
                 # tick.set_rotation(45)
@@ -391,7 +393,7 @@ if __name__ == "__main__":
                 fig_prc, ax_prc = plt.subplots(1, 1, figsize=(12, 8))
                 ax_prc = sns.lineplot(ax=ax_prc, data=best_performer_prc_cat,
                                       x="recall", y="precision", hue="method",
-                                      palette=sorted_cp)
+                                      palette=sorted_cp, sizes=(2.5,2.5), ci=None)
                 for pr_idx, (pred_method, pr_list) in enumerate(best_performer_prmax.items()):
                     ax_prc.plot(pr_list[0], pr_list[1], c=sorted_cp[pr_idx])
                     # best_performer_prmax[pred_method] = [pmax, rmax]
