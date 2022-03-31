@@ -4,8 +4,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 dict_to_compare = {
-                    '1000': '1000_',
-                    '500-1000': '500_1000_',
+                    # '1000': '1000_',
+                    # '500-1000': '500_1000_',
                     '200-500': '200_500_',
                     '100-200': '100_200_',
                     '50-100': '50_100_',
@@ -20,10 +20,12 @@ highest_fmax_df_list = []
 for k, v in dict_to_compare.items():
     perf_path = os.path.join(fpath, perf_fmt.format(k))
     perf_df = pd.read_csv(perf_path, compression='gzip')
+    perf_df = perf_df.loc[perf_df['method'] != 'best base']
     highest_fmax_df = perf_df.sort_values('fmax', ascending=False).drop_duplicates('data_name').reset_index()
     fig2 = plt.figure(figsize=(13, 6))
     ax2 = fig2.add_subplot(111)
     ax2 = sns.countplot(ax=ax2, x='method', data=highest_fmax_df)
+    ax2.set_xlabel('Ensemble Methods of EI')
 
     fig2.savefig('{}/ens_histogram_go_{}.pdf'.format(fpath, k), bbox_inches="tight")
     highest_fmax_df_list.append(highest_fmax_df)
@@ -33,6 +35,7 @@ highest_fmax_df_cat = pd.concat(highest_fmax_df_list)
 fig = plt.figure(figsize=(13, 6))
 ax = fig.add_subplot(111)
 ax = sns.countplot(ax=ax, x='method', data=highest_fmax_df_cat)
+ax.set_xlabel('Ensemble Methods of EI')
 
 fig.savefig('{}/ens_histogram_go.pdf'.format(fpath), bbox_inches="tight")
 
