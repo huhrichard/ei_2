@@ -91,9 +91,9 @@ if __name__ == "__main__":
     parser.add_argument('--group', type=str, required=True, help='')
     parser.add_argument('--file_prefix', type=str, required=True, help='')
     metrics = {
-                # 'fmax': r'$F_{max}$',
-               # 'auc': 'AUC',
-               # 'auprc': 'AUPRC',
+                'fmax': r'$F_{max}$',
+               'auc': 'AUC',
+               'auprc': 'AUPRC',
                'rmax': r'$Recall at F_{max}$',
                'pmax': r'$Precision at F_{max}$'
                }
