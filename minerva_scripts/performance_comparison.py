@@ -197,11 +197,12 @@ if __name__ == "__main__":
             performance_df_list = []
             for term_name, performance_file in performance_file_list.items():
                 # print(performance_file)
-                perf_df = pd.read_csv(performance_file)
+                if os.path.exists(performance_file):
+                    perf_df = pd.read_csv(performance_file)
 
-                perf_df['data_name'] = term_name
-                # print(perf_df)
-                performance_df_list.append(perf_df)
+                    perf_df['data_name'] = term_name
+                    # print(perf_df)
+                    performance_df_list.append(perf_df)
 
             # print(performance_df_list)
 
