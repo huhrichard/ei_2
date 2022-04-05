@@ -104,6 +104,8 @@ def xgboost_predictions_result(outcome_path):
 
         explainer = shap.TreeExplainer(xgb_clf)
         shap_values = explainer.shap_values(test_feat)
+        print(shap_values)
+        print(shap_values.shape)
         # for each iteration we save the test_set index and the shap_values
         list_shap_values.append(shap_values)
         list_test_sets.append(test_feat)
