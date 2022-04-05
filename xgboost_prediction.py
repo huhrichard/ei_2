@@ -148,7 +148,7 @@ def xgboost_predictions_result(outcome_path):
     explainer = shap.TreeExplainer(xgb_clf)
     shap_vals = explainer.shap_values(df[feature_columns])
     print(shap_vals)
-    shap.summary_plot(shap_vals, df[feature_columns], show=False).savefig('./plot/covid19/shap_xgb_plot_{}.pdf'.format(data_name),
+    shap.summary_plot(shap_vals, df[feature_columns], show=False, matplotlib=True).savefig('./plot/covid19/shap_xgb_plot_{}.pdf'.format(data_name),
                                                                    bbox_inches="tight")
     # pi_df = pd.DataFrame(data=[xgb_pi.importances_mean], columns=column_non_feature, index=[0])
     # pi_df.to_csv(os.path.join(analysis_folder, "xgb_feat_ranks.csv"), index=False)
