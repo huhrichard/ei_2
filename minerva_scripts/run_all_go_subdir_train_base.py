@@ -102,6 +102,7 @@ def write_submit_del_job(scratch_path, python_cmd):
     # script.write('export _JAVA_OPTIONS=\"-XX:ParallelGCThreads=10\"\nexport JAVA_OPTS=\"-Xmx10g\"\n')
     # script.write('mpirun selfsched < {}'.format(jobs_fn))
     print(python_cmd)
+    print(lsf_fn)
     script.write(python_cmd)
     # script.write('rm %s.jobs' % second_sub)
     script.close()
