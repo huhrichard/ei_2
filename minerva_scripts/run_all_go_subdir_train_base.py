@@ -107,7 +107,9 @@ def write_submit_del_job(scratch_path, python_cmd):
     # script.write('rm %s.jobs' % second_sub)
     script.close()
     ####### Submit the lsf job and remove lsf script
+    print('test0')
     system('bsub < %s' % lsf_fn)
+    print('test1')
     remove(lsf_fn)
 
 
