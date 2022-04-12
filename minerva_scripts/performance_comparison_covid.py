@@ -385,6 +385,8 @@ if __name__ == "__main__":
                     print(best_performer_name)
                     if pred_method != 'XGBoost':
                         best_performer_prc_df['method'] = '{}\n({})'.format(pred_method.split('(')[0], best_performer_name[0])
+                    else:
+                        best_performer_prc_df['method'] = 'XGBoost'
                     pmax = fs['P']
                     rmax = fs['R']
                     best_performer_prmax[pred_method] = [pmax, rmax]
