@@ -383,17 +383,33 @@ if __name__ == "__main__":
                     best_performer_prc_df = pd.DataFrame({'precision':p_curve, 'recall':r_curve})
                     best_performer_name = ensemble_df_cat.loc[(ensemble_df_cat['Outcome']==out_k) & (ensemble_df_cat['Method']==pred_method), 'best_ensemble_method'].values
                     print(best_performer_name)
-                    best_performer_prc_df['method'] = pred_method + best_performer_name[0]
+                    if pred_method != 'XGBoost':
+                        best_performer_prc_df['method'] = '{}\n({})'.format(pred_method.split('(')[0], best_performer_name[0])
                     pmax = fs['P']
                     rmax = fs['R']
                     best_performer_prmax[pred_method] = [pmax, rmax]
                     best_performer_prc.append(best_performer_prc_df)
 
                 best_performer_prc_cat = pd.concat(best_performer_prc)
-                fig_prc, ax_prc = plt.subplots(1, 1, figsize=(12, 8))
+                fig_prc, ax_prc = plt.subplots(1, 1, figsize=(10, 8))
                 ax_prc = sns.lineplot(ax=ax_prc, data=best_performer_prc_cat,
                                       x="recall", y="precision", hue="method",
                                       palette=sorted_cp, sizes=(2.5,2.5), ci=None)
+                ax_prc.legend(loc='upper right', prop={'weight': 'bold', 'size': 20})
+                ax_prc.set_xticks(np.arange(0,1,0.2))
+                ax_prc.set_yticks(np.arange(0,1,0.2))
+                ax3.set_ylabel('Precision', fontsize=24, fontweight='bold')
+                ax3.set_ylabel('Recall', fontsize=24, fontweight='bold')
+                for tick in ax_prc.get_xticklabels():
+                    tick.set_fontsize(22)
+                    # tick.set_rotation(45)
+                    tick.set_fontweight('semibold')
+                    # tick.set_horizontalalignment("right")
+
+                for tick in ax_prc.get_yticklabels():
+                    tick.set_fontsize(22)
+                    tick.set_fontweight('semibold')
+
                 for pr_idx, (pred_method, pr_list) in enumerate(best_performer_prmax.items()):
                     ax_prc.plot(pr_list[0], pr_list[1], c=sorted_cp[pr_idx])
                     # best_performer_prmax[pred_method] = [pmax, rmax]
