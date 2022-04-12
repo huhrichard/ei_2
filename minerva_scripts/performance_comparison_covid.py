@@ -397,11 +397,11 @@ if __name__ == "__main__":
                 ax_prc = sns.lineplot(ax=ax_prc, data=best_performer_prc_cat,
                                       x="recall", y="precision", hue="method",
                                       palette=sorted_cp, sizes=(2.5,2.5), ci=None)
-                ax_prc.legend(loc='upper right', prop={'weight': 'bold', 'size': 20})
-                ax_prc.set_xticks(np.arange(0,1,0.2))
-                ax_prc.set_yticks(np.arange(0,1,0.2))
-                ax3.set_ylabel('Precision', fontsize=24, fontweight='bold')
-                ax3.set_ylabel('Recall', fontsize=24, fontweight='bold')
+                ax_prc.legend(loc='upper right', prop={'weight': 'bold', 'size': 15})
+                ax_prc.set_xticks(np.arange(0,1.2,0.2))
+                ax_prc.set_yticks(np.arange(0,1.2,0.2))
+                ax_prc.set_ylabel('Precision', fontsize=24, fontweight='bold')
+                ax_prc.set_ylabel('Recall', fontsize=24, fontweight='bold')
                 for tick in ax_prc.get_xticklabels():
                     tick.set_fontsize(22)
                     # tick.set_rotation(45)
