@@ -65,6 +65,7 @@ def processTermArff(param, impute, fold=5):
     merged_df['seqID'] = merged_df.index
     print('before', merged_df.shape)
     merged_df.dropna(inplace=True)
+    print(merged_df['cls'].value_counts())
     # merged_df = merged_df.iloc[0:500,:]
     kf_split = StratifiedKFold(n_splits=fold, shuffle=True, random_state=64)
     # kf_split = KFold(n_splits=fold, shuffle=True, random_state=64)
