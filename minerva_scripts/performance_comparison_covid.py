@@ -401,7 +401,7 @@ if __name__ == "__main__":
                 ax_prc.set_xticks(np.arange(0,1.2,0.2))
                 ax_prc.set_yticks(np.arange(0,1.2,0.2))
                 ax_prc.set_ylabel('Precision', fontsize=24, fontweight='bold')
-                ax_prc.set_ylabel('Recall', fontsize=24, fontweight='bold')
+                ax_prc.set_xlabel('Recall', fontsize=24, fontweight='bold')
                 for tick in ax_prc.get_xticklabels():
                     tick.set_fontsize(22)
                     # tick.set_rotation(45)
