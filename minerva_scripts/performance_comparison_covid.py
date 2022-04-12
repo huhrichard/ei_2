@@ -384,7 +384,7 @@ if __name__ == "__main__":
                     best_performer_name = ensemble_df_cat.loc[(ensemble_df_cat['Outcome']==out_k) & (ensemble_df_cat['Method']==pred_method), 'best_ensemble_method'].values
                     print(best_performer_name)
                     if pred_method != 'XGBoost':
-                        best_performer_prc_df['method'] = '{}\n({})'.format(pred_method.split('(')[0], best_performer_name[0])
+                        best_performer_prc_df['method'] = '{}\n({})'.format(pred_method.split('\n(')[0], best_performer_name[0])
                     else:
                         best_performer_prc_df['method'] = 'XGBoost'
                     pmax = fs['P']
@@ -397,7 +397,7 @@ if __name__ == "__main__":
                 ax_prc = sns.lineplot(ax=ax_prc, data=best_performer_prc_cat,
                                       x="recall", y="precision", hue="method",
                                       palette=sorted_cp, sizes=(2.5,2.5), ci=None)
-                ax_prc.legend(loc='upper right', prop={'weight': 'bold', 'size': 15})
+                ax_prc.legend(loc='upper right', prop={'weight': 'bold', 'size': 14}).set_title(None)
                 ax_prc.set_xticks(np.arange(0,1.2,0.2))
                 ax_prc.set_yticks(np.arange(0,1.2,0.2))
                 ax_prc.set_ylabel('Precision', fontsize=24, fontweight='bold')
