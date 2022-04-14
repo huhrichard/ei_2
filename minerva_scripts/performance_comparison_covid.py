@@ -398,8 +398,8 @@ if __name__ == "__main__":
                                       x="recall", y="precision", hue="method",
                                       palette=sorted_cp, sizes=(2.5,2.5), ci=None)
                 ax_prc.legend(loc='upper right', prop={'weight': 'bold', 'size': 14}).set_title(None)
-                ax_prc.set_xticks(np.arange(0,1.2,0.2))
-                ax_prc.set_yticks(np.arange(0,1.2,0.2))
+                # ax_prc.set_xticks(np.arange(0,1.2,0.2))
+                # ax_prc.set_yticks(np.arange(0,1.2,0.2))
                 ax_prc.set_ylabel('Precision', fontsize=24, fontweight='bold')
                 ax_prc.set_xlabel('Recall', fontsize=24, fontweight='bold')
                 for tick in ax_prc.get_xticklabels():
