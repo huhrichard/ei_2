@@ -31,8 +31,11 @@ def merged_base_innerCV_by_outerfold(f_list, path):
                     except:
                         print('file not existed or crashed %s' % filename)
                 nested_fold_dfs.append(concat(bag_dfs, axis=1))
+
             dirname_dfs.append(concat(nested_fold_dfs, axis=0))
-        concat(dirname_dfs, axis=1).sort_index().to_csv('%s/validation-%s.csv.gz' % (path, fold), compression='gzip')
+        # concat(dirname_dfs, axis=1).sort_index().to_csv('%s/validation-%s.csv.gz' % (path, fold), compression='gzip')
+        concat(dirname_dfs, axis=1).dropna().sort_index().to_csv('%s/validation-%s.csv.gz' % (path, fold), compression='gzip')
+
 
     # for fold in range(fold_count):
     for fold in f_list:
@@ -62,7 +65,8 @@ def merged_base_innerCV_by_outerfold(f_list, path):
             if attr_imp_bool.lower() == 'true':
                 dirname_attribute_imp_dfs.append(concat(attribute_imp_dfs, ignore_index=True))
 
-        concat(dirname_dfs, axis=1).sort_index().to_csv('%s/predictions-%s.csv.gz' % (path, fold), compression='gzip')
+        # concat(dirname_dfs, axis=1).sort_index().to_csv('%s/predictions-%s.csv.gz' % (path, fold), compression='gzip')
+        concat(dirname_dfs, axis=1).dropna().sort_index().to_csv('%s/predictions-%s.csv.gz' % (path, fold), compression='gzip')
         if attr_imp_bool.lower() == 'true':
             concat(dirname_attribute_imp_dfs, ignore_index=True).to_csv('%s/attribute_imp-%s.csv.gz' % (path, fold), compression='gzip')
 
