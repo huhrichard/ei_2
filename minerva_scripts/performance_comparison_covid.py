@@ -103,10 +103,10 @@ if __name__ == "__main__":
                    # 'EI_PowerSet':'Ensemble Integration\nPower Set',
                    'admission': 'Admission\n(23)',
                    # 'labs':'Laboratory\ntests',
-                   'labs': 'Lab\ntests\n(44)',
+                   'labs': 'Lab\nTests\n(44)',
                    # 'medications': 'Medica-\ntions\n(26)',
-                   'comorbidities': 'Co-morbi-\ndities\n(23)',
-                   'vitals': 'Vital\nsigns\n(9)',
+                   'comorbidities': 'Co-morbi-\ndities\n(22)',
+                   'vitals': 'Vital\nSigns\n(9)',
                    # 'concatenated': 'Concat-\nenated\nAll',
                    'xgboost': 'XGBoost'}
 
