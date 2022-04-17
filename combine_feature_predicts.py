@@ -69,8 +69,8 @@ def merge_base_feat_preds_by_fold(f_list):
 
 
 
-		prediction_dfs = pd.concat(prediction_dfs,axis=1)
-		validation_dfs = pd.concat(validation_dfs,axis=1)
+		prediction_dfs = pd.concat(prediction_dfs,axis=1).dropna()
+		validation_dfs = pd.concat(validation_dfs,axis=1).dropna()
 
 
 		prediction_dfs.to_csv(data_folder + '/predictions-%s.csv.gz' %value,compression='gzip')
