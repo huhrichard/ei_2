@@ -25,6 +25,8 @@ from os import system
 sys.path.append('./')
 import common
 
+from sklearn.metrics import average_precision_score
+
 system('module load R')
 plot_dir = './plot/'
 
@@ -400,12 +402,14 @@ if __name__ == "__main__":
                             bp_name = stacker_list[best_performer_name]
                         else:
                             bp_name = best_performer_name
-                        best_performer_prc_df['method'] = '{}\n({})'.format(pred_method.split('\n(')[0], bp_name)
+                        best_performer_prc_df['method'] = '{}\n({})\n('.format(pred_method.split('\n(')[0], bp_name)+r'$\bf F_{max}$'+'{}'+fs['F']+')'
                     else:
-                        best_performer_prc_df['method'] = 'XGBoost'
+                        best_performer_prc_df['method'] = 'XGBoost\n('+r'$\bf F_{max}$'+'{}'+fs['F']+')'
                     pmax = fs['P']
                     rmax = fs['R']
-                    best_performer_prmax[pred_method] = [pmax, rmax]
+                    ap = average_precision_score(best_performer_outk_mk.label, best_performer_outk_mk.prediction)
+                    best_performer_prmax[pred_method] = [pmax, rmax, fs['F'], ap]
+                    # best_performer_prmax[pred_method] = [pmax, rmax]
                     best_performer_prc.append(best_performer_prc_df)
 
                 best_performer_prc_cat = pd.concat(best_performer_prc)
