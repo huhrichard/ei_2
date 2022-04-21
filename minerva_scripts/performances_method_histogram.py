@@ -15,6 +15,18 @@ dict_to_compare = {
 fpath = './plot/performances'
 perf_fmt = 'performances_cat_fmax_EI_go_{}.csv.gz'
 
+stacker_list = {
+             "RF.S": "S.RF",
+             "SVM.S": "S.SVM",
+             "NB.S": "S.NB",
+             "LR.S": "S.LR",
+             "AdaBoost.S": "S.AB",
+             "DT.S": "S.DT",
+             "GradientBoosting.S": "S.GB",
+             "KNN.S": "S.KNN",
+             "XGB.S": "S.XGB"
+            }
+
 highest_fmax_df_list = []
 
 for k, v in dict_to_compare.items():
@@ -22,6 +34,8 @@ for k, v in dict_to_compare.items():
     perf_df = pd.read_csv(perf_path, compression='gzip')
     perf_df = perf_df.loc[perf_df['method'] != 'best base']
     highest_fmax_df = perf_df.sort_values('fmax', ascending=False).drop_duplicates('data_name').reset_index()
+    method_name = highest_fmax_df['method'].unique()
+    highest_fmax_df.replace(stacker_list, inplace=True)
     fig2 = plt.figure(figsize=(13, 6))
     ax2 = fig2.add_subplot(111)
     # ax2 = sns.countplot(ax=ax2, x='method', data=highest_fmax_df)
@@ -33,11 +47,12 @@ for k, v in dict_to_compare.items():
 
 highest_fmax_df_cat = pd.concat(highest_fmax_df_list)
 
-fig = plt.figure(figsize=(10, 7))
+fig = plt.figure(figsize=(8, 7))
 ax = fig.add_subplot(111)
 # ax = sns.countplot(ax=ax, x='method', data=highest_fmax_df_cat)
 ax = sns.countplot(ax=ax, y='method', data=highest_fmax_df_cat, log=True)
-ax.set_xlabel('Ensemble Methods of EI')
+ax.set_ylabel('')
+ax.set_xlabel('')
 
 fig.savefig('{}/ens_histogram_go.pdf'.format(fpath), bbox_inches="tight")
 

@@ -99,6 +99,18 @@ if __name__ == "__main__":
     title_name = "COVID-19 death predictors"
     file_prefix = 'covid-19'
 
+    stacker_list = {
+        "RF.S": "S.RF",
+        "SVM.S": "S.SVM",
+        "NB.S": "S.NB",
+        "LR.S": "S.LR",
+        "AdaBoost.S": "S.AB",
+        "DT.S": "S.DT",
+        "GradientBoosting.S": "S.GB",
+        "KNN.S": "S.KNN",
+        "XGB.S": "S.XGB"
+    }
+
     dict_suffix = {'EI': 'Ensemble\nIntegration',
                    # 'EI_PowerSet':'Ensemble Integration\nPower Set',
                    'admission': 'Admission\n(23)',
@@ -397,7 +409,9 @@ if __name__ == "__main__":
                 ax_prc = sns.lineplot(ax=ax_prc, data=best_performer_prc_cat,
                                       x="recall", y="precision", hue="method",
                                       palette=sorted_cp, sizes=(2.5,2.5), ci=None)
-                ax_prc.legend(loc='upper right', prop={'weight': 'bold', 'size': 14}).set_title(None)
+                # ax_prc.legend(loc='upper right', prop={'weight': 'bold', 'size': 14}).set_title(None)
+                ax_prc.legend(bbox_to_anchor=(1.04,0), loc="lower left", borderaxespad=0,
+                              prop={'weight': 'bold', 'size': 14}).set_title(None)
                 # ax_prc.set_xticks(np.arange(0,1.2,0.2))
                 # ax_prc.set_yticks(np.arange(0,1.2,0.2))
                 ax_prc.set_ylabel('Precision', fontsize=24, fontweight='bold')
@@ -414,7 +428,9 @@ if __name__ == "__main__":
 
                 for pr_idx, (pred_method, pr_list) in enumerate(best_performer_prmax.items()):
                     ax_prc.plot(pr_list[0], pr_list[1], c=sorted_cp[pr_idx])
-                    # best_performer_prmax[pred_method] = [pmax, rmax]
+                    pmax, rmax = best_performer_prmax[pred_method]
+                    ax_prc.scatter(rmax, pmax, c=sorted_cp[pr_idx],
+                                   marker='x', edgecolors='black')
 
                 fig_prc.savefig('{}{}{}_{}_comparison.pdf'.format(plot_dir, 'covid19/', 'PRcurve', file_prefix), bbox_inches="tight")
 
