@@ -402,9 +402,9 @@ if __name__ == "__main__":
                             bp_name = stacker_list[best_performer_name]
                         else:
                             bp_name = best_performer_name
-                        best_performer_prc_df['method'] = '{}\n({})\n('.format(pred_method.split('\n(')[0], bp_name)+r'$\bf F_{max}$'+'{}'+'{:.2f}'.format(fs['F'])+')'
+                        best_performer_prc_df['method'] = '{}\n({})\n('.format(pred_method.split('\n(')[0], bp_name)+r'$\bf F_{max}$'+'='+'{:.4f}'.format(fs['F'])+')'
                     else:
-                        best_performer_prc_df['method'] = 'XGBoost\n('+r'$\bf F_{max}$'+'{}'+'{:.2f}'.format(fs['F'])+')'
+                        best_performer_prc_df['method'] = 'XGBoost\n('+r'$\bf F_{max}$'+'='+'{:.4f}'.format(fs['F'])+')'
                     pmax = fs['P']
                     rmax = fs['R']
                     ap = average_precision_score(best_performer_outk_mk.label, best_performer_outk_mk.prediction)
@@ -421,7 +421,7 @@ if __name__ == "__main__":
                 ax_prc.get_legend().remove()
                 ax_prc.legend(bbox_to_anchor=(0, 1.02, 1, 0.2), loc="lower left",
                            mode="expand", borderaxespad=0, ncol=3,
-                              prop={'weight': 'bold', 'size': 14}).set_title(None)
+                              prop={'weight': 'bold', 'size': 14})
                 # ax_prc.set_xticks(np.arange(0,1.2,0.2))
                 # ax_prc.set_yticks(np.arange(0,1.2,0.2))
                 ax_prc.set_ylabel('Precision', fontsize=24, fontweight='bold')
