@@ -93,7 +93,7 @@ for ontology in list_ontology:
         }
 
         for mk, mv in metrics.items():
-            csv_fp = cd_csv_path+'cd_csv/cd_input_{}_{}_{}.csv'.format(ontology, mk, group)
+            csv_fp = cd_csv_path+'cd_csv/cd_input_{}_{}_{}.csv'.format(ontology, group, mk)
             cd_df = pd.read_csv(csv_fp, index_col=0)
             # cd_df = pd.read_csv(csv_fp, index_col=0)
 
