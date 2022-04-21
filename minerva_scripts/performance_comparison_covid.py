@@ -393,10 +393,14 @@ if __name__ == "__main__":
                     fs = common.fmeasure_score(best_performer_outk_mk.label, best_performer_outk_mk.prediction, None)
                     p_curve, r_curve = fs['PR-curve']
                     best_performer_prc_df = pd.DataFrame({'precision':p_curve, 'recall':r_curve})
-                    best_performer_name = ensemble_df_cat.loc[(ensemble_df_cat['Outcome']==out_k) & (ensemble_df_cat['Method']==pred_method), 'best_ensemble_method'].values
+                    best_performer_name = ensemble_df_cat.loc[(ensemble_df_cat['Outcome']==out_k) & (ensemble_df_cat['Method']==pred_method), 'best_ensemble_method'].values[0]
                     print(best_performer_name)
                     if pred_method != 'XGBoost':
-                        best_performer_prc_df['method'] = '{}\n({})'.format(pred_method.split('\n(')[0], best_performer_name[0])
+                        if best_performer_name in best_performer_name:
+                            bp_name = stacker_list[best_performer_name]
+                        else:
+                            bp_name = best_performer_name
+                        best_performer_prc_df['method'] = '{}\n({})'.format(pred_method.split('\n(')[0], bp_name)
                     else:
                         best_performer_prc_df['method'] = 'XGBoost'
                     pmax = fs['P']
@@ -410,7 +414,8 @@ if __name__ == "__main__":
                                       x="recall", y="precision", hue="method",
                                       palette=sorted_cp, sizes=(2.5,2.5), ci=None)
                 # ax_prc.legend(loc='upper right', prop={'weight': 'bold', 'size': 14}).set_title(None)
-                ax_prc.legend(bbox_to_anchor=(1.04,0), loc="lower left", borderaxespad=0,
+                ax_prc.get_legend().remove()
+                ax_prc.legend(bbox_to_anchor=(1.04,0), ncol=3, loc="lower left", borderaxespad=0,
                               prop={'weight': 'bold', 'size': 14}).set_title(None)
                 # ax_prc.set_xticks(np.arange(0,1.2,0.2))
                 # ax_prc.set_yticks(np.arange(0,1.2,0.2))
@@ -427,9 +432,9 @@ if __name__ == "__main__":
                     tick.set_fontweight('semibold')
 
                 for pr_idx, (pred_method, pr_list) in enumerate(best_performer_prmax.items()):
-                    ax_prc.plot(pr_list[0], pr_list[1], c=sorted_cp[pr_idx])
-                    pmax, rmax = best_performer_prmax[pred_method]
-                    ax_prc.scatter(rmax, pmax, c=sorted_cp[pr_idx],
+                    # ax_prc.plot(pr_list[0], pr_list[1], c=sorted_cp[pr_idx])
+                    # pmax, rmax = best_performer_prmax[pred_method]
+                    ax_prc.scatter(pr_list[0], pr_list[1], c=sorted_cp[pr_idx],
                                    marker='x', edgecolors='black')
 
                 fig_prc.savefig('{}{}{}_{}_comparison.pdf'.format(plot_dir, 'covid19/', 'PRcurve', file_prefix), bbox_inches="tight")
