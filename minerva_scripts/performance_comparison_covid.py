@@ -426,6 +426,9 @@ if __name__ == "__main__":
                 # ax_prc.set_yticks(np.arange(0,1.2,0.2))
                 ax_prc.set_ylabel('Precision', fontsize=24, fontweight='bold')
                 ax_prc.set_xlabel('Recall', fontsize=24, fontweight='bold')
+
+                for t in legend.get_texts():
+                    t.set_ha('center')
                 for tick in ax_prc.get_xticklabels():
                     tick.set_fontsize(22)
                     # tick.set_rotation(45)
