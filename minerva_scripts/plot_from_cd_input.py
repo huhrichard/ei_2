@@ -84,13 +84,13 @@ for ontology in list_ontology:
     #     #     group = group_fn_suffix
     # cd_df = pd.concat(cd_csv_list)
     # print(cd_df.isna().sum())
-    metrics = {
-        'fmax': r'$F_{max}$',
-        # 'auc': 'AUC',
-        # 'auprc': 'AUPRC',
-        # 'rmax': r'Recall at $F_{max}$',
-        # 'pmax': r'Precision at $F_{max}$'
-    }
+        metrics = {
+            'fmax': r'$F_{max}$',
+            # 'auc': 'AUC',
+            # 'auprc': 'AUPRC',
+            # 'rmax': r'Recall at $F_{max}$',
+            # 'pmax': r'Precision at $F_{max}$'
+        }
 
         for mk, mv in metrics.items():
             csv_fp = cd_csv_path+'cd_csv/cd_input_{}_{}_{}.csv'.format(ontology, mk, group)
