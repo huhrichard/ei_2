@@ -398,7 +398,7 @@ if __name__ == "__main__":
                     best_performer_name = ensemble_df_cat.loc[(ensemble_df_cat['Outcome']==out_k) & (ensemble_df_cat['Method']==pred_method), 'best_ensemble_method'].values[0]
                     print(best_performer_name)
                     if pred_method != 'XGBoost':
-                        if best_performer_name in best_performer_name:
+                        if best_performer_name in stacker_list:
                             bp_name = stacker_list[best_performer_name]
                         else:
                             bp_name = best_performer_name
