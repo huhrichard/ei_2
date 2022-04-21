@@ -419,7 +419,7 @@ if __name__ == "__main__":
                                       palette=sorted_cp, sizes=(2.5,2.5), ci=None)
                 # ax_prc.legend(loc='upper right', prop={'weight': 'bold', 'size': 14}).set_title(None)
                 ax_prc.get_legend().remove()
-                ax_prc.legend(bbox_to_anchor=(0, 1.02, 1, 0.2), loc="lower left",
+                legend = ax_prc.legend(bbox_to_anchor=(0, 1.02, 1, 0.2), loc="lower left",
                            mode="expand", borderaxespad=0, ncol=3,
                               prop={'weight': 'bold', 'size': 14})
                 # ax_prc.set_xticks(np.arange(0,1.2,0.2))
