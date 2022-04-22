@@ -59,7 +59,8 @@ termcounts = TermCounts(godag, objanno.get_id2gos_nss())
 cd_csv_path = './plot/'
 # list_ontology = ['go', 'hpo']
 list_ontology = ['go']
-list_of_groups = ['1000', '500-1000', '200-500', '100-200', '50-100', '10-50']
+# list_of_groups = ['1000', '500-1000', '200-500', '100-200', '50-100']
+list_of_groups = ['']
 # ylabel = r'$F_{max}$'
 for ontology in list_ontology:
     for group in list_of_groups:
@@ -93,7 +94,7 @@ for ontology in list_ontology:
         }
 
         for mk, mv in metrics.items():
-            csv_fp = cd_csv_path+'cd_csv/cd_input_{}_{}_{}.csv'.format(ontology, group, mk)
+            csv_fp = cd_csv_path+'cd_csv/cd_input_{}_{}.csv'.format(ontology, mk)
             # csv_fp = cd_csv_path+'cd_csv/cd_input_{}_{}_{}.csv'.format(ontology, group, mk)
             cd_df = pd.read_csv(csv_fp, index_col=0)
             # cd_df = pd.read_csv(csv_fp, index_col=0)
