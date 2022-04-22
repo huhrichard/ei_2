@@ -59,8 +59,8 @@ termcounts = TermCounts(godag, objanno.get_id2gos_nss())
 cd_csv_path = './plot/'
 # list_ontology = ['go', 'hpo']
 list_ontology = ['go']
-# list_of_groups = ['1000', '500-1000', '200-500', '100-200', '50-100']
-list_of_groups = ['']
+list_of_groups = ['','1000', '500-1000', '200-500', '100-200', '50-100']
+# list_of_groups = ['']
 # ylabel = r'$F_{max}$'
 for ontology in list_ontology:
     for group in list_of_groups:
@@ -94,8 +94,10 @@ for ontology in list_ontology:
         }
 
         for mk, mv in metrics.items():
-            csv_fp = cd_csv_path+'cd_csv/cd_input_{}_{}.csv'.format(ontology, mk)
-            # csv_fp = cd_csv_path+'cd_csv/cd_input_{}_{}_{}.csv'.format(ontology, group, mk)
+            if group == '':
+                csv_fp = cd_csv_path+'cd_csv/cd_input_{}_{}.csv'.format(ontology, mk)
+            else:
+                csv_fp = cd_csv_path+'cd_csv/cd_input_{}_{}_{}.csv'.format(ontology, group, mk)
             cd_df = pd.read_csv(csv_fp, index_col=0)
             # cd_df = pd.read_csv(csv_fp, index_col=0)
 
@@ -230,7 +232,8 @@ for ontology in list_ontology:
             # ax1.set_title(title_name)
             # fig1.savefig('{}f_max_{}_comparison_{}.pdf'.format(plot_dir, ontology, group_fn_suffix), bbox_inches="tight")
             # fig1.savefig('{}{}_{}_comparison.pdf'.format(plot_dir, mk, ontology), bbox_inches="tight")
-            fig1.savefig('{}{}_{}_comparison_{}.png'.format(plot_dir,mk, ontology, group), bbox_inches="tight")
+            # fig1.savefig('{}{}_{}_comparison_{}.png'.format(plot_dir,mk, ontology, group), bbox_inches="tight")
+            fig1.savefig('{}{}_{}_comparison_{}.pdf'.format(plot_dir,mk, ontology, group), bbox_inches="tight")
             #
             value_count_depth = cd_df['go_depth'].value_counts().to_dict()
             value_count_ic_bin = cd_df['go_ic'].value_counts(bins=5).to_dict()
@@ -284,7 +287,8 @@ for ontology in list_ontology:
                 # ax2.set_title(title_name)
                 # fig2.savefig('{}f_max_{}_by_depth_{}.png'.format(plot_dir, ontology, group_fn_suffix), bbox_inches="tight")
                 # fig2.savefig('{}{}_{}_by_depth.pdf'.format(plot_dir,mk, ontology), bbox_inches="tight")
-                fig2.savefig('{}{}_{}_by_depth_{}.png'.format(plot_dir,mk, ontology, group), bbox_inches="tight")
+                # fig2.savefig('{}{}_{}_by_depth_{}.png'.format(plot_dir,mk, ontology, group), bbox_inches="tight")
+                fig2.savefig('{}{}_{}_by_depth_{}.pdf'.format(plot_dir,mk, ontology, group), bbox_inches="tight")
 
 
 
@@ -339,5 +343,6 @@ for ontology in list_ontology:
                     ytick.set_fontsize(22)
                 ax3.set_xlabel('Information Content', fontsize=22)
                 # ax3.set_title(title_name)
-                fig3.savefig('{}{}_{}_by_ic_{}.png'.format(plot_dir,mk,ontology, group), bbox_inches="tight")
+                # fig3.savefig('{}{}_{}_by_ic_{}.png'.format(plot_dir,mk,ontology, group), bbox_inches="tight")
+                fig3.savefig('{}{}_{}_by_ic_{}.pdf'.format(plot_dir,mk,ontology, group), bbox_inches="tight")
                 # fig3.savefig('{}{}_{}_by_ic.pdf'.format(plot_dir,mk , ontology), bbox_inches="tight")
