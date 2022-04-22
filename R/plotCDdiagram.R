@@ -2,7 +2,7 @@ library("scmamp")
 library("ggplot2")
 library("Rgraphviz")
 library("dplyr")
-library("PMCMR")
+# library("PMCMR")
 library("PMCMRplus")
 
 args=(commandArgs(TRUE))
