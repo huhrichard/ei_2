@@ -119,6 +119,7 @@ for ontology in list_ontology:
             # cd_df.to_csv(file, index_label=False)
             # cmd = "R CMD BATCH --no-save --no-restore '--args cd_fn=\"{}\"' R/plotCDdiagram.R".format(file.split('/')[-1])
             cmd = "R CMD BATCH --no-save --no-restore '--args cd_fn=\"{}\"' R/plotCDdiagram.R".format(csv_fp)
+            print(cmd)
             os.system(cmd)
             # cd_df.rename(columns={'EI':'Ensemble\nIntegration', })
             algo_names = cd_df.columns.values.tolist()
