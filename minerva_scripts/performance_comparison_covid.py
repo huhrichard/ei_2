@@ -418,10 +418,7 @@ if __name__ == "__main__":
                                       x="recall", y="precision", hue="method",
                                       palette=sorted_cp, sizes=(2.5,2.5), ci=None)
                 # ax_prc.legend(loc='upper right', prop={'weight': 'bold', 'size': 14}).set_title(None)
-                ax_prc.get_legend().remove()
-                legend = ax_prc.legend(bbox_to_anchor=(0, 1.02, 1, 0.2), loc="lower left",
-                           mode="expand", borderaxespad=0, ncol=3,
-                              prop={'weight': 'bold', 'size': 14})
+
                 # ax_prc.set_xticks(np.arange(0,1.2,0.2))
                 # ax_prc.set_yticks(np.arange(0,1.2,0.2))
                 ax_prc.set_ylabel('Precision', fontsize=24, fontweight='bold')
@@ -444,6 +441,11 @@ if __name__ == "__main__":
                     # pmax, rmax = best_performer_prmax[pred_method]
                     ax_prc.scatter(pr_list[1], pr_list[0], c=sorted_cp[pr_idx],
                                    marker='x', edgecolors='black')
+
+                ax_prc.get_legend().remove()
+                legend = ax_prc.legend(bbox_to_anchor=(0, 1.02, 1, 0.2), loc="lower left",
+                                       mode="expand", borderaxespad=0, ncol=3,
+                                       prop={'weight': 'bold', 'size': 14})
 
                 fig_prc.savefig('{}{}{}_{}_comparison.pdf'.format(plot_dir, 'covid19/', 'PRcurve', file_prefix), bbox_inches="tight")
 
