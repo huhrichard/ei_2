@@ -10,7 +10,7 @@ print(R.version)
 if(length(args)==0){
     print("No arguments supplied.")
     ##supply default values
-    cd_fn = "../plot/cd_csv/cd_input_go.csv"
+    cd_fn = "./plot/cd_csv/cd_input_go_fmax.csv"
 }else{
     for(i in 1:length(args)){
          eval(parse(text=args[[i]]))
