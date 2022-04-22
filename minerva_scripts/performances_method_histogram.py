@@ -39,7 +39,8 @@ for k, v in dict_to_compare.items():
     fig2 = plt.figure(figsize=(13, 6))
     ax2 = fig2.add_subplot(111)
     # ax2 = sns.countplot(ax=ax2, x='method', data=highest_fmax_df)
-    ax2 = sns.countplot(ax=ax2, y='method', data=highest_fmax_df)
+    ax2 = sns.countplot(ax=ax2, y='method', data=highest_fmax_df,
+                        order=highest_fmax_df['method'].value_counts().index)
     ax2.set_xlabel('Ensemble Methods of EI')
 
     fig2.savefig('{}/ens_histogram_go_{}.pdf'.format(fpath, k), bbox_inches="tight")
@@ -50,7 +51,8 @@ highest_fmax_df_cat = pd.concat(highest_fmax_df_list)
 fig = plt.figure(figsize=(8, 7))
 ax = fig.add_subplot(111)
 # ax = sns.countplot(ax=ax, x='method', data=highest_fmax_df_cat)
-ax = sns.countplot(ax=ax, y='method', data=highest_fmax_df_cat, log=True)
+ax = sns.countplot(ax=ax, y='method', data=highest_fmax_df_cat,
+                   log=True, order=highest_fmax_df_cat['method'].value_counts().index)
 ax.set_ylabel('')
 ax.set_xlabel('')
 

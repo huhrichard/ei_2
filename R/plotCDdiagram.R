@@ -1,4 +1,4 @@
-library("scmamp")
+# library("scmamp")
 library("ggplot2")
 library("Rgraphviz")
 library("dplyr")
@@ -11,7 +11,7 @@ print(R.version)
 if(length(args)==0){
     print("No arguments supplied.")
     ##supply default values
-    cd_fn = "./plot/cd_csv/cd_input_go_fmax.csv"
+    cd_fn = "./plot_6Apr/plot/cd_csv/cd_input_go_fmax.csv"
 }else{
     for(i in 1:length(args)){
          eval(parse(text=args[[i]]))
