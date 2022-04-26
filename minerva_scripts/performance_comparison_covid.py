@@ -403,7 +403,7 @@ if __name__ == "__main__":
                         #     # bp_name =
                         # else:
                         #     bp_name = best_performer_name
-                        m_name = pred_method.split('\n(')[0].replace('-\n', '').replace('\n','')
+                        m_name = pred_method.split('\n(')[0].replace('-\n', '').replace('\n',' ')
                         best_performer_prc_df['method'] = m_name + '\n(' + r'$\bf F_{max}$'+'='+'{:.4f}'.format(fs['F'])+')'
                     else:
                         best_performer_prc_df['method'] = 'XGBoost\n('+r'$\bf F_{max}$'+'='+'{:.4f}'.format(fs['F'])+')'
