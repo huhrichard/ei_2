@@ -442,7 +442,7 @@ if __name__ == "__main__":
                     # ax_prc.plot(pr_list[0], pr_list[1], c=sorted_cp[pr_idx])
                     # pmax, rmax = best_performer_prmax[pred_method]
                     ax_prc.scatter(pr_list[1], pr_list[0], c=sorted_cp[pr_idx],
-                                   marker='x', edgecolors='black', s=10)
+                                   marker='x', edgecolors='black', s=100)
 
                 # ax_prc.get_legend().remove()
                 # legend = ax_prc.legend()
