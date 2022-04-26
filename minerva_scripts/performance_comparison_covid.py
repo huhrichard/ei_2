@@ -398,12 +398,13 @@ if __name__ == "__main__":
                     best_performer_name = ensemble_df_cat.loc[(ensemble_df_cat['Outcome']==out_k) & (ensemble_df_cat['Method']==pred_method), 'best_ensemble_method'].values[0]
                     print(best_performer_name)
                     if pred_method != 'XGBoost':
-                        if best_performer_name in stacker_list:
-                            bp_name = stacker_list[best_performer_name]
-                            bp_name = stacker_
-                        else:
-                            bp_name = best_performer_name
-                        best_performer_prc_df['method'] = '{}\n('.format(pred_method.split('\n(')[0])+r'$\bf F_{max}$'+'='+'{:.4f}'.format(fs['F'])+')'
+                        # if best_performer_name in stacker_list:
+                        #     bp_name = stacker_list[best_performer_name]
+                        #     # bp_name =
+                        # else:
+                        #     bp_name = best_performer_name
+                        m_name = pred_method.split('\n(')[0].replace('-\n', '').replace('\n','')
+                        best_performer_prc_df['method'] = m_name + '\n(' + r'$\bf F_{max}$'+'='+'{:.4f}'.format(fs['F'])+')'
                     else:
                         best_performer_prc_df['method'] = 'XGBoost\n('+r'$\bf F_{max}$'+'='+'{:.4f}'.format(fs['F'])+')'
                     pmax = fs['P']
