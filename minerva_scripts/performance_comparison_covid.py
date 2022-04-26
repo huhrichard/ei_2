@@ -400,6 +400,7 @@ if __name__ == "__main__":
                     if pred_method != 'XGBoost':
                         if best_performer_name in stacker_list:
                             bp_name = stacker_list[best_performer_name]
+                            bp_name = stacker_
                         else:
                             bp_name = best_performer_name
                         best_performer_prc_df['method'] = '{}\n('.format(pred_method.split('\n(')[0])+r'$\bf F_{max}$'+'='+'{:.4f}'.format(fs['F'])+')'
@@ -442,12 +443,13 @@ if __name__ == "__main__":
                     ax_prc.scatter(pr_list[1], pr_list[0], c=sorted_cp[pr_idx],
                                    marker='x', edgecolors='black', s=10)
 
-                ax_prc.get_legend().remove()
-                legend = ax_prc.legend(bbox_to_anchor=(0, 1.02, 1, 0.2), loc="lower left",
-                                       mode="expand", borderaxespad=0, ncol=3,
-                                       prop={'weight': 'bold', 'size': 14})
+                # ax_prc.get_legend().remove()
+                # legend = ax_prc.legend()
                 handles, labels = ax_prc.get_legend_handles_labels()
-                ax_prc.legend(handles=handles[1:], labels=labels[1:])
+                ax_prc.legend(handles=handles[1:], labels=labels[1:],
+                              bbox_to_anchor=(0, 1.02, 1, 0.2), loc="lower left",
+                               mode="expand", borderaxespad=0, ncol=3,
+                               prop={'weight': 'bold', 'size': 14})
 
                 fig_prc.savefig('{}{}{}_{}_comparison.pdf'.format(plot_dir, 'covid19/', 'PRcurve', file_prefix), bbox_inches="tight")
 
