@@ -53,8 +53,20 @@ ax = fig.add_subplot(111)
 # ax = sns.countplot(ax=ax, x='method', data=highest_fmax_df_cat)
 ax = sns.countplot(ax=ax, y='method', data=highest_fmax_df_cat,
                    log=True, order=highest_fmax_df_cat['method'].value_counts().index)
+for tick in ax.get_xticklabels():
+    tick.set_fontsize(22)
+    # tick.set_rotation(45)
+    tick.set_fontweight('semibold')
+    # tick.set_horizontalalignment("right")
+
+for tick in ax.get_yticklabels():
+    tick.set_fontsize(22)
+    tick.set_fontweight('semibold')
+
 ax.set_ylabel('')
-ax.set_xlabel('')
+ax.set_xlabel('Number of GO terms', fontsize=24, fontweight='bold')
+
+
 
 fig.savefig('{}/ens_histogram_go.pdf'.format(fpath), bbox_inches="tight")
 
