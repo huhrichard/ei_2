@@ -1,4 +1,4 @@
-# library("scmamp")
+library("scmamp")
 library("ggplot2")
 library("Rgraphviz")
 library("dplyr")

@@ -404,9 +404,11 @@ if __name__ == "__main__":
                         # else:
                         #     bp_name = best_performer_name
                         m_name = pred_method.split('\n(')[0].replace('-\n', '').replace('\n',' ')
-                        best_performer_prc_df['method'] = m_name + '\n(' + r'$\bf F_{max}$'+'='+'{:.4f}'.format(fs['F'])+')'
+                        # best_performer_prc_df['method'] = m_name + '\n(' + r'$\bf F_{max}$'+'='+'{:.4f}'.format(fs['F'])+')'
+                        best_performer_prc_df['method'] = '{}({:.4f})'.format(m_name, fs['F'])
                     else:
-                        best_performer_prc_df['method'] = 'XGBoost\n('+r'$\bf F_{max}$'+'='+'{:.4f}'.format(fs['F'])+')'
+                        # best_performer_prc_df['method'] = 'XGBoost\n('+r'$\bf F_{max}$'+'='+'{:.4f}'.format(fs['F'])+')'
+                        best_performer_prc_df['method'] = '{}({:.4f})'.format('XGBoost',fs['F'])
                     pmax = fs['P']
                     rmax = fs['R']
                     ap = average_precision_score(best_performer_outk_mk.label, best_performer_outk_mk.prediction)
@@ -448,8 +450,11 @@ if __name__ == "__main__":
                 # legend = ax_prc.legend()
                 handles, labels = ax_prc.get_legend_handles_labels()
                 ax_prc.legend(handles=handles[1:], labels=labels[1:],
-                              bbox_to_anchor=(0, 1.02, 1, 0.2), loc="lower left",
-                               mode="expand", borderaxespad=0, ncol=3,
+                              # bbox_to_anchor=(0, 1.02, 1, 0.2),
+                              # loc="lower left",
+                              #  mode="expand",
+                              # borderaxespad=0, 
+                              ncol=2,
                                prop={'weight': 'bold', 'size': 14})
 
                 fig_prc.savefig('{}{}{}_{}_comparison.pdf'.format(plot_dir, 'covid19/', 'PRcurve', file_prefix), bbox_inches="tight")
