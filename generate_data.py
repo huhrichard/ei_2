@@ -67,7 +67,7 @@ def processTermArff(param, impute, fold=5):
     merged_df.dropna(inplace=True)
     print(merged_df['cls'].value_counts())
     # merged_df = merged_df.iloc[0:500,:]
-    kf_split = StratifiedKFold(n_splits=fold, shuffle=True, random_state=42)
+    kf_split = StratifiedKFold(n_splits=fold, shuffle=True, random_state=142)
     # kf_split = KFold(n_splits=fold, shuffle=True, random_state=64)
     kf_idx_list = kf_split.split(merged_df, y=merged_df['cls'])
     merged_df.reset_index(inplace=True, drop=True)

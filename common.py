@@ -53,12 +53,23 @@ def fmeasure_score(labels, predictions, thres=None, beta = 1.0, pos_label = 1):
     if thres is None:
         precision, recall, threshold = sklearn.metrics.precision_recall_curve(labels, predictions,
                                                                               pos_label=pos_label)
-        f1 = (1 + beta**2) * (precision * recall) / ((beta**2 * precision) + recall)
+        # f1 = (1 + beta**2) * (precision * recall) / ((beta**2 * precision) + recall)
+        f1 = 2 * (precision * recall) / (precision + recall)
         # print(threshold)
         # if len(threshold[where(f1==nanmax(f1))]) > 1:
-        opt_threshold = threshold[where(f1==nanmax(f1))][0]
-        r_max = recall[where(f1==nanmax(f1))][0]
-        p_max = precision[where(f1 == nanmax(f1))][0]
+        fmax_point = where(f1==nanmax(f1))[0]
+        # if len(fmax_point) > 0:
+        p_maxes = precision[fmax_point]
+        r_maxes = recall[fmax_point]
+        pr_diff = np.abs(p_maxes - r_maxes)
+        balance_fmax_point = where(pr_diff == min(pr_diff))[0]
+        p_max = p_maxes[balance_fmax_point]
+        r_max = r_maxes[balance_fmax_point]
+
+        opt_threshold = threshold[fmax_point][balance_fmax_point]
+
+        # r_max = recall[where(f1==nanmax(f1))[0]][0]
+        # p_max = precision[where(f1 == nanmax(f1))[0]][0]
         # else:
         #     opt_threshold = threshold[where(f1 == nanmax(f1))][0]
         #     r_max = recall[where(f1 == nanmax(f1))][0]
