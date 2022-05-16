@@ -63,10 +63,10 @@ def fmeasure_score(labels, predictions, thres=None, beta = 1.0, pos_label = 1):
         r_maxes = recall[fmax_point]
         pr_diff = np.abs(p_maxes - r_maxes)
         balance_fmax_point = where(pr_diff == min(pr_diff))[0]
-        p_max = p_maxes[balance_fmax_point]
-        r_max = r_maxes[balance_fmax_point]
+        p_max = p_maxes[balance_fmax_point][0]
+        r_max = r_maxes[balance_fmax_point][0]
 
-        opt_threshold = threshold[fmax_point][balance_fmax_point]
+        opt_threshold = threshold[fmax_point][balance_fmax_point][0]
 
         # r_max = recall[where(f1==nanmax(f1))[0]][0]
         # p_max = precision[where(f1 == nanmax(f1))[0]][0]

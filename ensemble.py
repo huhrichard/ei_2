@@ -438,7 +438,7 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank=''):
             auprc = common.auprc(predictions_df.label, predictions_df.prediction)
             if (not rank):
                 print('[%s] Finished evaluating model ###########################' % (stacker_name))
-                print('[%s] F-measure score is %s.' % (stacker_name, fmax['F']))
+                print('[%s] F-max score is %s.' % (stacker_name, fmax['F']))
                 if 'P' in fmax:
                     print('[%s] Precision score is %s.' % (stacker_name, fmax['P']))
                     print('[%s] Recall score is %s.' % (stacker_name, fmax['R']))
