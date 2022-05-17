@@ -77,7 +77,7 @@ if __name__ == "__main__":
     parser.add_argument('--path', '-P', type=str, required=True, help='data path')
     parser.add_argument('--queue', '-Q', type=str, default='premium', help='LSF queue to submit the job')
     parser.add_argument('--node', '-N', type=str, default='32', help='number of node requested')
-    parser.add_argument('--time', '-T', type=str, default='30:00', help='number of hours requested')
+    parser.add_argument('--time', '-T', type=str, default='40:00', help='number of hours requested')
     parser.add_argument('--memory', '-M', type=str, default='16000', help='memory requsted in MB')
     parser.add_argument('--classpath', '-CP', type=str, default='./weka.jar', help='default weka path')
     parser.add_argument('--hpc', type=str2bool, default='true', help='use HPC cluster or not')
