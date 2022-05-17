@@ -63,11 +63,13 @@ def best_ensemble_score(df, input, mk, ensemble_suffix='.S'):
     else:
         if (mk == 'pmax') or (mk == 'rmax'):
             ens_fmax_idx = (pivoted_df[ensemble_cols]).idxmax(axis=1)
+            print(pick_by)
             print('ens_fmax:', ens_fmax_idx)
             pivoted_pr_df = df.pivot_table(mk, ['data_name'], 'method')
             print('pivoted_pr_df:', pivoted_pr_df)
             pivoted_pr_df[best_mk] = 0
             for r_idx in pivoted_pr_df.index:
+                print(r_idx, ens_fmax_idx[r_idx])
                 pivoted_pr_df.loc[r_idx, best_mk] = pivoted_pr_df.loc[r_idx, ens_fmax_idx[r_idx]]
             pivoted_pr_df[best_mk] = pivoted_pr_df[ens_fmax_idx].values
             pivoted_pr_df['best_ensemble_method'] = ens_fmax_idx.values
