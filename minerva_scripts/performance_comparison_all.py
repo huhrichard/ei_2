@@ -18,7 +18,8 @@ list_ontology = [
                  # 'hpo'
                 ]
 # python_cmd = 'python performance_comparison.py {} {} {}'
-python_cmd = 'python minerva_scripts/performance_comparison.py --prepro_path {} --ontology {} --group {} --file_prefix {}'
+# python_cmd = 'python minerva_scripts/performance_comparison.py --prepro_path {} --ontology {} --group {} --file_prefix {}'
+python_cmd = 'python minerva_scripts/performance_comparison_from_cat.py --prepro_path {} --ontology {} --group {} --file_prefix {}'
 system('module load R')
 
 for o in list_ontology:
