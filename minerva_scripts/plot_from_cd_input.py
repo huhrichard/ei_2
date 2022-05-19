@@ -346,3 +346,6 @@ for ontology in list_ontology:
                 # fig3.savefig('{}{}_{}_by_ic_{}.png'.format(plot_dir,mk,ontology, group), bbox_inches="tight")
                 fig3.savefig('{}{}_{}_by_ic_{}.pdf'.format(plot_dir,mk,ontology, group), bbox_inches="tight")
                 # fig3.savefig('{}{}_{}_by_ic.pdf'.format(plot_dir,mk , ontology), bbox_inches="tight")
+
+            plt.close()
+
