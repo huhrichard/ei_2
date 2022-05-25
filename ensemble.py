@@ -34,7 +34,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 from sklearn.inspection import permutation_importance
-
+from sklearn.preprocessing import StandardScaler
 
 
 def str2bool(v):
@@ -314,6 +314,12 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df,
                            regression=False):
     train_df, train_labels, test_df, test_labels = common.read_fold(path, fold)
     stacker = stacker.fit(train_df, train_labels)
+
+    # if z_scoring:
+    z_scaler = StandardScaler()
+    # print(test_df)
+    train_df[:] = z_scaler.fit_transform(train_df.values)
+    test_df[:] = z_scaler.transform(test_df.values)
 
     if hasattr(stacker, "predict_proba") and (not regression):
         test_predictions = stacker.predict_proba(test_df)[:, 1]
