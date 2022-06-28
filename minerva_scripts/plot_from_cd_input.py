@@ -245,7 +245,7 @@ for ontology in list_ontology:
                 fig2_plot_only = ['Mashup', 'deepNF', 'Ensemble\nIntegration']
                 # idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
                 # cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
-                fig2 = plt.figure(figsize=(13,6))
+                fig2 = plt.figure(figsize=(13,7))
                 ax2 = fig2.add_subplot(111)
                 ax2 = sns.boxplot(ax=ax2, y=mk, x='go_depth',
                                   data=cd_df_melted[cd_df_melted['algo'].isin(fig2_plot_only)],
@@ -263,7 +263,7 @@ for ontology in list_ontology:
                 ax2.get_legend().remove()
                 # ax2.legend(loc='upper right', prop={'weight':'bold', 'size':18})
                 ax2.legend(bbox_to_anchor=(0, 1.02, 1, 0.2), loc="lower left",
-                           mode="expand", borderaxespad=0, ncol=3, prop={'weight': 'bold', 'size': 18})
+                           mode="expand", borderaxespad=0, ncol=3, prop={'weight': 'bold', 'size': 22})
                 ax2.set_ylabel(mv, fontsize=22, fontweight='bold')
                 ax2.set_xlabel('Depth in GO Hierarchy', fontsize=21)
                 ax2_new_xticks = []
@@ -314,7 +314,7 @@ for ontology in list_ontology:
                 #
                 #     ic_group_list.append(group_name)
                 print(cd_df_melted['ic_group'].value_counts())
-                fig3 = plt.figure(figsize=(13,6))
+                fig3 = plt.figure(figsize=(13,7))
                 ax3 = fig3.add_subplot(111)
                 ax3 = sns.boxplot(ax=ax3, y=mk, x='ic_group',
                                   data=cd_df_melted[cd_df_melted['algo'].isin(fig2_plot_only)],
@@ -332,7 +332,7 @@ for ontology in list_ontology:
                 ax3.get_legend().remove()
                 # ax3.legend(loc='upper right', prop={'weight':'bold', 'size':18})
                 ax3.legend(bbox_to_anchor=(0, 1.02, 1, 0.2), loc="lower left",
-                           mode="expand", borderaxespad=0, ncol=3, prop={'weight': 'bold', 'size': 18})
+                           mode="expand", borderaxespad=0, ncol=3, prop={'weight': 'bold', 'size': 22})
                 # ax3.legend(loc='upper right', prop={'weight':'bold', 'size':18})
                 ax3.set_ylabel(mv, fontsize=22, fontweight='bold')
                 for xtick in ax3.get_xticklabels():
