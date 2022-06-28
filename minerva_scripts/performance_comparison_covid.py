@@ -288,7 +288,7 @@ if __name__ == "__main__":
         print(sorted_dataname_list)
         sorted_cp = [s[2] for s in sorted_list]
 
-        fig1, ax1 = plt.subplots(1, 1, figsize=(12, 8.5))
+        fig1, ax1 = plt.subplots(1, 1, figsize=(12, 9.5))
         ax1 = sns.boxplot(ax=ax1, y=best_metric_str, x='Method',
                           data=ensemble_df_cat, palette=sorted_cp, order=sorted_dataname_list,
                           linewidth=2, width=0.5)
@@ -354,7 +354,7 @@ if __name__ == "__main__":
             sorted_dataname_list_no_xgb = sorted_dataname_list.copy()
             sorted_dataname_list_no_xgb.pop(xgb_idx)
 
-            fig3, ax3 = plt.subplots(1, 1, figsize=(12, 9.5))
+            fig3, ax3 = plt.subplots(1, 1, figsize=(12, 10.5))
             ax3 = sns.boxplot(ax=ax3, y=mk, x='Method',
                               data=performance_df_cat_di_only, palette=sorted_cp_no_xgb, order=sorted_dataname_list_no_xgb,
                               linewidth=2, width=0.5)
