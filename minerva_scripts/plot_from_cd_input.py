@@ -242,14 +242,16 @@ for ontology in list_ontology:
             if ontology == 'go':
                 # cd_df_melted.replace({'Ensemble\nIntegration':'EI'}, inplace=True)
                 # fig2_plot_only = ['Mashup', 'DeepNF', 'EI']
-                fig2_plot_only = ['Mashup', 'deepNF', 'Ensemble\nIntegration']
+                fig2_plot_only = ['Ensemble\nIntegration', 'Mashup', 'deepNF']
                 # idx_sorted_dataname = [sorted_dataname_list.index(p) for p in fig2_plot_only]
                 # cp_plot_only = [sorted_cp[idx] for idx in idx_sorted_dataname]
+                cp_3 = sns.color_palette(n_colors=3)
+                cp_3n = [cp_3[0], cp_3[2], cp_3[1]]
                 fig2 = plt.figure(figsize=(13,7))
                 ax2 = fig2.add_subplot(111)
                 ax2 = sns.boxplot(ax=ax2, y=mk, x='go_depth',
                                   data=cd_df_melted[cd_df_melted['algo'].isin(fig2_plot_only)],
-                                  # palette=c,
+                                  palette=cp_3n,
                                   hue='algo', hue_order=fig2_plot_only,
                                   order=sorted(set(cd_df_melted['go_depth'].values)),
                                   linewidth=2.5)
@@ -318,7 +320,7 @@ for ontology in list_ontology:
                 ax3 = fig3.add_subplot(111)
                 ax3 = sns.boxplot(ax=ax3, y=mk, x='ic_group',
                                   data=cd_df_melted[cd_df_melted['algo'].isin(fig2_plot_only)],
-                                  # palette=c,
+                                  palette=cp_3n,
                                   hue='algo', hue_order=fig2_plot_only,
                                   order=ic_group_list,
                                   linewidth=2.5)
