@@ -368,7 +368,7 @@ if __name__ == "__main__":
             #     tick.set_horizontalalignment("right")
             ax3.set_ylabel(ylabel, fontsize=24, fontweight='bold')
             ax3.set_xlabel('')
-            ax3.set_ylim(top=0.7)
+            ax3.set_ylim(top=0.68)
             # ax3.set_title(out_v, fontweight='semibold', fontsize=22)
             ax3.legend(loc='upper right', prop={'weight':'bold', 'size':20})
             # ax3.legend(bbox_to_anchor=(0,1.02,1,0.2), loc="lower left",
