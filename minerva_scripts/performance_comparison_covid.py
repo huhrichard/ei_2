@@ -354,7 +354,7 @@ if __name__ == "__main__":
             sorted_dataname_list_no_xgb = sorted_dataname_list.copy()
             sorted_dataname_list_no_xgb.pop(xgb_idx)
 
-            fig3, ax3 = plt.subplots(1, 1, figsize=(12, 10.5))
+            fig3, ax3 = plt.subplots(1, 1, figsize=(12, 9))
             ax3 = sns.boxplot(ax=ax3, y=mk, x='Method',
                               data=performance_df_cat_di_only, palette=sorted_cp_no_xgb, order=sorted_dataname_list_no_xgb,
                               linewidth=2, width=0.5)
@@ -368,6 +368,7 @@ if __name__ == "__main__":
             #     tick.set_horizontalalignment("right")
             ax3.set_ylabel(ylabel, fontsize=24, fontweight='bold')
             ax3.set_xlabel('')
+            ax3.set_ylim(top=0.7)
             # ax3.set_title(out_v, fontweight='semibold', fontsize=22)
             ax3.legend(loc='upper right', prop={'weight':'bold', 'size':20})
             # ax3.legend(bbox_to_anchor=(0,1.02,1,0.2), loc="lower left",
