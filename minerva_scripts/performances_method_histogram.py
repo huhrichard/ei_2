@@ -58,7 +58,7 @@ ax = sns.countplot(ax=ax, y='method', data=highest_fmax_df_cat,
 print(highest_fmax_df_cat['method'].value_counts())
 ax.set_xticks([1,10,100,1000])
 # labels = [item.get_text() for item in ax.get_xticklabels()]
-labels = [1, r'$\\bf{10^{1}}$',  r'$\\bf{10^{2}}$',  r'$\\bf{10^{3}}$']
+labels = [1, '$\\bf{10^{1}}$',  '$\\bf{10^{2}}$',  '$\\bf{10^{3}}$']
 ax.set_xticklabels(labels)
 # old_xticks[]
 for tidx, tick in enumerate(ax.get_xticklabels()):
