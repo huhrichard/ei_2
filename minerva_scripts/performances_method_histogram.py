@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-plt.rcParams["axes.labelweight"] = "bold"
+plt.rcParams['text.latex.preamble'] = [r'\boldmath']
 
 dict_to_compare = {
                     '1000': '1000_',
@@ -57,9 +57,9 @@ ax = sns.countplot(ax=ax, y='method', data=highest_fmax_df_cat,
 
 print(highest_fmax_df_cat['method'].value_counts())
 ax.set_xticks([1,10,100,1000])
-ax.set_xticklabels([1,r'\textbf{$10^{1}$}',
-                    r'\textbf{$10^{2}$}',
-                    r'\textbf{$10^{3}$}'])
+ax.set_xticklabels([1,r'$10^{1}$',
+                    r'$10^{2}$',
+                    r'$10^{3}$'])
 # old_xticks[]
 for tidx, tick in enumerate(ax.get_xticklabels()):
     print(tick)
