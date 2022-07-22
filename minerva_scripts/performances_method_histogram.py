@@ -56,13 +56,14 @@ ax = sns.countplot(ax=ax, y='method', data=highest_fmax_df_cat,
 
 print(highest_fmax_df_cat['method'].value_counts())
 for tick in ax.get_xticklabels():
+    print(tick)
     tick.set_fontsize(22)
     # tick.set_rotation(45)
     tick.set_fontweight('semibold')
     # tick.set_horizontalalignment("right")
 
 for tick in ax.get_yticklabels():
-    print(tick)
+    # print(tick)
     tick.set_fontsize(22)
     tick.set_fontweight('semibold')
 
