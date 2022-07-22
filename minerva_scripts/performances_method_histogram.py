@@ -55,8 +55,9 @@ ax = sns.countplot(ax=ax, y='method', data=highest_fmax_df_cat,
                    log=True, order=highest_fmax_df_cat['method'].value_counts().index)
 
 print(highest_fmax_df_cat['method'].value_counts())
-print(ax.get_xticks())
-for tick in ax.get_xticklabels():
+ax.set_xticks([1,10,100,1000])
+# old_xticks[]
+for tidx, tick in enumerate(ax.get_xticklabels()):
     print(tick)
     tick.set_fontsize(22)
     # tick.set_rotation(45)
