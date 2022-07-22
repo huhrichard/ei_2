@@ -62,6 +62,7 @@ for tick in ax.get_xticklabels():
     # tick.set_horizontalalignment("right")
 
 for tick in ax.get_yticklabels():
+    print(tick)
     tick.set_fontsize(22)
     tick.set_fontweight('semibold')
 
