@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+plt.rcParams["axes.labelweight"] = "bold"
 
 dict_to_compare = {
                     '1000': '1000_',
