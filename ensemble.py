@@ -35,6 +35,7 @@ import numpy as np
 import seaborn as sns
 from sklearn.inspection import permutation_importance
 from sklearn.preprocessing import StandardScaler
+import pickle
 
 
 def str2bool(v):
@@ -135,7 +136,7 @@ def thres_fmax(train_label_df, train_pred_df, testing_bool=False):
 
     return thres
 
-def CES_classifier(path, fold_count=range(5), agg=1, rank=False):
+def CES_classifier(path, fold_count=range(5), agg=1, rank=False, writeModel=False,):
     assert exists(path)
     if not exists('%s/analysis' % path):
         mkdir('%s/analysis' % path)
@@ -189,11 +190,13 @@ def CES_classifier(path, fold_count=range(5), agg=1, rank=False):
         local_model_weight_df = None
     return {'f-measure':fmax, 'auc':float(auc), 'auprc':auprc,
             'model_weight': local_model_weight_df,
-            'predictions': predictions_only_df}
+            'predictions': predictions_only_df,
+            'model': best_ensembles
+            }
 
 
 
-def aggregating_ensemble(path, fold_count=range(5), agg=1, rank=False, median=False):
+def aggregating_ensemble(path, fold_count=range(5), agg=1, rank=False, writeModel=False, median=False):
     def _unbag_mean(df, agg=agg):
         df = common.unbag(df, agg)
         return df.mean(axis=1)
@@ -248,13 +251,16 @@ def aggregating_ensemble(path, fold_count=range(5), agg=1, rank=False, median=Fa
     else:
         local_model_weight_df = None
 
+    model_name = 'median' if median else 'mean'
+
     return {'f-measure': fmax, 'auc': auc, 'auprc': auprc,
             'model_weight': local_model_weight_df,
-            'predictions': pred_out_df}
+            'predictions': pred_out_df,
+            'model': model_name}
 
 
 
-def bestbase_classifier(path, fold_count=range(5), agg=1, rank=False):
+def bestbase_classifier(path, fold_count=range(5), agg=1, rank=False, writeModel=False):
     assert exists(path)
     if not exists('%s/analysis' % path):
         mkdir('%s/analysis' % path)
@@ -270,18 +276,20 @@ def bestbase_classifier(path, fold_count=range(5), agg=1, rank=False):
 
     fmax_list = [common.fmeasure_score(labels, predictions.iloc[:, i])['F'] for i in range(len(predictions.columns))]
     fscores_list = [common.fmeasure_score(labels, predictions.iloc[:, i]) for i in range(len(predictions.columns))]
+
     argmax_bp_idx = np.argmax(fmax_list)
     best_bp_predictions = predictions.iloc[:,[argmax_bp_idx]]
     best_fmax = max(fmax_list)
     best_auc = sklearn.metrics.roc_auc_score(labels, best_bp_predictions)
     best_auprc = common.auprc(labels, best_bp_predictions)
+    best_bp_name = predictions.columns.tolist()[argmax_bp_idx]
     print('best_bp')
     best_bp_predictions.columns = ['best base']
     print(best_bp_predictions)
 
     return {'f-measure':{'F':best_fmax, 'R':fscores_list[argmax_bp_idx]['R'], 'P':fscores_list[argmax_bp_idx]['P']},
             'auc': best_auc,
-            'auprc': best_auprc, 'predictions': best_bp_predictions}
+            'auprc': best_auprc, 'predictions': best_bp_predictions, 'model':best_bp_name}
 
 def median_base_classifier(path, fold_count=range(5), agg=1, rank=False):
     assert exists(path)
@@ -310,7 +318,7 @@ def median_base_classifier(path, fold_count=range(5), agg=1, rank=False):
     return {'f-measure': best_fmax, 'auc': best_auc,
             'auprc': best_auprc, 'predictions': best_bp_predictions}
 
-def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df,
+def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df, writeModel=False,
                            regression=False):
     train_df, train_labels, test_df, test_labels = common.read_fold(path, fold)
     stacker = stacker.fit(train_df, train_labels)
@@ -338,10 +346,10 @@ def stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df,
     # print('stacking_df:')
     # print(df)
     return {'testing_df':df, "training": [train_labels, train_predictions], 'train_dfs': [train_df, train_labels],
-            'stacked_df':stacked_df}
+            'stacked_df':stacked_df, 'stacker':stacker}
 
 
-def main_classification(path, f_list, agg=1, rank=False, ens_for_rank=''):
+def main_classification(path, f_list, agg=1, rank=False, ens_for_rank='', writeModel=False):
     #
     dn = abspath(path).split('/')[-1]
     cols = ['data_name', 'fmax', 'method', 'auc', 'auprc', 'pmax', 'rmax']
@@ -356,7 +364,7 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank=''):
                        # 'median base': _bestbaseclassifier
                        }
 
-
+    ens_models = dict()
 
     for key, val in aggregated_dict.items():
 
@@ -381,7 +389,8 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank=''):
                 print('[{}] AUPRC score is {}.'.format(key, auprc_perf))
                 predictions_dataframes.append(perf['predictions'])
                 dfs.append(pd.DataFrame(data=[[dn, fmax_perf, key, auc_perf, auprc_perf, pmax_perf, rmax_perf]], columns=cols, index=[0]))
-
+            if writeModel:
+                ens_models[key] = perf['model']
     # print('Saving results #############################################')
     analysis_path = '%s/analysis' % path
     if not exists(analysis_path):
@@ -412,8 +421,11 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank=''):
                 if rank:
                     if fold == 1:
                         stacking_output.append(stack)
+                        if writeModel:
+                            ens_models[key] = stack['stacker']
                 else:
                     stacking_output.append(stack)
+
             predictions_dfs = [s['testing_df'] for s in stacking_output]
             if rank:
                 training_dfs = stacking_output[0]['train_dfs'][0]
@@ -474,6 +486,10 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank=''):
         predictions_dataframe.to_csv(os.path.join(analysis_path, "predictions.csv"))
         dfs.to_csv(os.path.join(analysis_path, "performance.csv"), index=False)
 
+    if writeModel:
+        pickle.dump(ens_models,
+                    open(os.path.join(analysis_path, "ens_model.pkl"), 'wb'))
+
 if __name__ == "__main__":
     warnings.filterwarnings("ignore")
 
@@ -485,6 +501,7 @@ if __name__ == "__main__":
     parser.add_argument('--fold', '-F', type=int, default=5, help='cross-validation fold')
     parser.add_argument('--aggregate', '-A', type=int, default=1, help='if aggregate is needed, feed bagcount, else 1')
     parser.add_argument('--rank', type=str2bool, default='False', help='Boolean of getting local model ranking or not (default:False)')
+    parser.add_argument('--writeModel', type=str2bool, default='False', help='Boolean of writing the ensemble or not (default:False)')
     parser.add_argument('--ens_for_rank', type=str, default='Choose one of the ensemble', help='Choose the ensemble for EI interpretation')
     args = parser.parse_args()
     data_path = abspath(args.path)
@@ -504,4 +521,6 @@ if __name__ == "__main__":
     else:
         fold_values = range(int(p['foldCount']))
 
-    main_classification(data_path, fold_values, args.aggregate, args.rank, args.ens_for_rank)
+    main_classification(data_path, fold_values,
+                        args.aggregate, args.rank,
+                        args.ens_for_rank, args.writeModel)

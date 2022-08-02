@@ -8,3 +8,8 @@ mashup
 not_on_github
 plot
 .Rproj.user
+covid19_pairwise_differenceDECEASED_in_0-3_DAYS_auc.csv
+covid19_pairwise_differenceDECEASED_in_0-3_DAYS_fmax.csv
+covid19_pairwise_differenceDECEASED_in_3-5_DAYS_auc.csv
+covid19_pairwise_differenceDECEASED_in_3-5_DAYS_fmax.csv
+covid19_pairwise_difference_auc_duration.csv
