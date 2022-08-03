@@ -9,11 +9,12 @@ from common import str2bool
 # base_path = '/sc/arion/scratch/liy42/covid19_DECEASED_INDICATOR/'
 
 
-list_of_method = ['EI', 'admission',
-                  'labs',
-                  # 'medications',
-                  'vitals', 'concatenated',
-                  'comorbidities',
+list_of_method = ['EI',
+                  # 'admission',
+                  # 'labs',
+                  # # 'medications',
+                  # 'vitals', 'concatenated',
+                  # 'comorbidities',
                   # 'xgboost'
                     # 'medications_binary', 'EI_med_binary', 'concatenated_med_binary'
                   # 'EI_svdImpute', 'EI_svdImpute_rank_5', 'EI_svdImpute_rank_20',
