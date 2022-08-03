@@ -123,7 +123,7 @@ if __name__ == "__main__":
                 if args.rank is False:
                     jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir))
                 else:
-                    jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir) + ' --rank True')
+                    jobs_list.append('python ensemble.py --path {}'.format(go_scratch_dir) + ' --rank True --writeModel True')
             else:
                 break
         jobs_txt.write('\n'.join(jobs_list))
