@@ -11,7 +11,7 @@ import pandas as pd
 import numpy as np
 
 data_folder = abspath(argv[1])
-attr_imp_bool = argv[2]
+attr_imp_bool = str2bool(argv[2])
 test_model = str2bool(argv[3])
 #
 # fns = listdir(data_folder)
