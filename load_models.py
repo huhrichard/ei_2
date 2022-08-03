@@ -44,7 +44,7 @@ def base_predictors(model_path, data_path, hpc, classpath):
 
     # get fold, id and label attribute
 
-    fold_values = 'test'
+    fold_values = ['test']
     jobs_fn = "temp_train_base_{}_{}.jobs".format(data_source_dir, data_name)
     job_file = open(jobs_fn, 'w')
     if not hpc:
