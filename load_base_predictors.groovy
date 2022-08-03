@@ -77,7 +77,7 @@ source              = new DataSource(inputFilename)
 data                = source.getDataSet()
 regression          = data.attribute(classAttribute).isNumeric()
 if (!regression) {
-predictClassValue = p.getProperty("predictClassValue").trim()
+    predictClassValue = p.getProperty("predictClassValue").trim()
 }
 
 
