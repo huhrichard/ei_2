@@ -368,7 +368,7 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank='', writeM
 
     for key, val in aggregated_dict.items():
 
-        if (rank and (key == ens_for_rank)) or (not rank):
+        if (rank and ((key == ens_for_rank) or (ens_for_rank == 'None'))) or (not rank):
             print('[{}] Start building model #################################'.format(key))
             perf = val(path, fold_values, agg, rank)
             if rank:
@@ -416,7 +416,7 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank='', writeM
     stacked_df = pd.DataFrame(columns= df_cols)
 
     for i, (stacker_name, stacker) in enumerate(stackers_dict.items()):
-        if (rank and (stacker_name == ens_for_rank)) or (not rank):
+        if (rank and ((stacker_name == ens_for_rank) or (ens_for_rank == 'None'))) or (not rank):
             print('[%s] Start building model ################################' % (stacker_name))
             stacking_output = []
             for fold in f_list:
@@ -506,7 +506,7 @@ if __name__ == "__main__":
     parser.add_argument('--aggregate', '-A', type=int, default=1, help='if aggregate is needed, feed bagcount, else 1')
     parser.add_argument('--rank', type=str2bool, default='False', help='Boolean of getting local model ranking or not (default:False)')
     parser.add_argument('--writeModel', type=str2bool, default='False', help='Boolean of writing the ensemble or not (default:False)')
-    parser.add_argument('--ens_for_rank', type=str, default='Choose one of the ensemble', help='Choose the ensemble for EI interpretation')
+    parser.add_argument('--ens_for_rank', type=str, default='None', help='Choose the ensemble for EI interpretation')
     args = parser.parse_args()
     data_path = abspath(args.path)
     if args.rank:
