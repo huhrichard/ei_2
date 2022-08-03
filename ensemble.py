@@ -477,7 +477,9 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank='', writeM
         # print(local_model_weight_dfs)
         local_mr_df = pd.concat(local_model_weight_dfs)
         local_mr_df.to_csv(os.path.join(analysis_path, 'local_model_ranks.csv'))
-
+        if writeModel:
+            pickle.dump(ens_models,
+                        open(os.path.join(analysis_path, "ens_model.pkl"), 'wb'))
 
     """ Save results """
     if rank is False:
@@ -486,9 +488,7 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank='', writeM
         predictions_dataframe.to_csv(os.path.join(analysis_path, "predictions.csv"))
         dfs.to_csv(os.path.join(analysis_path, "performance.csv"), index=False)
 
-    if writeModel:
-        pickle.dump(ens_models,
-                    open(os.path.join(analysis_path, "ens_model.pkl"), 'wb'))
+
 
 if __name__ == "__main__":
     warnings.filterwarnings("ignore")

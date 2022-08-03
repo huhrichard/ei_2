@@ -189,7 +189,7 @@ if (!classifierDir.exists()) {
 outputPrefix = sprintf "predictions-%s-%02d", currentFold, currentBag
 writer = new PrintWriter(new GZIPOutputStream(new FileOutputStream(new File(classifierDir, outputPrefix + ".csv.gz"))))
 if (writeModel) {
-    SerializationHelper.write(new GZIPOutputStream(new FileOutputStream(new File(classifierDir, outputPrefix + "local_model.gz"))), filteredClassifier)
+    SerializationHelper.write(new GZIPOutputStream(new FileOutputStream(new File(classifierDir, outputPrefix + "-local_model.gz"))), filteredClassifier)
 }
 header = sprintf "# %s@%s %.2f minutes %s\n", System.getProperty("user.name"), java.net.InetAddress.getLocalHost().getHostName(), durationMinutes, classifierString.join(" ")
 writer.write(header)
