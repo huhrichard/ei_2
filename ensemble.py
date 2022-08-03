@@ -371,11 +371,14 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank='', writeM
         if (rank and (key == ens_for_rank)) or (not rank):
             print('[{}] Start building model #################################'.format(key))
             perf = val(path, fold_values, agg, rank)
-            # if key != 'best base':
-            #     fmax_perf = perf['f-measure']['F']
-            #     if rank:
-            #         local_model_weight_dfs.append(perf['model_weight'])
-            # else:
+            if rank:
+                if key != 'best base':
+                # fmax_perf = perf['f-measure']['F']
+
+                    local_model_weight_dfs.append(perf['model_weight'])
+                if writeModel:
+                    ens_models[key] = perf['model']
+
             fmax_perf = perf['f-measure']['F']
             rmax_perf = perf['f-measure']['R']
             pmax_perf = perf['f-measure']['P']
@@ -389,8 +392,9 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank='', writeM
                 print('[{}] AUPRC score is {}.'.format(key, auprc_perf))
                 predictions_dataframes.append(perf['predictions'])
                 dfs.append(pd.DataFrame(data=[[dn, fmax_perf, key, auc_perf, auprc_perf, pmax_perf, rmax_perf]], columns=cols, index=[0]))
-            if writeModel:
-                ens_models[key] = perf['model']
+            # else:
+                # if
+
     # print('Saving results #############################################')
     analysis_path = '%s/analysis' % path
     if not exists(analysis_path):
