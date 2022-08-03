@@ -53,8 +53,8 @@ currentBag                  = Integer.valueOf(args[3])
 inputFilename		    = rootDir + "/data.arff"
 // }
 // String[] classifierString   = args[4]
-shortClassifierName = args[4]
-
+classifierName = args[4]
+shortClassifierName  = classifierName.split("\\.")[-1]
 // load data parameters from properties file
 p = new Properties()
 p.load(new FileInputStream(parentDir + "/weka.properties"))
@@ -80,7 +80,7 @@ if (!regression) {
     predictClassValue = p.getProperty("predictClassValue").trim()
 }
 
-
+classifierDir = new File(workingDir, classifierName)
 // shuffle data, set class variable
 data.randomize(new Random(1))
 data.setClass(data.attribute(classAttribute))
