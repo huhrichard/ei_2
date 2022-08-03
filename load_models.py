@@ -129,7 +129,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Ensemble script of EI')
     parser.add_argument('--model_path', '-mp', type=str, required=True, help='Path of the EI model')
     parser.add_argument('--data_path', '-dp', type=str, required=True, help='Path of the multimodal data')
-    parser.add_argument('--fold', '-F', type=int, default=5, help='cross-validation fold')
+    # parser.add_argument('--fold', '-F', type=int, default=5, help='cross-validation fold')
     parser.add_argument('--aggregate', '-A', type=int, default=1, help='if aggregate is needed, feed bagcount, else 1')
     parser.add_argument('--hpc', type=str2bool, default='True', help='Boolean of using HPC to compute (default:True)')
     parser.add_argument('--queue', '-Q', type=str, default='premium', help='LSF queue to submit the job')
@@ -138,9 +138,14 @@ if __name__ == "__main__":
     parser.add_argument('--memory', '-M', type=str, default='16000', help='memory requsted in MB')
     parser.add_argument('--classpath', '-CP', type=str, default='./weka.jar', help='default weka path')
     parser.add_argument('--rank', type=str2bool, default='False', help='Boolean of getting local model ranking or not (default:False)')
-    parser.add_argument('--local_predictor', type=str2bool, default='False', help='Boolean of writing the ensemble or not (default:False)')
+    parser.add_argument('--local_predictor', type=str2bool, default='False', help='Boolean of loading local_models (default:False)')
     parser.add_argument('--ens_model', type=str, default='Choose one of the ensemble', help='Choose the ensemble for EI interpretation')
 
     args = parser.parse_args()
+
+    if args.local_predictor:
+        base_predictors(args.model_path, args.data_path, args.hpc, args.classpath)
+    else:
+        ensemble(args.model_path, args.data_path, args.ens_model)
 
 #TODO: load ensembles
