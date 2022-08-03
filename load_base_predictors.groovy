@@ -84,7 +84,7 @@ classifierDir = new File(workingDir, classifierName)
 // shuffle data, set class variable
 data.randomize(new Random(1))
 data.setClass(data.attribute(classAttribute))
-cls_gzip_input = new GZIPInputStream(new FileInputStream(new File(classifierDir+"predictions-1-00-local_model.gz")))
+cls_gzip_input = new GZIPInputStream(new FileInputStream(new File(classifierDir, "predictions-1-00-local_model.gz")))
 classifier = (Classifier) weka.core.SerializationHelper.read(cls_gzip_input);
 
 outputPrefix = sprintf "validation-%s-%02d", currentFold, currentBag
