@@ -63,7 +63,7 @@ def merged_base_innerCV_by_outerfold(f_list, path):
                 except:
                     print('file not existed or crashed %s' % filename)
             dirname_dfs.append(concat(bag_dfs, axis=1))
-            if attr_imp_bool.lower() == 'true':
+            if attr_imp_bool:
                 dirname_attribute_imp_dfs.append(concat(attribute_imp_dfs, ignore_index=True))
 
         # concat(dirname_dfs, axis=1).sort_index().to_csv('%s/predictions-%s.csv.gz' % (path, fold), compression='gzip')
