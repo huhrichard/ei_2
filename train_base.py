@@ -164,8 +164,9 @@ if __name__ == "__main__":
                 classpath, working_dir, data_path, project_path, fold, bag, args.rank, args.writeModel, classifier))
 
         if not args.hpc:
-            jf.write('python combine_individual_feature_preds.py %s %s\npython combine_feature_predicts.py %s %s\n' % (
-                data_path, args.rank, data_path, args.rank))
+            jf.write('python combine_individual_feature_preds.py %s %s %s\npython combine_feature_predicts.py %s %s %s\n' % (
+                data_path, args.rank, 'False',
+                data_path, args.rank, 'False'))
 
         return jf
 
@@ -185,8 +186,9 @@ if __name__ == "__main__":
 
         fn.write('mpirun selfsched < {}\n'.format(jobs_fn))
         fn.write('rm {}\n'.format(jobs_fn))
-        fn.write('python combine_individual_feature_preds.py %s %s\npython combine_feature_predicts.py %s %s\n' % (
-        data_path, args.rank, data_path, args.rank))
+        fn.write('python combine_individual_feature_preds.py %s %s %s\npython combine_feature_predicts.py %s %s %s\n' % (
+        data_path, args.rank, 'False',
+        data_path, args.rank, 'False'))
         fn.close()
         system('bsub < %s' % lsf_fn)
         system('rm %s' % lsf_fn)
