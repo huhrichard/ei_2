@@ -49,7 +49,15 @@ def base_predictors(model_path, data_path, hpc, classpath):
     fns = [data_path + '/' + fn for fn in fns]
     data_feature_folders = [fn for fn in fns if isdir(fn)]
 
+    data_model_feat_list = []
+    for fn in model_feature_folders:
+        data_model_pair = [fn]
+        for dfn in data_feature_folders
+            if fn.split('/')[-1] == dfn.split('/')[-1]:
+                data_model_pair.append(dfn)
+        data_model_feat_list.append(data_model_pair)
 
+    print(data_model_feat_list)
     # get fold, id and label attribute
 
     fold_values = ['test']
@@ -60,17 +68,18 @@ def base_predictors(model_path, data_path, hpc, classpath):
 
     def preprocessing(jf):
         # classpath = classpath
-        all_parameters = list(product(model_feature_folders, data_feature_folders, classifiers, fold_values, bag_values))
+        all_parameters = list(product(data_model_feat_list, classifiers, fold_values, bag_values))
 
         for parameters in all_parameters:
-            project_path, data_feat_dir, classifier, fold, bag = parameters
+            data_model_pair, classifier, fold, bag = parameters
+            local_model_path, data_feat_dir = data_model_pair
             jf.write('groovy -cp %s %s/load_base_predictors.groovy %s %s %s %s %s %s\n' % (classpath, working_dir,
                                                                                          data_path,
-                                                                                         project_path,
+                                                                                         data_feat_dir,
                                                                                          fold,
                                                                                          bag,
                                                                                          classifier,
-                                                                                         model_path
+                                                                                         local_model_path
                                                                                       ))
 
         if not hpc:
