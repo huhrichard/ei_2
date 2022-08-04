@@ -90,7 +90,7 @@ data_folder = abspath(argv[1])
 attr_imp_bool = str2bool(argv[2])
 test_model = str2bool(argv[3])
 
-print(attr_imp_bool)
+# print(attr_imp_bool)
 feature_folders = data_dir_list(data_folder)
 # data_name = data_folder.split('/')[-1]
 # fns = listdir(data_folder)
@@ -113,7 +113,8 @@ if 'foldAttribute' in p:
 else:
     fold_values = range(int(p['foldCount']))
 
-
+if test_model:
+    fold_values = ['test']
 
 pca_fold_values = ['pca_{}'.format(fv) for fv in fold_values]
 
