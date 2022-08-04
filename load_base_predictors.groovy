@@ -107,7 +107,7 @@ duration = System.currentTimeMillis() - start
     durationMinutes = duration / (1e3 * 60)
 header = sprintf "# %s@%s %.2f minutes %s\n", System.getProperty("user.name"), java.net.InetAddress.getLocalHost().getHostName(), durationMinutes, shortClassifierName
 writer.write(header)
-writer.write("id,label,prediction,fold,bag,classifier\n")
+writer.write("id,prediction,fold,bag,classifier\n")
 
 if (foldAttribute != ""){
     for (instance in data) {
@@ -120,7 +120,7 @@ if (foldAttribute != ""){
     //         label = instance.classValue()
             prediction = classifier.distributionForInstance(instance)[0]
         }
-        row = sprintf "%s,%s,%f,%s,%s,%s\n", id, label, prediction, currentFold, currentBag, shortClassifierName
+        row = sprintf "%s,%f,%s,%s,%s\n", id, prediction, currentFold, currentBag, shortClassifierName
         writer.write(row)
     }
 }
