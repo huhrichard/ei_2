@@ -56,11 +56,13 @@ def base_predictors(model_path, data_path, hpc, classpath):
 
         for parameters in all_parameters:
             project_path, classifier, fold, bag = parameters
-            jf.write('groovy -cp %s %s/load_base_predictors.groovy %s %s %s %s %s \n' % (classpath, working_dir, data_path,
-                                                                                      project_path,
-                                                                                      fold,
-                                                                                      bag,
-                                                                                      classifier
+            jf.write('groovy -cp %s %s/load_base_predictors.groovy %s %s %s %s %s %s\n' % (classpath, working_dir,
+                                                                                         data_path,
+                                                                                         project_path,
+                                                                                         fold,
+                                                                                         bag,
+                                                                                         classifier,
+                                                                                         model_path
                                                                                       ))
 
         if not hpc:
