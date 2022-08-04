@@ -33,6 +33,7 @@ def base_predictors(model_path, data_path, hpc, classpath):
     assert exists(classifiers_fn)
     classifiers = filter(lambda x: not x.startswith('#'), open(classifiers_fn).readlines())
     classifiers = [_.strip() for _ in classifiers]
+    print(classifiers)
 
     ### get paths of the list of features
     print(model_path)
