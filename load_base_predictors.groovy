@@ -107,10 +107,10 @@ if (foldAttribute != ""){
         double prediction
         if (!regression) {
     //         label = (instance.stringValue(instance.classAttribute()).equals(predictClassValue)) ? 1 : 0
-            prediction = filteredClassifier.distributionForInstance(instance)[predictClassIndex]
+            prediction = classifier.distributionForInstance(instance)[predictClassIndex]
         } else {
     //         label = instance.classValue()
-            prediction = filteredClassifier.distributionForInstance(instance)[0]
+            prediction = classifier.distributionForInstance(instance)[0]
         }
         row = sprintf "%s,%s,%f,%s,%s,%s\n", id, label, prediction, currentFold, currentBag, shortClassifierName
         writer.write(row)
