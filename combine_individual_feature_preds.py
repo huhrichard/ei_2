@@ -25,7 +25,12 @@ def merged_base_innerCV_by_outerfold(f_list, path):
                     for bag in range(bag_count):
                         filename = '%s/validation-%s-%02i-%02i.csv.gz' % (dirname, fold, nested_fold, bag)
                         try:
-                            df = read_csv(filename, skiprows=1, index_col=[0, 1], compression='gzip', engine='python')
+                            if test_model:
+                                df = read_csv(filename, skiprows=1, index_col=0, compression='gzip',
+                                              engine='python')
+                            else:
+                                df = read_csv(filename, skiprows=1, index_col=[0, 1], compression='gzip', engine='python')
+                            # df = read_csv(filename, skiprows=1, index_col=[0, 1], compression='gzip', engine='python')
                             df = df[['prediction']]
                             df.rename(columns={'prediction': '%s.%s' % (classifier, bag)}, inplace=True)
                             bag_dfs.append(df)
@@ -53,7 +58,11 @@ def merged_base_innerCV_by_outerfold(f_list, path):
                 filename = '%s/predictions-%s-%02i.csv.gz' % (dirname, fold, bag)
 
                 try:
-                    df = read_csv(filename, skiprows=1, index_col=[0, 1], compression='gzip', engine='python')
+                    if test_model:
+                        df = read_csv(filename, skiprows=1, index_col=0, compression='gzip',
+                                      engine='python')
+                    else:
+                        df = read_csv(filename, skiprows=1, index_col=[0, 1], compression='gzip', engine='python')
                     df = df[['prediction']]
                     df.rename(columns={'prediction': '%s.%s' % (classifier, bag)}, inplace=True)
                     bag_dfs.append(df)
