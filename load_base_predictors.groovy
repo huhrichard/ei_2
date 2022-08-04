@@ -81,6 +81,14 @@ if (!regression) {
     predictClassValue = p.getProperty("predictClassValue").trim()
 }
 
+if (!regression) {
+    predictClassIndex = data.attribute(classAttribute).indexOfValue(predictClassValue)
+    assert predictClassIndex != -1
+    printf "[%s] %s, generating probabilities for class %s (index %d)\n", shortClassifierName, data.attribute(classAttribute), predictClassValue, predictClassIndex
+} else {
+    printf "[%s] %s, generating predictions\n", shortClassifierName, data.attribute(classAttribute)
+}
+
 builtClassifierDir = new File(modelDir, classifierName)
 classifierPredictDir = new File(workingDir, classifierName)
 if (!classifierPredictDir.exists()) {
