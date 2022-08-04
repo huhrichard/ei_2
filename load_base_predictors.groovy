@@ -82,7 +82,7 @@ if (!regression) {
 }
 
 if (!regression) {
-    predictClassIndex = data.attribute(classAttribute).indexOfValue(predictClassValue)
+    predictClassIndex = 0
     assert predictClassIndex != -1
     printf "[%s] %s, generating probabilities for class %s (index %d)\n", shortClassifierName, data.attribute(classAttribute), predictClassValue, predictClassIndex
 } else {
@@ -101,7 +101,7 @@ data.setClass(data.attribute(classAttribute))
 cls_gzip_input = new GZIPInputStream(new FileInputStream(new File(builtClassifierDir, "predictions-1-00-local_model.gz")))
 classifier = (Classifier) weka.core.SerializationHelper.read(cls_gzip_input);
 
-outputPrefix = sprintf "validation-%s-%02d", currentFold, currentBag
+outputPrefix = sprintf "predictions-%s-%02d", currentFold, currentBag
 writer = new PrintWriter(new GZIPOutputStream(new FileOutputStream(new File(classifierPredictDir, outputPrefix + ".csv.gz"))))
 duration = System.currentTimeMillis() - start
     durationMinutes = duration / (1e3 * 60)
@@ -121,6 +121,7 @@ if (foldAttribute != ""){
             prediction = classifier.distributionForInstance(instance)[0]
         }
         row = sprintf "%s,%f,%s,%s,%s\n", id, prediction, currentFold, currentBag, shortClassifierName
+        printf "%s", row
         writer.write(row)
     }
 }
