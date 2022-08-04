@@ -35,6 +35,7 @@ def base_predictors(model_path, data_path, hpc, classpath):
     classifiers = [_.strip() for _ in classifiers]
 
     ### get paths of the list of features
+    print(model_path)
     fns = listdir(model_path)
     excluding_folder = ['analysis', 'feature_rank']
     fns = [fn for fn in fns if not fn in excluding_folder]
