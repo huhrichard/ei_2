@@ -57,6 +57,7 @@ def merge_base_feat_preds_by_fold(f_list):
 			feature_name = folder.split('/')[-1]
 
 			prediction_df = pd.read_csv(folder + '/predictions-%s.csv.gz' %value,compression='gzip')
+			print(feature_name)
 			if test_model:
 				prediction_df.set_index(['id'],inplace=True)
 			else:

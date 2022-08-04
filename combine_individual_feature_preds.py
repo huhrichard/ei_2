@@ -56,7 +56,7 @@ def merged_base_innerCV_by_outerfold(f_list, path):
                     # print('running attribute imp1')
                     attribute_imp_filename = '%s/attribute_imp-%s-%02i.csv.gz' % (dirname, fold, bag)
                 filename = '%s/predictions-%s-%02i.csv.gz' % (dirname, fold, bag)
-
+                print(filename)
                 try:
                     if test_model:
                         df = read_csv(filename, skiprows=1, index_col=0, compression='gzip',
@@ -80,8 +80,8 @@ def merged_base_innerCV_by_outerfold(f_list, path):
         if attr_imp_bool:
             concat(dirname_attribute_imp_dfs, ignore_index=True).to_csv('%s/attribute_imp-%s.csv.gz' % (path, fold), compression='gzip')
 
-def combine_individual(path):
-    merged_base_innerCV_by_outerfold(fold_values, path)
+def combine_individual(f_values, path):
+    merged_base_innerCV_by_outerfold(f_values, path)
     # merged_base_innerCV_by_outerfold(pca_fold_values, path)
 
 
@@ -121,4 +121,4 @@ pca_fold_values = ['pca_{}'.format(fv) for fv in fold_values]
 nested_fold_count = int(p['nestedFoldCount'])
 bag_count = max(1, int(p['bagCount']))
 for path_f in feature_folders:
-    combine_individual(path_f)
+    combine_individual(fold_values, path_f)
