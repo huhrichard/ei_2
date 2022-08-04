@@ -40,7 +40,15 @@ def base_predictors(model_path, data_path, hpc, classpath):
     fns = [fn for fn in fns if not fn in excluding_folder]
     fns = [fn for fn in fns if not 'tcca' in fn]
     fns = [data_path + '/' + fn for fn in fns]
-    feature_folders = [fn for fn in fns if isdir(fn)]
+    model_feature_folders = [fn for fn in fns if isdir(fn)]
+
+    fns = listdir(data_path)
+    excluding_folder = ['analysis', 'feature_rank']
+    fns = [fn for fn in fns if not fn in excluding_folder]
+    fns = [fn for fn in fns if not 'tcca' in fn]
+    fns = [data_path + '/' + fn for fn in fns]
+    data_feature_folders = [fn for fn in fns if isdir(fn)]
+
 
     # get fold, id and label attribute
 
@@ -52,10 +60,10 @@ def base_predictors(model_path, data_path, hpc, classpath):
 
     def preprocessing(jf):
         # classpath = classpath
-        all_parameters = list(product(feature_folders, classifiers, fold_values, bag_values))
+        all_parameters = list(product(model_feature_folders, data_feature_folders, classifiers, fold_values, bag_values))
 
         for parameters in all_parameters:
-            project_path, classifier, fold, bag = parameters
+            project_path, data_feat_dir, classifier, fold, bag = parameters
             jf.write('groovy -cp %s %s/load_base_predictors.groovy %s %s %s %s %s %s\n' % (classpath, working_dir,
                                                                                          data_path,
                                                                                          project_path,
