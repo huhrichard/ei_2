@@ -52,7 +52,7 @@ def base_predictors(model_path, data_path, hpc, classpath):
     data_model_feat_list = []
     for fn in model_feature_folders:
         data_model_pair = [fn]
-        for dfn in data_feature_folders
+        for dfn in data_feature_folders:
             if fn.split('/')[-1] == dfn.split('/')[-1]:
                 data_model_pair.append(dfn)
         data_model_feat_list.append(data_model_pair)
