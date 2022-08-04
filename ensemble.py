@@ -426,7 +426,7 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank='', writeM
                     if fold == 1:
                         stacking_output.append(stack)
                         if writeModel:
-                            ens_models[key] = stack['stacker']
+                            ens_models[stacker_name] = stack['stacker']
                 else:
                     stacking_output.append(stack)
 
