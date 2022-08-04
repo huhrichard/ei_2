@@ -14,6 +14,7 @@ from pandas import concat, read_csv
 
 def merged_base_innerCV_by_outerfold(f_list, path):
     dirnames = sorted(filter(isdir, glob('%s/weka.classifiers.*' % path)))
+    print(f_list)
     if not test_model:
         for fold in f_list:
             dirname_dfs = []
