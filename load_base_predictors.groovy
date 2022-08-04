@@ -102,7 +102,7 @@ writer.write(header)
 writer.write("id,label,prediction,fold,bag,classifier\n")
 
 if (foldAttribute != ""){
-    for (instance in test) {
+    for (instance in data) {
         id = instance.stringValue(test.attribute(idAttribute))
         double prediction
         if (!regression) {
