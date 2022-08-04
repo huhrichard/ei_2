@@ -97,7 +97,7 @@ outputPrefix = sprintf "validation-%s-%02d", currentFold, currentBag
 writer = new PrintWriter(new GZIPOutputStream(new FileOutputStream(new File(classifierPredictDir, outputPrefix + ".csv.gz"))))
 duration = System.currentTimeMillis() - start
     durationMinutes = duration / (1e3 * 60)
-header = sprintf "# %s@%s %.2f minutes %s\n", System.getProperty("user.name"), java.net.InetAddress.getLocalHost().getHostName(), durationMinutes, classifierString.join(" ")
+header = sprintf "# %s@%s %.2f minutes %s\n", System.getProperty("user.name"), java.net.InetAddress.getLocalHost().getHostName(), durationMinutes, shortClassifierName
 writer.write(header)
 writer.write("id,label,prediction,fold,bag,classifier\n")
 
