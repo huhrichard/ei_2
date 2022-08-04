@@ -32,13 +32,13 @@ def base_predictors(model_path, data_path, hpc, classpath):
     classifiers_fn = model_path + '/classifiers.txt'
     assert exists(classifiers_fn)
     classifiers = filter(lambda x: not x.startswith('#'), open(classifiers_fn).readlines())
-    classifiers = [_.strip() for _ in classifiers]
+    classifiers = [_.strip().split(' ')[0] for _ in classifiers]
     print(classifiers)
 
     ### get paths of the list of features
-    print(model_path)
+    # print(model_path)
     fns = listdir(model_path)
-    print(fns)
+    # print(fns)
     excluding_folder = ['analysis']
     fns = [fn for fn in fns if not fn in excluding_folder]
     fns = [fn for fn in fns if not 'tcca' in fn]

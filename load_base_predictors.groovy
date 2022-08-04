@@ -87,13 +87,16 @@ if (!classifierPredictDir.exists()) {
     classifierPredictDir.mkdir()
 }
 // shuffle data, set class variable
-data.randomize(new Random(1))
+start = System.currentTimeMillis()
+// data.randomize(new Random(1))
 data.setClass(data.attribute(classAttribute))
 cls_gzip_input = new GZIPInputStream(new FileInputStream(new File(builtClassifierDir, "predictions-1-00-local_model.gz")))
 classifier = (Classifier) weka.core.SerializationHelper.read(cls_gzip_input);
 
 outputPrefix = sprintf "validation-%s-%02d", currentFold, currentBag
 writer = new PrintWriter(new GZIPOutputStream(new FileOutputStream(new File(classifierPredictDir, outputPrefix + ".csv.gz"))))
+duration = System.currentTimeMillis() - start
+    durationMinutes = duration / (1e3 * 60)
 header = sprintf "# %s@%s %.2f minutes %s\n", System.getProperty("user.name"), java.net.InetAddress.getLocalHost().getHostName(), durationMinutes, classifierString.join(" ")
 writer.write(header)
 writer.write("id,label,prediction,fold,bag,classifier\n")
