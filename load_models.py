@@ -140,7 +140,9 @@ def ensemble(model_path, data_path, ens_model):
         ens_prediction = ces_bp_df.mean(axis=1)
     elif '.S' in ens_model:
         stacker = ens_model_dict[ens_model]
-        ens_prediction = stacker.predict(data_df)
+        ens_prediction_np_array = stacker.predict(data_df.values)
+        ens_prediction = pd.DataFrame({'id': data_df.index,
+                            'prediction': ens_prediction_np_array})
 
     ens_prediction.to_csv(os.path.join(data_path, 'prediction_score.csv'))
 
