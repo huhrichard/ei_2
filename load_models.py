@@ -136,6 +136,7 @@ def ensemble(model_path, data_path, ens_model, regression=False):
         ens_prediction = data_df.mean(axis=1)
     elif ens_model == "CES":
         ces_combination = ens_model_dict[ens_model][0]
+        print(ces_combination)
         ces_bp_df = data_df[ces_combination]
         ens_prediction = ces_bp_df.mean(axis=1)
     elif '.S' in ens_model:
@@ -146,8 +147,8 @@ def ensemble(model_path, data_path, ens_model, regression=False):
             ens_prediction_np_array = stacker.predict(data_df)
             if regression is False:
                 ens_prediction_np_array = ens_prediction_np_array[:, 1]
-        ens_prediction = pd.DataFrame({'id': data_df.index,
-                            'prediction': ens_prediction_np_array})
+    ens_prediction = pd.DataFrame({'id': data_df.index,
+                        'prediction': ens_prediction_np_array})
     print(ens_prediction)
     ens_prediction.to_csv(os.path.join(data_path, 'prediction_score.csv'))
 
