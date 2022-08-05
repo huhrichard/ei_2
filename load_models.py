@@ -127,7 +127,7 @@ def base_predictors(model_path, data_path, hpc, classpath):
     # return local_predictions
 
 
-def ensemble(model_path, data_path, ens_model):
+def ensemble(model_path, data_path, ens_model, regression=False):
     ens_model_path = os.path.join(model_path, 'analysis/ens_model.pkl')
     ens_model_dict = pickle.load(open(ens_model_path,'rb'))
     data_df = pandas.read_csv(os.path.join(data_path, 'predictions-test.csv.gz'), index_col=0)
@@ -140,7 +140,12 @@ def ensemble(model_path, data_path, ens_model):
         ens_prediction = ces_bp_df.mean(axis=1)
     elif '.S' in ens_model:
         stacker = ens_model_dict[ens_model]
-        ens_prediction_np_array = stacker.predict(data_df.values)
+        if hasattr(stacker, "predict_proba") and (not regression):
+            ens_prediction_np_array = stacker.predict_proba(data_df)[:, 1]
+        else:
+            ens_prediction_np_array = stacker.predict(data_df)
+            if regression is False:
+                ens_prediction_np_array = ens_prediction_np_array[:, 1]
         ens_prediction = pd.DataFrame({'id': data_df.index,
                             'prediction': ens_prediction_np_array})
     print(ens_prediction)
