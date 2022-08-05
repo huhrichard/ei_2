@@ -106,17 +106,17 @@ if __name__ == "__main__":
 
     ### get paths of the list of features
     fns = listdir(data_path)
-    excluding_folder = ['analysis', 'feature_rank']
+    excluding_folder = ['analysis', 'feature_rank', 'model_built']
     fns = [fn for fn in fns if not fn in excluding_folder]
     fns = [fn for fn in fns if not 'tcca' in fn]
     fns = [data_path + '/' + fn for fn in fns]
     feature_folders = [fn for fn in fns if isdir(fn)]
 
-    if args.rank:
-        feature_rank_path = os.path.join(data_path,'feature_rank')
-        if not exists(feature_rank_path):
-            os.mkdir(feature_rank_path)
-        data_path, feature_folders = create_pseudoTestdata(feature_rank_path,
+    if args.rank or args.writeModel:
+        model_built_path = os.path.join(data_path, 'model_built')
+        if not exists(model_built_path):
+            os.mkdir(model_built_path)
+        data_path, feature_folders = create_pseudoTestdata(model_built_path,
                                                            feature_folders,
                                                            original_dir=data_path,
                                                            # create_rank_dir=args.create_rank_dir,
