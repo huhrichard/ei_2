@@ -140,7 +140,7 @@ def ensemble(model_path, data_path, ens_model, regression=False):
         ces_comb_bag = [c+'.0' for c in ces_combination.tolist()]
         ces_bp_df = data_df[ces_comb_bag]
         ens_prediction_np_array = ces_bp_df.mean(axis=1).values
-    elif '.S' in ens_model:
+    elif 'S.' in ens_model:
         stacker = ens_model_dict[ens_model]
         if hasattr(stacker, "predict_proba") and (not regression):
             ens_prediction_np_array = stacker.predict_proba(data_df)[:, 1]

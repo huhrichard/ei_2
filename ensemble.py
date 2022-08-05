@@ -401,15 +401,15 @@ def main_classification(path, f_list, agg=1, rank=False, ens_for_rank='', writeM
         mkdir(analysis_path)
     """ Stacking Ensemble """
     stackers_dict = {
-                     "RF.S": RandomForestClassifier(),
-                     "SVM.S": SVC(kernel='linear', probability=True, max_iter=1e7),
-                     "NB.S": GaussianNB(),
-                     "LR.S": LogisticRegression(),
-                     "AdaBoost.S": AdaBoostClassifier(),
-                     "DT.S": DecisionTreeClassifier(),
-                     "GradientBoosting.S": GradientBoostingClassifier(),
-                     "KNN.S": KNeighborsClassifier(),
-                     "XGB.S": XGBClassifier()
+                     "S.RF": RandomForestClassifier(),
+                     "S.SVM": SVC(kernel='linear', probability=True, max_iter=1e7),
+                     "S.NB": GaussianNB(),
+                     "S.LR": LogisticRegression(),
+                     "S.AdaBoost": AdaBoostClassifier(),
+                     "S.DT": DecisionTreeClassifier(),
+                     "S.GradientBoosting": GradientBoostingClassifier(),
+                     "S.KNN": KNeighborsClassifier(),
+                     "S.XGB": XGBClassifier()
                     }
     df_cols = ['f_train_base','f_test_base', 'fold', 'stacker',
                'feat_imp', 'base_data', 'base_cls', 'base_bag']
