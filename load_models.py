@@ -137,6 +137,7 @@ def ensemble(model_path, data_path, ens_model, regression=False):
     elif ens_model == "CES":
         ces_combination = ens_model_dict[ens_model][0]
         print(ces_combination)
+        ces_comb_bag = [c+'.0' for c in ces_combination.tolist()]
         ces_bp_df = data_df[ces_combination]
         ens_prediction = ces_bp_df.mean(axis=1)
     elif '.S' in ens_model:
