@@ -133,13 +133,13 @@ def ensemble(model_path, data_path, ens_model, regression=False):
     data_df = pandas.read_csv(os.path.join(data_path, 'predictions-test.csv.gz'), index_col=0)
     # print(data_df)
     if ens_model == "Mean":
-        ens_prediction = data_df.mean(axis=1)
+        ens_prediction_np_array = data_df.mean(axis=1).values
     elif ens_model == "CES":
         ces_combination = ens_model_dict[ens_model][0]
-        print(ces_combination)
+        # print(ces_combination)
         ces_comb_bag = [c+'.0' for c in ces_combination.tolist()]
-        ces_bp_df = data_df[ces_combination]
-        ens_prediction = ces_bp_df.mean(axis=1)
+        ces_bp_df = data_df[ces_comb_bag]
+        ens_prediction_np_array = ces_bp_df.mean(axis=1).values
     elif '.S' in ens_model:
         stacker = ens_model_dict[ens_model]
         if hasattr(stacker, "predict_proba") and (not regression):
