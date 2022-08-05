@@ -131,7 +131,7 @@ def ensemble(model_path, data_path, ens_model):
     ens_model_path = os.path.join(model_path, 'analysis/ens_model.pkl')
     ens_model_dict = pickle.load(open(ens_model_path,'rb'))
     data_df = pandas.read_csv(os.path.join(data_path, 'predictions-test.csv.gz'))
-    print(ens_model_dict)
+    print(data_df)
     if ens_model == "Mean":
         ens_prediction = data_df.mean(axis=1)
     elif ens_model == "CES":
