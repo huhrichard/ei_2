@@ -163,7 +163,7 @@ def CES_classifier(path, fold_count=range(5), agg=1, rank=False, writeModel=Fals
             performance_dfs.append(perf_df)
             thres = thres_fmax(train_pred_df.label, train_pred_df.prediction)
             if rank:
-                if fold == 1:
+                if fold == 'pseudoTest':
                     best_ensembles.append(best_ensemble)
         performance_df = pd.concat(performance_dfs)
         performance_df.to_csv('%s/analysis/selection-%s-%s-iterations.csv' % (path, method, 'fmax'), index=False)
@@ -420,7 +420,7 @@ def main_classification(path, f_list, agg=1, rank=False, ens_algo='', writeModel
                 stack = stacked_generalization(path, stacker_name, stacker, fold, agg, stacked_df)
                 stacked_df = stack.pop('stacked_df')
                 if rank or writeModel:
-                    if fold == 1:
+                    if fold == 'pseudoTest':
                         stacking_output.append(stack)
                         if writeModel:
                             ens_models[stacker_name] = stack['stacker']

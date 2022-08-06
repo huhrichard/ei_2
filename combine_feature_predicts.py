@@ -36,8 +36,8 @@ if 'foldAttribute' in p:
 else:
     fold_values = range(int(p['foldCount']))
 
-if test_model:
-    fold_values = ['test']
+# if test_model:
+#     fold_values = ['test']
 
 pca_fold_values = ['pca_{}'.format(fv) for fv in fold_values]
 prediction_dfs = []

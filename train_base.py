@@ -42,7 +42,7 @@ def create_pseudoTestdata(data_dir, feat_folders, original_dir):
         for i_col in feature_cols:
             if len(feat_df_drop_idx[i_col].unique()) > 2:
                 real_val_cols.append(i_col)
-        feat_df.loc[:, 'fold'] = 0
+        feat_df.loc[:, 'fold'] = 'trainModel'
         # create 20 pseudo test entries
         df_shape = feat_df.shape
         number_of_real_col = len(real_val_cols)
@@ -52,7 +52,7 @@ def create_pseudoTestdata(data_dir, feat_folders, original_dir):
             # number_of_real_col = len(real_val_cols)
             # feat_df.loc[ri] = np.random.randn(number_of_real_col)
             feat_df.loc[ri, real_val_cols] = np.random.randn(number_of_real_col)
-            feat_df.loc[ri, 'fold'] = 1
+            feat_df.loc[ri, 'fold'] = 'pseudoTest'
             feat_df.loc[ri, 'seqID'] = i
             if (i % 2) == 0:
                 c = 'pos'
@@ -62,7 +62,7 @@ def create_pseudoTestdata(data_dir, feat_folders, original_dir):
         new_feat_dir = os.path.join(data_dir, ff.split('/')[-1])
         if not exists(new_feat_dir):
             os.mkdir(new_feat_dir)
-            feat_df['fold'] = feat_df['fold'].astype(int)
+            # feat_df['fold'] = feat_df['fold'].astype(int)
             os.system('cp {} {}'.format(os.path.join(original_dir, 'classifiers.txt'),
                                         new_feat_dir))
             os.system('cp {} {}'.format(os.path.join(original_dir, 'weka.properties'),
@@ -146,6 +146,9 @@ if __name__ == "__main__":
         fold_values = list(df[p['foldAttribute']].unique())
     else:
         fold_values = range(int(p['foldCount']))
+
+    # if writeModel:
+    #     fold_values = ['test']
     id_col = p['idAttribute']
     label_col = p['classAttribute']
     jobs_fn = "temp_train_base_{}_{}.jobs".format(data_source_dir, data_name)
