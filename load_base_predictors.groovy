@@ -98,7 +98,7 @@ if (!classifierPredictDir.exists()) {
 start = System.currentTimeMillis()
 // data.randomize(new Random(1))
 data.setClass(data.attribute(classAttribute))
-cls_gzip_input = new GZIPInputStream(new FileInputStream(new File(builtClassifierDir, "predictions-1-00-local_model.gz")))
+cls_gzip_input = new GZIPInputStream(new FileInputStream(new File(builtClassifierDir, "predictions-pseudoTest-00-local_model.gz")))
 classifier = (Classifier) weka.core.SerializationHelper.read(cls_gzip_input);
 
 outputPrefix = sprintf "predictions-%s-%02d", currentFold, currentBag
