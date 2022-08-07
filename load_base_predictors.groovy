@@ -101,6 +101,7 @@ data.setClass(data.attribute(classAttribute))
 cls_gzip_input = new GZIPInputStream(new FileInputStream(new File(builtClassifierDir, "predictions-pseudoTest-00-local_model.gz")))
 classifier = (Classifier) weka.core.SerializationHelper.read(cls_gzip_input);
 
+
 outputPrefix = sprintf "predictions-%s-%02d", currentFold, currentBag
 writer = new PrintWriter(new GZIPOutputStream(new FileOutputStream(new File(classifierPredictDir, outputPrefix + ".csv.gz"))))
 duration = System.currentTimeMillis() - start
