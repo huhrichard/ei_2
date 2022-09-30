@@ -443,6 +443,7 @@ def main_classification(path, f_list, agg=1, rank=False, ens_algo='', writeModel
                 stacker_pi = permutation_importance(estimator=stacker,
                                                    X=training_dfs.values,
                                                    y=training_labels.values,
+                                                    n_jobs=-1,
                                                n_repeats=n_repeats,
                                                 random_state=0,
                                                    scoring = auprc_sklearn

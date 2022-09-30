@@ -45,6 +45,19 @@ Instances balance(instances) {
     return Filter.useFilter(instances, balanceFilter)
 }
 
+Instances oversampleing_balance(instances) {
+    stats = instances.attributeStats(instances.classIndex())
+    classPercent = stats.nominalCounts
+    majority_percentage = max(classPercent[0], classPercent[1])/stats.totalCount
+
+    balanceFilter = new Resample()
+    balanceFilter.setNoReplacement(false)
+    balanceFilter.setBiasToUniformClass(1.0)
+    balanceFilter.setSampleSizePercent(majority_percentage*200)
+    balanceFilter.setInputFormat(instances)
+    return Filter.useFilter(instances, balanceFilter)
+}
+
 // parse options
 parentDir                   = args[0] //path to parent folder of features
 rootDir                     = args[1] //path to feature folder
@@ -149,7 +162,8 @@ if (bagCount > 0) {
 }
 if (!regression && balanceTraining) {
     printf "[%s] balancing training samples\n", shortClassifierName
-    train = balance(train)
+//     train = balance(train)
+    train = oversampleing_balance(train)
 }
 if (!regression && balanceTest) {
     printf "[%s] balancing test samples\n", shortClassifierName
@@ -255,7 +269,8 @@ for (currentNestedFold in 0..nestedFoldCount - 1) {
     }
     if (!regression && balanceTraining) {
         printf "[%s inner %s] balancing training samples\n", shortClassifierName, currentNestedFold
-        nestedTrain = balance(nestedTrain)
+//         nestedTrain = balance(nestedTrain)
+        nestedTrain = oversampleing_balance(nestedTrain)
     }
     if (!regression && balanceTest) {
         printf "[%s inner %s] balancing test samples\n", shortClassifierName, currentNestedFold
