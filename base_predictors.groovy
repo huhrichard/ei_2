@@ -49,6 +49,7 @@ Instances oversampleing_balance(instances) {
     stats = instances.attributeStats(instances.classIndex())
     classPercent = stats.nominalCounts
     majority_percentage = max(classPercent[0], classPercent[1])/stats.totalCount
+    printf "majority majority_percentage %f", majority_percentage
 
     balanceFilter = new Resample()
     balanceFilter.setNoReplacement(false)
