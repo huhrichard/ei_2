@@ -27,7 +27,7 @@ from sklearn.svm import SVC
 
 import sklearn
 import warnings
-from processing_scripts.common import load_properties
+from common import load_properties
 from os.path import abspath
 import numpy as np
 from sklearn.inspection import permutation_importance
