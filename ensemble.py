@@ -401,7 +401,7 @@ def main_classification(path, f_list, agg=1, rank=False, ens_algo='', writeModel
                      "S.DT": DecisionTreeClassifier(),
                      "S.GB": GradientBoostingClassifier(),
                      "S.KNN": KNeighborsClassifier(),
-                     "S.XGB": XGBClassifier()
+                     # "S.XGB": XGBClassifier()
                     }
     df_cols = ['f_train_base','f_test_base', 'fold', 'stacker',
                'feat_imp', 'base_data', 'base_cls', 'base_bag']
