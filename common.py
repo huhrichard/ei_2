@@ -2,6 +2,8 @@ from numpy import argmax, argmin, argsort, corrcoef, mean, nanmax, sqrt, triu_in
 from pandas import DataFrame, concat, read_csv
 from scipy.io.arff import loadarff
 # import sklearn.metrics
+from sklearn.metrics import roc_curve, confusion_matrix, precision_recall_curve,\
+    precision_recall_fscore_support, average_precision_score, roc_auc_score, make_scorer
 import sklearn
 import numpy as np
 import os
@@ -41,9 +43,9 @@ def get_best_performer(df, one_se = False, _greater_is_better=True):
 
 
 def confusion_matrix_fpr(labels, predictions, false_discovery_rate = 0.1):
-    fpr, tpr, thresholds = sklearn.metrics.roc_curve(labels, predictions)
+    fpr, tpr, thresholds = roc_curve(labels, predictions)
     max_fpr_index = where(fpr >= false_discovery_rate)[0][0]
-    print(sklearn.metrics.confusion_matrix(labels, predictions > thresholds[max_fpr_index]))
+    print(confusion_matrix(labels, predictions > thresholds[max_fpr_index]))
 
 
 def fmeasure_score(labels, predictions, thres=None, beta = 1.0, pos_label = 1):
@@ -52,7 +54,7 @@ def fmeasure_score(labels, predictions, thres=None, beta = 1.0, pos_label = 1):
         Manning, C. D. et al. (2008). Evaluation in Information Retrieval. In Introduction to Information Retrieval. Cambridge University Press.
     """
     if thres is None:
-        precision, recall, threshold = sklearn.metrics.precision_recall_curve(labels, predictions,
+        precision, recall, threshold = precision_recall_curve(labels, predictions,
                                                                               pos_label=pos_label)
         # f1 = (1 + beta**2) * (precision * recall) / ((beta**2 * precision) + recall)
         f1 = 2 * (precision * recall) / (precision + recall)
@@ -82,21 +84,21 @@ def fmeasure_score(labels, predictions, thres=None, beta = 1.0, pos_label = 1):
     else:
         predictions[predictions > thres] = 1
         predictions[predictions <= thres] = 0
-        precision, recall, fmeasure, _ = sklearn.metrics.precision_recall_fscore_support(labels,
+        precision, recall, fmeasure, _ = precision_recall_fscore_support(labels,
                                                                                       predictions, average='binary')
         return {'P':precision, 'R':recall, 'F':fmeasure}
 
 def auprc(y_true, y_scores):
     # precision, recall, thresholds = sklearn.metrics.precision_recall_curve(y_true, y_scores, pos_label=1)
     # return sklearn.metrics.auc(recall, precision)
-    return sklearn.metrics.average_precision_score(y_true, y_scores)
+    return average_precision_score(y_true, y_scores)
 
 def f_max(labels, predictions, thres=None, beta = 1.0, pos_label = 1):
     """
         Radivojac, P. et al. (2013). A Large-Scale Evaluation of Computational Protein Function Prediction. Nature Methods, 10(3), 221-227.
         Manning, C. D. et al. (2008). Evaluation in Information Retrieval. In Introduction to Information Retrieval. Cambridge University Press.
     """
-    precision, recall, threshold = sklearn.metrics.precision_recall_curve(labels, predictions,
+    precision, recall, threshold = precision_recall_curve(labels, predictions,
                                                                           pos_label=pos_label)
     f1 = (1 + beta**2) * (precision * recall) / ((beta**2 * precision) + recall)
     # print(threshold)
@@ -201,8 +203,8 @@ def read_arff_to_pandas_df(arff_path):
 
 diversity_score = average_pearson_score
 # score = sklearn.metrics.roc_auc_score
-score = sklearn.metrics.roc_auc_score
+score = roc_auc_score
 greater_is_better = True
 best = max if greater_is_better else min
 argbest = argmax if greater_is_better else argmin
-fmax_scorer = sklearn.metrics.make_scorer(fmeasure_score, greater_is_better = True, needs_threshold = True)
+fmax_scorer = make_scorer(fmeasure_score, greater_is_better = True, needs_threshold = True)
