@@ -1,5 +1,5 @@
 import pandas as pd
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import numpy as np
 from goatools.base import get_godag
 from goatools.semantic import get_info_content
@@ -64,7 +64,8 @@ if __name__ == "__main__":
         go_by_count_dict = {
                             # 'EIdata_top2_{}.jobs'.format(ontology_suffix): top2_bool
                             # 'EIdata_500_1000_{}.jobs'.format(ontology_suffix):np.logical_and((go_pos_count>500), (go_pos_count<=1000)),
-                            'EIdata_1000_{}.jobs'.format(ontology_suffix): go_pos_count > 1000,
+                            # 'EIdata_1000_{}.jobs'.format(ontology_suffix): go_pos_count > 1000,
+                            'EIdata_max_{}.jobs'.format(ontology_suffix): go_pos_count
                             # 'EIdata_200_500_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>200), (go_pos_count<=500)),
                             # # 'EIdata_10_50_{}.jobs'.format(ontology_suffix): np.logical_and((go_pos_count>10), (go_pos_count<=50)),
                             # # 'EIdata_10_{}.jobs'.format(ontology_suffix): go_pos_count<=10,
@@ -78,7 +79,8 @@ if __name__ == "__main__":
             jobs_fn = './jobs/'+fn
             f = open(jobs_fn, 'w')
             go_stats = 0
-            go_group_dir = os.path.join('/sc/arion/scratch/liy42/', fn.split('.')[0])
+            # go_group_dir = os.path.join('/sc/arion/scratch/liy42/', fn.split('.')[0])
+            go_group_dir = os.path.join('./', fn.split('.')[0])
             if not exists(go_group_dir):
                 mkdir(go_group_dir)
             # plt.figure()

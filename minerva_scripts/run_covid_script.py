@@ -10,6 +10,7 @@ from common import str2bool
 
 
 list_of_method = ['EI',
+                  'fam_hx', 'vital', 'labs', 'comorbidities', 'encounter'
                   # 'admission',
                   # 'labs',
                   # # 'medications',
