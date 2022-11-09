@@ -33,7 +33,8 @@ base_path = args.path
 script_name = args.script
 rank = args.rank
 
-cmd_str = 'python {} --path {} --by_jobf false --rank {}'
+# cmd_str = 'python {} --path {} --by_jobf false --rank {}'
+cmd_str = 'python {} --path {} --rank {}'
 for m in list_of_method:
     # if 'ensemble' in script_name:
     #     cmd_str = cmd_str +
