@@ -1,7 +1,8 @@
 from numpy import argmax, argmin, argsort, corrcoef, mean, nanmax, sqrt, triu_indices_from, where
 from pandas import DataFrame, concat, read_csv
 from scipy.io.arff import loadarff
-import sklearn.metrics
+# import sklearn.metrics
+import sklearn
 import numpy as np
 import os
 from os.path import exists,abspath,isdir,dirname
@@ -67,6 +68,8 @@ def fmeasure_score(labels, predictions, thres=None, beta = 1.0, pos_label = 1):
         r_max = r_maxes[balance_fmax_point][0]
 
         opt_threshold = threshold[fmax_point][balance_fmax_point][0]
+
+
 
         # r_max = recall[where(f1==nanmax(f1))[0]][0]
         # p_max = precision[where(f1 == nanmax(f1))[0]][0]
