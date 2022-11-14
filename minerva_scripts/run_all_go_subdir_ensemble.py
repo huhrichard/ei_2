@@ -28,7 +28,8 @@ parser.add_argument('--classpath', '-CP', type=str,default='./weka.jar', help='p
 parser.add_argument('--hpc', '-MIN', type=str2bool,default='true', help='use hpc cluster or not')
 parser.add_argument('--term_prefix', type=str, default='GO', help='term_prefix')
 parser.add_argument('--rank', type=str2bool, default='false', help='attribute importance')
-parser.add_argument('--by_jobf', type=str2bool, default='True', help='submit jobs by the .jobs file')
+# parser.add_argument('--by_jobf', type=str2bool, default='True', help='submit jobs by the .jobs file')
+parser.add_argument('--by_jobf', type=str2bool, default='False', help='submit jobs by the .jobs file')
 parser.add_argument('--seed', '-S', type=str,default='1', help='the seed use to generate cross-validataion data')
 
 args = parser.parse_args()
