@@ -356,7 +356,7 @@ def main_classification(path, f_list, agg=1, rank=False, ens_algo='', writeModel
     local_model_weight_dfs = []
     aggregated_dict = {'CES': CES_classifier,
                        'Mean': aggregating_ensemble,
-                       'best base': bestbase_classifier,
+                       # 'best base': bestbase_classifier,
                        # 'median base': _bestbaseclassifier
                        }
 
@@ -377,6 +377,8 @@ def main_classification(path, f_list, agg=1, rank=False, ens_algo='', writeModel
                 fmax_perf = perf['f-measure']['F']
                 rmax_perf = perf['f-measure']['R']
                 pmax_perf = perf['f-measure']['P']
+
+                # fmax_perf_neg = perf['f-measure']['F']
                 auc_perf = perf['auc']
                 auprc_perf = perf['auprc']
                 print('[{}] Finished evaluating model ############################'.format(key))
@@ -401,7 +403,7 @@ def main_classification(path, f_list, agg=1, rank=False, ens_algo='', writeModel
                      "S.DT": DecisionTreeClassifier(),
                      "S.GB": GradientBoostingClassifier(),
                      "S.KNN": KNeighborsClassifier(),
-                     # "S.XGB": XGBClassifier()
+                     "S.XGB": XGBClassifier()
                     }
     df_cols = ['f_train_base','f_test_base', 'fold', 'stacker',
                'feat_imp', 'base_data', 'base_cls', 'base_bag']

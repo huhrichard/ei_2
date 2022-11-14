@@ -53,9 +53,14 @@ def fmeasure_score(labels, predictions, thres=None, beta = 1.0, pos_label = 1):
         Radivojac, P. et al. (2013). A Large-Scale Evaluation of Computational Protein Function Prediction. Nature Methods, 10(3), 221-227.
         Manning, C. D. et al. (2008). Evaluation in Information Retrieval. In Introduction to Information Retrieval. Cambridge University Press.
     """
+    if np.bincount(labels)[0] < np.bincount(labels)[1]:
+        minor_class = 0
+    else:
+        minor_class = 1
     if thres is None:
-        precision, recall, threshold = precision_recall_curve(labels, predictions,
-                                                                              pos_label=pos_label)
+        precision, recall, threshold = precision_recall_curve(labels,
+                                                              predictions,
+                                                              pos_label=minor_class)
         # f1 = (1 + beta**2) * (precision * recall) / ((beta**2 * precision) + recall)
         f1 = 2 * (precision * recall) / (precision + recall)
         # print(threshold)
@@ -84,8 +89,7 @@ def fmeasure_score(labels, predictions, thres=None, beta = 1.0, pos_label = 1):
     else:
         predictions[predictions > thres] = 1
         predictions[predictions <= thres] = 0
-        precision, recall, fmeasure, _ = precision_recall_fscore_support(labels,
-                                                                                      predictions, average='binary')
+        precision, recall, fmeasure, _ = precision_recall_fscore_support(labels, predictions, average='binary')
         return {'P':precision, 'R':recall, 'F':fmeasure}
 
 def auprc(y_true, y_scores):
