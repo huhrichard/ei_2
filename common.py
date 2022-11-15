@@ -48,19 +48,23 @@ def confusion_matrix_fpr(labels, predictions, false_discovery_rate = 0.1):
     print(confusion_matrix(labels, predictions > thresholds[max_fpr_index]))
 
 
-def fmeasure_score(labels, predictions, thres=None, beta = 1.0, pos_label = 1):
+def fmeasure_score(labels, predictions, thres=None, beta = 1.0, pos_label = 1, thres_same_cls=False):
     """
         Radivojac, P. et al. (2013). A Large-Scale Evaluation of Computational Protein Function Prediction. Nature Methods, 10(3), 221-227.
         Manning, C. D. et al. (2008). Evaluation in Information Retrieval. In Introduction to Information Retrieval. Cambridge University Press.
     """
     if np.bincount(labels)[0] < np.bincount(labels)[1]:
         minor_class = 0
+        # if pos_label == 0:
+        labels = 1 - np.array(labels)
+        predictions = 1 - np.array(predictions)
     else:
         minor_class = 1
+
+
     if thres is None:
         precision, recall, threshold = precision_recall_curve(labels,
-                                                              predictions,
-                                                              pos_label=minor_class)
+                                                              predictions)
         # f1 = (1 + beta**2) * (precision * recall) / ((beta**2 * precision) + recall)
         f1 = 2 * (precision * recall) / (precision + recall)
         # print(threshold)
